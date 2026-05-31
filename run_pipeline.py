@@ -136,6 +136,25 @@ def run_riddle():
     bank_manager.ensure_refilled("riddles")
 
 
+def run_wyr():
+    print("=" * 55)
+    print("  MODE: WOULD YOU RATHER")
+    print("=" * 55)
+
+    from upload_youtube import upload
+    import would_you_rather_video
+
+    out_path, data = would_you_rather_video.main()
+
+    desc = f"{data['hook']} {data['option_a']} or {data['option_b']}?\n\nComment which one you'd pick! ⬇️\n\n#wouldyourather #shorts #fun"
+    tags = ["would you rather", "fun", "shorts", "choose", "challenge"]
+
+    print("\nUploading...")
+    upload(str(out_path), data["title"], desc, tags, "public", "would_you_rather")
+    print("Would You Rather video done!")
+    bank_manager.ensure_refilled("would_you_rather")
+
+
 def main():
     mode = sys.argv[1] if len(sys.argv) > 1 else "story"
     if mode == "story":
@@ -148,8 +167,10 @@ def main():
         run_how_it_works()
     elif mode == "riddles":
         run_riddle()
+    elif mode == "would_you_rather":
+        run_wyr()
     else:
-        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', or 'riddles'")
+        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', or 'would_you_rather'")
 
 
 if __name__ == "__main__":

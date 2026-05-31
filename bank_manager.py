@@ -41,6 +41,16 @@ REFILL_PROMPTS = {
         "EXPLANATION: [one sentence explanation]\n"
         "Make it clever but solvable. Suitable for all ages."
     ),
+    "would_you_rather": (
+        "Write a 'Would You Rather' question about {cat}. "
+        "Never repeat options from this avoid list:"
+        "\n---\n{avoid}\n---\n"
+        "Format exactly:\n"
+        "OPTION_A: [first option, ~3-8 words]\n"
+        "OPTION_B: [second option, ~3-8 words]\n"
+        "Make both options fun, imaginative, and suitable for all ages. "
+        "Both options should be equally desirable so it's a real choice."
+    ),
 }
 
 NICHES = [
@@ -65,6 +75,11 @@ IMAGE_PROMPT_RIDDLE_ANSWER = "cinematic reveal scene: {answer}, bright warm ligh
 RIDDLE_TYPES = [
     "logic", "wordplay", "math", "lateral thinking", "observation",
     "classic", "nature", "science", "everyday", "animal",
+]
+
+WYR_CATEGORIES = [
+    "food", "travel", "money", "superpowers", "animals", "silly",
+    "everyday", "nature", "sports", "school", "technology",
 ]
 
 
@@ -114,6 +129,11 @@ def _mark_used(mode: str, entry: dict):
         n = _normalize(entry.get("riddle", ""))
         if n and n not in used:
             used.append(n)
+    elif mode == "would_you_rather":
+        for opt in [entry.get("option_a", ""), entry.get("option_b", "")]:
+            n = _normalize(opt)
+            if n and n not in used:
+                used.append(n)
     data["used"] = used
     _write_bank(mode, data)
 
@@ -172,6 +192,8 @@ def refill(mode: str, force_count: int | None = None):
         new_entries = _refill_how_it_works(need)
     elif mode == "riddles":
         new_entries = _refill_riddles(need)
+    elif mode == "would_you_rather":
+        new_entries = _refill_wyr(need)
     else:
         return
 
@@ -363,6 +385,42 @@ def _refill_riddles(need: int) -> list:
                 "tts_script": f"{hook} {riddle} Pause and think about it. The answer is... {answer}. {explanation or f'The answer is {answer}.'}",
             }
             entries.append(entry)
+        attempts += 1
+    return entries
+
+
+def _refill_wyr(need: int) -> list:
+    entries = []
+    attempts = 0
+    hooks = [
+        "Would you rather...", "Choose wisely:", "Which one would you pick?",
+        "Hard choice incoming:", "What would you do?", "Pick your side:",
+    ]
+    while len(entries) < need and attempts < need * 5:
+        cat = random.choice(WYR_CATEGORIES)
+        avoid = _avoid_sample("would_you_rather")
+        prompt = REFILL_PROMPTS["would_you_rather"].format(cat=cat, avoid=avoid)
+        raw = _generate(prompt, temperature=0.9, max_tokens=200,
+                        system="You write fun 'Would You Rather' questions suitable for all ages.")
+        if not raw:
+            attempts += 1
+            continue
+        a = b = ""
+        for line in raw.split("\n"):
+            line = line.strip()
+            if line.upper().startswith("OPTION_A:") or line.upper().startswith("A)"):
+                a = line.split(":", 1)[-1].split(")", 1)[-1].strip()
+            elif line.upper().startswith("OPTION_B:") or line.upper().startswith("B)"):
+                b = line.split(":", 1)[-1].split(")", 1)[-1].strip()
+        if a and b and not _is_duplicate("would_you_rather", [a, b], _read_bank("would_you_rather")):
+            hook = random.choice(hooks)
+            entries.append({
+                "title": "Would You Rather?",
+                "hook": hook,
+                "option_a": a,
+                "option_b": b,
+                "tts_script": f"{hook} {a} or {b}. Which one would you choose? Comment below!",
+            })
         attempts += 1
     return entries
 
