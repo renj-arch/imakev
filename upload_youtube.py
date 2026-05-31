@@ -17,7 +17,10 @@ PLAYLISTS = {
     "facts": {"name": "Mind-Blowing Facts", "desc": "Daily facts that will change how you see the world."},
     "what_if": {"name": "What If? For Kids", "desc": "Imaginative 'what if' scenarios that spark curiosity and wonder."},
     "how_it_works": {"name": "How Things Work", "desc": "Everyday objects explained — how they actually work."},
+    "riddles": {"name": "Riddles & Brain Teasers", "desc": "Fun riddles to test your brain — can you solve them?"},
+    "would_you_rather": {"name": "Would You Rather?", "desc": "Fun choices — which one would you pick?"},
     "history_minute": {"name": "History Minute", "desc": "Fascinating history shorts — one minute at a time."},
+    "psychology": {"name": "Psychology Hacks", "desc": "Mind-blowing psychology hacks your brain doesn't want you to know."},
 }
 
 

@@ -174,6 +174,28 @@ def run_history_minute():
     bank_manager.ensure_refilled("history_minute")
 
 
+def run_psychology():
+    print("=" * 55)
+    print("  MODE: PSYCHOLOGY HACKS")
+    print("=" * 55)
+
+    from upload_youtube import upload
+    import psychology_video
+
+    out_path, data = psychology_video.main()
+
+    desc = "Mind-blowing psychology hacks your brain doesn't want you to know.\n\n"
+    for h, e in zip(data["hacks"], data["explanations"]):
+        desc += f"{h}: {e}\n\n"
+    desc += "#psychology #brainhacks #shorts #mindtricks"
+    tags = ["psychology", "brain hacks", "mind tricks", "shorts", "self improvement", "mental health"]
+
+    print("\nUploading...")
+    upload(str(out_path), data["title"], desc, tags, "public", "psychology")
+    print("Psychology video done!")
+    bank_manager.ensure_refilled("psychology")
+
+
 def main():
     mode = sys.argv[1] if len(sys.argv) > 1 else "story"
     if mode == "story":
@@ -190,8 +212,10 @@ def main():
         run_wyr()
     elif mode == "history_minute":
         run_history_minute()
+    elif mode == "psychology":
+        run_psychology()
     else:
-        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', or 'history_minute'")
+        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', or 'psychology'")
 
 
 if __name__ == "__main__":

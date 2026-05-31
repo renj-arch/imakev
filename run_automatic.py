@@ -16,13 +16,15 @@ def log(msg: str):
         f.write(line + "\n")
 
 
+MODES = ["story", "facts", "what_if", "how_it_works", "riddles", "would_you_rather", "history_minute", "psychology"]
+
 def get_mode() -> str:
     count = 0
     if COUNTER_FILE.exists():
         count = int(COUNTER_FILE.read_text().strip() or "0")
     count += 1
     COUNTER_FILE.write_text(str(count))
-    return "story" if count % 2 == 1 else "facts"
+    return MODES[(count - 1) % len(MODES)]
 
 
 def main():

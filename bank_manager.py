@@ -59,6 +59,16 @@ REFILL_PROMPTS = {
         "Focus on a single specific historical event or fact. "
         "40-80 words max. Return ONLY the script text."
     ),
+    "psychology": (
+        "Give me 6 different psychology hacks or brain facts. "
+        "Each should be a real psychological effect with a surprising explanation. "
+        "Never repeat hacks from this avoid list:"
+        "\n---\n{avoid}\n---\n"
+        "Format exactly:\n"
+        "HACK: [Name of the effect]\n"
+        "EXPLANATION: [1-2 sentence explanation of how it works]\n\n"
+        "Make each one feel like a secret about the human mind."
+    ),
 }
 
 NICHES = [
@@ -80,6 +90,7 @@ IMAGE_PROMPT_HOW = "cinematic close-up illustration: {topic}, detailed technical
 IMAGE_PROMPT_RIDDLE = "mysterious cinematic scene: {riddle}, dark moody lighting, question marks, 9:16 vertical, intrigue"
 IMAGE_PROMPT_RIDDLE_ANSWER = "cinematic reveal scene: {answer}, bright warm lighting, discovery moment, 9:16 vertical"
 IMAGE_PROMPT_HISTORY = "vintage historical photograph style: {topic}, sepia tones, dramatic lighting, 9:16 vertical, weathered texture, cinematic"
+IMAGE_PROMPT_PSYCHOLOGY = "cinematic surreal brain illustration: {hack}, glowing neural connections, moody atmospheric lighting, 9:16 vertical, dark background with neon accents, highly detailed"
 
 RIDDLE_TYPES = [
     "logic", "wordplay", "math", "lateral thinking", "observation",
@@ -102,6 +113,35 @@ HISTORY_NICHES = [
 WYR_CATEGORIES = [
     "food", "travel", "money", "superpowers", "animals", "silly",
     "everyday", "nature", "sports", "school", "technology",
+]
+
+PSYCHOLOGY_HOOKS = [
+    "Your brain is playing tricks on you...",
+    "This psychology hack will change how you see people...",
+    "Most people don't know this about their own brain...",
+    "Here's why your brain does this:",
+    "Psychology says:",
+    "Your mind is more powerful than you think...",
+    "This brain hack works instantly:",
+    "The way you think is not what you think it is...",
+]
+
+PSYCHOLOGY_FALLBACKS = [
+    ("The Spotlight Effect", "You think everyone notices your mistakes. They don't. People are too busy thinking about themselves."),
+    ("The Ben Franklin Effect", "If someone does you a favor, they will like you more — not less. The brain justifies helping by assuming they like you."),
+    ("Loss Aversion", "Losing $10 hurts twice as much as finding $10 feels good. Your brain is wired to avoid loss more than seek gain."),
+    ("The IKEA Effect", "You value things more when you build them yourself. That's why DIY projects feel so satisfying."),
+    ("Mirroring", "People unconsciously copy body language of people they like. Try subtly mirroring someone — they'll feel connected to you."),
+    ("The Halo Effect", "If someone is attractive, your brain assumes they're also smart and kind. One positive trait colors everything."),
+    ("Choice Paradox", "Too many options make us unhappy. The brain prefers 3 choices over 30. Less is literally more."),
+    ("Foot-in-the-Door", "If someone agrees to a small request, they're much more likely to agree to a bigger one later."),
+    ("The Zeigarnik Effect", "Your brain remembers unfinished tasks better than completed ones. That's why cliffhangers are so effective."),
+    ("Cognitive Dissonance", "When your actions don't match your beliefs, your brain changes the belief — not the behavior."),
+    ("The Pratfall Effect", "Highly competent people become more likable when they make a small mistake. Perfection is actually off-putting."),
+    ("Anchoring", "The first number you hear sets a mental anchor. That's why $99 feels much cheaper after seeing $199 first."),
+    ("The Pygmalion Effect", "Expecting more from someone actually makes them perform better. High expectations create high results."),
+    ("Reciprocity", "When someone gives you something, your brain feels an overwhelming urge to give back. It's automatic."),
+    ("The Dunning-Kruger Effect", "Incompetent people overestimate their skills. Experts underestimate theirs. The more you know, the less confident you feel."),
 ]
 
 
@@ -160,6 +200,11 @@ def _mark_used(mode: str, entry: dict):
         n = _normalize(entry.get("script", ""))
         if n and n not in used:
             used.append(n)
+    elif mode == "psychology":
+        for h in entry.get("hacks", []):
+            n = _normalize(h)
+            if n and n not in used:
+                used.append(n)
     data["used"] = used
     _write_bank(mode, data)
 
@@ -223,6 +268,8 @@ def refill(mode: str, force_count: int | None = None):
             new_entries = _refill_wyr(need)
         elif mode == "history_minute":
             new_entries = _refill_history(need)
+        elif mode == "psychology":
+            new_entries = _refill_psychology(need)
         else:
             return
 
@@ -513,6 +560,60 @@ def _refill_history(need: int) -> list:
                 "script": script,
                 "image_prompt": image_prompt,
                 "tts_script": tts_script,
+            }
+            entries.append(entry)
+        attempts += 1
+
+    return entries
+
+
+def _refill_psychology(need: int) -> list:
+    entries = []
+    attempts = 0
+    hooks = PSYCHOLOGY_HOOKS
+    while len(entries) < need and attempts < need * 5:
+        avoid = _avoid_sample("psychology")
+        prompt = REFILL_PROMPTS["psychology"].format(avoid=avoid)
+        try:
+            raw = _generate(prompt, temperature=0.8, max_tokens=800,
+                            system="You write about real psychology effects in simple, fascinating terms. Only include verified psychological phenomena.")
+        except Exception as e:
+            print(f"  LLM error (psychology): {e}")
+            attempts += 1
+            continue
+        if not raw:
+            attempts += 1
+            continue
+
+        hacks = []
+        current = {}
+        for line in raw.split("\n"):
+            line = line.strip()
+            if line.upper().startswith("HACK:"):
+                if current.get("hack") and current.get("explanation"):
+                    hacks.append((current["hack"], current["explanation"]))
+                current = {"hack": line.split(":", 1)[-1].strip()}
+            elif line.upper().startswith("EXPLANATION:") and current:
+                current["explanation"] = line.split(":", 1)[-1].strip()
+        if current.get("hack") and current.get("explanation"):
+            hacks.append((current["hack"], current["explanation"]))
+
+        hack_texts = [h for h, _ in hacks]
+        if len(hacks) >= 3 and not _is_duplicate("psychology", hack_texts, _read_bank("psychology")):
+            hook = random.choice(hooks)
+            image_prompts = [
+                IMAGE_PROMPT_PSYCHOLOGY.format(hack=h)
+                for h, _ in hacks
+            ]
+            tts_lines = [f"{h}. {e}" for h, e in hacks]
+            entry = {
+                "title": f"Psychology Hack: {hacks[0][0]}",
+                "hook": hook,
+                "hacks": [h for h, _ in hacks],
+                "explanations": [e for _, e in hacks],
+                "image_prompts": image_prompts,
+                "script": " ".join(tts_lines),
+                "tts_script": " ".join(tts_lines),
             }
             entries.append(entry)
         attempts += 1
