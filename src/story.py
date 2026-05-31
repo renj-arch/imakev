@@ -1,8 +1,9 @@
-"""Manages continuous story chapters - each video continues from the last."""
+"""Self-generating continuous story — uses LLM to write each next chapter automatically."""
 
-import json
+import json, re
 from pathlib import Path
 import config
+from src.script_generator import generate_script
 
 STORY_FILE = config.ROOT_DIR / "story_state.json"
 
@@ -10,12 +11,11 @@ DEFAULT_STORY = {
     "chapter": 1,
     "previous_title": "Cat Kidnapping & Bike Rescue Squad",
     "previous_summary": (
-        "In the neon-lit dream city, a mysterious cat villain kidnapped a child. "
-        "A brave rescue squad on futuristic bicycles chased the villain through impossible streets. "
-        "They caught the cat villain, rescued the child, and justice prevailed."
+        "In the neon-lit dream city, a cat villain kidnapped a child. "
+        "A rescue squad on futuristic bicycles chased the villain through impossible streets. "
+        "The squad caught the villain and rescued the child."
     ),
-    "series": "Neon City Chronicles",
-    "world_state": "child rescued, cat villain caught, city still bending",
+    "world_state": "Neon city, rescue squad formed, villain caught, child rescued",
 }
 
 
@@ -31,71 +31,103 @@ def save_story(story: dict):
         json.dump(story, f, indent=2)
 
 
+def parse_llm_response(text: str) -> dict | None:
+    """Parse structured output from LLM into scenes and subtitles."""
+    scenes = re.findall(r"(?:SCENE|Scene)\s*\d+[:\s]+(.+)", text)
+    subtitles = re.findall(r"(?:SUBTITLE|Subtitle)\s*\d+[:\s]+(.+)", text)
+
+    # Fallback: split by double newlines
+    if not scenes:
+        paragraphs = [p.strip() for p in text.split("\n\n") if p.strip() and len(p.strip()) > 20]
+        if paragraphs:
+            scenes = paragraphs[:6]
+            subtitles = scenes
+
+    # Generate default prompts from subtitles
+    if scenes:
+        prompts = []
+        for s in scenes:
+            keywords = s.lower()[:60]
+            prompts.append(f"cinematic scene: {keywords}, neon cyberpunk style, 9:16 vertical, highly detailed")
+        return {
+            "title": scenes[0][:50] if scenes else "Next Chapter",
+            "script": ". ".join(subtitles) if subtitles else ". ".join(scenes),
+            "scenes": prompts[:6],
+            "subtitles": subtitles[:6] if subtitles else scenes[:6],
+        }
+    return None
+
+
+def generate_next_chapter_via_llm(previous_summary: str, chapter: int) -> dict:
+    """Ask LLM to write the next chapter."""
+    prompt = (
+        f"You are writing the next chapter of a cinematic neon-noir series set in a dreamlike cyberpunk city.\n\n"
+        f"Previously: {previous_summary}\n\n"
+        f"Write Chapter {chapter} of the story. Give me exactly 5 scenes with:\n"
+        f"- SCENE 1: (description, for image generation)\n"
+        f"- SUBTITLE 1: (spoken line)\n"
+        f"... up to SCENE 5 and SUBTITLE 5.\n\n"
+        f"Make it cinematic, visual, action-packed. New events only."
+    )
+
+    result = generate_script(
+        niche="cinematic cyberpunk story",
+        topic=prompt,
+    )
+
+    if result and len(result) > 50:
+        parsed = parse_llm_response(result)
+        if parsed:
+            return parsed
+
+    # Fallback: generate 5 generic scenes
+    return {
+        "title": f"Chapter {chapter}: The Story Continues",
+        "script": f"The neon city pulses with new energy. Something stirs in the shadows.",
+        "scenes": [
+            f"cinematic scene: the neon city at night, chapter {chapter}, dramatic lighting",
+            f"cinematic scene: mysterious figure emerges from shadows, tension building",
+            f"cinematic scene: fast pursuit through glowing streets, energy and motion",
+            f"cinematic scene: dramatic confrontation under neon lights",
+            f"cinematic scene: aftermath, city skyline, cinematic wide shot",
+        ],
+        "subtitles": [
+            f"The neon city pulses with new energy. Chapter {chapter} begins.",
+            "A mysterious figure emerges from the shadows of the dream city.",
+            "The chase begins again through streets of light and code.",
+            "Under the neon sky, destinies collide in a burst of light.",
+            "The city breathes. The story continues...",
+        ],
+    }
+
+
 def next_chapter() -> dict:
     story = load_story()
     chapter = story["chapter"] + 1
-    prev = story["previous_summary"]
 
-    # Build next chapter prompts based on previous
-    scenarios = {
-        2: {
-            "title": "The Cat Villain's Revenge",
-            "prompt": "The cat villain escapes from custody and seeks revenge on the rescue squad. The children must defend their city.",
-            "scenes": [
-                "cat villain breaking out of prison, neon chains shattering, dramatic cinematic",
-                "rescue squad children alerted by holographic alarm, determined faces, cinematic",
-                "cat villain stalking through neon city, glowing eyes, revenge, cinematic",
-                "children riding bicycles through city preparing for battle, cinematic",
-                "showdown between rescue squad and cat villain on neon bridge, epic standoff, cinematic",
-                "cat villain defeated again, but escapes into the shadows, cinematic ending",
-            ],
-            "subtitles": [
-                "The cat villain breaks free from his neon prison, vengeance in his glowing eyes.",
-                "The rescue squad is alerted. The city needs them once more.",
-                "Through the neon streets, the villain stalks his prey.",
-                "The children mount their light-cycles, ready for battle.",
-                "An epic showdown on the neon bridge. The city holds its breath.",
-                "The villain escapes into the shadows. The story continues...",
-            ],
-        },
-        3: {
-            "title": "The Hacker's Secret",
-            "prompt": "A mysterious hacker joins the cat villain, corrupting the city's AI systems. The rescue squad must find the source.",
-            "scenes": [
-                "mysterious hacker in hoodie surrounded by holographic screens, cyberpunk cinematic",
-                "city AI glitching, neon lights flickering, digital corruption spreading",
-                "rescue squad investigating corrupted data streams on their bikes, cinematic",
-                "chase through digital landscape with glitching buildings, surreal",
-                "confrontation with the hacker in a neon data center, cinematic",
-                "hacker escapes but leaves a cryptic message, the story deepens",
-            ],
-            "subtitles": [
-                "A mysterious figure emerges from the digital underworld.",
-                "The city's AI begins to glitch and corrupt around them.",
-                "The rescue squad investigates the data streams, following the digital trail.",
-                "They ride through a glitching cityscape where reality bends and warps.",
-                "In the heart of the data center, they confront the hacker.",
-                "The hacker vanishes, but leaves a cryptic clue behind...",
-            ],
-        },
-    }
+    print(f"\n  Writing Chapter {chapter} via LLM...")
 
-    scenario = scenarios.get(chapter, {
-        "title": f"Neon City Chronicles - Chapter {chapter}",
-        "prompt": f"Continuing from: {prev}. New adventure in the neon dream city.",
-        "scenes": [f"cinematic scene {i+1} of the neon city, chapter {chapter}" for i in range(6)],
-        "subtitles": [f"Chapter {chapter} unfolds..." for _ in range(6)],
-    })
+    result = generate_next_chapter_via_llm(story["previous_summary"], chapter)
 
+    title = result.get("title", f"Chapter {chapter}")
+    script = result.get("script", "The story continues...")
+    scenes = result.get("scenes", [])
+    subtitles = result.get("subtitles", [])
+
+    # Update story state
     story["chapter"] = chapter
-    story["previous_title"] = scenario["title"]
-    story["previous_summary"] = scenario["prompt"]
+    story["previous_title"] = title
+    story["previous_summary"] = f"Chapter {chapter}: {script[:200]}"
+    story["world_state"] = f"Neon city, chapter {chapter}"
     save_story(story)
+
+    print(f"  {title}")
+    print(f"  {len(scenes)} scenes generated")
 
     return {
         "chapter": chapter,
-        "title": scenario["title"],
-        "script": scenario["prompt"],
-        "scenes": scenario["scenes"],
-        "subtitles": scenario["subtitles"],
+        "title": title,
+        "script": script,
+        "scenes": scenes,
+        "subtitles": subtitles,
     }
