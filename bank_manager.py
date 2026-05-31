@@ -69,6 +69,16 @@ REFILL_PROMPTS = {
         "EXPLANATION: [1-2 sentence explanation of how it works]\n\n"
         "Make each one feel like a secret about the human mind."
     ),
+    "life_hacks": (
+        "Give me 6 useful life hacks or clever everyday tips. "
+        "Each must be practical, surprising, and actually work. "
+        "Never repeat hacks from this avoid list:"
+        "\n---\n{avoid}\n---\n"
+        "Format exactly:\n"
+        "HACK: [short name of the hack]\n"
+        "EXPLANATION: [1-2 sentence how to do it and why it works]\n\n"
+        "Make them simple, clever, and immediately usable."
+    ),
 }
 
 NICHES = [
@@ -91,6 +101,7 @@ IMAGE_PROMPT_RIDDLE = "mysterious cinematic scene: {riddle}, dark moody lighting
 IMAGE_PROMPT_RIDDLE_ANSWER = "cinematic reveal scene: {answer}, bright warm lighting, discovery moment, 9:16 vertical"
 IMAGE_PROMPT_HISTORY = "vintage historical photograph style: {topic}, sepia tones, dramatic lighting, 9:16 vertical, weathered texture, cinematic"
 IMAGE_PROMPT_PSYCHOLOGY = "cinematic surreal brain illustration: {hack}, glowing neural connections, moody atmospheric lighting, 9:16 vertical, dark background with neon accents, highly detailed"
+IMAGE_PROMPT_LIFE_HACKS = "clean bright flat lay photography: {hack}, household objects arranged neatly, top down view, natural lighting, minimalist, 9:16 vertical, white background"
 
 RIDDLE_TYPES = [
     "logic", "wordplay", "math", "lateral thinking", "observation",
@@ -142,6 +153,40 @@ PSYCHOLOGY_FALLBACKS = [
     ("The Pygmalion Effect", "Expecting more from someone actually makes them perform better. High expectations create high results."),
     ("Reciprocity", "When someone gives you something, your brain feels an overwhelming urge to give back. It's automatic."),
     ("The Dunning-Kruger Effect", "Incompetent people overestimate their skills. Experts underestimate theirs. The more you know, the less confident you feel."),
+]
+
+LIFE_HACKS_HOOKS = [
+    "This life hack will save you time every day:",
+    "Here's a hack you wish you knew sooner:",
+    "Stop doing this the hard way. Try this instead:",
+    "This simple trick changes everything:",
+    "Most people don't know this hack:",
+    "Here's a life hack that actually works:",
+    "You've been doing this wrong your whole life:",
+    "This one trick makes everything easier:",
+]
+
+LIFE_HACKS_FALLBACKS = [
+    ("Peel garlic in 10 seconds", "Put garlic cloves in a metal bowl, cover with another bowl, and shake hard for 10 seconds. The skin falls right off."),
+    ("Untie knots with a fork", "Stick a fork into the knot and twist. The tines separate the strands and the knot loosens instantly."),
+    ("Keep bananas fresh longer", "Wrap the stem of the banana bunch in plastic wrap. It traps the ethylene gas and slows ripening by days."),
+    ("Find wall studs with a magnet", "Run a magnet along the wall until it sticks to a screw or nail. That's where the stud is."),
+    ("Never lose a sock again", "Safety pin socks together before washing. They stay paired through the entire laundry cycle."),
+    ("Make your phone charger last", "Wrap a spring from an old pen around the base of the charging cable. It prevents the wire from fraying at the stress point."),
+    ("Remove a stripped screw", "Place a rubber band between the screwdriver and the screw head. The extra grip lets you turn it out."),
+    ("Keep chip bags closed", "Fold the top of the bag down in triangles, then flip it over. The tension holds it shut without a clip."),
+    ("Cool drinks faster", "Wrap a wet paper towel around the bottle and put it in the freezer. The evaporative cooling works in 15 minutes instead of an hour."),
+    ("Remove permanent marker", "Draw over the marker stain with a dry erase marker, then wipe both off together. The solvents lift the permanent ink."),
+    ("Prevent tears when cutting onions", "Chew gum while chopping. The chewing forces you to breathe through your mouth, bypassing the eye-irritating fumes."),
+    ("Open a jar with tape", "Wrap duct tape around the lid in opposite directions, leaving two tails to pull. The leverage makes any jar open easily."),
+    ("Double your headphone battery", "Store wireless earbuds in the case upside down. The contacts don't connect, so they stop trickle charging and last longer."),
+    ("Zipper fix with a pencil", "Rub pencil graphite along the teeth of a stuck zipper. The graphite acts as a dry lubricant and it glides smoothly."),
+    ("Keep cables tangle-free", "Fold cables in thirds, loop a twist tie around the middle. They stay coiled and never tangle in your bag."),
+    ("Remove price stickers cleanly", "Heat the sticker with a hairdryer for 30 seconds. The adhesive softens and it peels off without residue."),
+    ("Boost Wi-Fi with foil", "Place a curved piece of aluminum foil behind your router. It reflects the signal forward and can double range in one direction."),
+    ("Fix a wobbly table", "Dip a toothpick in wood glue and hammer it into the loose joint. Snap off the excess. The table becomes rock solid."),
+    ("Keep ice cream soft", "Store ice cream in a ziplock bag inside the carton. The bag prevents ice crystals from forming so it stays scoopable."),
+    ("Get more juice from lemons", "Microwave the lemon for 15 seconds before squeezing. The heat breaks down membranes and releases twice the juice."),
 ]
 
 
@@ -201,6 +246,11 @@ def _mark_used(mode: str, entry: dict):
         if n and n not in used:
             used.append(n)
     elif mode == "psychology":
+        for h in entry.get("hacks", []):
+            n = _normalize(h)
+            if n and n not in used:
+                used.append(n)
+    elif mode == "life_hacks":
         for h in entry.get("hacks", []):
             n = _normalize(h)
             if n and n not in used:
@@ -270,6 +320,8 @@ def refill(mode: str, force_count: int | None = None):
             new_entries = _refill_history(need)
         elif mode == "psychology":
             new_entries = _refill_psychology(need)
+        elif mode == "life_hacks":
+            new_entries = _refill_life_hacks(need)
         else:
             return
 
@@ -608,6 +660,60 @@ def _refill_psychology(need: int) -> list:
             tts_lines = [f"{h}. {e}" for h, e in hacks]
             entry = {
                 "title": f"Psychology Hack: {hacks[0][0]}",
+                "hook": hook,
+                "hacks": [h for h, _ in hacks],
+                "explanations": [e for _, e in hacks],
+                "image_prompts": image_prompts,
+                "script": " ".join(tts_lines),
+                "tts_script": " ".join(tts_lines),
+            }
+            entries.append(entry)
+        attempts += 1
+
+    return entries
+
+
+def _refill_life_hacks(need: int) -> list:
+    entries = []
+    attempts = 0
+    hooks = LIFE_HACKS_HOOKS
+    while len(entries) < need and attempts < need * 5:
+        avoid = _avoid_sample("life_hacks")
+        prompt = REFILL_PROMPTS["life_hacks"].format(avoid=avoid)
+        try:
+            raw = _generate(prompt, temperature=0.8, max_tokens=800,
+                            system="You write practical, clever life hacks that actually work. Each hack must be safe, simple, and useful.")
+        except Exception as e:
+            print(f"  LLM error (life_hacks): {e}")
+            attempts += 1
+            continue
+        if not raw:
+            attempts += 1
+            continue
+
+        hacks = []
+        current = {}
+        for line in raw.split("\n"):
+            line = line.strip()
+            if line.upper().startswith("HACK:"):
+                if current.get("hack") and current.get("explanation"):
+                    hacks.append((current["hack"], current["explanation"]))
+                current = {"hack": line.split(":", 1)[-1].strip()}
+            elif line.upper().startswith("EXPLANATION:") and current:
+                current["explanation"] = line.split(":", 1)[-1].strip()
+        if current.get("hack") and current.get("explanation"):
+            hacks.append((current["hack"], current["explanation"]))
+
+        hack_texts = [h for h, _ in hacks]
+        if len(hacks) >= 3 and not _is_duplicate("life_hacks", hack_texts, _read_bank("life_hacks")):
+            hook = random.choice(hooks)
+            image_prompts = [
+                IMAGE_PROMPT_LIFE_HACKS.format(hack=h)
+                for h, _ in hacks
+            ]
+            tts_lines = [f"{h}. {e}" for h, e in hacks]
+            entry = {
+                "title": f"{hook} {hacks[0][0]}",
                 "hook": hook,
                 "hacks": [h for h, _ in hacks],
                 "explanations": [e for _, e in hacks],

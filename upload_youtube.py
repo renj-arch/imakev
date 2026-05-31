@@ -21,6 +21,7 @@ PLAYLISTS = {
     "would_you_rather": {"name": "Would You Rather?", "desc": "Fun choices — which one would you pick?"},
     "history_minute": {"name": "History Minute", "desc": "Fascinating history shorts — one minute at a time."},
     "psychology": {"name": "Psychology Hacks", "desc": "Mind-blowing psychology hacks your brain doesn't want you to know."},
+    "life_hacks": {"name": "Life Hacks", "desc": "Clever life hacks that actually work — save time, money, and effort."},
 }
 
 

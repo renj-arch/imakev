@@ -10,7 +10,7 @@ on:
         required: true
         default: 'auto'
         type: choice
-        options:
+          options:
           - auto
           - story
           - facts
@@ -20,6 +20,7 @@ on:
           - would_you_rather
           - history_minute
           - psychology
+          - life_hacks
 
 concurrency:
   group: video-pipeline
@@ -72,7 +73,7 @@ jobs:
           if [ "$MODE" = "auto" ]; then
             HOUR=$(date -u +%-H)
             IDX=$((HOUR / 2))
-            case $((IDX % 8)) in
+            case $((IDX % 9)) in
               0) MODE="story" ;;
               1) MODE="facts" ;;
               2) MODE="what_if" ;;
@@ -81,6 +82,7 @@ jobs:
               5) MODE="would_you_rather" ;;
               6) MODE="history_minute" ;;
               7) MODE="psychology" ;;
+              8) MODE="life_hacks" ;;
             esac
           fi
           echo "mode=$MODE" >> $GITHUB_OUTPUT
