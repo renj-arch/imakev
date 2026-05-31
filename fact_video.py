@@ -7,7 +7,7 @@ import numpy as np
 import requests as req
 from moviepy import (
     VideoClip, AudioFileClip, ImageClip,
-    concatenate_videoclips, CompositeAudioClip,
+    concatenate_videoclips, CompositeAudioClip, concatenate_audioclips,
 )
 import config
 
@@ -192,9 +192,13 @@ def main():
     final = bg
 
     audio_clip = AudioFileClip(str(tts_path))
+    video_dur = total_dur + 1.5
+    if video_dur > audio_clip.duration:
+        silence = AudioFileClip(str(tts_path)).with_duration(video_dur - audio_clip.duration).with_volume_scaled(0)
+        audio_clip = concatenate_audioclips([audio_clip, silence])
     music_paths = list(config.MUSIC_DIR.glob("*.mp3"))
     if music_paths:
-        music = AudioFileClip(str(random.choice(music_paths))).with_duration(total_dur + 1.5).with_volume_scaled(0.08)
+        music = AudioFileClip(str(random.choice(music_paths))).with_duration(video_dur).with_volume_scaled(0.08)
         final = final.with_audio(CompositeAudioClip([audio_clip, music]))
     else:
         final = final.with_audio(audio_clip)

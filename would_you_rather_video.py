@@ -5,7 +5,7 @@ from pathlib import Path
 from PIL import Image, ImageEnhance, ImageDraw, ImageFont
 import numpy as np
 import requests as req
-from moviepy import VideoClip, AudioFileClip, concatenate_videoclips, CompositeAudioClip
+from moviepy import VideoClip, AudioFileClip, concatenate_videoclips, CompositeAudioClip, concatenate_audioclips
 import config
 from src.would_you_rather import generate_wyr_script
 
@@ -178,10 +178,14 @@ def main():
     ]
     final = concatenate_videoclips(clips, method="compose")
     audio_clip = AudioFileClip(str(tts_path))
+    video_dur = final.duration
+    if video_dur > audio_clip.duration:
+        silence = AudioFileClip(str(tts_path)).with_duration(video_dur - audio_clip.duration).with_volume_scaled(0)
+        audio_clip = concatenate_audioclips([audio_clip, silence])
 
     music_paths = list(config.MUSIC_DIR.glob("*.mp3"))
     if music_paths:
-        music = AudioFileClip(str(random.choice(music_paths))).with_duration(final.duration).with_volume_scaled(0.06)
+        music = AudioFileClip(str(random.choice(music_paths))).with_duration(video_dur).with_volume_scaled(0.06)
         final = final.with_audio(CompositeAudioClip([audio_clip, music]))
     else:
         final = final.with_audio(audio_clip)

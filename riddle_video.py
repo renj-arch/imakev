@@ -196,7 +196,10 @@ def main():
     print("\n[4/4] Applying audio...")
     audio_riddle = AudioFileClip(str(tts_path))
     total_video_dur = 1.5 + riddle_dur + pause_before_answer + answer_dur
-    audio_riddle = audio_riddle.with_duration(total_video_dur)
+    # Pad narration with silence so moviepy doesn't read past end
+    if total_video_dur > audio_riddle.duration:
+        silence = AudioFileClip(str(tts_path)).with_duration(total_video_dur - audio_riddle.duration).with_volume_scaled(0)
+        audio_riddle = concatenate_audioclips([audio_riddle, silence])
 
     music_paths = list(config.MUSIC_DIR.glob("*.mp3"))
     if music_paths:
