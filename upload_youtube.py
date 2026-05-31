@@ -1,6 +1,6 @@
 """Upload video to YouTube via YouTube Data API v3 + OAuth 2.0."""
 
-import os, pickle
+import sys, os, pickle
 from pathlib import Path
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -43,7 +43,7 @@ def upload(video_path: str, title: str, description: str = "", tags: list[str] =
     }
 
     media = MediaFileUpload(video_path, chunksize=-1, resumable=True)
-    print("Uploading...")
+    print(f"Uploading: {title[:50]}...")
     request = youtube.videos().insert(part="snippet,status", body=body, media_body=media)
     response = None
     while response is None:
@@ -60,11 +60,11 @@ if __name__ == "__main__":
         print("No MP4 files in output/")
         exit(1)
     video = str(mp4s[0])
-    print(f"Uploading: {Path(video).name}")
     upload(
         video_path=video,
         title="Cat Kidnapping & Bike Rescue Squad | AI Cinematic Short Film",
-        description="A cinematic AI-generated short film.\nCreated with Pollinations.ai, edge-tts, moviepy\n#shorts #aicinema #cat",
-        tags=["ai film", "cinematic", "cat", "shorts"],
+        description="Daily AI cinematic short film.\n#shorts #aicinema",
+        tags=["ai film", "cinematic", "shorts"],
         privacy="public",
     )
+

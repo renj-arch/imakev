@@ -3,7 +3,7 @@ echo Installing AI Cinematic Daily Schedule (3:00 AM)
 echo.
 
 :: Create the task
-schtasks /create /tn "AICinematicDaily" /tr "C:\Users\Renjith\AppData\Local\Python\pythoncore-3.14-64\python.exe C:\Users\Renjith\Desktop\icode (2)\youtuberevenue\run_pipeline.py" /sc daily /st 03:00 /f
+schtasks /create /tn "AICinematicDaily" /tr "C:\Users\Renjith\AppData\Local\Python\pythoncore-3.14-64\python.exe C:\Users\Renjith\Desktop\icode (2)\imakev\run_pipeline.py" /sc daily /st 03:00 /f
 
 if %errorlevel% equ 0 (
     echo.

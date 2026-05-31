@@ -34,6 +34,7 @@ SUBTITLES = [
 ]
 
 TITLE = "CAT KIDNAPPING & BIKE RESCUE SQUAD"
+CHAPTER = 1  # will be overridden by pipeline
 
 SCRIPT = (
     "In the neon-lit shadows of the dream city, a mysterious cat villain emerges from the darkness. "
@@ -174,9 +175,13 @@ def main():
 
     # End card (use last scene)
     end_img = images.get(scene_ids[-1], Image.new("RGB", (W, H), (10, 5, 40)))
-    clips.append(motion_clip(end_img, 2.5))
-    end_txt = TextClip(text="TO BE CONTINUED...", font=FONT, font_size=36, color="white", stroke_color="black", stroke_width=2, method="label").with_position(("center", "center")).with_duration(2.5).with_start(total_dur - 2.5)
+    clips.append(motion_clip(end_img, 3.5))
+    end_txt = TextClip(text="SUBSCRIBE FOR CHAPTER " + str(CHAPTER + 1), font=FONT, font_size=38, color="white", stroke_color="black", stroke_width=3, method="label").with_position(("center", "center")).with_duration(3.5).with_start(total_dur - 3.5)
     overlays.append(end_txt)
+
+    # Comment prompt (halfway)
+    comment_txt = TextClip(text="Comment what happens next  👇", font=FONT, font_size=28, color="white", stroke_color="black", stroke_width=2, method="label").with_position(("center", H - 300)).with_duration(2.5).with_start(total_dur * 0.5)
+    overlays.append(comment_txt)
 
     bg = concatenate_videoclips(clips, method="compose")
     bh = int(H * 0.08)

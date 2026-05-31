@@ -7,3 +7,7 @@ assets/backgrounds/*
 !assets/backgrounds/.gitkeep
 assets/music/*
 !assets/music/.gitkeep
+client_secret.json
+token.pickle
+story_state.json
+*.mp4
