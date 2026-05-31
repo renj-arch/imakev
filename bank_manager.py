@@ -1,6 +1,7 @@
-"""Content bank: stores pre-generated scripts in repo, auto-refills via LLM."""
+"""Content bank: stores pre-generated scripts in repo, auto-refills via LLM.
+Ensures no content repetition by tracking used items and filtering during refill."""
 
-import json, random
+import json, random, re
 from pathlib import Path
 from src.script_generator import _generate
 
@@ -9,10 +10,14 @@ BANK_DIR = Path(__file__).parent / "bank"
 REFILL_PROMPTS = {
     "facts": (
         "Generate 8 surprising true facts about {niche}. "
-        "All facts must be 100% accurate. Number them 1-8, one per line."
+        "All facts must be 100%% accurate. Never repeat facts from this avoid list:"
+        "\n---\n{avoid}\n---\n"
+        "Number them 1-8, one per line."
     ),
     "what_if": (
         "Give me 6 imaginative 'What If' scenarios for kids. "
+        "Never repeat scenarios from this avoid list:"
+        "\n---\n{avoid}\n---\n"
         "Format each as:\n"
         "SCENARIO: what if ...\n"
         "EXPLANATION: a short fun explanation of what would happen\n"
@@ -20,6 +25,8 @@ REFILL_PROMPTS = {
     ),
     "how_it_works": (
         "Give me 6 different everyday objects and explain how each works in 2-3 simple sentences. "
+        "Never repeat topics from this avoid list:"
+        "\n---\n{avoid}\n---\n"
         "Format exactly:\n"
         "TOPIC: [object name]\n"
         "EXPLANATION: [how it works in 2-3 sentences]\n\n"
@@ -54,7 +61,7 @@ def _read_bank(mode: str) -> dict:
     if path.exists():
         with open(path) as f:
             return json.load(f)
-    return {"entries": [], "min_before_refill": 5, "refill_target": 40}
+    return {"entries": [], "used": [], "min_before_refill": 5, "refill_target": 40}
 
 
 def _write_bank(mode: str, data: dict):
@@ -63,11 +70,57 @@ def _write_bank(mode: str, data: dict):
         json.dump(data, f, indent=2)
 
 
+def _normalize(text: str) -> str:
+    return re.sub(r"[^a-z0-9]+", " ", text.lower()).strip()
+
+
+def _mark_used(mode: str, entry: dict):
+    data = _read_bank(mode)
+    if "used" not in data:
+        data["used"] = []
+    used = data["used"]
+    if mode == "facts":
+        for f in entry.get("facts", []):
+            n = _normalize(f)
+            if n not in used:
+                used.append(n)
+    elif mode == "what_if":
+        for s in entry.get("scenarios", []):
+            n = _normalize(s)
+            if n not in used:
+                used.append(n)
+    elif mode == "how_it_works":
+        for t in entry.get("topics", []):
+            n = _normalize(t)
+            if n not in used:
+                used.append(n)
+    data["used"] = used
+    _write_bank(mode, data)
+
+
+def _avoid_sample(mode: str, max_items: int = 30) -> str:
+    data = _read_bank(mode)
+    used = data.get("used", [])
+    if not used:
+        return "none yet"
+    sample = random.sample(used, min(max_items, len(used)))
+    return "\n".join(f"- {item}" for item in sample)
+
+
+def _is_duplicate(mode: str, items: list[str], data: dict) -> bool:
+    used = set(data.get("used", []))
+    for item in items:
+        if _normalize(item) in used:
+            return True
+    return False
+
+
 def pick(mode: str) -> dict | None:
     data = _read_bank(mode)
     if data["entries"]:
         entry = data["entries"].pop(0)
         _write_bank(mode, data)
+        _mark_used(mode, entry)
         return entry
     return None
 
@@ -108,10 +161,11 @@ def refill(mode: str, force_count: int | None = None):
 def _refill_facts(need: int) -> list:
     entries = []
     attempts = 0
-    while len(entries) < need and attempts < need * 3:
+    while len(entries) < need and attempts < need * 5:
         niche = random.choice(NICHES)
-        prompt = REFILL_PROMPTS["facts"].format(niche=niche)
-        raw = _generate(prompt, temperature=0.7, max_tokens=800,
+        avoid = _avoid_sample("facts")
+        prompt = REFILL_PROMPTS["facts"].format(niche=niche, avoid=avoid)
+        raw = _generate(prompt, temperature=0.8, max_tokens=800,
                         system="You write verified facts. Only include facts you are certain are true. One fact per line, numbered.")
         if not raw:
             attempts += 1
@@ -127,7 +181,7 @@ def _refill_facts(need: int) -> list:
                 if clean and len(clean) > 10:
                     facts.append(clean.rstrip(".") + ".")
 
-        if len(facts) >= 3:
+        if len(facts) >= 3 and not _is_duplicate("facts", facts, _read_bank("facts")):
             hook = random.choice(FACT_HOOKS)
             image_prompts = [
                 IMAGE_PROMPT_FACT.format(keywords=" ".join(f.split()[:12]))
@@ -152,8 +206,9 @@ def _refill_facts(need: int) -> list:
 def _refill_what_if(need: int) -> list:
     entries = []
     attempts = 0
-    while len(entries) < need and attempts < need * 3:
-        prompt = REFILL_PROMPTS["what_if"]
+    while len(entries) < need and attempts < need * 5:
+        avoid = _avoid_sample("what_if")
+        prompt = REFILL_PROMPTS["what_if"].format(avoid=avoid)
         raw = _generate(prompt, temperature=0.9, max_tokens=800,
                         system="You write creative 'What If' scenarios for children's videos.")
         if not raw:
@@ -173,7 +228,8 @@ def _refill_what_if(need: int) -> list:
         if current.get("scenario") and current.get("explanation"):
             scenarios.append((current["scenario"], current["explanation"]))
 
-        if len(scenarios) >= 3:
+        scenario_texts = [s for s, _ in scenarios]
+        if len(scenarios) >= 3 and not _is_duplicate("what_if", scenario_texts, _read_bank("what_if")):
             hook = random.choice(FACT_HOOKS)
             image_prompts = [
                 IMAGE_PROMPT_WHATIF.format(scenario=s)
@@ -198,8 +254,9 @@ def _refill_what_if(need: int) -> list:
 def _refill_how_it_works(need: int) -> list:
     entries = []
     attempts = 0
-    while len(entries) < need and attempts < need * 3:
-        prompt = REFILL_PROMPTS["how_it_works"]
+    while len(entries) < need and attempts < need * 5:
+        avoid = _avoid_sample("how_it_works")
+        prompt = REFILL_PROMPTS["how_it_works"].format(avoid=avoid)
         raw = _generate(prompt, temperature=0.8, max_tokens=800,
                         system="You explain how everyday things work in simple, accurate terms.")
         if not raw:
@@ -219,7 +276,8 @@ def _refill_how_it_works(need: int) -> list:
         if current.get("topic") and current.get("explanation"):
             topics.append((current["topic"], current["explanation"]))
 
-        if len(topics) >= 3:
+        topic_texts = [t for t, _ in topics]
+        if len(topics) >= 3 and not _is_duplicate("how_it_works", topic_texts, _read_bank("how_it_works")):
             hook = random.choice([
                 "Ever wondered how this works?", "Here's how it actually works.",
                 "You use it every day. But how does it work?", "Let me explain how this works.",
