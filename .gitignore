@@ -1,0 +1,9 @@
+.env
+__pycache__/
+*.pyc
+temp/
+output/*.mp4
+assets/backgrounds/*
+!assets/backgrounds/.gitkeep
+assets/music/*
+!assets/music/.gitkeep
