@@ -176,11 +176,9 @@ def main():
     # End card (use last scene)
     end_img = images.get(scene_ids[-1], Image.new("RGB", (W, H), (10, 5, 40)))
     clips.append(motion_clip(end_img, 3.5))
-    # Channel name + subscribe call
-    end_line1 = TextClip(text="@Glitchverse12-i8i", font=FONT, font_size=44, color="white", stroke_color="black", stroke_width=3, method="label").with_position(("center", H//2 - 60)).with_duration(3.5).with_start(total_dur - 3.5)
-    end_line2 = TextClip(text="SUBSCRIBE FOR CHAPTER " + str(CHAPTER + 1), font=FONT, font_size=32, color="#FFCC00", stroke_color="black", stroke_width=2, method="label").with_position(("center", H//2 + 20)).with_duration(3.5).with_start(total_dur - 3.5)
-    end_line3 = TextClip(text="🔔 TURN ON NOTIFICATIONS 🔔", font=FONT, font_size=24, color="white", stroke_color="black", stroke_width=2, method="label").with_position(("center", H//2 + 80)).with_duration(3.0).with_start(total_dur - 3.0)
-    overlays.extend([end_line1, end_line2, end_line3])
+    end_line1 = TextClip(text="TO BE CONTINUED...", font=FONT, font_size=44, color="white", stroke_color="black", stroke_width=3, method="label").with_position(("center", H//2 - 30)).with_duration(3.5).with_start(total_dur - 3.5)
+    end_line2 = TextClip(text="SUBSCRIBE FOR CHAPTER " + str(CHAPTER + 1), font=FONT, font_size=32, color="#FFCC00", stroke_color="black", stroke_width=2, method="label").with_position(("center", H//2 + 30)).with_duration(3.5).with_start(total_dur - 3.5)
+    overlays.extend([end_line1, end_line2])
 
     # Comment prompt (halfway)
     comment_txt = TextClip(text="Comment what happens next  👇", font=FONT, font_size=28, color="white", stroke_color="black", stroke_width=2, method="label").with_position(("center", H - 300)).with_duration(2.5).with_start(total_dur * 0.5)
