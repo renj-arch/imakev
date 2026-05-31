@@ -24,11 +24,13 @@ HOOK_PHRASES = [
 
 def generate_title(chapter: int, story_title: str) -> str:
     templates = [
-        f"Chapter {chapter}: {story_title} 🔥 | AI Cinematic Short Film",
-        f"{story_title} - Chapter {chapter} (AI Cinematic) 🎬",
-        f"AI Generated: {story_title} | Chapter {chapter} {random.choice(TRENDING_HASHTAGS)}",
-        f"Mind-Blowing AI Film - Chapter {chapter}: {story_title}",
-        f"Chapter {chapter}: {story_title} - An AI Story {random.choice(['🌆', '🔥', '⚡', '🎥'])}",
+        f"Chapter {chapter}: {story_title} 🔥 | Glitchverse AI",
+        f"{story_title} - Chapter {chapter} 🎬 @Glitchverse12-i8i",
+        f"AI Generated: {story_title} | Chapter {chapter}",
+        f"TO BE CONTINUED... Chapter {chapter}: {story_title}",
+        f"Chapter {chapter}: {story_title} 🌆 | Daily AI Story",
+        f"THE STORY CONTINUES - Chapter {chapter}: {story_title}",
+        f"⚠️ Chapter {chapter}: {story_title} (Watch Till End)",
     ]
     return random.choice(templates)
 
@@ -41,12 +43,13 @@ def generate_description(chapter: int, story_title: str, script: str, video_url:
         f"{hook}! 🚀\n\n"
         f"Chapter {chapter}: {story_title}\n\n"
         f"{script[:200]}...\n\n"
-        f"🤖 Created with AI (Pollinations.ai + edge-tts + Python)\n"
-        f"📺 Subscribe for daily chapters: https://youtube.com/@yourchannel\n\n"
+        f"🤖 Created with AI\n"
+        f"📺 Subscribe: https://youtube.com/@Glitchverse12-i8i\n"
+        f"🔔 Turn on notifications for Chapter {chapter + 1}!\n\n"
         f"💬 Comment: What should happen in Chapter {chapter + 1}?\n"
-        f"🔔 Turn on notifications for the next episode!\n\n"
+        f"👍 Like if you want the next chapter tomorrow!\n\n"
         f"{tags_list}\n\n"
-        f"#aicinema #shortfilm #aigenerated #neoncity #chapter{chapter}"
+        f"#aicinema #shortfilm #aigenerated #glitchverse #chapter{chapter}"
     )
 
 
