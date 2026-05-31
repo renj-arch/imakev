@@ -1,6 +1,6 @@
 """Would You Rather Shorts — image + baked text + TTS + music."""
 
-import subprocess, time, io, random
+import sys, subprocess, time, io, random
 from pathlib import Path
 from PIL import Image, ImageEnhance, ImageDraw, ImageFont
 import numpy as np
