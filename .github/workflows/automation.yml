@@ -10,7 +10,7 @@ on:
         required: true
         default: 'auto'
         type: choice
-          options:
+        options:
           - auto
           - story
           - facts
