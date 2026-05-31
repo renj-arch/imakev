@@ -1,4 +1,4 @@
-"""Upload video to YouTube via API v3 + auto-comment for engagement."""
+"""Upload video to YouTube via API v3 + auto-playlist + auto-comment."""
 
 import sys, os, pickle, time
 from pathlib import Path
@@ -8,9 +8,11 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 
-SCOPES = ["https://www.googleapis.com/auth/youtube.upload", "https://www.googleapis.com/auth/youtube.force-ssl"]
+SCOPES = ["https://www.googleapis.com/auth/youtube"]
 CLIENT_SECRET = "client_secret.json"
 TOKEN_FILE = "token.pickle"
+PLAYLIST_NAME = "Neon City Chronicles"
+PLAYLIST_DESC = "A continuous AI-generated cinematic series. Each chapter continues the story."
 
 
 def get_service():
@@ -29,9 +31,44 @@ def get_service():
     return build("youtube", "v3", credentials=creds)
 
 
+def get_or_create_playlist(youtube) -> str:
+    """Get existing playlist ID or create a new one."""
+    request = youtube.playlists().list(part="snippet", mine=True, maxResults=50)
+    response = request.execute()
+    for item in response.get("items", []):
+        if item["snippet"]["title"] == PLAYLIST_NAME:
+            print(f"  Playlist found: {PLAYLIST_NAME}")
+            return item["id"]
+
+    # Create new playlist
+    body = {
+        "snippet": {
+            "title": PLAYLIST_NAME,
+            "description": PLAYLIST_DESC,
+        },
+        "status": {"privacyStatus": "public"},
+    }
+    result = youtube.playlists().insert(part="snippet,status", body=body).execute()
+    print(f"  Playlist created: {PLAYLIST_NAME}")
+    return result["id"]
+
+
+def add_to_playlist(youtube, playlist_id: str, video_id: str):
+    """Add video to playlist."""
+    body = {
+        "snippet": {
+            "playlistId": playlist_id,
+            "resourceId": {"kind": "youtube#video", "videoId": video_id},
+        }
+    }
+    youtube.playlistItems().insert(part="snippet", body=body).execute()
+    print(f"  Added to playlist: {PLAYLIST_NAME}")
+
+
 def upload(video_path: str, title: str, description: str = "", tags: list[str] = None, privacy: str = "public"):
     youtube = get_service()
 
+    # Upload video
     body = {
         "snippet": {
             "title": title,
@@ -56,10 +93,17 @@ def upload(video_path: str, title: str, description: str = "", tags: list[str] =
     video_id = response["id"]
     print(f"Done! https://youtu.be/{video_id}")
 
-    # Auto-comment for early engagement (algorithm boost)
-    time.sleep(3)
+    # Add to playlist
     try:
-        comment = f"Chapter X coming next. What should happen? 👇"
+        playlist_id = get_or_create_playlist(youtube)
+        add_to_playlist(youtube, playlist_id, video_id)
+    except Exception as e:
+        print(f"  Playlist skipped: {e}")
+
+    # Auto-comment
+    time.sleep(2)
+    try:
+        comment = f"What should happen in Chapter X? 👇"
         youtube.commentThreads().insert(
             part="snippet",
             body={
@@ -69,10 +113,11 @@ def upload(video_path: str, title: str, description: str = "", tags: list[str] =
                 }
             },
         ).execute()
-        print(f"  Auto-commented: '{comment}'")
+        print(f"  Auto-commented")
     except Exception as e:
         print(f"  Auto-comment skipped: {e}")
 
+    print(f"  Channel: https://youtube.com/@Glitchverse12-i8i")
     return video_id
 
 
