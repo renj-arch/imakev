@@ -42,9 +42,9 @@ def main():
     from src.seo import generate_title, generate_description, generate_tags, generate_hashtags
 
     final_title = generate_title(chapter["chapter"], chapter["title"])
-    final_description = generate_description(chapter["chapter"], chapter["title"], cv.SCRIPT)
-    final_tags = generate_tags(chapter["chapter"], chapter["title"])
     hashtags = generate_hashtags()
+    final_description = generate_description(chapter["chapter"], chapter["title"], cv.SCRIPT, hashtags)
+    final_tags = generate_tags(chapter["chapter"], chapter["title"])
     print(f"  Title: {final_title}")
     print(f"  Tags: {len(final_tags)} tags + {hashtags.count('#')} hashtags")
 
