@@ -1,6 +1,6 @@
-"""Full automated pipeline: switches between story video and fact video each run."""
+"""Full automated pipeline: story / facts / what_if modes."""
 
-import sys, random
+import sys
 from pathlib import Path
 import config
 
@@ -54,24 +54,42 @@ def run_facts():
 
     from src.facts import generate_fact_script
     from src.seo import generate_hashtags
-    import fact_video
     from upload_youtube import upload
+    import fact_video
 
-    # Generate and render
     out_path, fact_data = fact_video.main()
 
-    # SEO
-    hashtags = generate_hashtags()
+    hashtags = generate_hashtags(8)
     desc = f"{fact_data['hook']}\n\n"
     for i, f in enumerate(fact_data["facts"], 1):
         desc += f"{i}. {f}\n"
-    desc += f"\n#facts #{fact_data['niche'].replace(' ', '')} #shorts\n{hashtags}"
-
-    tags = ["facts", fact_data["niche"], "shorts", "did you know", "mind blowing"] + fact_data["niche"].split()
+    desc += f"\n#facts #shorts\n{hashtags}"
+    tags = ["facts", fact_data["niche"], "shorts", "did you know", "fun facts"]
 
     print("\nUploading...")
     upload(str(out_path), fact_data["title"], desc, tags, "public", "facts")
     print("Fact video done!")
+
+
+def run_what_if():
+    print("=" * 55)
+    print("  MODE: WHAT IF?")
+    print("=" * 55)
+
+    from upload_youtube import upload
+    import what_if_video
+
+    out_path, data = what_if_video.main()
+
+    desc = f"{data['hook']}\n\n"
+    for s, e in zip(data["scenarios"], data["explanations"]):
+        desc += f"What if {s}? {e}\n\n"
+    desc += "#whatif #imagination #kidsshorts #shorts"
+    tags = ["what if", "imagination", "kids shorts", "curiosity", "wonder", "fun"]
+
+    print("\nUploading...")
+    upload(str(out_path), data["title"], desc, tags, "public", "what_if")
+    print("What If video done!")
 
 
 def main():
@@ -80,8 +98,10 @@ def main():
         run_story()
     elif mode == "facts":
         run_facts()
+    elif mode == "what_if":
+        run_what_if()
     else:
-        print(f"Unknown mode: {mode}. Use 'story' or 'facts'")
+        print(f"Unknown mode: {mode}. Use 'story', 'facts', or 'what_if'")
 
 
 if __name__ == "__main__":

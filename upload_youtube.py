@@ -15,6 +15,7 @@ TOKEN_FILE = "token.pickle"
 PLAYLISTS = {
     "story": {"name": "Neon City Chronicles", "desc": "A continuous AI-generated cinematic series. Each chapter continues the story."},
     "facts": {"name": "Mind-Blowing Facts", "desc": "Daily facts that will change how you see the world."},
+    "what_if": {"name": "What If? For Kids", "desc": "Imaginative 'what if' scenarios that spark curiosity and wonder."},
 }
 
 
