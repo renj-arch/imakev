@@ -1,6 +1,6 @@
 """Upload video to YouTube via API v3 + auto-playlist + auto-comment."""
 
-import sys, os, pickle, time
+import sys, os, pickle
 from pathlib import Path
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -80,7 +80,7 @@ def upload(video_path: str, title: str, description: str = "", tags: list[str] =
         },
         "status": {
             "privacyStatus": privacy,
-            "selfDeclaredMadeForKids": False,
+            "selfDeclaredMadeForKids": True,
         },
     }
 
@@ -102,22 +102,8 @@ def upload(video_path: str, title: str, description: str = "", tags: list[str] =
     except Exception as e:
         print(f"  Playlist skipped: {e}")
 
-    # Auto-comment
-    time.sleep(2)
-    try:
-        comment = f"What should happen in Chapter X? 👇"
-        youtube.commentThreads().insert(
-            part="snippet",
-            body={
-                "snippet": {
-                    "videoId": video_id,
-                    "topLevelComment": {"snippet": {"textOriginal": comment}},
-                }
-            },
-        ).execute()
-        print(f"  Auto-commented")
-    except Exception as e:
-        print(f"  Auto-comment skipped: {e}")
+    # Auto-comment — skipped for made-for-kids videos (comments disabled by YouTube)
+    print("  Comments disabled: marked as made for kids")
 
     print(f"  Channel: https://youtube.com/@Glitchverse12-i8i")
     return video_id
