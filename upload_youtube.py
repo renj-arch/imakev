@@ -69,7 +69,7 @@ def add_to_playlist(youtube, playlist_id: str, video_id: str, playlist_key: str 
     print(f"  Added to playlist: {info['name']}")
 
 
-def upload(video_path: str, title: str, description: str = "", tags: list[str] = None, privacy: str = "public", playlist_key: str = "story", made_for_kids: bool = True):
+def upload(video_path: str, title: str, description: str = "", tags: list[str] = None, privacy: str = "public", playlist_key: str = "story",     made_for_kids: bool = False):
     youtube = get_service()
 
     # Upload video
@@ -104,8 +104,8 @@ def upload(video_path: str, title: str, description: str = "", tags: list[str] =
     except Exception as e:
         print(f"  Playlist skipped: {e}")
 
-    # Auto-comment — skipped for made-for-kids videos (comments disabled by YouTube)
-    print("  Comments disabled: marked as made for kids")
+    # Comments now available (not marked as made for kids)
+    print("  Comments enabled")
 
     print(f"  Channel: https://youtube.com/@Glitchverse12-i8i")
     return video_id
