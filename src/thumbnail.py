@@ -7,11 +7,7 @@ import numpy as np
 import requests as req
 import config
 
-FONT = "C:\\Windows\\Fonts\\impact.ttf"
-if not Path(FONT).exists():
-    FONT = "C:\\Windows\\Fonts\\arialbd.ttf"
-if not Path(FONT).exists():
-    FONT = "C:\\Windows\\Fonts\\arial.ttf"
+FONT = config.get_font()
 
 W, H = 1280, 720  # YouTube thumbnail size
 

@@ -33,15 +33,7 @@ def _get_font(size: int = 60) -> str:
     font_paths = list(config.FONTS_DIR.glob("*.ttf")) + list(config.FONTS_DIR.glob("*.otf"))
     if font_paths:
         return str(font_paths[0])
-    windows_fonts = [
-        r"C:\Windows\Fonts\arial.ttf",
-        r"C:\Windows\Fonts\segoeui.ttf",
-        r"C:\Windows\Fonts\tahoma.ttf",
-        r"C:\Windows\Fonts\calibri.ttf",
-    ]
-    for path in windows_fonts:
-        if Path(path).exists():
-            return path
+    return config.get_font()
     return "Arial"
 
 

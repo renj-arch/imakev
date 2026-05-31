@@ -12,9 +12,7 @@ from moviepy import (
 )
 import config
 
-FONT = "C:\\Windows\\Fonts\\impact.ttf"
-if not Path(FONT).exists():
-    FONT = "C:\\Windows\\Fonts\\arial.ttf"
+FONT = config.get_font()
 W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
 
 SCENES = [
@@ -48,7 +46,7 @@ SCRIPT = (
 
 def gen_img(prompt: str) -> Image.Image | None:
     """Generate image via Pollinations.ai (free)."""
-    url = f"https://image.pollinations.ai/prompt/{req.utils.quote(prompt)}?width=1080&height=1920&nofeed=true&seed={random.randint(0,999999)}&model=flux"
+    url = f"https://image.pollinations.ai/prompt/{req.utils.quote(prompt)}?width={config.VIDEO_WIDTH}&height={config.VIDEO_HEIGHT}&nofeed=true&seed={random.randint(0,999999)}&model=flux"
     try:
         r = req.get(url, timeout=120)
         if r.status_code == 200 and len(r.content) > 500:
@@ -218,7 +216,7 @@ def main():
     safe_title = TITLE.lower().replace(" ", "_").replace("&", "and").replace("'", "")[:50]
     out = config.OUTPUT_DIR / f"{safe_title}.mp4"
     print(f"  {total_dur:.1f}s | {W}x{H}")
-    final.write_videofile(str(out), fps=24, codec="libx264", audio_codec="aac", threads=4, preset="medium", logger=None)
+    final.write_videofile(str(out), fps=config.VIDEO_FPS, codec="libx264", audio_codec="aac", threads=4, preset="ultrafast", ffmpeg_params=["-movflags", "+faststart"], logger=None)
     final.close()
     print(f"\n  DONE: {out}")
 

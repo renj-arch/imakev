@@ -1,11 +1,12 @@
-"""Wrapper that runs pipeline with retries and logging - for unattended operation."""
+"""Wrapper that alternates story/facts every run with retries and logging."""
 
 import sys, time, traceback
 from pathlib import Path
 from datetime import datetime
 
 LOG_FILE = Path(__file__).parent / "pipeline_log.txt"
-MAX_RETRIES = 3
+MAX_RETRIES = 2
+COUNTER_FILE = Path(__file__).parent / "run_counter.txt"
 
 
 def log(msg: str):
@@ -15,15 +16,26 @@ def log(msg: str):
         f.write(line + "\n")
 
 
+def get_mode() -> str:
+    count = 0
+    if COUNTER_FILE.exists():
+        count = int(COUNTER_FILE.read_text().strip() or "0")
+    count += 1
+    COUNTER_FILE.write_text(str(count))
+    return "story" if count % 2 == 1 else "facts"
+
+
 def main():
-    log("=" * 50)
-    log("Pipeline started")
+    mode = sys.argv[1] if len(sys.argv) > 1 else get_mode()
+    log(f"=" * 50)
+    log(f"Pipeline started - MODE: {mode}")
 
     for attempt in range(1, MAX_RETRIES + 1):
         try:
+            sys.argv = [sys.argv[0], mode]
             import run_pipeline
             run_pipeline.main()
-            log("Pipeline completed successfully")
+            log(f"Pipeline completed ({mode})")
             return
         except Exception as e:
             log(f"Attempt {attempt}/{MAX_RETRIES} FAILED: {e}")
@@ -33,7 +45,7 @@ def main():
                 log(f"Retrying in {wait}s...")
                 time.sleep(wait)
 
-    log("All attempts failed. Will retry on next schedule.")
+    log(f"All attempts failed for {mode}. Will retry next run.")
     sys.exit(1)
 
 

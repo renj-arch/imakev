@@ -1,4 +1,4 @@
-import os
+import os, platform
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -24,8 +24,45 @@ GOOGLE_BASE = "https://generativelanguage.googleapis.com/v1beta/openai/"
 
 TTS_PROVIDER = os.getenv("TTS_PROVIDER", "edge")
 
-VIDEO_WIDTH = int(os.getenv("VIDEO_WIDTH", 1080))
-VIDEO_HEIGHT = int(os.getenv("VIDEO_HEIGHT", 1920))
-VIDEO_FPS = int(os.getenv("VIDEO_FPS", 24))
+VIDEO_WIDTH = int(os.getenv("VIDEO_WIDTH", 720))
+VIDEO_HEIGHT = int(os.getenv("VIDEO_HEIGHT", 1280))
+VIDEO_FPS = int(os.getenv("VIDEO_FPS", 12))
 
 SHORTS_SIZE = (VIDEO_WIDTH, VIDEO_HEIGHT)
+
+
+def get_font() -> str:
+    """Find best available bold font across platforms."""
+    font_dirs = []
+    system = platform.system()
+    if system == "Windows":
+        font_dirs = [Path("C:/Windows/Fonts")]
+    elif system == "Linux":
+        font_dirs = [
+            Path("/usr/share/fonts/truetype/dejavu"),
+            Path("/usr/share/fonts/truetype/liberation"),
+            Path("/usr/share/fonts/truetype/noto"),
+        ]
+    elif system == "Darwin":
+        font_dirs = [
+            Path("/System/Library/Fonts"),
+            Path("/Library/Fonts"),
+            Path.home() / "Library/Fonts",
+        ]
+
+    names = [
+        "impact.ttf", "arialbd.ttf", "arial.ttf",
+        "DejaVuSans-Bold.ttf", "DejaVuSans.ttf",
+        "LiberationSans-Bold.ttf", "LiberationSans.ttf",
+        "NotoSans-Bold.ttf", "NotoSans.ttf",
+        "Arial Bold.ttf", "Arial.ttf",
+    ]
+
+    for d in font_dirs:
+        if d.exists():
+            for name in names:
+                candidates = list(d.rglob(name)) if d.is_dir() else []
+                if candidates:
+                    return str(candidates[0])
+
+    return str(font_dirs[0] / names[3]) if font_dirs else names[3]

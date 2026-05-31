@@ -1,23 +1,24 @@
-"""Full automated pipeline: viral video generation + upload + thumbnail + cross-post."""
+"""Full automated pipeline: switches between story video and fact video each run."""
 
+import sys, random
 from pathlib import Path
 import config
-from src import story as story_module
 
 
-def main():
+def run_story():
     print("=" * 55)
-    print("  IMAKEV - Viral AI Cinematic Story Pipeline")
+    print("  MODE: CINEMATIC STORY")
     print("=" * 55)
 
-    # Step 0: Generate next story chapter
+    from src import story as story_module
+    import cinematic_video as cv
+    from src.thumbnail import save_thumbnail
+    from src.seo import generate_title, generate_description, generate_tags, generate_hashtags
+    from upload_youtube import upload
+
     chapter = story_module.next_chapter()
     print(f"\nChapter {chapter['chapter']}: {chapter['title']}")
 
-    # --- GENERATE VIDEO ---
-    import cinematic_video as cv
-
-    # Patch with chapter data
     cv.TITLE = f"Chapter {chapter['chapter']}: {chapter['title']}"
     cv.CHAPTER = chapter["chapter"]
     cv.SCRIPT = ". ".join(chapter["subtitles"])
@@ -27,58 +28,60 @@ def main():
     print("\n[1/5] Generating video...")
     cv.main()
 
-    # --- GENERATE THUMBNAIL ---
-    print("\n[2/5] Generating YouTube thumbnail...")
-    from src.thumbnail import save_thumbnail
-    thumb_path = save_thumbnail(
-        chapter=chapter["chapter"],
-        story_title=chapter["title"],
-        output_dir=config.OUTPUT_DIR,
-    )
-    print(f"  Thumbnail: {thumb_path}")
+    print("\n[2/5] Thumbnail...")
+    save_thumbnail(chapter["chapter"], chapter["title"], config.OUTPUT_DIR)
 
-    # --- GENERATE TITLE + DESCRIPTION + TAGS ---
-    print("\n[3/5] Optimizing SEO...")
-    from src.seo import generate_title, generate_description, generate_tags, generate_hashtags
-
+    print("\n[3/5] SEO...")
     final_title = generate_title(chapter["chapter"], chapter["title"])
     hashtags = generate_hashtags()
     final_description = generate_description(chapter["chapter"], chapter["title"], cv.SCRIPT, hashtags)
     final_tags = generate_tags(chapter["chapter"], chapter["title"])
-    print(f"  Title: {final_title}")
-    print(f"  Tags: {len(final_tags)} tags + {hashtags.count('#')} hashtags")
 
-    # --- UPLOAD TO YOUTUBE ---
-    print("\n[4/5] Uploading to YouTube...")
-    from upload_youtube import upload
-
+    print("\n[4/5] Uploading...")
     mp4s = sorted(Path("output").glob("*.mp4"), key=lambda p: p.stat().st_mtime, reverse=True)
     if not mp4s:
-        print("  No video found!")
+        print("  No video!")
         return
+    upload(str(mp4s[0]), final_title, final_description, final_tags, "public", "story")
 
-    video = str(mp4s[0])
-    upload(
-        video_path=video,
-        title=final_title,
-        description=final_description,
-        tags=final_tags,
-        privacy="public",
-    )
+    print(f"\n[5/5] Story Chapter {chapter['chapter']} done!")
 
-    # --- LIKE4LIKE / COMMENT BOT SETUP (optional) ---
-    print("\n[5/5] Viral hooks activated:")
-    print("  ✓ Subscribe overlay added to video")
-    print("  ✓ Comment prompt added to video")
-    print("  ✓ SEO-optimized title + description")
-    print("  ✓ Trending hashtags applied")
-    print("  ✓ YouTube thumbnail generated")
 
-    print(f"\n{'='*55}")
-    print(f"  Chapter {chapter['chapter']} complete!")
-    print(f"  Next chapter will generate in ~2 hours")
-    print(f"  SEO title: {final_title}")
-    print(f"{'='*55}")
+def run_facts():
+    print("=" * 55)
+    print("  MODE: FACTS")
+    print("=" * 55)
+
+    from src.facts import generate_fact_script
+    from src.seo import generate_hashtags
+    import fact_video
+    from upload_youtube import upload
+
+    # Generate and render
+    out_path, fact_data = fact_video.main()
+
+    # SEO
+    hashtags = generate_hashtags()
+    desc = f"{fact_data['hook']}\n\n"
+    for i, f in enumerate(fact_data["facts"], 1):
+        desc += f"{i}. {f}\n"
+    desc += f"\n#facts #{fact_data['niche'].replace(' ', '')} #shorts\n{hashtags}"
+
+    tags = ["facts", fact_data["niche"], "shorts", "did you know", "mind blowing"] + fact_data["niche"].split()
+
+    print("\nUploading...")
+    upload(str(out_path), fact_data["title"], desc, tags, "public", "facts")
+    print("Fact video done!")
+
+
+def main():
+    mode = sys.argv[1] if len(sys.argv) > 1 else "story"
+    if mode == "story":
+        run_story()
+    elif mode == "facts":
+        run_facts()
+    else:
+        print(f"Unknown mode: {mode}. Use 'story' or 'facts'")
 
 
 if __name__ == "__main__":

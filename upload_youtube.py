@@ -11,8 +11,11 @@ from googleapiclient.http import MediaFileUpload
 SCOPES = ["https://www.googleapis.com/auth/youtube"]
 CLIENT_SECRET = "client_secret.json"
 TOKEN_FILE = "token.pickle"
-PLAYLIST_NAME = "Neon City Chronicles"
-PLAYLIST_DESC = "A continuous AI-generated cinematic series. Each chapter continues the story."
+
+PLAYLISTS = {
+    "story": {"name": "Neon City Chronicles", "desc": "A continuous AI-generated cinematic series. Each chapter continues the story."},
+    "facts": {"name": "Mind-Blowing Facts", "desc": "Daily facts that will change how you see the world."},
+}
 
 
 def get_service():
@@ -31,30 +34,29 @@ def get_service():
     return build("youtube", "v3", credentials=creds)
 
 
-def get_or_create_playlist(youtube) -> str:
-    """Get existing playlist ID or create a new one."""
+def get_or_create_playlist(youtube, playlist_key: str = "story") -> str:
+    info = PLAYLISTS.get(playlist_key, PLAYLISTS["story"])
     request = youtube.playlists().list(part="snippet", mine=True, maxResults=50)
     response = request.execute()
     for item in response.get("items", []):
-        if item["snippet"]["title"] == PLAYLIST_NAME:
-            print(f"  Playlist found: {PLAYLIST_NAME}")
+        if item["snippet"]["title"] == info["name"]:
+            print(f"  Playlist found: {info['name']}")
             return item["id"]
 
-    # Create new playlist
     body = {
         "snippet": {
-            "title": PLAYLIST_NAME,
-            "description": PLAYLIST_DESC,
+            "title": info["name"],
+            "description": info["desc"],
         },
         "status": {"privacyStatus": "public"},
     }
     result = youtube.playlists().insert(part="snippet,status", body=body).execute()
-    print(f"  Playlist created: {PLAYLIST_NAME}")
+    print(f"  Playlist created: {info['name']}")
     return result["id"]
 
 
-def add_to_playlist(youtube, playlist_id: str, video_id: str):
-    """Add video to playlist."""
+def add_to_playlist(youtube, playlist_id: str, video_id: str, playlist_key: str = "story"):
+    info = PLAYLISTS.get(playlist_key, PLAYLISTS["story"])
     body = {
         "snippet": {
             "playlistId": playlist_id,
@@ -62,10 +64,10 @@ def add_to_playlist(youtube, playlist_id: str, video_id: str):
         }
     }
     youtube.playlistItems().insert(part="snippet", body=body).execute()
-    print(f"  Added to playlist: {PLAYLIST_NAME}")
+    print(f"  Added to playlist: {info['name']}")
 
 
-def upload(video_path: str, title: str, description: str = "", tags: list[str] = None, privacy: str = "public"):
+def upload(video_path: str, title: str, description: str = "", tags: list[str] = None, privacy: str = "public", playlist_key: str = "story"):
     youtube = get_service()
 
     # Upload video
@@ -95,8 +97,8 @@ def upload(video_path: str, title: str, description: str = "", tags: list[str] =
 
     # Add to playlist
     try:
-        playlist_id = get_or_create_playlist(youtube)
-        add_to_playlist(youtube, playlist_id, video_id)
+        playlist_id = get_or_create_playlist(youtube, playlist_key)
+        add_to_playlist(youtube, playlist_id, video_id, playlist_key)
     except Exception as e:
         print(f"  Playlist skipped: {e}")
 

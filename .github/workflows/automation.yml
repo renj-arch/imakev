@@ -1,0 +1,76 @@
+name: AI Video Automation
+
+on:
+  schedule:
+    - cron: '0 */2 * * *'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Video mode'
+        required: true
+        default: 'auto'
+        type: choice
+        options:
+          - auto
+          - story
+          - facts
+
+concurrency:
+  group: video-pipeline
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install system fonts
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq fonts-dejavu-core fonts-liberation2
+
+      - name: Install Python deps
+        run: pip install -r requirements.txt
+
+      - name: Decode credentials
+        run: |
+          echo "${{ secrets.CLIENT_SECRET_B64 }}" | base64 -d > client_secret.json
+          echo "${{ secrets.TOKEN_PICKLE_B64 }}" | base64 -d > token.pickle
+
+      - name: Create .env
+        run: |
+          cat > .env << EOF
+          LLM_PROVIDER=openrouter
+          LLM_MODEL=openrouter/free
+          LLM_API_KEY=${{ secrets.LLM_API_KEY }}
+          TTS_PROVIDER=edge
+          VIDEO_WIDTH=720
+          VIDEO_HEIGHT=1280
+          VIDEO_FPS=12
+          EOF
+
+      - name: Determine mode
+        id: mode
+        run: |
+          MODE="${{ inputs.mode || 'auto' }}"
+          if [ "$MODE" = "auto" ]; then
+            HOUR=$(date -u +%-H)
+            IDX=$((HOUR / 2))
+            if [ $((IDX % 2)) -eq 0 ]; then
+              MODE="story"
+            else
+              MODE="facts"
+            fi
+          fi
+          echo "mode=$MODE" >> $GITHUB_OUTPUT
+          echo "Running: $MODE"
+
+      - name: Run pipeline
+        run: python run_pipeline.py ${{ steps.mode.outputs.mode }}
