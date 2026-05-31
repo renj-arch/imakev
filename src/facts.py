@@ -1,6 +1,7 @@
-"""Fact generator — LLM every run, curated bank is offline fallback only."""
+"""Fact generator — reads from content bank, LLM fallback."""
 
 import random
+import bank_manager
 
 FACT_HOOKS = [
     "Did you know?", "This will blow your mind...",
@@ -14,7 +15,6 @@ NICHE_NAMES = [
     "human body", "ocean", "technology", "brain", "nature", "physics",
 ]
 
-# Offline fallback — only used when LLM is unavailable
 FALLBACK_FACTS = [
     "A day on Venus is longer than a year on Venus.",
     "Octopuses have three hearts and blue blood.",
@@ -35,9 +35,14 @@ FALLBACK_FACTS = [
 
 
 def generate_fact_script(niche: str = "") -> dict:
+    entry = bank_manager.pick("facts")
+    if entry:
+        print(f"  Using banked facts ({bank_manager.count('facts')} left)")
+        return entry
+
+    print("  Bank empty, generating fresh facts...")
     if not niche:
         niche = random.choice(NICHE_NAMES)
-
     print(f"  Generating facts about: {niche}")
 
     facts = _try_llm(niche)

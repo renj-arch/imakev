@@ -3,6 +3,7 @@
 import sys
 from pathlib import Path
 import config
+import bank_manager
 
 
 def run_story():
@@ -69,6 +70,7 @@ def run_facts():
     print("\nUploading...")
     upload(str(out_path), fact_data["title"], desc, tags, "public", "facts")
     print("Fact video done!")
+    bank_manager.ensure_refilled("facts")
 
 
 def run_what_if():
@@ -90,6 +92,7 @@ def run_what_if():
     print("\nUploading...")
     upload(str(out_path), data["title"], desc, tags, "public", "what_if")
     print("What If video done!")
+    bank_manager.ensure_refilled("what_if")
 
 
 def run_how_it_works():
@@ -111,6 +114,7 @@ def run_how_it_works():
     print("\nUploading...")
     upload(str(out_path), data["title"], desc, tags, "public", "how_it_works", made_for_kids=False)
     print("How It Works video done!")
+    bank_manager.ensure_refilled("how_it_works")
 
 
 def main():

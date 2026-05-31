@@ -1,6 +1,7 @@
-"""How Things Work — LLM every run for fresh topics. Bank is offline fallback only."""
+"""How Things Work — reads from content bank, LLM fallback."""
 
 import random
+import bank_manager
 
 HOOKS = [
     "Ever wondered how this works?", "Here's how it actually works.",
@@ -29,6 +30,12 @@ IMAGE_PROMPT_TEMPLATE = "cinematic close-up illustration: {topic}, detailed tech
 
 
 def generate_howitworks_script() -> dict:
+    entry = bank_manager.pick("how_it_works")
+    if entry:
+        print(f"  Using banked how-it-works ({bank_manager.count('how_it_works')} left)")
+        return entry
+
+    print("  Bank empty, generating fresh how-it-works...")
     topics = _try_llm()
     if not topics:
         print("  LLM unavailable, using fallback")

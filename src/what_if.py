@@ -1,6 +1,7 @@
-"""What If? — LLM every run for fresh ideas. Bank is offline fallback only."""
+"""What If? — reads from content bank, LLM fallback."""
 
 import random
+import bank_manager
 
 HOOKS = ["What if...", "Imagine if...", "What would happen if...", "Picture this:", "Have you ever wondered..."]
 
@@ -21,6 +22,12 @@ IMAGE_PROMPT_TEMPLATE = "whimsical children's book illustration: {scenario}, col
 
 
 def generate_what_if_script() -> dict:
+    entry = bank_manager.pick("what_if")
+    if entry:
+        print(f"  Using banked what-if ({bank_manager.count('what_if')} left)")
+        return entry
+
+    print("  Bank empty, generating fresh what-if...")
     scenarios = _try_llm()
     if not scenarios:
         print("  LLM unavailable, using fallback")
