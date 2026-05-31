@@ -16,6 +16,7 @@ PLAYLISTS = {
     "story": {"name": "Neon City Chronicles", "desc": "A continuous AI-generated cinematic series. Each chapter continues the story."},
     "facts": {"name": "Mind-Blowing Facts", "desc": "Daily facts that will change how you see the world."},
     "what_if": {"name": "What If? For Kids", "desc": "Imaginative 'what if' scenarios that spark curiosity and wonder."},
+    "how_it_works": {"name": "How Things Work", "desc": "Everyday objects explained — how they actually work."},
 }
 
 
@@ -68,7 +69,7 @@ def add_to_playlist(youtube, playlist_id: str, video_id: str, playlist_key: str 
     print(f"  Added to playlist: {info['name']}")
 
 
-def upload(video_path: str, title: str, description: str = "", tags: list[str] = None, privacy: str = "public", playlist_key: str = "story"):
+def upload(video_path: str, title: str, description: str = "", tags: list[str] = None, privacy: str = "public", playlist_key: str = "story", made_for_kids: bool = True):
     youtube = get_service()
 
     # Upload video
@@ -81,7 +82,7 @@ def upload(video_path: str, title: str, description: str = "", tags: list[str] =
         },
         "status": {
             "privacyStatus": privacy,
-            "selfDeclaredMadeForKids": True,
+            "selfDeclaredMadeForKids": made_for_kids,
         },
     }
 

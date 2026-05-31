@@ -92,6 +92,27 @@ def run_what_if():
     print("What If video done!")
 
 
+def run_how_it_works():
+    print("=" * 55)
+    print("  MODE: HOW IT WORKS")
+    print("=" * 55)
+
+    from upload_youtube import upload
+    import how_it_works_video
+
+    out_path, data = how_it_works_video.main()
+
+    desc = "Ever wondered how everyday things work?\n\n"
+    for t, e in zip(data["topics"], data["explanations"]):
+        desc += f"{t.capitalize()}: {e}\n\n"
+    desc += "#howitworks #science #shorts #engineering"
+    tags = ["how it works", "science", "engineering", "shorts", "education", "explained"]
+
+    print("\nUploading...")
+    upload(str(out_path), data["title"], desc, tags, "public", "how_it_works", made_for_kids=False)
+    print("How It Works video done!")
+
+
 def main():
     mode = sys.argv[1] if len(sys.argv) > 1 else "story"
     if mode == "story":
@@ -100,8 +121,10 @@ def main():
         run_facts()
     elif mode == "what_if":
         run_what_if()
+    elif mode == "how_it_works":
+        run_how_it_works()
     else:
-        print(f"Unknown mode: {mode}. Use 'story', 'facts', or 'what_if'")
+        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', or 'how_it_works'")
 
 
 if __name__ == "__main__":
