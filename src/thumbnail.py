@@ -24,14 +24,14 @@ def generate_thumbnail(chapter: int, story_title: str, scene_images: dict | None
             img = base.resize((W, H), Image.LANCZOS)
 
     if img is None:
-        # Procedural thumbnail
+        # Colorful kid-friendly procedural thumbnail
         arr = np.zeros((H, W, 3), dtype=np.uint8)
         for y in range(H):
             ratio = y / H
-            r = int(50 + 150 * (1 - ratio) + abs(np.sin(y * 0.01)) * 60)
-            g = int(10 + 50 * (1 - ratio) + abs(np.cos(y * 0.008)) * 40)
-            b = int(80 + 180 * ratio + abs(np.sin(y * 0.012)) * 50)
-            noise = np.random.randint(-20, 20, W)
+            r = int(200 - 100 * ratio + abs(np.sin(y * 0.015)) * 40)
+            g = int(150 + 50 * ratio + abs(np.cos(y * 0.012)) * 35)
+            b = int(255 - 50 * ratio + abs(np.sin(y * 0.018)) * 30)
+            noise = np.random.randint(-15, 15, W)
             arr[y, :, 0] = np.clip(r + noise, 0, 255).astype(np.uint8)
             arr[y, :, 1] = np.clip(g + (noise * 0.5).astype(int), 0, 255).astype(np.uint8)
             arr[y, :, 2] = np.clip(b + (noise * 0.3).astype(int), 0, 255).astype(np.uint8)

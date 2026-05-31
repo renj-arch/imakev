@@ -1,76 +1,72 @@
-"""Viral SEO: titles, descriptions, tags — optimized for YouTube Shorts, no AI mentions."""
+"""Kid-friendly SEO for 'Pajama Explorers' — no AI mentions, gentle engagement."""
 
 import random
 
-TRENDING_HASHTAGS = [
-    "#shorts", "#viralshorts", "#trending", "#fyp", "#foryou",
-    "#cinematic", "#cyberpunk", "#neon",
-    "#cat", "#cats", "#storytime", "#animation",
-    "#dreamcore", "#surreal", "#nightcity",
-    "#shortfilm", "#cinematography", "#viralvideo", "#fypシ",
-    "#scifi", "#dystopian", "#megacity", "#rain",
+HASHTAGS = [
+    "#shorts", "#kidsshorts", "#bedtimestory", "#storyforkids",
+    "#kidsstory", "#fairytale", "#imagination", "#magic",
+    "#kidsvideo", "#storytime", "#pajamaexplorers", "#adventure",
+    "#dreams", "#childrensstory", "#reading", "#bedtime",
 ]
 
-HOOK_PHRASES = [
-    "You won't believe what happens next",
-    "Wait for the ending",
-    "This will blow your mind",
-    "Subscribe for more stories",
-    "Comment your favorite scene",
-    "Like if you love cinematic stories",
-    "Share with someone who needs to see this",
+TITLE_TEMPLATES = [
+    "Pajama Explorers: {} ✨",
+    "Chapter {}: {} 🌙",
+    "The Midnight Flight 🛏️ Chapter {}: {}",
+    "Pajama Explorers - Chapter {}: {}",
+    "✨ Chapter {}: {}",
+]
+
+DESC_HOOKS = [
+    "A new dream awaits the Pajama Explorers!",
+    "Where will the magic beds fly tonight?",
+    "Mia, Leo, and Sam are off on another adventure!",
+    "The Pajama Explorers discover a new magical world!",
+    "Ember the fox leads the way to somewhere incredible!",
 ]
 
 def generate_title(chapter: int, story_title: str) -> str:
-    templates = [
-        f"Chapter {chapter}: {story_title} 🔥",
-        f"{story_title} - Chapter {chapter} 🎬",
-        f"TO BE CONTINUED... Chapter {chapter}: {story_title}",
-        f"Chapter {chapter}: {story_title} 🌆",
-        f"THE STORY CONTINUES - Chapter {chapter}: {story_title}",
-        f"⚠️ Chapter {chapter}: {story_title} (Watch Till End)",
-    ]
-    return random.choice(templates)
+    name = story_title.split(":", 1)[-1].strip() if ":" in story_title else story_title
+    t = random.choice(TITLE_TEMPLATES)
+    if t.count("{}") == 2:
+        return t.format(chapter, name)
+    return t.format(name)
 
 
 def generate_description(chapter: int, story_title: str, script: str, hashtags: str = "", video_url: str = "") -> str:
-    hook = random.choice(HOOK_PHRASES)
+    hook = random.choice(DESC_HOOKS)
     return (
-        f"{hook}! 🚀\n\n"
-        f"Chapter {chapter}: {story_title}\n\n"
+        f"{hook}\n\n"
+        f"⭐ Chapter {chapter}: {story_title}\n\n"
         f"{script[:200]}...\n\n"
-        f"📺 Subscribe for Chapter {chapter + 1}!\n"
-        f"🔔 Turn on notifications!\n\n"
-        f"💬 What happens in Chapter {chapter + 1}?\n"
-        f"👍 Like if you re-watched (be honest 👀)\n"
-        f"🔁 Share with someone who loves cinematic stories\n\n"
+        f"Subscribe for more Pajama Explorer adventures! 🌙\n"
+        f"💬 What dream world should they visit next?\n\n"
         f"{hashtags}"
     )
 
 
 def generate_tags(chapter: int, story_title: str) -> list[str]:
     return [
-        "cinematic", "short film", "neon city",
-        f"chapter {chapter}", story_title, "cinematic short",
-        "viral video", "shorts", "cyberpunk", "dreamcore",
-        "youtube shorts", "storytime", "shorts video",
+        "pajama explorers", "kids story", "bedtime story",
+        f"chapter {chapter}", story_title,
+        "magical adventure", "kids shorts", "imagination",
+        "dreams", "fairytale", "childrens story",
     ] + random.sample([
-        "cat story", "night city", "fyp", "foryoupage", "trending",
+        "fox", "magic bed", "adventure", "kids entertainment", "story for kids",
     ], 3)
 
 
-def generate_hashtags(count: int = 12) -> str:
-    selected = random.sample(TRENDING_HASHTAGS, min(count, len(TRENDING_HASHTAGS)))
+def generate_hashtags(count: int = 8) -> str:
+    selected = random.sample(HASHTAGS, min(count, len(HASHTAGS)))
     return " ".join(selected)
 
 
 def get_comment_prompt() -> str:
     prompts = [
-        "What should happen next? 👇",
-        "Which scene was your favorite? 💬",
-        "Rate this video 1-10 in the comments! ⭐",
-        "Subscribe for Chapter X tomorrow! 🔔",
-        "Share this with a friend!",
-        "Comment your theory about the cat villain! 🐱",
+        "What dream world should they visit next? 🌙",
+        "Which Pajama Explorer is your favorite? 💬",
+        "Where would YOUR bed fly? Tell us! ✨",
+        "Subscribe for the next adventure! 🔔",
+        "Draw the dream world and share it! 🎨",
     ]
     return random.choice(prompts)
