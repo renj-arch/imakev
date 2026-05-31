@@ -32,6 +32,15 @@ REFILL_PROMPTS = {
         "EXPLANATION: [how it works in 2-3 sentences]\n\n"
         "Make each explanation clear and correct. Choose common household objects."
     ),
+    "riddles": (
+        "Write a {rtype} riddle. Never repeat riddles from this avoid list:"
+        "\n---\n{avoid}\n---\n"
+        "Format exactly:\n"
+        "RIDDLE: [the riddle question]\n"
+        "ANSWER: [short answer]\n"
+        "EXPLANATION: [one sentence explanation]\n"
+        "Make it clever but solvable. Suitable for all ages."
+    ),
 }
 
 NICHES = [
@@ -50,6 +59,13 @@ FACT_HOOKS = [
 IMAGE_PROMPT_FACT = "cinematic illustration: {keywords}, atmospheric lighting, 9:16 vertical, highly detailed, moody"
 IMAGE_PROMPT_WHATIF = "whimsical children's book illustration: {scenario}, colorful magical dreamlike, wide shot, 9:16 vertical, vibrant pastels, soft lighting"
 IMAGE_PROMPT_HOW = "cinematic close-up illustration: {topic}, detailed technical cross-section view, clean lighting, educational style, 9:16 vertical"
+IMAGE_PROMPT_RIDDLE = "mysterious cinematic scene: {riddle}, dark moody lighting, question marks, 9:16 vertical, intrigue"
+IMAGE_PROMPT_RIDDLE_ANSWER = "cinematic reveal scene: {answer}, bright warm lighting, discovery moment, 9:16 vertical"
+
+RIDDLE_TYPES = [
+    "logic", "wordplay", "math", "lateral thinking", "observation",
+    "classic", "nature", "science", "everyday", "animal",
+]
 
 
 def _bank_path(mode: str) -> Path:
@@ -94,6 +110,10 @@ def _mark_used(mode: str, entry: dict):
             n = _normalize(t)
             if n not in used:
                 used.append(n)
+    elif mode == "riddles":
+        n = _normalize(entry.get("riddle", ""))
+        if n and n not in used:
+            used.append(n)
     data["used"] = used
     _write_bank(mode, data)
 
@@ -150,6 +170,8 @@ def refill(mode: str, force_count: int | None = None):
         new_entries = _refill_what_if(need)
     elif mode == "how_it_works":
         new_entries = _refill_how_it_works(need)
+    elif mode == "riddles":
+        new_entries = _refill_riddles(need)
     else:
         return
 
@@ -299,6 +321,49 @@ def _refill_how_it_works(need: int) -> list:
             entries.append(entry)
         attempts += 1
 
+    return entries
+
+
+def _refill_riddles(need: int) -> list:
+    entries = []
+    attempts = 0
+    hooks = [
+        "Can you solve this riddle?", "Here's a riddle for you:",
+        "Think you're smart? Try this:", "Test your brain with this riddle:",
+        "Only 1 in 10 can solve this:", "Here's a tricky one:",
+    ]
+    while len(entries) < need and attempts < need * 5:
+        rtype = random.choice(RIDDLE_TYPES)
+        avoid = _avoid_sample("riddles")
+        prompt = REFILL_PROMPTS["riddles"].format(rtype=rtype, avoid=avoid)
+        raw = _generate(prompt, temperature=0.8, max_tokens=300,
+                        system="You write clever riddles suitable for all ages.")
+        if not raw:
+            attempts += 1
+            continue
+        riddle = answer = explanation = ""
+        for line in raw.split("\n"):
+            line = line.strip()
+            if line.upper().startswith("RIDDLE:"):
+                riddle = line.split(":", 1)[-1].strip()
+            elif line.upper().startswith("ANSWER:"):
+                answer = line.split(":", 1)[-1].strip()
+            elif line.upper().startswith("EXPLANATION:"):
+                explanation = line.split(":", 1)[-1].strip()
+        if riddle and answer and not _is_duplicate("riddles", [riddle], _read_bank("riddles")):
+            hook = random.choice(hooks)
+            entry = {
+                "title": "Can You Solve This Riddle?",
+                "hook": hook,
+                "riddle": riddle,
+                "answer": answer,
+                "explanation": explanation or f"The answer is {answer}.",
+                "image_prompt_riddle": IMAGE_PROMPT_RIDDLE.format(riddle=riddle[:80]),
+                "image_prompt_answer": IMAGE_PROMPT_RIDDLE_ANSWER.format(answer=answer[:80]),
+                "tts_script": f"{hook} {riddle} Pause and think about it. The answer is... {answer}. {explanation or f'The answer is {answer}.'}",
+            }
+            entries.append(entry)
+        attempts += 1
     return entries
 
 

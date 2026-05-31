@@ -117,6 +117,25 @@ def run_how_it_works():
     bank_manager.ensure_refilled("how_it_works")
 
 
+def run_riddle():
+    print("=" * 55)
+    print("  MODE: RIDDLES")
+    print("=" * 55)
+
+    from upload_youtube import upload
+    import riddle_video
+
+    out_path, data = riddle_video.main()
+
+    desc = f"{data['hook']}\n\n{data['riddle']}\n\nAnswer: {data['answer']}\n\n{data.get('explanation', '')}\n\n#riddles #brainteaser #shorts"
+    tags = ["riddles", "brain teaser", "puzzle", "shorts", "fun", "challenge"]
+
+    print("\nUploading...")
+    upload(str(out_path), data["title"], desc, tags, "public", "riddles")
+    print("Riddle video done!")
+    bank_manager.ensure_refilled("riddles")
+
+
 def main():
     mode = sys.argv[1] if len(sys.argv) > 1 else "story"
     if mode == "story":
@@ -127,8 +146,10 @@ def main():
         run_what_if()
     elif mode == "how_it_works":
         run_how_it_works()
+    elif mode == "riddles":
+        run_riddle()
     else:
-        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', or 'how_it_works'")
+        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', or 'riddles'")
 
 
 if __name__ == "__main__":
