@@ -47,7 +47,7 @@ def _fallback() -> dict:
     hacks = random.sample(FALLBACKS, min(4, len(FALLBACKS)))
     hook = random.choice(HOOKS)
     image_prompts = [
-        f"cinematic surreal brain illustration: {hack}, glowing neural connections, moody atmospheric lighting, 9:16 vertical, dark background with neon accents, highly detailed"
+        f"cinematic surreal brain illustration: {h}, glowing neural connections, moody atmospheric lighting, 9:16 vertical, dark background with neon accents, highly detailed"
         for h, _ in hacks
     ]
     tts_lines = [f"{h}. {e}" for h, e in hacks]
