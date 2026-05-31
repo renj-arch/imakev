@@ -155,6 +155,25 @@ def run_wyr():
     bank_manager.ensure_refilled("would_you_rather")
 
 
+def run_history_minute():
+    print("=" * 55)
+    print("  MODE: HISTORY MINUTE")
+    print("=" * 55)
+
+    from upload_youtube import upload
+    import history_minute_video
+
+    out_path, data = history_minute_video.main()
+
+    desc = f"{data['hook']}\n\n{data['script']}\n\n#history #shorts #historyfacts"
+    tags = ["history", "history facts", "shorts", "did you know", "history lesson", "educational"]
+
+    print("\nUploading...")
+    upload(str(out_path), data["title"], desc, tags, "public", "history_minute", made_for_kids=False)
+    print("History Minute video done!")
+    bank_manager.ensure_refilled("history_minute")
+
+
 def main():
     mode = sys.argv[1] if len(sys.argv) > 1 else "story"
     if mode == "story":
@@ -169,8 +188,10 @@ def main():
         run_riddle()
     elif mode == "would_you_rather":
         run_wyr()
+    elif mode == "history_minute":
+        run_history_minute()
     else:
-        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', or 'would_you_rather'")
+        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', or 'history_minute'")
 
 
 if __name__ == "__main__":

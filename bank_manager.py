@@ -51,6 +51,14 @@ REFILL_PROMPTS = {
         "Make both options fun, imaginative, and suitable for all ages. "
         "Both options should be equally desirable so it's a real choice."
     ),
+    "history_minute": (
+        "Write a short YouTube Shorts script about a fascinating yet lesser-known historical event. "
+        "Never repeat events from this avoid list:"
+        "\n---\n{avoid}\n---\n"
+        "Make it surprising, conversational, and hook in the first 3 seconds. "
+        "Focus on a single specific historical event or fact. "
+        "40-80 words max. Return ONLY the script text."
+    ),
 }
 
 NICHES = [
@@ -71,10 +79,24 @@ IMAGE_PROMPT_WHATIF = "whimsical children's book illustration: {scenario}, color
 IMAGE_PROMPT_HOW = "cinematic close-up illustration: {topic}, detailed technical cross-section view, clean lighting, educational style, 9:16 vertical"
 IMAGE_PROMPT_RIDDLE = "mysterious cinematic scene: {riddle}, dark moody lighting, question marks, 9:16 vertical, intrigue"
 IMAGE_PROMPT_RIDDLE_ANSWER = "cinematic reveal scene: {answer}, bright warm lighting, discovery moment, 9:16 vertical"
+IMAGE_PROMPT_HISTORY = "vintage historical photograph style: {topic}, sepia tones, dramatic lighting, 9:16 vertical, weathered texture, cinematic"
 
 RIDDLE_TYPES = [
     "logic", "wordplay", "math", "lateral thinking", "observation",
     "classic", "nature", "science", "everyday", "animal",
+]
+
+HISTORY_HOOKS = [
+    "Did you know this happened?", "History is full of surprises:",
+    "You won't believe what happened in history:", "This historical event will shock you:",
+    "Here's a history lesson you didn't get in school:", "Mind-blowing history fact:",
+    "Most people don't know this about history:", "Wait till you hear this history story:",
+]
+
+HISTORY_NICHES = [
+    "ancient civilizations", "world wars", "medieval history", "famous inventors",
+    "explorers", "ancient rome", "ancient egypt", "industrial revolution",
+    "renaissance", "american history", "asian history", "scientific discoveries",
 ]
 
 WYR_CATEGORIES = [
@@ -134,6 +156,10 @@ def _mark_used(mode: str, entry: dict):
             n = _normalize(opt)
             if n and n not in used:
                 used.append(n)
+    elif mode == "history_minute":
+        n = _normalize(entry.get("script", ""))
+        if n and n not in used:
+            used.append(n)
     data["used"] = used
     _write_bank(mode, data)
 
@@ -195,6 +221,8 @@ def refill(mode: str, force_count: int | None = None):
             new_entries = _refill_riddles(need)
         elif mode == "would_you_rather":
             new_entries = _refill_wyr(need)
+        elif mode == "history_minute":
+            new_entries = _refill_history(need)
         else:
             return
 
@@ -450,6 +478,45 @@ def _refill_wyr(need: int) -> list:
                 "tts_script": f"{hook} {a} or {b}. Which one would you choose? Comment below!",
             })
         attempts += 1
+    return entries
+
+
+def _refill_history(need: int) -> list:
+    entries = []
+    attempts = 0
+    while len(entries) < need and attempts < need * 5:
+        niche = random.choice(HISTORY_NICHES)
+        avoid = _avoid_sample("history_minute")
+        prompt = REFILL_PROMPTS["history_minute"].format(niche=niche, avoid=avoid)
+        try:
+            raw = _generate(prompt, temperature=0.8, max_tokens=400,
+                            system="You write verified historical facts. Only include events you are certain are accurate. Make it engaging for short-form video.")
+        except Exception as e:
+            print(f"  LLM error (history): {e}")
+            attempts += 1
+            continue
+        if not raw or len(raw) < 30:
+            attempts += 1
+            continue
+
+        script = raw.strip()
+        if not _is_duplicate("history_minute", [script], _read_bank("history_minute")):
+            hook = random.choice(HISTORY_HOOKS)
+            topic = script.split(".")[0].strip()
+            keywords = " ".join(script.split()[:15])
+            image_prompt = IMAGE_PROMPT_HISTORY.format(topic=keywords)
+            tts_script = f"{hook} {script}"
+            entry = {
+                "title": f"{hook} {topic[:60]}...",
+                "niche": niche,
+                "hook": hook,
+                "script": script,
+                "image_prompt": image_prompt,
+                "tts_script": tts_script,
+            }
+            entries.append(entry)
+        attempts += 1
+
     return entries
 
 
