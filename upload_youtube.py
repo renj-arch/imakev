@@ -62,9 +62,11 @@ if __name__ == "__main__":
     video = str(mp4s[0])
     upload(
         video_path=video,
-        title="Cat Kidnapping & Bike Rescue Squad | AI Cinematic Short Film",
-        description="Daily AI cinematic short film.\n#shorts #aicinema",
-        tags=["ai film", "cinematic", "shorts"],
+        title="Cat Kidnapping & Bike Rescue Squad | Cinematic Short Film",
+
+        description="Daily cinematic short film.\n#shorts #cinematic",
+
+        tags=["cinematic", "shorts", "story"],
         privacy="public",
     )
 

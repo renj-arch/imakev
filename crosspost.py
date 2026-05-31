@@ -32,4 +32,4 @@ def post_all(video_path: str, description: str):
 if __name__ == "__main__":
     mp4s = sorted(Path("output").glob("*.mp4"), key=lambda p: p.stat().st_mtime, reverse=True)
     if mp4s:
-        post_all(str(mp4s[0]), "AI Cinematic Short Film #shorts #aicinema")
+        post_all(str(mp4s[0]), "Cinematic Short Film #shorts")

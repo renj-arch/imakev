@@ -78,12 +78,12 @@ def generate_thumbnail(chapter: int, story_title: str, scene_images: dict | None
     if line2:
         draw.text((30, H - 80), line2, fill="white", font=font_title, stroke_width=3, stroke_color="black")
 
-    # "AI CINEMATIC" tag
-    tag_text = "AI CINEMATIC"
+    # "NEW" tag
+    tag_text = "NEW"
     tag_bbox = draw.textbbox((0, 0), tag_text, font=font_sub)
     tw, th = tag_bbox[2] - tag_bbox[0] + 30, tag_bbox[3] - tag_bbox[1] + 15
     draw.rectangle([W - tw - 15, 15, W - 15, 15 + th], fill=(0, 0, 0, 180))
-    draw.text((W - tw - 5, 17), tag_text, fill=(100, 255, 200), font=font_sub)
+    draw.text((W - tw - 5, 17), tag_text, fill="white", font=font_sub)
 
     # Arrow / attention element
     for _ in range(3):
