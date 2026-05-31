@@ -146,6 +146,11 @@ def main():
 
     scene_ids = [s[0] for s in SCENES]
 
+    # Hook overlay (first 3 seconds - critical for retention)
+    hook_text = TextClip(text="👀 WATCH TILL THE END", font=FONT, font_size=44, color="#FFCC00", stroke_color="black", stroke_width=3, method="label").with_position(("center", H//2 - 80)).with_duration(1.8).with_start(0.3)
+    hook_sub = TextClip(text="it gets wild...", font=FONT, font_size=28, color="white", stroke_color="black", stroke_width=2, method="label").with_position(("center", H//2)).with_duration(1.8).with_start(0.3)
+    overlays.extend([hook_text, hook_sub])
+
     # Title card (use first scene)
     title_img = images.get(scene_ids[0], Image.new("RGB", (W, H), (10, 5, 40)))
     clips.append(motion_clip(title_img, 2.5))
@@ -173,9 +178,17 @@ def main():
         clips.append(clip)
         ct += dur
 
-    # End card (use last scene)
+    # "Watch again" prompt mid-video (boosts repeat views)
+    mid_time = total_dur * 0.6
+    watch_again = TextClip(text="👀 WATCH AGAIN - you missed something", font=FONT, font_size=26, color="white", stroke_color="black", stroke_width=2, method="label").with_position(("center", H-300)).with_duration(2.0).with_start(mid_time)
+    overlays.append(watch_again)
+
+    # End card (use LAST scene, then loop back to first scene for seamless loop)
     end_img = images.get(scene_ids[-1], Image.new("RGB", (W, H), (10, 5, 40)))
-    clips.append(motion_clip(end_img, 3.5))
+    clips.append(motion_clip(end_img, 2.0))
+    # Loop-ready: replay title image briefly so Shorts auto-loop looks seamless
+    loop_img = images.get(scene_ids[0], Image.new("RGB", (W, H), (10, 5, 40)))
+    clips.append(motion_clip(loop_img, 0.5))
     end_line1 = TextClip(text="TO BE CONTINUED...", font=FONT, font_size=44, color="white", stroke_color="black", stroke_width=3, method="label").with_position(("center", H//2 - 30)).with_duration(3.5).with_start(total_dur - 3.5)
     end_line2 = TextClip(text="SUBSCRIBE FOR CHAPTER " + str(CHAPTER + 1), font=FONT, font_size=32, color="#FFCC00", stroke_color="black", stroke_width=2, method="label").with_position(("center", H//2 + 30)).with_duration(3.5).with_start(total_dur - 3.5)
     overlays.extend([end_line1, end_line2])
