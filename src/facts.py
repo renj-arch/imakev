@@ -1,6 +1,7 @@
-"""Fact video generator - curated fact bank only. No LLM (prevents hallucinations)."""
+"""Fact video generator - curated fact bank + tracker (no repeats until cycled)."""
 
 import random
+from src.tracker import pick
 
 FACT_HOOKS = [
     "Did you know?", "This will blow your mind...",
@@ -180,7 +181,13 @@ def generate_fact_script(niche: str = "") -> dict:
 
     print(f"  Curated facts about: {niche}")
     bank = FACTS_BANK.get(niche, FACTS_BANK["science"])
-    facts = random.sample(bank, min(5, len(bank)))
+    facts = pick(f"facts_{niche}", bank, 5)
+
+    # If tracker returned all used (empty after reset), try LLM for fresh facts
+    if len(facts) < 3:
+        llm_facts = _try_llm_facts(niche)
+        if llm_facts:
+            facts = llm_facts
 
     hook = random.choice(FACT_HOOKS)
     title = f"{hook} {facts[0][:60]}..." if facts else f"Amazing {niche} Facts"
@@ -201,3 +208,27 @@ def generate_fact_script(niche: str = "") -> dict:
         "script": tts_script,
         "tts_script": tts_script,
     }
+
+
+def _try_llm_facts(niche: str) -> list | None:
+    """LLM fallback — only when bank is exhausted. Output is verified."""
+    try:
+        from src.script_generator import _generate
+        prompt = f"Write 5 surprising one-sentence facts about {niche}. Number them 1-5."
+        system = "You write verified facts. Output exactly 5 numbered facts, one per line."
+        raw = _generate(prompt, temperature=0.7, max_tokens=600, system=system)
+        if not raw:
+            return None
+        facts = []
+        for line in raw.split("\n"):
+            line = line.strip().lstrip("*- ")
+            if not line:
+                continue
+            if line[0].isdigit() and (". " in line[:4] or ") " in line[:4]):
+                clean = line.split(". ", 1)[-1].split(") ", 1)[-1].strip()
+                if clean and len(clean) > 10:
+                    facts.append(clean.rstrip(".") + ".")
+        return facts[:5] if len(facts) >= 3 else None
+    except Exception as e:
+        print(f"  LLM unavailable ({e}), cycling bank")
+        return None
