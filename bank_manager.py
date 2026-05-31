@@ -175,31 +175,34 @@ def needs_refill(mode: str) -> bool:
 
 
 def refill(mode: str, force_count: int | None = None):
-    data = _read_bank(mode)
-    target = force_count or data["refill_target"]
-    existing = len(data["entries"])
-    need = target - existing
-    if need <= 0:
-        return
+    try:
+        data = _read_bank(mode)
+        target = force_count or data["refill_target"]
+        existing = len(data["entries"])
+        need = target - existing
+        if need <= 0:
+            return
 
-    print(f"  Bank refill: generating {need} new {mode} entries...")
+        print(f"  Bank refill: generating {need} new {mode} entries...")
 
-    if mode == "facts":
-        new_entries = _refill_facts(need)
-    elif mode == "what_if":
-        new_entries = _refill_what_if(need)
-    elif mode == "how_it_works":
-        new_entries = _refill_how_it_works(need)
-    elif mode == "riddles":
-        new_entries = _refill_riddles(need)
-    elif mode == "would_you_rather":
-        new_entries = _refill_wyr(need)
-    else:
-        return
+        if mode == "facts":
+            new_entries = _refill_facts(need)
+        elif mode == "what_if":
+            new_entries = _refill_what_if(need)
+        elif mode == "how_it_works":
+            new_entries = _refill_how_it_works(need)
+        elif mode == "riddles":
+            new_entries = _refill_riddles(need)
+        elif mode == "would_you_rather":
+            new_entries = _refill_wyr(need)
+        else:
+            return
 
-    data["entries"].extend(new_entries)
-    _write_bank(mode, data)
-    print(f"  Bank refilled: {len(data['entries'])} {mode} entries total")
+        data["entries"].extend(new_entries)
+        _write_bank(mode, data)
+        print(f"  Bank refilled: {len(data['entries'])} {mode} entries total")
+    except Exception as e:
+        print(f"  Bank refill failed (non-critical): {e}")
 
 
 def _refill_facts(need: int) -> list:
@@ -209,8 +212,13 @@ def _refill_facts(need: int) -> list:
         niche = random.choice(NICHES)
         avoid = _avoid_sample("facts")
         prompt = REFILL_PROMPTS["facts"].format(niche=niche, avoid=avoid)
-        raw = _generate(prompt, temperature=0.8, max_tokens=800,
-                        system="You write verified facts. Only include facts you are certain are true. One fact per line, numbered.")
+        try:
+            raw = _generate(prompt, temperature=0.8, max_tokens=800,
+                            system="You write verified facts. Only include facts you are certain are true. One fact per line, numbered.")
+        except Exception as e:
+            print(f"  LLM error (facts): {e}")
+            attempts += 1
+            continue
         if not raw:
             attempts += 1
             continue
@@ -253,8 +261,13 @@ def _refill_what_if(need: int) -> list:
     while len(entries) < need and attempts < need * 5:
         avoid = _avoid_sample("what_if")
         prompt = REFILL_PROMPTS["what_if"].format(avoid=avoid)
-        raw = _generate(prompt, temperature=0.9, max_tokens=800,
-                        system="You write creative 'What If' scenarios for children's videos.")
+        try:
+            raw = _generate(prompt, temperature=0.9, max_tokens=800,
+                            system="You write creative 'What If' scenarios for children's videos.")
+        except Exception as e:
+            print(f"  LLM error (what_if): {e}")
+            attempts += 1
+            continue
         if not raw:
             attempts += 1
             continue
@@ -301,8 +314,13 @@ def _refill_how_it_works(need: int) -> list:
     while len(entries) < need and attempts < need * 5:
         avoid = _avoid_sample("how_it_works")
         prompt = REFILL_PROMPTS["how_it_works"].format(avoid=avoid)
-        raw = _generate(prompt, temperature=0.8, max_tokens=800,
-                        system="You explain how everyday things work in simple, accurate terms.")
+        try:
+            raw = _generate(prompt, temperature=0.8, max_tokens=800,
+                            system="You explain how everyday things work in simple, accurate terms.")
+        except Exception as e:
+            print(f"  LLM error (how_it_works): {e}")
+            attempts += 1
+            continue
         if not raw:
             attempts += 1
             continue
@@ -358,8 +376,13 @@ def _refill_riddles(need: int) -> list:
         rtype = random.choice(RIDDLE_TYPES)
         avoid = _avoid_sample("riddles")
         prompt = REFILL_PROMPTS["riddles"].format(rtype=rtype, avoid=avoid)
-        raw = _generate(prompt, temperature=0.8, max_tokens=300,
-                        system="You write clever riddles suitable for all ages.")
+        try:
+            raw = _generate(prompt, temperature=0.8, max_tokens=300,
+                            system="You write clever riddles suitable for all ages.")
+        except Exception as e:
+            print(f"  LLM error (riddles): {e}")
+            attempts += 1
+            continue
         if not raw:
             attempts += 1
             continue
@@ -400,8 +423,13 @@ def _refill_wyr(need: int) -> list:
         cat = random.choice(WYR_CATEGORIES)
         avoid = _avoid_sample("would_you_rather")
         prompt = REFILL_PROMPTS["would_you_rather"].format(cat=cat, avoid=avoid)
-        raw = _generate(prompt, temperature=0.9, max_tokens=200,
-                        system="You write fun 'Would You Rather' questions suitable for all ages.")
+        try:
+            raw = _generate(prompt, temperature=0.9, max_tokens=200,
+                            system="You write fun 'Would You Rather' questions suitable for all ages.")
+        except Exception as e:
+            print(f"  LLM error (would_you_rather): {e}")
+            attempts += 1
+            continue
         if not raw:
             attempts += 1
             continue
