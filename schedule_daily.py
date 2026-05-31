@@ -3,7 +3,7 @@
 import subprocess, sys, os, getpass
 from pathlib import Path
 
-TASK_NAME = "AICinematicDaily"
+TASK_NAME = "AICinematicEvery2H"
 SCRIPT = str(Path(__file__).parent / "run_pipeline.py")
 PYTHON = sys.executable
 
@@ -17,7 +17,9 @@ def install():
     # PowerShell command to create the task
     ps_command = f'''
 $action = New-ScheduledTaskAction -Execute "{PYTHON}" -Argument "{SCRIPT}"
-$trigger = New-ScheduledTaskTrigger -Daily -At 03:00AM
+$trigger = New-ScheduledTaskTrigger -Daily -At 00:00AM
+$trigger.RepetitionInterval = New-TimeSpan -Hours 2
+$trigger.RepetitionDuration = New-TimeSpan -Days 365
 $settings = New-ScheduledTaskSettingsSet -StartWhenAvailable -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
 $principal = New-ScheduledTaskPrincipal -UserId "{getpass.getuser()}" -LogonType S4U -RunLevel Limited
 Register-ScheduledTask -TaskName "{TASK_NAME}" -Action $action -Trigger $trigger -Settings $settings -Principal $principal -Force

@@ -76,7 +76,7 @@ def main():
 
     print(f"\n{'='*55}")
     print(f"  Chapter {chapter['chapter']} complete!")
-    print(f"  Next: Chapter {chapter['chapter'] + 1} will generate tomorrow")
+    print(f"  Next chapter will generate in ~2 hours")
     print(f"  SEO title: {final_title}")
     print(f"{'='*55}")
 
