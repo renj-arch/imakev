@@ -22,6 +22,7 @@ PLAYLISTS = {
     "history_minute": {"name": "History Minute", "desc": "Fascinating history shorts — one minute at a time."},
     "psychology": {"name": "Psychology Hacks", "desc": "Mind-blowing psychology hacks your brain doesn't want you to know."},
     "life_hacks": {"name": "Life Hacks", "desc": "Clever life hacks that actually work — save time, money, and effort."},
+    "urban_legends": {"name": "Urban Legends", "desc": "Famous urban legends — the spooky story vs the real truth."},
 }
 
 

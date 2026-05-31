@@ -218,6 +218,25 @@ def run_life_hacks():
     bank_manager.ensure_refilled("life_hacks")
 
 
+def run_urban_legends():
+    print("=" * 55)
+    print("  MODE: URBAN LEGENDS")
+    print("=" * 55)
+
+    from upload_youtube import upload
+    import urban_legends_video
+
+    out_path, data = urban_legends_video.main()
+
+    desc = f"{data['hook']}\n\n{data['legend']}\n\nTHE MYTH:\n{data['myth']}\n\nTHE TRUTH:\n{data['truth']}\n\n#urbanlegends #shorts #mythsdebunked"
+    tags = ["urban legends", "myths", "debunked", "shorts", "creepy", "truth"]
+
+    print("\nUploading...")
+    upload(str(out_path), data["title"], desc, tags, "public", "urban_legends")
+    print("Urban Legends video done!")
+    bank_manager.ensure_refilled("urban_legends")
+
+
 def main():
     mode = sys.argv[1] if len(sys.argv) > 1 else "story"
     if mode == "story":
@@ -238,8 +257,10 @@ def main():
         run_psychology()
     elif mode == "life_hacks":
         run_life_hacks()
+    elif mode == "urban_legends":
+        run_urban_legends()
     else:
-        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', or 'life_hacks'")
+        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', or 'urban_legends'")
 
 
 if __name__ == "__main__":

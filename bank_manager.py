@@ -79,6 +79,17 @@ REFILL_PROMPTS = {
         "EXPLANATION: [1-2 sentence how to do it and why it works]\n\n"
         "Make them simple, clever, and immediately usable."
     ),
+    "urban_legends": (
+        "Write a short YouTube Shorts script about a famous urban legend. "
+        "First tell the spooky version, then reveal the real origin. "
+        "Never repeat legends from this avoid list:"
+        "\n---\n{avoid}\n---\n"
+        "Format exactly:\n"
+        "LEGEND: [name of the urban legend]\n"
+        "MYTH: [the spooky story version in 2-3 sentences]\n"
+        "TRUTH: [the real origin in 2-3 sentences]\n\n"
+        "Make it engaging and surprising. Suitable for all ages."
+    ),
 }
 
 NICHES = [
@@ -102,6 +113,8 @@ IMAGE_PROMPT_RIDDLE_ANSWER = "cinematic reveal scene: {answer}, bright warm ligh
 IMAGE_PROMPT_HISTORY = "vintage historical photograph style: {topic}, sepia tones, dramatic lighting, 9:16 vertical, weathered texture, cinematic"
 IMAGE_PROMPT_PSYCHOLOGY = "cinematic surreal brain illustration: {hack}, glowing neural connections, moody atmospheric lighting, 9:16 vertical, dark background with neon accents, highly detailed"
 IMAGE_PROMPT_LIFE_HACKS = "clean bright flat lay photography: {hack}, household objects arranged neatly, top down view, natural lighting, minimalist, 9:16 vertical, white background"
+IMAGE_PROMPT_URBAN_LEGENDS_MYTH = "dark cinematic horror scene: {legend}, foggy night, creepy atmosphere, vintage style, 9:16 vertical, moody lighting, shadows"
+IMAGE_PROMPT_URBAN_LEGENDS_TRUTH = "bright cinematic reveal scene: {legend}, warm sunlight, documentary style, clean, 9:16 vertical, educational"
 
 RIDDLE_TYPES = [
     "logic", "wordplay", "math", "lateral thinking", "observation",
@@ -189,6 +202,35 @@ LIFE_HACKS_FALLBACKS = [
     ("Get more juice from lemons", "Microwave the lemon for 15 seconds before squeezing. The heat breaks down membranes and releases twice the juice."),
 ]
 
+URBAN_LEGENDS_HOOKS = [
+    "You've heard this story. But here's what really happened:",
+    "This urban legend gave generations nightmares. Was it real?",
+    "Everyone knows this story. Almost none of it is true:",
+    "The scariest story you've heard? It's not what you think:",
+    "You probably believe this urban legend. Here's the truth:",
+    "This famous story is completely made up. Here's the real origin:",
+    "Before the internet, this story terrified everyone. Then the truth came out:",
+    "You've been told this spooky story since childhood. Let me ruin it with facts:",
+]
+
+URBAN_LEGENDS_FALLBACKS = [
+    ("Bloody Mary", "Say Bloody Mary three times in front of a mirror and a ghostly woman appears to attack you. The legend has terrified children at sleepovers for decades.", "The legend likely originated from 16th century Queen Mary I. The modern version spread in the 1970s as a harmless dare game, inspired by mirror-gazing superstitions."),
+    ("The Hook", "A couple parked at Lover's Lane hears a radio warning about an escaped convict with a hook for a hand. They drive away scared, and later find a bloody hook dangling from the car door handle.", "The story first appeared in 1950s teen folklore magazines. No real incident has ever matched the details, but it became the classic cautionary tale about teenage rebellion."),
+    ("Killer in the Backseat", "A woman driving home notices a car flashing its headlights at her repeatedly. Frightened, she races home. The driver follows her, then tells her a man was hiding in her backseat with a knife.", "This legend may trace to a real 1964 crime where a woman found a man in her backseat. The 'friendly flasher' variant appears in driver's safety courses as a real warning."),
+    ("The Babysitter", "A babysitter receives creepy phone calls asking 'Have you checked the children?' She calls the police and learns the calls are coming from inside the house. The killer is upstairs.", "This story first appeared in a 1960s horror anthology. No real case has ever matched this exact scenario, but it became one of the most retold urban legends in American folklore."),
+    ("Alligators in the Sewers", "New York City's sewers are infested with alligators that were flushed down toilets as babies and grew in the darkness feeding on rats and garbage.", "The myth started in the 1930s when a few small alligators were found in NYC sewers. They were almost certainly dumped by owners, not from a breeding population. Sewers are too cold for them to survive."),
+    ("The Vanishing Hitchhiker", "A driver picks up a hitchhiker on a lonely road. The hitchhiker gives an address, then mysteriously vanishes from the car. The driver later finds out the person died years ago.", "This is one of the oldest urban legends dating back to the 1800s. Versions exist in dozens of cultures. The modern version spread during the 1950s car culture boom."),
+    ("Microwaved Pet", "An elderly woman tries to dry her wet poodle by putting it in the microwave. The pet explodes, killing it instantly.", "This grotesque story appeared in a 1970s book but was entirely fabricated. No documented case of anyone microwaving a pet has ever been found. It became a warning about modern technology."),
+    ("Spider Bite", "A woman is bitten by a spider while on vacation. The bite swells and when she goes to the doctor, hundreds of baby spiders crawl out of the wound.", "Medically impossible. Spider eggs cannot survive inside human tissue and spider venom doesn't work this way. The story originates from a 1990s chain email."),
+    ("The Kidney Heist", "A businessman travels abroad, wakes up in a bathtub of ice with a note saying 'Call 911. You've had one of your kidneys removed.'", "No verified case of a single kidney being stolen surgically has ever been documented. The story spread via chain emails in the late 1990s. Kidney transplants require tissue matching and medical infrastructure."),
+    ("The Clown Statue", "A family buys a creepy clown statue from an antique store. It keeps appearing in different rooms. They later learn it was never a statue — it was a man playing dead.", "This story gained traction on early internet forums in the 2000s. It's a variation of the 'living statue' trope found in horror fiction dating back to the 1800s."),
+    ("Car Headlights Game", "Teens drive to a remote road at night and stop. They turn off the car. The legend says if you count to three and turn the headlights back on, you'll see a ghost in the beam.", "This is a modern campfire story that spread through social media. No paranormal sightings have been verified, but teens still try it. The fear comes from anticipation and darkness."),
+    ("The Licked Hand", "A girl staying home alone feels safe with her dog. She puts her hand down for the dog to lick. In the morning, she finds the dog dead and a message in blood: 'Humans can lick too.'", "This story appeared in a 1992 horror fiction collection. It was written as fiction but spread as a true story through forwarded emails. No police report of this event exists."),
+    ("Room for One More", "A taxi driver picks up a passenger. The passenger gets out at a cemetery. The driver looks back and the passenger is gone. Later he finds out the passenger was a person who died exactly one year ago.", "This is a global folklore motif dating back centuries. Versions exist in Japanese, Mexican, and European cultures. It's a classic ghost story, not a real event."),
+    ("The Crying Boy", "A painting of a crying boy is blamed for causing fires in homes across England in the 1980s. Every house that burned down had the painting intact on the wall.", "In 1985, a UK newspaper claimed firefighters found the print untouched in numerous fires. The real explanation: the print was mass-produced, so it appeared in many homes. Confirmation bias created the legend."),
+    ("Deadly Pizza Topping", "A man orders pizza, eats it, and dies. Police trace it to a specific topping that was laced with poison by a disgruntled employee.", "No verified case of a poisoned pizza killing a customer has ever been documented. This urban legend likely stems from general food safety fears and has been debunked by multiple food safety agencies."),
+]
+
 
 def _bank_path(mode: str) -> Path:
     return BANK_DIR / f"{mode}.json"
@@ -255,6 +297,10 @@ def _mark_used(mode: str, entry: dict):
             n = _normalize(h)
             if n and n not in used:
                 used.append(n)
+    elif mode == "urban_legends":
+        n = _normalize(entry.get("legend", ""))
+        if n and n not in used:
+            used.append(n)
     data["used"] = used
     _write_bank(mode, data)
 
@@ -322,6 +368,8 @@ def refill(mode: str, force_count: int | None = None):
             new_entries = _refill_psychology(need)
         elif mode == "life_hacks":
             new_entries = _refill_life_hacks(need)
+        elif mode == "urban_legends":
+            new_entries = _refill_urban_legends(need)
         else:
             return
 
@@ -720,6 +768,58 @@ def _refill_life_hacks(need: int) -> list:
                 "image_prompts": image_prompts,
                 "script": " ".join(tts_lines),
                 "tts_script": " ".join(tts_lines),
+            }
+            entries.append(entry)
+        attempts += 1
+
+    return entries
+
+
+def _refill_urban_legends(need: int) -> list:
+    entries = []
+    attempts = 0
+    hooks = URBAN_LEGENDS_HOOKS
+    while len(entries) < need and attempts < need * 5:
+        avoid = _avoid_sample("urban_legends")
+        prompt = REFILL_PROMPTS["urban_legends"].format(avoid=avoid)
+        try:
+            raw = _generate(prompt, temperature=0.8, max_tokens=800,
+                            system="You write about real urban legends. Always distinguish myth from fact. Keep it family-friendly.")
+        except Exception as e:
+            print(f"  LLM error (urban_legends): {e}")
+            attempts += 1
+            continue
+        if not raw:
+            attempts += 1
+            continue
+
+        legend = ""
+        myth = ""
+        truth = ""
+        for line in raw.split("\n"):
+            line = line.strip()
+            if line.upper().startswith("LEGEND:"):
+                legend = line.split(":", 1)[-1].strip()
+            elif line.upper().startswith("MYTH:"):
+                myth = line.split(":", 1)[-1].strip()
+            elif line.upper().startswith("TRUTH:"):
+                truth = line.split(":", 1)[-1].strip()
+
+        if legend and myth and truth and not _is_duplicate("urban_legends", [legend], _read_bank("urban_legends")):
+            hook = random.choice(hooks)
+            image_prompts = [
+                IMAGE_PROMPT_URBAN_LEGENDS_MYTH.format(legend=legend),
+                IMAGE_PROMPT_URBAN_LEGENDS_TRUTH.format(legend=legend),
+            ]
+            entry = {
+                "title": f"Urban Legend: {legend}",
+                "hook": hook,
+                "legend": legend,
+                "myth": myth,
+                "truth": truth,
+                "image_prompts": image_prompts,
+                "script": f"{hook} {legend}. {myth} But here's the truth: {truth}",
+                "tts_script": f"{hook} {legend}. {myth} But here's the truth: {truth}",
             }
             entries.append(entry)
         attempts += 1
