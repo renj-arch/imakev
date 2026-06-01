@@ -324,6 +324,21 @@ def run_satisfying():
     bank_manager.ensure_refilled("satisfying")
 
 
+def run_try_this():
+    print("=" * 55)
+    print("  MODE: TRY THIS — BRAIN HACK")
+    print("=" * 55)
+
+    from upload_youtube import upload
+    import try_this_video
+
+    out_path, data = try_this_video.main()
+    print("\nUploading with viral SEO...")
+    upload(str(out_path), mode="try_this", playlist_key="try_this", script_data=data, made_for_kids=False)
+    print("Try This video done!")
+    bank_manager.ensure_refilled("try_this")
+
+
 def run_loop():
     import time, random
     interval = int(sys.argv[2]) if len(sys.argv) > 2 else 3600
@@ -333,7 +348,7 @@ def run_loop():
         "life_hacks", "urban_legends", "coincidences",
         "unsolved_mysteries", "movie_trivia", "animal_kingdom",
         "space_wonders", "box_office", "things_they_dont_teach",
-        "challenges", "satisfying", "negative_hooks",
+        "challenges", "satisfying", "negative_hooks", "try_this",
     ]
     print(f"\n{'='*55}")
     print(f"  LOOP MODE — generating every {interval}s")
@@ -350,8 +365,9 @@ def run_loop():
             "unsolved_mysteries": run_unsolved_mysteries, "movie_trivia": run_movie_trivia,
             "animal_kingdom": run_animal_kingdom, "space_wonders": run_space_wonders,
             "box_office": run_box_office, "things_they_dont_teach": run_things,
-            "challenges": run_challenges, "satisfying": run_satisfying,
+            "challenges": run_challenges,             "satisfying": run_satisfying,
             "negative_hooks": run_negative_hooks,
+            "try_this": run_try_this,
         }[mode]
         try:
             runner()
@@ -409,8 +425,10 @@ def main():
         run_satisfying()
     elif mode == "negative_hooks":
         run_negative_hooks()
+    elif mode == "try_this":
+        run_try_this()
     else:
-        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', 'movie_trivia', 'animal_kingdom', 'space_wonders', 'box_office', 'things_they_dont_teach', 'challenges', 'satisfying', or 'negative_hooks'")
+        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', 'movie_trivia', 'animal_kingdom', 'space_wonders', 'box_office', 'things_they_dont_teach', 'challenges', 'satisfying', or 'negative_hooks' or 'try_this'")
 
 
 if __name__ == "__main__":

@@ -181,6 +181,21 @@ REFILL_PROMPTS = {
         "DIFFICULTY: [easy/medium/hard]\n\n"
         "Make each one feel like a dare."
     ),
+    "try_this": (
+        "Give me 1 interactive brain hack or visual illusion. "
+        "The viewer must experience the effect in real time. "
+        "Never repeat tricks from this avoid list:"
+        "\n---\n{avoid}\n---\n"
+        "Format exactly:\n"
+        "HOOK: [direct command, first 2 seconds]\n"
+        "SETUP: [what the brain is doing, 3-5s]\n"
+        "ACTION: [countdown or instruction]\n"
+        "REVEAL: [what they just experienced]\n"
+        "EXPLANATION: [one punchy line, 5-8s]\n"
+        "PROMPT: [one line summary for the end]\n"
+        "IMAGE: [short visual description for the image]\n\n"
+        "Make it feel like a magic trick. The viewer must do something."
+    ),
 }
 
 NICHES = [
@@ -215,6 +230,7 @@ IMAGE_PROMPT_BOX_OFFICE = "vintage Hollywood movie poster, {title}, dramatic gol
 IMAGE_PROMPT_CHALLENGES = "cinematic action shot, {challenge}, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
 IMAGE_PROMPT_SATISFYING = "macro close-up shot, {topic}, soft diffused lighting, satisfying textures, 9:16 vertical, clean minimalist aesthetic, vibrant colors"
 IMAGE_PROMPT_NEGATIVE = "dark cinematic scene, {topic}, moody lighting, deep shadows, 9:16 vertical, unsettling atmosphere, noir style"
+IMAGE_PROMPT_TRY_THIS = "minimalist brain illusion, {hook}, 9:16 vertical, high contrast, surreal, optical illusion style, clean background"
 
 RIDDLE_TYPES = [
     "logic", "wordplay", "math", "lateral thinking", "observation",
@@ -383,6 +399,17 @@ CHALLENGES_HOOKS = [
     "This stunt requires serious skill. Ready?",
 ]
 
+TRY_THIS_HOOKS = [
+    "Try this right now. Don't look away:",
+    "Your brain is lying to you. Try this:",
+    "This trick works on everyone. Ready?",
+    "Try this 5-second brain hack:",
+    "You won't believe what happens. Try it:",
+    "This illusion breaks your brain. Watch:",
+    "Ready to hack your own brain?",
+    "Try this and feel your brain break:",
+]
+
 SATISFYING_HOOKS = [
     "This is so satisfying to watch:",
     "You won't believe how satisfying this is:",
@@ -539,6 +566,10 @@ def _mark_used(mode: str, entry: dict):
             n = _normalize(t)
             if n and n not in used:
                 used.append(n)
+    elif mode == "try_this":
+        n = _normalize(entry.get("hook", ""))
+        if n and n not in used:
+            used.append(n)
     data["used"] = used
     _write_bank(mode, data)
 
@@ -620,6 +651,8 @@ def refill(mode: str, force_count: int | None = None):
             new_entries = _refill_satisfying(need)
         elif mode == "negative_hooks":
             new_entries = _refill_negative_hooks(need)
+        elif mode == "try_this":
+            new_entries = _refill_try_this(need)
         else:
             return
 
@@ -1282,6 +1315,60 @@ def _refill_challenges(need: int) -> list:
                 "image_prompts": image_prompts,
                 "script": " ".join(tts_lines),
                 "tts_script": f"{hook} {' '.join(tts_lines)}",
+            }
+            entries.append(entry)
+        attempts += 1
+    return entries
+
+
+def _refill_try_this(need: int) -> list:
+    entries = []
+    attempts = 0
+    hooks = TRY_THIS_HOOKS
+    while len(entries) < need and attempts < need * 5:
+        avoid = _avoid_sample("try_this")
+        prompt = REFILL_PROMPTS["try_this"].format(avoid=avoid)
+        try:
+            raw = _generate(prompt, temperature=0.9, max_tokens=300,
+                            system="You write interactive brain hacks and visual illusions. Short, punchy, experiential.")
+        except Exception as e:
+            print(f"  LLM error (try_this): {e}")
+            attempts += 1
+            continue
+        if not raw:
+            attempts += 1
+            continue
+        result = {}
+        for line in raw.split("\n"):
+            line = line.strip()
+            if line.upper().startswith("HOOK:"):
+                result["hook"] = line.split(":", 1)[-1].strip()
+            elif line.upper().startswith("SETUP:"):
+                result["setup"] = line.split(":", 1)[-1].strip()
+            elif line.upper().startswith("ACTION:"):
+                result["action"] = line.split(":", 1)[-1].strip()
+            elif line.upper().startswith("REVEAL:"):
+                result["reveal"] = line.split(":", 1)[-1].strip()
+            elif line.upper().startswith("EXPLANATION:"):
+                result["explanation"] = line.split(":", 1)[-1].strip()
+            elif line.upper().startswith("PROMPT:"):
+                result["prompt"] = line.split(":", 1)[-1].strip()
+            elif line.upper().startswith("IMAGE:"):
+                result["image_style"] = line.split(":", 1)[-1].strip() + ", 9:16"
+        if result.get("hook") and result.get("reveal") and not _is_duplicate("try_this", [result["hook"]], _read_bank("try_this")):
+            result.setdefault("setup", "")
+            result.setdefault("action", "")
+            result.setdefault("explanation", "")
+            result.setdefault("prompt", result["reveal"])
+            result.setdefault("image_style", "minimal brain illusion, abstract, 9:16")
+            entry = {
+                "hook": result["hook"],
+                "setup": result["setup"],
+                "action": result["action"],
+                "reveal": result["reveal"],
+                "explanation": result["explanation"],
+                "prompt": result["prompt"],
+                "image_style": result["image_style"],
             }
             entries.append(entry)
         attempts += 1

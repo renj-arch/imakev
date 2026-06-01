@@ -52,6 +52,7 @@ MODE_KEYWORDS = {
     "riddles": ["riddle", "brain teaser", "puzzle", "iq test", "riddle answer", "challenge", "logic puzzle", "think"],
     "would_you_rather": ["would you rather", "this or that", "choice", "pick one", "fun questions", "decision", "personality test"],
     "story": ["story", "cinematic", "animation", "ai story", "chapter", "series", "drama"],
+    "try_this": ["try this", "brain hack", "illusion", "mind trick", "optical illusion", "brain teaser", "visual trick", "psychology experiment", "mind game"],
 }
 
 CATEGORY_MAP = {
@@ -75,6 +76,7 @@ CATEGORY_MAP = {
     "riddles": "entertainment",
     "would_you_rather": "entertainment",
     "story": "entertainment",
+    "try_this": "education",
 }
 
 
@@ -161,6 +163,7 @@ def generate_audience_tags(mode: str) -> list[str]:
         "riddles": ["puzzle solvers", "brain game lovers", "iq challenge", "smart"],
         "would_you_rather": ["decision lovers", "fun seekers", "game players", "social"],
         "story": ["story lovers", "cinematic fans", "fiction", "drama"],
+        "try_this": ["brain hack fans", "illusion lovers", "psychology curious", "mind game players"],
     }
     return audience_map.get(mode, ["general audience"])
 

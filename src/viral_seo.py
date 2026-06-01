@@ -18,6 +18,17 @@ TITLE_TEMPLATES = {
         "What They Don't Tell You About {topic}",
         "This {topic} Reality Check Hits Hard",
     ],
+    "try_this": [
+        "Try This: {hook} 🧠",
+        "Your Brain Is Lying To You — Try This",
+        "Try This Brain Hack Right Now ⚡",
+        "This 10-Second Trick Breaks Your Brain",
+        "Try This: You'll Never See The Same Way Again",
+        "Your Brain Hates This Trick — Try It",
+        "Try This If You Want Your Mind Blown 🤯",
+        "This Illusion Works On Everyone. Try It.",
+        "Try This 5-Second Brain Hack",
+    ],
     "satisfying": [
         "Oddly Satisfying: {topic} 🎯",
         "This {topic} Is So Satisfying To Watch",
@@ -168,6 +179,10 @@ DESCRIPTION_TEMPLATES = {
         "{hook}\n\nDark truths you weren't ready for. Which one hit you the hardest?",
         "{hook}\n\nThese uncomfortable truths will change how you see everything. Comment your thoughts below.",
     ],
+    "try_this": [
+        "{hook}\n\nTry this brain hack right now. It works instantly.\n\nComment what you experienced! 👇",
+        "{hook}\n\nYour brain is lying to you. Watch till the end and try it yourself.\n\nLet me know what you felt in the comments!",
+    ],
     "satisfying": [
         "{hook}\n\nSit back, relax, and enjoy these oddly satisfying visuals. Which one was your favorite?",
         "{hook}\n\nDIY projects, satisfying restorations, and oddly calming visuals. Comment your favorite!",
@@ -231,6 +246,7 @@ def generate_viral_title(mode: str, data: dict) -> str:
         "challenges": lambda d: d.get("challenges", [{"title": "this"}])[0]["title"] if d.get("challenges") else "this",
         "satisfying": lambda d: d.get("topics", ["this"])[0] if d.get("topics") else "this",
         "negative_hooks": lambda d: d.get("topics", ["truth"])[0] if d.get("topics") else "truth",
+        "try_this": lambda d: d.get("hook", "brain hack")[:40],
     }
 
     get_topic = topic_map.get(mode, lambda d: "")
@@ -313,6 +329,7 @@ def generate_viral_tags(mode: str, data: dict) -> list[str]:
         "challenges": ["shorts", "challenge", "stunts", "dare", "fail", "try", "competition", "funny", "youtubeshorts", "viral"],
         "satisfying": ["shorts", "satisfying", "oddlysatisfying", "diy", "restoration", "cleaning", "asmr", "relaxing", "satisfyingvideo", "youtubeshorts"],
         "negative_hooks": ["shorts", "darktruths", "realitycheck", "uncomfortabletruths", "psychology", "mindblown", "truth", "deeptheory", "youtubeshorts"],
+        "try_this": ["shorts", "trythis", "brainhack", "illusion", "mindtrick", "psychology", "braintrick", "opticalillusion", "mindblown", "youtubeshorts"],
     }
 
     tags = base_tags.get(mode, ["shorts", "youtubeshorts", mode])[:]
@@ -368,6 +385,7 @@ def generate_viral_hashtags(mode: str, count: int = 6) -> str:
         "challenges": ["#challenge", "#shorts", "#stunts", "#dare", "#tryit", "#viral", "#fail"],
         "satisfying": ["#satisfying", "#shorts", "#oddlysatisfying", "#diy", "#restoration", "#asmr", "#relaxing"],
         "negative_hooks": ["#darktruths", "#shorts", "#realitycheck", "#uncomfortable", "#truthhurts", "#deep", "#mindblowing"],
+        "try_this": ["#trythis", "#shorts", "#brainhack", "#illusion", "#mindtrick", "#psychology", "#opticalillusion", "#mindblown"],
     }
 
     selected = mode_hashtags.get(mode, ["#shorts", mode, "#youtubeshorts"])
