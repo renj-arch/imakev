@@ -28,6 +28,7 @@ PLAYLISTS = {
     "movie_trivia": {"name": "Movie Trivia", "desc": "Real behind-the-scenes movie secrets you never knew."},
     "animal_kingdom": {"name": "Animal Kingdom", "desc": "Incredible animal facts from around the world."},
     "space_wonders": {"name": "Space Wonders", "desc": "Incredible space facts from NASA and astronomy."},
+    "box_office": {"name": "Box Office Facts", "desc": "Incredible box office facts and movie earnings records."},
 }
 
 

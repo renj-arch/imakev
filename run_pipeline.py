@@ -347,6 +347,28 @@ def run_space_wonders():
     bank_manager.ensure_refilled("space_wonders")
 
 
+def run_box_office():
+    print("=" * 55)
+    print("  MODE: BOX OFFICE")
+    print("=" * 55)
+
+    from upload_youtube import upload
+    import box_office_video
+
+    out_path, data = box_office_video.main()
+
+    desc = "Incredible box office facts and movie earnings records.\n\n"
+    for title, story in zip(data["box_office_titles"], data["stories"]):
+        desc += f"{title}: {story}\n\n"
+    desc += "#boxoffice #movies #shorts #hollywood #moviefacts"
+    tags = ["box office", "movies", "shorts", "hollywood", "movie facts", "earnings", "film records"]
+
+    print("\nUploading...")
+    upload(str(out_path), data["title"], desc, tags, "public", "box_office")
+    print("Box Office video done!")
+    bank_manager.ensure_refilled("box_office")
+
+
 def main():
     mode = sys.argv[1] if len(sys.argv) > 1 else "story"
     if mode == "story":
@@ -379,8 +401,10 @@ def main():
         run_animal_kingdom()
     elif mode == "space_wonders":
         run_space_wonders()
+    elif mode == "box_office":
+        run_box_office()
     else:
-        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', 'movie_trivia', 'animal_kingdom', or 'space_wonders'")
+        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', 'movie_trivia', 'animal_kingdom', 'space_wonders', or 'box_office'")
 
 
 if __name__ == "__main__":
