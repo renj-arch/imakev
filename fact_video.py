@@ -8,6 +8,7 @@ import requests as req
 from moviepy import (
     VideoClip, AudioFileClip, ImageClip,
     concatenate_videoclips, CompositeAudioClip, concatenate_audioclips,
+    CompositeVideoClip,
 )
 import config
 from src.engagement import hook_overlays, fast_motion, comment_prompt_overlay, subscribe_end_card, branding_overlays

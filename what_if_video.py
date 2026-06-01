@@ -5,7 +5,7 @@ from pathlib import Path
 from PIL import Image, ImageEnhance, ImageDraw, ImageFont
 import numpy as np
 import requests as req
-from moviepy import VideoClip, AudioFileClip, concatenate_videoclips, CompositeAudioClip, concatenate_audioclips
+from moviepy import VideoClip, AudioFileClip, concatenate_videoclips, CompositeAudioClip, concatenate_audioclips, CompositeVideoClip
 import config
 from src.what_if import generate_what_if_script
 from src.engagement import hook_overlays, fast_motion, comment_prompt_overlay, subscribe_end_card, branding_overlays
