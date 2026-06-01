@@ -171,7 +171,7 @@ def main():
         final = final.with_audio(audio_clip)
 
     print('\n[4/4] Rendering...')
-    safe_title = TITLE.lower().replace(' ', '_').replace('?', '').replace('!', '').replace(\"'\", '').replace('.','').replace(',','').replace(':','')[:50]
+    safe_title = TITLE.lower().replace(' ', '_').replace('?', '').replace('!', '').replace("'", '').replace('.','').replace(',','').replace(':','')[:50]
     out = config.OUTPUT_DIR / f'neet_{safe_title}.mp4'
     out.unlink(missing_ok=True)
     print(f'  {total_dur + 1.5:.1f}s | {W}x{H}')
