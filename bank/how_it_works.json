@@ -1,30 +1,6 @@
 {
   "entries": [
     {
-      "title": "Ever wondered how this works? A zipper",
-      "hook": "Ever wondered how this works?",
-      "topics": [
-        "a zipper",
-        "a smoke detector",
-        "a vacuum cleaner",
-        "a pencil"
-      ],
-      "explanations": [
-        "A zipper works using interlocking teeth. The slider forces teeth together locking hook into hollow. Pulling down splits them apart.",
-        "A tiny radioactive source ionizes air between electrodes. Smoke particles disrupt the current triggering the alarm.",
-        "A motor spins a fan that sucks air in creating low pressure. Outside air pushes in carrying dirt. Filters trap particles.",
-        "Graphite flakes stick to paper through friction. The clay binder adjusts hardness. Eraser removes flakes using abrasion."
-      ],
-      "image_prompts": [
-        "cinematic close-up illustration: a zipper, detailed technical cross-section view, clean lighting, educational style, 9:16 vertical",
-        "cinematic close-up illustration: a smoke detector, detailed technical cross-section view, clean lighting, educational style, 9:16 vertical",
-        "cinematic close-up illustration: a vacuum cleaner, detailed technical cross-section view, clean lighting, educational style, 9:16 vertical",
-        "cinematic close-up illustration: a pencil, detailed technical cross-section view, clean lighting, educational style, 9:16 vertical"
-      ],
-      "script": "A zipper works using interlocking teeth. The slider forces teeth together locking hook into hollow. Pulling down splits them apart. A tiny radioactive source ionizes air between electrodes. Smoke particles disrupt the current triggering the alarm. A motor spins a fan that sucks air in creating low pressure. Outside air pushes in carrying dirt. Filters trap particles. Graphite flakes stick to paper through friction. The clay binder adjusts hardness. Eraser removes flakes using abrasion.",
-      "tts_script": "A zipper works using interlocking teeth. The slider forces teeth together locking hook into hollow. Pulling down splits them apart. A tiny radioactive source ionizes air between electrodes. Smoke particles disrupt the current triggering the alarm. A motor spins a fan that sucks air in creating low pressure. Outside air pushes in carrying dirt. Filters trap particles. Graphite flakes stick to paper through friction. The clay binder adjusts hardness. Eraser removes flakes using abrasion."
-    },
-    {
       "title": "Here's how it actually works: A toilet",
       "hook": "Here's how it actually works:",
       "topics": [
@@ -11939,7 +11915,10 @@
     "a fluorescent light",
     "a zipper",
     "a microwave",
-    "a compass"
+    "a compass",
+    "a smoke detector",
+    "a vacuum cleaner",
+    "a pencil"
   ],
   "min_before_refill": 20,
   "refill_target": 500
