@@ -1,30 +1,6 @@
 {
   "entries": [
     {
-      "title": "Imagine if... Feelings changed the weather",
-      "hook": "Imagine if...",
-      "scenarios": [
-        "feelings changed the weather",
-        "pets drove tiny cars",
-        "music was visible",
-        "shadows were alive"
-      ],
-      "explanations": [
-        "Happy thoughts would bring sunshine and laughter would create rainbows.",
-        "Dogs would drive to the park cats to sunny windowsills and hamsters would race.",
-        "Every song would paint colors in the air and concerts would be rainbow explosions.",
-        "Your shadow would wave at you and play games when the sun was out."
-      ],
-      "image_prompts": [
-        "whimsical children's book illustration: feelings changed the weather, colorful magical dreamlike, wide shot, 9:16 vertical, vibrant pastels, soft lighting",
-        "whimsical children's book illustration: pets drove tiny cars, colorful magical dreamlike, wide shot, 9:16 vertical, vibrant pastels, soft lighting",
-        "whimsical children's book illustration: music was visible, colorful magical dreamlike, wide shot, 9:16 vertical, vibrant pastels, soft lighting",
-        "whimsical children's book illustration: shadows were alive, colorful magical dreamlike, wide shot, 9:16 vertical, vibrant pastels, soft lighting"
-      ],
-      "script": "Happy thoughts would bring sunshine and laughter would create rainbows. Dogs would drive to the park cats to sunny windowsills and hamsters would race. Every song would paint colors in the air and concerts would be rainbow explosions. Your shadow would wave at you and play games when the sun was out.",
-      "tts_script": "Happy thoughts would bring sunshine and laughter would create rainbows. Dogs would drive to the park cats to sunny windowsills and hamsters would race. Every song would paint colors in the air and concerts would be rainbow explosions. Your shadow would wave at you and play games when the sun was out."
-    },
-    {
       "title": "What would happen if... Cats could talk",
       "hook": "What would happen if...",
       "scenarios": [
@@ -12001,7 +11977,12 @@
       "tts_script": "Happy thoughts would bring sunshine and laughter would create rainbows. Dogs would drive to the park cats to sunny windowsills and hamsters would race. Every night you would imagine something and wake up to find it real. Astronauts would bring crackers and telescopes would make everyone hungry."
     }
   ],
-  "used": [],
+  "used": [
+    "feelings changed the weather",
+    "pets drove tiny cars",
+    "music was visible",
+    "shadows were alive"
+  ],
   "min_before_refill": 20,
   "refill_target": 500
 }
