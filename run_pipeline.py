@@ -279,34 +279,19 @@ def run_box_office():
     bank_manager.ensure_refilled("box_office")
 
 
-def run_upsc():
+def run_challenges():
     print("=" * 55)
-    print("  MODE: UPSC CONCEPTS")
-    print("=" * 55)
-
-    from upload_youtube import upload
-    import upsc_video
-
-    out_path, data = upsc_video.main()
-    print("\nUploading with viral SEO...")
-    upload(str(out_path), mode="upsc", playlist_key="upsc", script_data=data, made_for_kids=False)
-    print("UPSC video done!")
-    bank_manager.ensure_refilled("upsc")
-
-
-def run_neet():
-    print("=" * 55)
-    print("  MODE: NEET CONCEPTS")
+    print("  MODE: CHALLENGES & STUNTS")
     print("=" * 55)
 
     from upload_youtube import upload
-    import neet_video
+    import challenges_video
 
-    out_path, data = neet_video.main()
+    out_path, data = challenges_video.main()
     print("\nUploading with viral SEO...")
-    upload(str(out_path), mode="neet", playlist_key="neet", script_data=data, made_for_kids=False)
-    print("NEET video done!")
-    bank_manager.ensure_refilled("neet")
+    upload(str(out_path), mode="challenges", playlist_key="challenges", script_data=data, made_for_kids=False)
+    print("Challenges video done!")
+    bank_manager.ensure_refilled("challenges")
 
 
 def main():
@@ -343,14 +328,12 @@ def main():
         run_space_wonders()
     elif mode == "box_office":
         run_box_office()
-    elif mode == "upsc":
-        run_upsc()
     elif mode == "things_they_dont_teach":
         run_things()
-    elif mode == "neet":
-        run_neet()
+    elif mode == "challenges":
+        run_challenges()
     else:
-        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', 'movie_trivia', 'animal_kingdom', 'space_wonders', 'box_office', or 'things_they_dont_teach'")
+        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', 'movie_trivia', 'animal_kingdom', 'space_wonders', 'box_office', 'things_they_dont_teach', or 'challenges'")
 
 
 if __name__ == "__main__":

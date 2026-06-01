@@ -32,8 +32,8 @@ PLAYLISTS = {
     "animal_kingdom": {"name": "Animal Kingdom Facts", "desc": "Incredible animal facts from around the world."},
     "space_wonders": {"name": "Space Wonders", "desc": "NASA-confirmed space facts that break your brain."},
     "box_office": {"name": "Box Office Records", "desc": "Movie earnings records that will shock you."},
-    "upsc": {"name": "UPSC Concept Crack", "desc": "Master UPSC concepts in 30 seconds."},
-    "neet": {"name": "NEET Concept Crack", "desc": "Master NEET concepts in 30 seconds."},
+    "things_they_dont_teach": {"name": "Hard Truths", "desc": "Hard truths about life, money, career, and relationships they don't teach you in school."},
+    "challenges": {"name": "Challenges & Stunts", "desc": "Fast-paced challenges and stunts that test your skills. Can you do them all?"},
 }
 
 

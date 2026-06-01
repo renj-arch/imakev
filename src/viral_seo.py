@@ -7,6 +7,26 @@ CHANNEL_HANDLE = "@dingdong"
 
 # Curiosity gap title templates proven to boost CTR 2-5x
 TITLE_TEMPLATES = {
+    "challenges": [
+        "Can You Complete This {topic} Challenge? ⚡",
+        "99% Fail This {topic} Challenge. Can You Beat It?",
+        "This {topic} Challenge Looks Easy. It's Not.",
+        "Try Not To Fail This {topic} Challenge 🏆",
+        "The {topic} Challenge That Breaks Everyone",
+        "{hook} {topic} Challenge — Are You Game?",
+        "This {topic} Stunt Will Blow Your Mind 🤯",
+        "Only 1% Can Win This {topic} Challenge",
+    ],
+    "things_they_dont_teach": [
+        "{hook} {topic} Truth #shorts",
+        "This {topic} Truth Will Change How You See Everything",
+        "Nobody Teaches You This About {topic}",
+        "The {topic} Truth They Hide From You",
+        "Why Nobody Tells You This About {topic}",
+        "The Harsh Truth About {topic} Nobody Talks About",
+        "This {topic} Fact Will Open Your Eyes",
+        "{hook} {topic} — Watch Till The End",
+    ],
     "facts": [
         "This {topic} Fact Will Ruin Your Day 😱",
         "Why {topic} Scientists Are Hiding This From You",
@@ -119,21 +139,17 @@ TITLE_TEMPLATES = {
         "The {title} Secret Nobody Talks About",
         "{title} — Watch Till The End ⚠️",
     ],
-    "upsc": [
-        "This {topic} Concept Confuses Every UPSC Aspirant",
-        "You're Getting {topic} Wrong In Prelims. Here's Why",
-        "The {topic} Trick That UPSC Toppers Use",
-        "Stop Confusing {topic} — It's Actually Simple",
-    ],
-    "neet": [
-        "This {topic} Concept Tricks 90% Of NEET Students",
-        "The {topic} Shortcut They Don't Teach You",
-        "You're Losing Marks On {topic}. Fix It In 30 Seconds",
-        "NEET Toppers Master {topic} With This One Trick",
-    ],
 }
 
 DESCRIPTION_TEMPLATES = {
+    "challenges": [
+        "{hook}\n\nThink you can handle these challenges? Try them yourself and comment how far you got!",
+        "{hook}\n\nWatch till the end — these challenges are harder than they look. Let us know your score in the comments!",
+    ],
+    "things_they_dont_teach": [
+        "{hook}\n\nWatch till the end — these hard truths will change how you see everything.\n\nComment which one hit you hardest! 👇",
+        "{hook}\n\nHere are some hard truths they don't teach you in school. Let us know your thoughts in the comments!",
+    ],
     "facts": [
         "This {topic} fact will change how you see everything. Watch till the end — it gets wild.\n\n{hashtags}",
         "Most people don't know this about {topic}. Here's the truth they're hiding.\n\nComment what you think! 👇\n\n{hashtags}",
@@ -180,13 +196,14 @@ def generate_viral_title(mode: str, data: dict) -> str:
         "animal_kingdom": lambda d: d.get("animal_facts", ["this animal"])[0] if d.get("animal_facts") else "this animal",
         "space_wonders": lambda d: d.get("space_facts", ["this"])[0] if d.get("space_facts") else "space",
         "box_office": lambda d: d.get("box_office_titles", ["this movie"])[0] if d.get("box_office_titles") else "this movie",
-        "upsc": lambda d: d.get("topics", ["this"])[0] if d.get("topics") else "this concept",
-        "neet": lambda d: d.get("topics", ["this"])[0] if d.get("topics") else "this concept",
         "story": lambda d: d.get("title", "this story"),
+        "things_they_dont_teach": lambda d: d.get("topics", ["hard truth"])[0] if d.get("topics") else "hard truth",
+        "challenges": lambda d: d.get("challenges", [{"title": "this"}])[0]["title"] if d.get("challenges") else "this",
     }
 
     get_topic = topic_map.get(mode, lambda d: "")
     topic = get_topic(data)
+    template = template.replace("{hook}", data.get("hook", ""))
     template = template.replace("{topic}", topic)
     template = template.replace("{scenario}", data.get("scenarios", ["it"])[0] if data.get("scenarios") else "it")
     template = template.replace("{hack}", data.get("hacks", ["it"])[0] if data.get("hacks") else "this")
@@ -259,9 +276,9 @@ def generate_viral_tags(mode: str, data: dict) -> list[str]:
         "animal_kingdom": ["shorts", "animals", "animalfacts", "nature", "wildlife", "amazinganimals", "didyouknow", "naturelovers", "youtubeshorts"],
         "space_wonders": ["shorts", "space", "astronomy", "nasa", "universe", "spacefacts", "science", "cosmos", "galaxy", "youtubeshorts"],
         "box_office": ["shorts", "boxoffice", "movies", "hollywood", "moviefacts", "earnings", "filmmaking", "movierecords", "youtubeshorts"],
-        "upsc": ["shorts", "upsc", "upscpreparation", "upscexam", "ias", "upscconcepts", "competitiveexams", "cse", "upscsyllabus", "youtubeshorts"],
-        "neet": ["shorts", "neet", "neetpreparation", "neetexam", "mbbs", "medical", "biology", "physics", "chemistry", "neetug", "ncert", "youtubeshorts"],
         "story": ["shorts", "story", "cinematic", "animation", "ai", "chapter", "series", "episode", "storytime", "youtubeshorts"],
+        "things_they_dont_teach": ["shorts", "hardtruths", "lifelessons", "wisdom", "realitycheck", "adulting", "lifetips", "truth", "mindset", "youtubeshorts"],
+        "challenges": ["shorts", "challenge", "stunts", "dare", "fail", "try", "competition", "funny", "youtubeshorts", "viral"],
     }
 
     tags = base_tags.get(mode, ["shorts", "youtubeshorts", mode])[:]
@@ -308,8 +325,8 @@ def generate_viral_hashtags(mode: str, count: int = 6) -> str:
         "animal_kingdom": ["#animals", "#shorts", "#animalfacts", "#nature", "#wildlife", "#didyouknow"],
         "space_wonders": ["#space", "#shorts", "#astronomy", "#nasa", "#universe", "#spacefacts"],
         "box_office": ["#boxoffice", "#shorts", "#movies", "#hollywood", "#moviefacts", "#records"],
-        "upsc": ["#upsc", "#shorts", "#upscpreparation", "#ias", "#competitiveexams", "#upscconcepts"],
-        "neet": ["#neet", "#shorts", "#neetpreparation", "#mbbs", "#medical", "#neetug"],
+        "things_they_dont_teach": ["#hardtruths", "#shorts", "#lifelessons", "#wisdom", "#realitycheck", "#mindset"],
+        "challenges": ["#challenge", "#shorts", "#stunts", "#dare", "#tryit", "#viral", "#fail"],
     }
 
     selected = mode_hashtags.get(mode, ["#shorts", mode, "#youtubeshorts"])

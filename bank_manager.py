@@ -144,27 +144,19 @@ REFILL_PROMPTS = {
         "FACT: [3-4 sentences explaining with specific dollar amounts and details]\n\n"
         "Include specific numbers, years, and comparisons."
     ),
-    "upsc": (
-        "Give me 4 different UPSC exam concepts to explain in a short video. "
-        "Each should be a high-yield topic from Polity, Economy, History, or Geography. "
-        "Never repeat topics from this avoid list:"
+    "challenges": (
+        "Give me 5 different fun physical challenges or stunts to attempt. "
+        "Each should be specific and measurable (e.g., 'Hold your breath for 30 seconds'). "
+        "Mix easy, medium, and hard difficulties. "
+        "Never repeat challenges from this avoid list:"
         "\n---\n{avoid}\n---\n"
         "Format exactly:\n"
-        "TOPIC: [Name of the concept]\n"
-        "EXPLANATION: [2-3 sentence clear explanation as if teaching a beginner]\n"
-        "SUBJECT: [Polity/Economy/History/Geography]\n\n"
-        "Make explanations simple, accurate, and exam-focused. Focus on topics that appear in UPSC Prelims and Mains."
-    ),
-    "neet": (
-        "Give me 4 different NEET exam concepts to explain in a short video. "
-        "Each should be a high-yield topic from Biology, Physics, or Chemistry based on NCERT Class 11 and 12 syllabus. "
-        "Never repeat topics from this avoid list:"
-        "\n---\n{avoid}\n---\n"
-        "Format exactly:\n"
-        "TOPIC: [Name of the concept]\n"
-        "EXPLANATION: [2-3 sentence clear explanation as if teaching a beginner]\n"
-        "SUBJECT: [Biology/Physics/Chemistry]\n\n"
-        "Make explanations simple, accurate, and exam-focused. Focus on topics that appear in NEET UG."
+        "CHALLENGE: [short name, 3-8 words]\n"
+        "DESCRIPTION: [one punchy sentence explaining what to do and why it's hard]\n"
+        "RESULT: [what typically happens when people try]\n"
+        "SKILL: [balance/dexterity/endurance/speed/willpower/strength]\n"
+        "DIFFICULTY: [easy/medium/hard]\n\n"
+        "Make each one feel like a dare."
     ),
 }
 
@@ -197,8 +189,7 @@ IMAGE_PROMPT_MOVIE_TRIVIA = "cinematic movie poster style, {title}, dramatic lig
 IMAGE_PROMPT_ANIMAL_KINGDOM = "National Geographic wildlife photography, {title}, stunning animal portrait, golden hour lighting, 9:16 vertical, hyper-realistic, nature documentary style"
 IMAGE_PROMPT_SPACE_WONDERS = "NASA deep space photograph, {title}, stunning nebula and stars, cosmic colors, 9:16 vertical, ultra-detailed space photography, James Webb Space Telescope style"
 IMAGE_PROMPT_BOX_OFFICE = "vintage Hollywood movie poster, {title}, dramatic golden lighting, film strip border, 9:16 vertical, cinema marquee lights, retro box office aesthetic"
-IMAGE_PROMPT_UPSC = "cinematic educational illustration: {topic}, Indian government building background, clean professional style, 9:16 vertical, dark blue and gold theme, highly detailed, upsc exam preparation theme"
-IMAGE_PROMPT_NEET = "cinematic educational illustration: {topic}, NEET exam preparation, biology chemistry physics, clean professional style, 9:16 vertical, dark green and gold theme, highly detailed"
+IMAGE_PROMPT_CHALLENGES = "cinematic action shot, {challenge}, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
 
 RIDDLE_TYPES = [
     "logic", "wordplay", "math", "lateral thinking", "observation",
@@ -346,46 +337,6 @@ SPACE_WONDERS_HOOKS = [
     "The cosmos has secrets we're only beginning to understand:",
 ]
 
-UPSC_HOOKS = [
-    "UPSC aspirants, listen up:",
-    "This concept is a must-know for prelims:",
-    "Most students confuse this UPSC topic:",
-    "Here's a high-weightage concept for your exam:",
-    "One concept that keeps appearing in UPSC papers:",
-    "Clear this UPSC topic once and for all:",
-    "Stop getting this question wrong in mock tests:",
-    "UPSC topper secret: master this concept:",
-]
-
-UPSC_FALLBACKS = [
-    ("Fiscal Deficit", "The difference between the government's total expenditure and its total revenue excluding borrowing. A high deficit means the government is spending beyond its means and borrowing to cover the gap.", "Economy"),
-    ("Fundamental Rights", "Six fundamental rights guaranteed by the Indian Constitution — Right to Equality, Freedom, Against Exploitation, Freedom of Religion, Cultural/Educational Rights, and Right to Constitutional Remedies. Article 32 is the heart and soul of the Constitution.", "Polity"),
-    ("Monsoon Mechanism", "The southwest monsoon is driven by the differential heating of land and sea. The Tibetan Plateau acts as a heat source, creating a low-pressure zone that draws moist air from the Indian Ocean.", "Geography"),
-    ("Battle of Plassey", "Fought in 1757 between the British East India Company and Siraj-ud-Daulah. Robert Clive bribed Mir Jafar who betrayed the Nawab. This marked the beginning of British political control in India.", "History"),
-    ("Directive Principles", "Article 36-51 of the Indian Constitution. Non-justiciable guidelines for the state to create a welfare state. Inspired by the Irish Constitution.", "Polity"),
-    ("Greenhouse Effect", "The trapping of heat by greenhouse gases like CO2 and methane in Earth's atmosphere. Without it Earth would be -18°C. Human activities have intensified it causing global warming.", "Environment"),
-    ("WTO and India", "The World Trade Organization replaced GATT in 1995. India is a founding member. Key issues include agricultural subsidies and intellectual property rights under TRIPS.", "International Relations"),
-    ("Right to Information", "Enacted in 2005, RTI empowers citizens to seek information from public authorities. Promotes transparency and accountability in government. Any citizen can file an RTI application.", "Polity"),
-    ("Inflation Types", "Demand-pull inflation occurs when demand exceeds supply. Cost-push inflation happens when production costs rise. RBI uses repo rate to control inflation.", "Economy"),
-    ("Western Ghats", "A UNESCO World Heritage Site and one of the world's eight hottest biodiversity hotspots. They run parallel to India's west coast spanning 1600 km.", "Geography"),
-    ("Preamble of India", "The Preamble declares India as a Sovereign, Socialist, Secular, Democratic Republic. Adopted on 26 November 1949. Socialist and Secular were added by the 42nd Amendment in 1976.", "Polity"),
-    ("Banking Structure in India", "RBI is the supreme monetary authority. Scheduled commercial banks include public sector, private sector, foreign banks and regional rural banks.", "Economy"),
-    ("Harappan Civilization", "One of the three great ancient civilizations. Known for advanced urban planning with grid streets, drainage systems and standardized bricks. Major sites: Harappa, Mohenjo-Daro.", "History"),
-    ("NAPCC", "India's National Action Plan on Climate Change has 8 national missions including Solar Mission, Water Mission and Green India Mission. Launched in 2008.", "Environment"),
-    ("Lok Sabha vs Rajya Sabha", "Lok Sabha has 543 elected members with a 5-year term. Rajya Sabha has 245 members, 12 nominated by President. Rajya Sabha is permanent with 1/3 retiring every 2 years.", "Polity"),
-]
-
-NEET_HOOKS = [
-    "NEET aspirants, listen up:",
-    "This concept is a must-know for NEET:",
-    "Most students get this wrong in NEET:",
-    "High-yield topic for your NEET exam:",
-    "This keeps appearing in NEET papers:",
-    "Master this NEET concept once and for all:",
-    "Stop missing this question in mock tests:",
-    "NEET topper secret: master this concept:",
-]
-
 BOX_OFFICE_HOOKS = [
     "You won't believe how much this movie earned:",
     "This box office record still stands today:",
@@ -394,6 +345,17 @@ BOX_OFFICE_HOOKS = [
     "Made on a tiny budget, earned millions:",
     "The most profitable movie ever made:",
     "Hollywood didn't see this coming:",
+]
+
+CHALLENGES_HOOKS = [
+    "Think you can do this? Watch till the end:",
+    "99% of people fail this challenge. Can you?",
+    "This challenge looks easy. It's not:",
+    "How far would YOU get? Be honest:",
+    "Only 1% can complete all of these. You?",
+    "This challenge separates the pros from the amateurs:",
+    "Most people give up before the end. Prove us wrong:",
+    "This stunt requires serious skill. Ready?",
 ]
 
 URBAN_LEGENDS_FALLBACKS = [
@@ -514,14 +476,9 @@ def _mark_used(mode: str, entry: dict):
             n = _normalize(f)
             if n and n not in used:
                 used.append(n)
-    elif mode == "upsc":
-        for t in entry.get("topics", []):
-            n = _normalize(t)
-            if n and n not in used:
-                used.append(n)
-    elif mode == "neet":
-        for t in entry.get("topics", []):
-            n = _normalize(t)
+    elif mode == "challenges":
+        for c in entry.get("challenges", []):
+            n = _normalize(c.get("title", ""))
             if n and n not in used:
                 used.append(n)
     data["used"] = used
@@ -599,10 +556,8 @@ def refill(mode: str, force_count: int | None = None):
             new_entries = _refill_3item("space_wonders", need, SPACE_WONDERS_HOOKS, "space_facts", IMAGE_PROMPT_SPACE_WONDERS)
         elif mode == "box_office":
             new_entries = _refill_3item("box_office", need, BOX_OFFICE_HOOKS, "box_office_titles", IMAGE_PROMPT_BOX_OFFICE)
-        elif mode == "upsc":
-            new_entries = _refill_upsc(need)
-        elif mode == "neet":
-            new_entries = _refill_neet(need)
+        elif mode == "challenges":
+            new_entries = _refill_challenges(need)
         else:
             return
 
@@ -1113,117 +1068,61 @@ def _refill_3item(mode: str, need: int, hooks: list, list_key: str, img_prompt: 
     return entries
 
 
-def _refill_upsc(need: int) -> list:
+def _refill_challenges(need: int) -> list:
     entries = []
     attempts = 0
-    hooks = UPSC_HOOKS
+    hooks = CHALLENGES_HOOKS
     while len(entries) < need and attempts < need * 5:
-        avoid = _avoid_sample("upsc")
-        prompt = REFILL_PROMPTS["upsc"].format(avoid=avoid)
+        avoid = _avoid_sample("challenges")
+        prompt = REFILL_PROMPTS["challenges"].format(avoid=avoid)
         try:
-            raw = _generate(prompt, temperature=0.8, max_tokens=800,
-                            system="You are a UPSC mentor teaching complex topics in simple words. Only include verified facts.")
+            raw = _generate(prompt, temperature=0.8, max_tokens=700,
+                            system="You write fun, engaging physical challenges and stunts for short-form video content.")
         except Exception as e:
-            print(f"  LLM error (upsc): {e}")
+            print(f"  LLM error (challenges): {e}")
             attempts += 1
             continue
         if not raw:
             attempts += 1
             continue
 
-        concepts = []
+        challenges = []
         current = {}
         for line in raw.split("\n"):
             line = line.strip()
-            if line.upper().startswith("TOPIC:"):
-                if current.get("topic") and current.get("explanation"):
-                    concepts.append((current["topic"], current["explanation"], current.get("subject", "Polity")))
-                current = {"topic": line.split(":", 1)[-1].strip()}
-            elif line.upper().startswith("EXPLANATION:") and current:
-                current["explanation"] = line.split(":", 1)[-1].strip()
-            elif line.upper().startswith("SUBJECT:") and current:
-                current["subject"] = line.split(":", 1)[-1].strip()
-        if current.get("topic") and current.get("explanation"):
-            concepts.append((current["topic"], current["explanation"], current.get("subject", "Polity")))
+            if line.upper().startswith("CHALLENGE:"):
+                if current.get("title") and current.get("description"):
+                    challenges.append(current)
+                current = {"title": line.split(":", 1)[-1].strip()}
+            elif line.upper().startswith("DESCRIPTION:") and current:
+                current["description"] = line.split(":", 1)[-1].strip()
+            elif line.upper().startswith("RESULT:") and current:
+                current["result"] = line.split(":", 1)[-1].strip()
+            elif line.upper().startswith("SKILL:") and current:
+                current["skill"] = line.split(":", 1)[-1].strip()
+            elif line.upper().startswith("DIFFICULTY:") and current:
+                current["difficulty"] = line.split(":", 1)[-1].strip()
+        if current.get("title") and current.get("description"):
+            challenges.append(current)
 
-        topic_texts = [t for t, _, _ in concepts]
-        if len(concepts) >= 3 and not _is_duplicate("upsc", topic_texts, _read_bank("upsc")):
+        titles = [c["title"] for c in challenges]
+        if len(challenges) >= 3 and not _is_duplicate("challenges", titles, _read_bank("challenges")):
             hook = random.choice(hooks)
             image_prompts = [
-                IMAGE_PROMPT_UPSC.format(topic=t)
-                for t, _, _ in concepts
+                IMAGE_PROMPT_CHALLENGES.format(challenge=c["title"].lower().replace(" ", "_")[:50])
+                for c in challenges
             ]
-            tts_lines = [f"{t}. {e}" for t, e, _ in concepts]
+            tts_lines = [f"{c['title']}. {c['description']}" for c in challenges]
             entry = {
-                "title": f"UPSC: {concepts[0][0]}",
+                "title": f"Can You Do This? {challenges[0]['title'][:50]}",
                 "hook": hook,
-                "topics": [t for t, _, _ in concepts],
-                "explanations": [e for _, e, _ in concepts],
-                "subjects": [s for _, _, s in concepts],
+                "challenges": challenges,
                 "image_prompts": image_prompts,
                 "script": " ".join(tts_lines),
-                "tts_script": " ".join(tts_lines),
+                "tts_script": f"{hook} {' '.join(tts_lines)}",
             }
             entries.append(entry)
         attempts += 1
-
-    return entries
-
-
-def _refill_neet(need: int) -> list:
-    entries = []
-    attempts = 0
-    hooks = NEET_HOOKS
-    while len(entries) < need and attempts < need * 5:
-        avoid = _avoid_sample("neet")
-        prompt = REFILL_PROMPTS["neet"].format(avoid=avoid)
-        try:
-            raw = _generate(prompt, temperature=0.8, max_tokens=800,
-                            system="You are a NEET mentor teaching complex topics in simple words. Only include verified facts from NCERT.")
-        except Exception as e:
-            print(f"  LLM error (neet): {e}")
-            attempts += 1
-            continue
-        if not raw:
-            attempts += 1
-            continue
-
-        concepts = []
-        current = {}
-        for line in raw.split("\n"):
-            line = line.strip()
-            if line.upper().startswith("TOPIC:"):
-                if current.get("topic") and current.get("explanation"):
-                    concepts.append((current["topic"], current["explanation"], current.get("subject", "Biology")))
-                current = {"topic": line.split(":", 1)[-1].strip()}
-            elif line.upper().startswith("EXPLANATION:") and current:
-                current["explanation"] = line.split(":", 1)[-1].strip()
-            elif line.upper().startswith("SUBJECT:") and current:
-                current["subject"] = line.split(":", 1)[-1].strip()
-        if current.get("topic") and current.get("explanation"):
-            concepts.append((current["topic"], current["explanation"], current.get("subject", "Biology")))
-
-        topic_texts = [t for t, _, _ in concepts]
-        if len(concepts) >= 3 and not _is_duplicate("neet", topic_texts, _read_bank("neet")):
-            hook = random.choice(hooks)
-            image_prompts = [
-                IMAGE_PROMPT_NEET.format(topic=t)
-                for t, _, _ in concepts
-            ]
-            tts_lines = [f"{t}. {e}" for t, e, _ in concepts]
-            entry = {
-                "title": f"NEET: {concepts[0][0]}",
-                "hook": hook,
-                "topics": [t for t, _, _ in concepts],
-                "explanations": [e for _, e, _ in concepts],
-                "subjects": [s for _, _, s in concepts],
-                "image_prompts": image_prompts,
-                "script": " ".join(tts_lines),
-                "tts_script": " ".join(tts_lines),
-            }
-            entries.append(entry)
-        attempts += 1
-
     return entries
 
 
