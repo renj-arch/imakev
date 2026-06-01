@@ -124,7 +124,16 @@ def main():
     audio = AudioFileClip(str(tts_path))
     total_dur = audio.duration
     audio.close()
-    print(f"  {total_dur:.1f}s")
+    # Pad TTS to 61s+ for long-form ad revenue
+    if total_dur < 61:
+        silent_pad = AudioFileClip(str(tts_path)).with_duration(61 - total_dur).with_volume_scaled(0)
+        from moviepy import concatenate_audioclips
+        combined = concatenate_audioclips([AudioFileClip(str(tts_path)), silent_pad])
+        combined.write_audiofile(str(tts_path), fps=22050, logger=None)
+        combined.close()
+        total_dur = 61
+        print(f"  Padded to {total_dur:.0f}s (long-form minimum)")
+    print(f"  {total_dur:.1f}s | ~{len(tts_script.split())} words")
 
     print(f"\n[2/4] Generating {len(visual_prompts)} images...")
     images = []
