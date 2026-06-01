@@ -1,0 +1,2007 @@
+{
+  "entries": [
+    {
+      "title": "Can You Do This? 30\u2011Second Wall Handstand",
+      "hook": "99% of people fail this challenge. Can you?",
+      "challenges": [
+        {
+          "title": "30\u2011Second Wall Handstand",
+          "description": "Kick up into a handstand against a wall and hold for 30 seconds without wobbling.",
+          "result": "Most people tumble after 10\u201115 seconds, but the brave stay steady and feel like a superhero.",
+          "skill": "balance",
+          "difficulty": "easy"
+        },
+        {
+          "title": "20\u2011Meter Backward Bear Crawl",
+          "description": "Crawl backwards on all fours for 20 meters as fast as you can, staying low to the ground.",
+          "result": "You\u2019ll quickly discover how tiring your core and shoulders get, and most stumble before the finish line.",
+          "skill": "endurance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "15\u2011Second One\u2011Legged Box Jump",
+          "description": "Jump onto a 12\u2011inch box and stay standing on one leg for at least 15 seconds before stepping down.",
+          "result": "The landing shocks your calves; many wobble and hop off, while the steady few hold the pose like a pro.",
+          "skill": "strength",
+          "difficulty": "medium"
+        },
+        {
+          "title": "60\u2011Second Plank with Alternating Arm Taps",
+          "description": "Hold a forearm plank while tapping each opposite shoulder with your hand, 30 taps per side in 60 seconds.",
+          "result": "Your core burns, hips sway, and most give up before the minute is up\u2014those who finish feel rock\u2011solid.",
+          "skill": "endurance",
+          "difficulty": "hard"
+        },
+        {
+          "title": "10\u2011Meter Sprint on a Balance Beam",
+          "description": "Sprint the length of a 10\u2011meter low balance beam without stepping off or slowing down.",
+          "result": "Most lose speed or step off; the daring few zip across, earning bragging rights and a sweaty grin.",
+          "skill": "speed",
+          "difficulty": "hard"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, 30\u2011second_wall_handstand, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 20\u2011meter_backward_bear_crawl, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 15\u2011second_one\u2011legged_box_jump, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 60\u2011second_plank_with_alternating_arm_taps, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 10\u2011meter_sprint_on_a_balance_beam, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "30\u2011Second Wall Handstand. Kick up into a handstand against a wall and hold for 30 seconds without wobbling. 20\u2011Meter Backward Bear Crawl. Crawl backwards on all fours for 20 meters as fast as you can, staying low to the ground. 15\u2011Second One\u2011Legged Box Jump. Jump onto a 12\u2011inch box and stay standing on one leg for at least 15 seconds before stepping down. 60\u2011Second Plank with Alternating Arm Taps. Hold a forearm plank while tapping each opposite shoulder with your hand, 30 taps per side in 60 seconds. 10\u2011Meter Sprint on a Balance Beam. Sprint the length of a 10\u2011meter low balance beam without stepping off or slowing down.",
+      "tts_script": "99% of people fail this challenge. Can you? 30\u2011Second Wall Handstand. Kick up into a handstand against a wall and hold for 30 seconds without wobbling. 20\u2011Meter Backward Bear Crawl. Crawl backwards on all fours for 20 meters as fast as you can, staying low to the ground. 15\u2011Second One\u2011Legged Box Jump. Jump onto a 12\u2011inch box and stay standing on one leg for at least 15 seconds before stepping down. 60\u2011Second Plank with Alternating Arm Taps. Hold a forearm plank while tapping each opposite shoulder with your hand, 30 taps per side in 60 seconds. 10\u2011Meter Sprint on a Balance Beam. Sprint the length of a 10\u2011meter low balance beam without stepping off or slowing down."
+    },
+    {
+      "title": "Can You Do This? One\u2011Foot Wall Sit",
+      "hook": "How far would YOU get? Be honest:",
+      "challenges": [
+        {
+          "title": "One\u2011Foot Wall Sit",
+          "description": "Plant one foot on a wall, slide down into a 90\u00b0 squat and hold as long as you can\u2014no hands allowed.",
+          "result": "Your legs turn to jelly and the timer ticks past the 30\u2011second mark for most beginners.",
+          "skill": "endurance",
+          "difficulty": "easy"
+        },
+        {
+          "title": "Double\u2011Toe\u2011Touch Sprint",
+          "description": "Sprint 20\u202fft, stop, and touch your toes with both hands without bending your knees; repeat 5 times as fast as possible.",
+          "result": "You\u2019ll see how quickly your hamstrings and core give out, often leading to a wobbly finish line.",
+          "skill": "speed",
+          "difficulty": "medium"
+        },
+        {
+          "title": "Backpack Carry\u2011Across",
+          "description": "Fill a backpack with 20\u202flb of books, strap it on, and walk a full 100\u202fft without dropping it or letting it swing.",
+          "result": "Your shoulders ache, posture slouches, and many end up swapping the load for a quick shuffle.",
+          "skill": "strength",
+          "difficulty": "medium"
+        },
+        {
+          "title": "Hand\u2011Stand Wall\u2011Pop",
+          "description": "Kick up into a hand\u2011stand against a wall, then pop off the wall and hold the free\u2011standing hand\u2011stand for 5 seconds.",
+          "result": "Most wobble and tap the floor before the five\u2011second count, but the successful ones feel like superheroes.",
+          "skill": "balance",
+          "difficulty": "hard"
+        },
+        {
+          "title": "30\u2011Second Breath\u2011Hold Challenge",
+          "description": "Take a deep inhale, then hold your breath for a full 30 seconds while staying perfectly still.",
+          "result": "Your pulse races, a slight tremor appears, and many end up gasping for air before the timer ends.",
+          "skill": "willpower",
+          "difficulty": "hard"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, one\u2011foot_wall_sit, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, double\u2011toe\u2011touch_sprint, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, backpack_carry\u2011across, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, hand\u2011stand_wall\u2011pop, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 30\u2011second_breath\u2011hold_challenge, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "One\u2011Foot Wall Sit. Plant one foot on a wall, slide down into a 90\u00b0 squat and hold as long as you can\u2014no hands allowed. Double\u2011Toe\u2011Touch Sprint. Sprint 20\u202fft, stop, and touch your toes with both hands without bending your knees; repeat 5 times as fast as possible. Backpack Carry\u2011Across. Fill a backpack with 20\u202flb of books, strap it on, and walk a full 100\u202fft without dropping it or letting it swing. Hand\u2011Stand Wall\u2011Pop. Kick up into a hand\u2011stand against a wall, then pop off the wall and hold the free\u2011standing hand\u2011stand for 5 seconds. 30\u2011Second Breath\u2011Hold Challenge. Take a deep inhale, then hold your breath for a full 30 seconds while staying perfectly still.",
+      "tts_script": "How far would YOU get? Be honest: One\u2011Foot Wall Sit. Plant one foot on a wall, slide down into a 90\u00b0 squat and hold as long as you can\u2014no hands allowed. Double\u2011Toe\u2011Touch Sprint. Sprint 20\u202fft, stop, and touch your toes with both hands without bending your knees; repeat 5 times as fast as possible. Backpack Carry\u2011Across. Fill a backpack with 20\u202flb of books, strap it on, and walk a full 100\u202fft without dropping it or letting it swing. Hand\u2011Stand Wall\u2011Pop. Kick up into a hand\u2011stand against a wall, then pop off the wall and hold the free\u2011standing hand\u2011stand for 5 seconds. 30\u2011Second Breath\u2011Hold Challenge. Take a deep inhale, then hold your breath for a full 30 seconds while staying perfectly still."
+    },
+    {
+      "title": "Can You Do This? Pillow\u2011Flip Flip\u2011Flop",
+      "hook": "This stunt requires serious skill. Ready?",
+      "challenges": [
+        {
+          "title": "Pillow\u2011Flip Flip\u2011Flop",
+          "description": "Toss a pillow over your shoulder, flip it in mid\u2011air, and catch it without it landing on the floor \u2013 all while holding a plank for 10 seconds.",
+          "result": "Most folks drop the pillow or lose the plank hold, ending up on the floor or in a messy pillow\u2011puff.",
+          "skill": "Balance/Dexterity",
+          "difficulty": "Hard"
+        },
+        {
+          "title": "One\u2011Arm Wall Sit",
+          "description": "Perform a 30\u2011second wall sit using only one arm to support your upper body, forcing your core and legs to stay rigid while your free arm struggles for balance.",
+          "result": "The free arm usually collapses, pulling the whole body off the wall or causing a dramatic tumble.",
+          "skill": "Endurance/Strength",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "45\u2011Second Handstand Press\u2011Up",
+          "description": "Kick into a handstand against a wall, lower into a press\u2011up, and return to handstand, attempting a full set in 45 seconds.",
+          "result": "Many hit a wall\u2011touch imbalance, ending up falling or missing the press\u2011up entirely.",
+          "skill": "Balance/Strength",
+          "difficulty": "Hard"
+        },
+        {
+          "title": "10\u2011Step Obstacle Dodge",
+          "description": "Set up a 10\u2011step ladder on the floor, sprint over it, and then jump back, repeating five times in a row while holding a weighted backpack.",
+          "result": "Usually the runner trips over the ladder or drops the backpack, leading to a scramble.",
+          "skill": "Speed/Endurance",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "20\u2011Second Yoga Tree Pose",
+          "description": "Hold the Tree Pose (one\u2011leg balance) for 20 seconds while chanting \u201cI am, I am\u201d continuously \u2013 the focus test doubles your mental endurance.",
+          "result": "Most people wobble off the single foot or break the chant rhythm, ending up in a fall or a giggle.",
+          "skill": "Willpower/Balance",
+          "difficulty": "Easy"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, pillow\u2011flip_flip\u2011flop, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, one\u2011arm_wall_sit, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 45\u2011second_handstand_press\u2011up, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 10\u2011step_obstacle_dodge, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 20\u2011second_yoga_tree_pose, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "Pillow\u2011Flip Flip\u2011Flop. Toss a pillow over your shoulder, flip it in mid\u2011air, and catch it without it landing on the floor \u2013 all while holding a plank for 10 seconds. One\u2011Arm Wall Sit. Perform a 30\u2011second wall sit using only one arm to support your upper body, forcing your core and legs to stay rigid while your free arm struggles for balance. 45\u2011Second Handstand Press\u2011Up. Kick into a handstand against a wall, lower into a press\u2011up, and return to handstand, attempting a full set in 45 seconds. 10\u2011Step Obstacle Dodge. Set up a 10\u2011step ladder on the floor, sprint over it, and then jump back, repeating five times in a row while holding a weighted backpack. 20\u2011Second Yoga Tree Pose. Hold the Tree Pose (one\u2011leg balance) for 20 seconds while chanting \u201cI am, I am\u201d continuously \u2013 the focus test doubles your mental endurance.",
+      "tts_script": "This stunt requires serious skill. Ready? Pillow\u2011Flip Flip\u2011Flop. Toss a pillow over your shoulder, flip it in mid\u2011air, and catch it without it landing on the floor \u2013 all while holding a plank for 10 seconds. One\u2011Arm Wall Sit. Perform a 30\u2011second wall sit using only one arm to support your upper body, forcing your core and legs to stay rigid while your free arm struggles for balance. 45\u2011Second Handstand Press\u2011Up. Kick into a handstand against a wall, lower into a press\u2011up, and return to handstand, attempting a full set in 45 seconds. 10\u2011Step Obstacle Dodge. Set up a 10\u2011step ladder on the floor, sprint over it, and then jump back, repeating five times in a row while holding a weighted backpack. 20\u2011Second Yoga Tree Pose. Hold the Tree Pose (one\u2011leg balance) for 20 seconds while chanting \u201cI am, I am\u201d continuously \u2013 the focus test doubles your mental endurance."
+    },
+    {
+      "title": "Can You Do This? Stack, Stack, Stack",
+      "hook": "Think you can do this? Watch till the end:",
+      "challenges": [
+        {
+          "title": "Stack, Stack, Stack",
+          "description": "Build a tower of 10 identical soda cans without any support\u2014no fingers on the ground.",
+          "result": "The tower usually collapses before you finish, leaving a pile of cans and a grin.",
+          "skill": "balance",
+          "difficulty": "easy"
+        },
+        {
+          "title": "Handstand Wall Walk",
+          "description": "Walk your feet up a wall in a handstand while keeping your body straight and your core tight.",
+          "result": "Most try to stand up too early or wobble, often ending in a dramatic tumble.",
+          "skill": "strength, balance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "60\u2011Second Wall Sit Sprint",
+          "description": "Do a standard wall sit for 60 seconds, then immediately sprint 50 meters\u2014no stopping.",
+          "result": "The body cramps, the legs shake, and you\u2019re left gasping and smiling at the same time.",
+          "skill": "endurance, speed",
+          "difficulty": "medium"
+        },
+        {
+          "title": "Impossible One\u2011Arm Push\u2011Up",
+          "description": "Perform a full one\u2011arm push\u2011up with the free hand gripping a small object, then switch hands mid\u2011set.",
+          "result": "Flank muscles burn, balance is lost, and many end with a comedic flop.",
+          "skill": "strength, balance",
+          "difficulty": "hard"
+        },
+        {
+          "title": "5\u2011Minute Plank Relay",
+          "description": "Hold a plank for 5 minutes while alternating the position of your feet (heel\u2011to\u2011toe, toes\u2011to\u2011heel, etc.) every 30 seconds.",
+          "result": "Core muscles scream, fingers numb, but the finish line feels like a triumph.",
+          "skill": "endurance, willpower",
+          "difficulty": "hard"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, stack,_stack,_stack, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, handstand_wall_walk, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 60\u2011second_wall_sit_sprint, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, impossible_one\u2011arm_push\u2011up, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 5\u2011minute_plank_relay, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "Stack, Stack, Stack. Build a tower of 10 identical soda cans without any support\u2014no fingers on the ground. Handstand Wall Walk. Walk your feet up a wall in a handstand while keeping your body straight and your core tight. 60\u2011Second Wall Sit Sprint. Do a standard wall sit for 60 seconds, then immediately sprint 50 meters\u2014no stopping. Impossible One\u2011Arm Push\u2011Up. Perform a full one\u2011arm push\u2011up with the free hand gripping a small object, then switch hands mid\u2011set. 5\u2011Minute Plank Relay. Hold a plank for 5 minutes while alternating the position of your feet (heel\u2011to\u2011toe, toes\u2011to\u2011heel, etc.) every 30 seconds.",
+      "tts_script": "Think you can do this? Watch till the end: Stack, Stack, Stack. Build a tower of 10 identical soda cans without any support\u2014no fingers on the ground. Handstand Wall Walk. Walk your feet up a wall in a handstand while keeping your body straight and your core tight. 60\u2011Second Wall Sit Sprint. Do a standard wall sit for 60 seconds, then immediately sprint 50 meters\u2014no stopping. Impossible One\u2011Arm Push\u2011Up. Perform a full one\u2011arm push\u2011up with the free hand gripping a small object, then switch hands mid\u2011set. 5\u2011Minute Plank Relay. Hold a plank for 5 minutes while alternating the position of your feet (heel\u2011to\u2011toe, toes\u2011to\u2011heel, etc.) every 30 seconds."
+    },
+    {
+      "title": "Can You Do This? 30\u2011Second Wall Handstand",
+      "hook": "Only 1% can complete all of these. You?",
+      "challenges": [
+        {
+          "title": "30\u2011Second Wall Handstand",
+          "description": "Plant your hands flat against a wall and kick up into a handstand, staying vertical for a full 30 seconds.",
+          "result": "Most wobble and tap the floor; only the truly steady hold the pose the whole time.",
+          "skill": "balance",
+          "difficulty": "easy"
+        },
+        {
+          "title": "20\u2011Meter Backward Sprint",
+          "description": "Run backwards as fast as you can for 20 meters without looking over your shoulder.",
+          "result": "Legs quickly lose coordination and people either stumble or finish dramatically out\u2011of\u2011breath.",
+          "skill": "speed",
+          "difficulty": "medium"
+        },
+        {
+          "title": "50\u2011Push\u2011Up Ladder (Every 10\u202fseconds)",
+          "description": "Do a set of push\u2011ups every 10 seconds\u20141 push\u2011up, then 2, then 3, and so on\u2014until you can\u2019t keep the rhythm.",
+          "result": "Chest and triceps burn out fast; most drop out around the 8\u201110 push\u2011up mark.",
+          "skill": "strength",
+          "difficulty": "medium"
+        },
+        {
+          "title": "1\u2011Minute Plank with Alternating Leg Lift",
+          "description": "Hold a forearm plank while raising each leg off the ground for 2 seconds, alternating legs, for a solid minute.",
+          "result": "Core quivers, hips sway, and many collapse before the 60\u2011second mark.",
+          "skill": "endurance",
+          "difficulty": "hard"
+        },
+        {
+          "title": "10\u2011Foot One\u2011Arm T\u2011Pull\u2011Up",
+          "description": "Grip a pull\u2011up bar with one hand, swing up, and pull your chin over the bar while keeping the other arm relaxed, then lower back down\u2014repeat for 10 feet of total ascent.",
+          "result": "Upper\u2011body fireworks; only a few manage a clean rep without shaking off the bar.",
+          "skill": "strength",
+          "difficulty": "hard"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, 30\u2011second_wall_handstand, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 20\u2011meter_backward_sprint, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 50\u2011push\u2011up_ladder_(every_10\u202fseconds), dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 1\u2011minute_plank_with_alternating_leg_lift, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 10\u2011foot_one\u2011arm_t\u2011pull\u2011up, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "30\u2011Second Wall Handstand. Plant your hands flat against a wall and kick up into a handstand, staying vertical for a full 30 seconds. 20\u2011Meter Backward Sprint. Run backwards as fast as you can for 20 meters without looking over your shoulder. 50\u2011Push\u2011Up Ladder (Every 10\u202fseconds). Do a set of push\u2011ups every 10 seconds\u20141 push\u2011up, then 2, then 3, and so on\u2014until you can\u2019t keep the rhythm. 1\u2011Minute Plank with Alternating Leg Lift. Hold a forearm plank while raising each leg off the ground for 2 seconds, alternating legs, for a solid minute. 10\u2011Foot One\u2011Arm T\u2011Pull\u2011Up. Grip a pull\u2011up bar with one hand, swing up, and pull your chin over the bar while keeping the other arm relaxed, then lower back down\u2014repeat for 10 feet of total ascent.",
+      "tts_script": "Only 1% can complete all of these. You? 30\u2011Second Wall Handstand. Plant your hands flat against a wall and kick up into a handstand, staying vertical for a full 30 seconds. 20\u2011Meter Backward Sprint. Run backwards as fast as you can for 20 meters without looking over your shoulder. 50\u2011Push\u2011Up Ladder (Every 10\u202fseconds). Do a set of push\u2011ups every 10 seconds\u20141 push\u2011up, then 2, then 3, and so on\u2014until you can\u2019t keep the rhythm. 1\u2011Minute Plank with Alternating Leg Lift. Hold a forearm plank while raising each leg off the ground for 2 seconds, alternating legs, for a solid minute. 10\u2011Foot One\u2011Arm T\u2011Pull\u2011Up. Grip a pull\u2011up bar with one hand, swing up, and pull your chin over the bar while keeping the other arm relaxed, then lower back down\u2014repeat for 10 feet of total ascent."
+    },
+    {
+      "title": "Can You Do This? One\u2011Arm Wall Sit",
+      "hook": "How far would YOU get? Be honest:",
+      "challenges": [
+        {
+          "title": "One\u2011Arm Wall Sit",
+          "description": "Lean against a wall with one arm extended forward and hold a full wall sit for 60 seconds, keeping your body straight and your non\u2011supporting arm rigid.",
+          "result": "Most people wobble, then collapse from leg fatigue and arm strain.",
+          "skill": "Strength, endurance",
+          "difficulty": "hard"
+        },
+        {
+          "title": "10\u2011Second Handstand Hold",
+          "description": "Kick into a handstand and lock your arms, trying to stay inverted for 10 seconds without any wall or support.",
+          "result": "The majority let the body drift onto the ground or lose balance mid\u2011attempt.",
+          "skill": "Balance, strength, willpower",
+          "difficulty": "medium"
+        },
+        {
+          "title": "30\u2011Second One\u2011Leg Squat",
+          "description": "Perform a full squat on one leg for 30 consecutive seconds, keeping the other leg straight out in front and your hips level.",
+          "result": "Most people stumble or switch legs before the timer ends.",
+          "skill": "Balance, strength, endurance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "5\u2011Minute Plank Jacks",
+          "description": "Hold a forearm plank while simultaneously performing continuous jump\u2011in, jump\u2011out leg movements for five minutes\u2014no breaks, no counting.",
+          "result": "The average person can\u2019t maintain form beyond 30\u201360 seconds before fatigue causes slouch or arm cramps.",
+          "skill": "Endurance, willpower, speed",
+          "difficulty": "hard"
+        },
+        {
+          "title": "15\u2011Second Speed Juggle",
+          "description": "Toss a tennis ball into the air and catch it with the same hand 15 times in a row as fast as possible; record the fastest streak.",
+          "result": "Many people drop the ball within the first 5\u20137 throws, struggling to keep up the rhythm.",
+          "skill": "Dexterity, speed, willpower",
+          "difficulty": "easy"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, one\u2011arm_wall_sit, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 10\u2011second_handstand_hold, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 30\u2011second_one\u2011leg_squat, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 5\u2011minute_plank_jacks, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 15\u2011second_speed_juggle, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "One\u2011Arm Wall Sit. Lean against a wall with one arm extended forward and hold a full wall sit for 60 seconds, keeping your body straight and your non\u2011supporting arm rigid. 10\u2011Second Handstand Hold. Kick into a handstand and lock your arms, trying to stay inverted for 10 seconds without any wall or support. 30\u2011Second One\u2011Leg Squat. Perform a full squat on one leg for 30 consecutive seconds, keeping the other leg straight out in front and your hips level. 5\u2011Minute Plank Jacks. Hold a forearm plank while simultaneously performing continuous jump\u2011in, jump\u2011out leg movements for five minutes\u2014no breaks, no counting. 15\u2011Second Speed Juggle. Toss a tennis ball into the air and catch it with the same hand 15 times in a row as fast as possible; record the fastest streak.",
+      "tts_script": "How far would YOU get? Be honest: One\u2011Arm Wall Sit. Lean against a wall with one arm extended forward and hold a full wall sit for 60 seconds, keeping your body straight and your non\u2011supporting arm rigid. 10\u2011Second Handstand Hold. Kick into a handstand and lock your arms, trying to stay inverted for 10 seconds without any wall or support. 30\u2011Second One\u2011Leg Squat. Perform a full squat on one leg for 30 consecutive seconds, keeping the other leg straight out in front and your hips level. 5\u2011Minute Plank Jacks. Hold a forearm plank while simultaneously performing continuous jump\u2011in, jump\u2011out leg movements for five minutes\u2014no breaks, no counting. 15\u2011Second Speed Juggle. Toss a tennis ball into the air and catch it with the same hand 15 times in a row as fast as possible; record the fastest streak."
+    },
+    {
+      "title": "Can You Do This? 30\u2011Second Wall Sit Freeze",
+      "hook": "Think you can do this? Watch till the end:",
+      "challenges": [
+        {
+          "title": "30\u2011Second Wall Sit Freeze",
+          "description": "Slide down a wall until your thighs are parallel to the floor and hold for 30 seconds\u2014your legs will feel like concrete.",
+          "result": "Most people wobble or collapse before the timer ends, but the finish feels like a mini\u2011victory.",
+          "skill": "endurance",
+          "difficulty": "easy"
+        },
+        {
+          "title": "One\u2011Arm Push\u2011Up Countdown",
+          "description": "Complete as many strict one\u2011arm push\u2011ups as you can, counting down from 10 to 1 without dropping to two arms.",
+          "result": "Expect shaking shoulders and a quick drop to the knees; a full set is a brag\u2011worthy badge of strength.",
+          "skill": "strength",
+          "difficulty": "medium"
+        },
+        {
+          "title": "15\u2011Second Single\u2011Leg Balance on a Bosu",
+          "description": "Stand on the dome side of a Bosu ball on one foot for 15 seconds; add a light object in each hand for extra wobble.",
+          "result": "Most people lose balance within a few seconds, but mastering the wobble earns you a steady\u2011as\u2011a\u2011rock feeling.",
+          "skill": "balance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "100\u2011Meter Backward Sprint",
+          "description": "Sprint 100 meters backward as fast as you can\u2014no turning around until you hit the finish line.",
+          "result": "Legs burn, you\u2019ll probably glance over your shoulder, and a clean run feels like you just rewound time.",
+          "skill": "speed",
+          "difficulty": "hard"
+        },
+        {
+          "title": "60\u2011Second Hand\u2011Clap Burpee Blitz",
+          "description": "Do as many burpees as possible in 60 seconds, but replace the jump\u2011up with a double\u2011hand clap at the top of each rep.",
+          "result": "The cardio spikes, coordination trips up, and finishing the minute leaves you breathless and proud.",
+          "skill": "endurance",
+          "difficulty": "hard"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, 30\u2011second_wall_sit_freeze, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, one\u2011arm_push\u2011up_countdown, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 15\u2011second_single\u2011leg_balance_on_a_bosu, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 100\u2011meter_backward_sprint, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 60\u2011second_hand\u2011clap_burpee_blitz, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "30\u2011Second Wall Sit Freeze. Slide down a wall until your thighs are parallel to the floor and hold for 30 seconds\u2014your legs will feel like concrete. One\u2011Arm Push\u2011Up Countdown. Complete as many strict one\u2011arm push\u2011ups as you can, counting down from 10 to 1 without dropping to two arms. 15\u2011Second Single\u2011Leg Balance on a Bosu. Stand on the dome side of a Bosu ball on one foot for 15 seconds; add a light object in each hand for extra wobble. 100\u2011Meter Backward Sprint. Sprint 100 meters backward as fast as you can\u2014no turning around until you hit the finish line. 60\u2011Second Hand\u2011Clap Burpee Blitz. Do as many burpees as possible in 60 seconds, but replace the jump\u2011up with a double\u2011hand clap at the top of each rep.",
+      "tts_script": "Think you can do this? Watch till the end: 30\u2011Second Wall Sit Freeze. Slide down a wall until your thighs are parallel to the floor and hold for 30 seconds\u2014your legs will feel like concrete. One\u2011Arm Push\u2011Up Countdown. Complete as many strict one\u2011arm push\u2011ups as you can, counting down from 10 to 1 without dropping to two arms. 15\u2011Second Single\u2011Leg Balance on a Bosu. Stand on the dome side of a Bosu ball on one foot for 15 seconds; add a light object in each hand for extra wobble. 100\u2011Meter Backward Sprint. Sprint 100 meters backward as fast as you can\u2014no turning around until you hit the finish line. 60\u2011Second Hand\u2011Clap Burpee Blitz. Do as many burpees as possible in 60 seconds, but replace the jump\u2011up with a double\u2011hand clap at the top of each rep."
+    },
+    {
+      "title": "Can You Do This? One\u2011Arm Plank Flip",
+      "hook": "99% of people fail this challenge. Can you?",
+      "challenges": [
+        {
+          "title": "One\u2011Arm Plank Flip",
+          "description": "Hold a one\u2011arm plank while flipping your body 360\u00b0 in the air\u2014shows raw core power and mental focus.",
+          "result": "Most people wobble mid\u2011flip, losing balance and ending up in a slap\u2011stick tumble.",
+          "skill": "strength/balance",
+          "difficulty": "hard"
+        },
+        {
+          "title": "10\u2011Second Wall Sit Marathon",
+          "description": "Sit against a wall for 10 uninterrupted seconds, then immediately clap your hands\u2014tests quick recovery and endurance.",
+          "result": "Nearly everyone drops the legs or pulls a muscle before the clap.",
+          "skill": "endurance/willpower",
+          "difficulty": "easy"
+        },
+        {
+          "title": "7\u2011Step Ladder Jumps",
+          "description": "Jump up and down a 7\u2011step ladder in alternating feet, completing 10 rounds without stopping\u2014grabs speed and leg power.",
+          "result": "Feet slip, knees buckle, or the ladder is left in disarray.",
+          "skill": "speed/strength",
+          "difficulty": "medium"
+        },
+        {
+          "title": "Balancing Brace Hold",
+          "description": "Stand on one leg, arms extended, while holding a weighted barbell above your head for 15 seconds\u2014combines balance, core, and arm strength.",
+          "result": "Most participants wobble, the bar swings, or the hands lose grip.",
+          "skill": "balance/endurance",
+          "difficulty": "hard"
+        },
+        {
+          "title": "Backwards Handstand Countdown",
+          "description": "Perform a handstand facing backward, then count down 5\u20114\u20113\u20112\u20111 as you kick back; high dexterity and coordination needed.",
+          "result": "The kicker often loses balance or the handstand collapses before the final count.",
+          "skill": "dexterity/balance",
+          "difficulty": "medium"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, one\u2011arm_plank_flip, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 10\u2011second_wall_sit_marathon, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 7\u2011step_ladder_jumps, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, balancing_brace_hold, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, backwards_handstand_countdown, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "One\u2011Arm Plank Flip. Hold a one\u2011arm plank while flipping your body 360\u00b0 in the air\u2014shows raw core power and mental focus. 10\u2011Second Wall Sit Marathon. Sit against a wall for 10 uninterrupted seconds, then immediately clap your hands\u2014tests quick recovery and endurance. 7\u2011Step Ladder Jumps. Jump up and down a 7\u2011step ladder in alternating feet, completing 10 rounds without stopping\u2014grabs speed and leg power. Balancing Brace Hold. Stand on one leg, arms extended, while holding a weighted barbell above your head for 15 seconds\u2014combines balance, core, and arm strength. Backwards Handstand Countdown. Perform a handstand facing backward, then count down 5\u20114\u20113\u20112\u20111 as you kick back; high dexterity and coordination needed.",
+      "tts_script": "99% of people fail this challenge. Can you? One\u2011Arm Plank Flip. Hold a one\u2011arm plank while flipping your body 360\u00b0 in the air\u2014shows raw core power and mental focus. 10\u2011Second Wall Sit Marathon. Sit against a wall for 10 uninterrupted seconds, then immediately clap your hands\u2014tests quick recovery and endurance. 7\u2011Step Ladder Jumps. Jump up and down a 7\u2011step ladder in alternating feet, completing 10 rounds without stopping\u2014grabs speed and leg power. Balancing Brace Hold. Stand on one leg, arms extended, while holding a weighted barbell above your head for 15 seconds\u2014combines balance, core, and arm strength. Backwards Handstand Countdown. Perform a handstand facing backward, then count down 5\u20114\u20113\u20112\u20111 as you kick back; high dexterity and coordination needed."
+    },
+    {
+      "title": "Can You Do This? One\u2011Handed Wall Sit",
+      "hook": "This stunt requires serious skill. Ready?",
+      "challenges": [
+        {
+          "title": "One\u2011Handed Wall Sit",
+          "description": "Squeeze into a wall sit using only one hand to keep your torso upright\u2014no extra support or wobbling allowed.",
+          "result": "Most people wobble, lose balance, or have to switch hands after a few seconds.",
+          "skill": "balance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "60\u2011Second Handstand Hold",
+          "description": "Flip into a perfect handstand and hold it for a full minute without touching the ground or using a wall for assistance.",
+          "result": "The average person\u2019s shoulder fatigue and loss of balance make the hold collapse before a minute.",
+          "skill": "strength",
+          "difficulty": "hard"
+        },
+        {
+          "title": "10\u2011Step Triple Jump",
+          "description": "Perform a long jump, immediately land and do a double back flip on the landing, then run and jump again\u2014total of ten consecutive jumps.",
+          "result": "Most videos end with a spectacular wipeout or a dramatic, awkward landing.",
+          "skill": "speed",
+          "difficulty": "hard"
+        },
+        {
+          "title": "30\u2011Second Circle\u2011Flip",
+          "description": "While standing, spin 360\u00b0 on one foot and immediately perform a backflip, all within 30 seconds of continuous motion.",
+          "result": "Many attempt the spin, but the backflip usually falls short of a clean landing.",
+          "skill": "dexterity",
+          "difficulty": "medium"
+        },
+        {
+          "title": "100\u2011Step Bear Crawl Relay",
+          "description": "Crawl in a tight bear\u2011crawling position for 100 consecutive steps without pausing or switching to a more relaxed stance.",
+          "result": "The average cow\u2011walker gasps for breath and often breaks the crawl before reaching the final steps.",
+          "skill": "endurance",
+          "difficulty": "easy"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, one\u2011handed_wall_sit, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 60\u2011second_handstand_hold, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 10\u2011step_triple_jump, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 30\u2011second_circle\u2011flip, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 100\u2011step_bear_crawl_relay, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "One\u2011Handed Wall Sit. Squeeze into a wall sit using only one hand to keep your torso upright\u2014no extra support or wobbling allowed. 60\u2011Second Handstand Hold. Flip into a perfect handstand and hold it for a full minute without touching the ground or using a wall for assistance. 10\u2011Step Triple Jump. Perform a long jump, immediately land and do a double back flip on the landing, then run and jump again\u2014total of ten consecutive jumps. 30\u2011Second Circle\u2011Flip. While standing, spin 360\u00b0 on one foot and immediately perform a backflip, all within 30 seconds of continuous motion. 100\u2011Step Bear Crawl Relay. Crawl in a tight bear\u2011crawling position for 100 consecutive steps without pausing or switching to a more relaxed stance.",
+      "tts_script": "This stunt requires serious skill. Ready? One\u2011Handed Wall Sit. Squeeze into a wall sit using only one hand to keep your torso upright\u2014no extra support or wobbling allowed. 60\u2011Second Handstand Hold. Flip into a perfect handstand and hold it for a full minute without touching the ground or using a wall for assistance. 10\u2011Step Triple Jump. Perform a long jump, immediately land and do a double back flip on the landing, then run and jump again\u2014total of ten consecutive jumps. 30\u2011Second Circle\u2011Flip. While standing, spin 360\u00b0 on one foot and immediately perform a backflip, all within 30 seconds of continuous motion. 100\u2011Step Bear Crawl Relay. Crawl in a tight bear\u2011crawling position for 100 consecutive steps without pausing or switching to a more relaxed stance."
+    },
+    {
+      "title": "Can You Do This? Triple\u2011Jump Cone Crawl",
+      "hook": "How far would YOU get? Be honest:",
+      "challenges": [
+        {
+          "title": "Triple\u2011Jump Cone Crawl",
+          "description": "Sprint 30 meters, jump over five cones, then reverse\u2011crawl under them\u2014no stopping, no hesitation.",
+          "result": "Leg muscles burn, balance teeters, and most folks drop a foot or two.",
+          "skill": "balance, dexterity, speed",
+          "difficulty": "medium"
+        },
+        {
+          "title": "One\u2011Arm Wall Sit Drop",
+          "description": "Hold a standard wall\u2011sit for 45 seconds, then drop from a 2\u2011meter platform while keeping one arm free.",
+          "result": "Core cramps, gravity pulls hard, and the arm often shivers as you hit the ground.",
+          "skill": "endurance, willpower, strength",
+          "difficulty": "hard"
+        },
+        {
+          "title": "60\u2011Second Handstand Push\u2011Up",
+          "description": "Perform a full handstand push\u2011up for one minute continuously\u2014no rest, no feeling of ground.",
+          "result": "Shoulder fatigue spikes, hips wobble, and many collapse before the final rep.",
+          "skill": "strength, balance, willpower",
+          "difficulty": "hard"
+        },
+        {
+          "title": "10 Consecutive 180\u00b0 Spin Jumps",
+          "description": "Jump, spin 180\u00b0 in mid\u2011air, land, and repeat\u2014ten times in a row\u2014without losing rhythm.",
+          "result": "Giddy legs, dizziness creeps in, and most stumble after the sixth rotation.",
+          "skill": "dexterity, speed, balance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "30\u2011Second Full\u2011Body Freeze",
+          "description": "Enter a plank, transition to a side plank, then back to plank\u2014all in a single sigh\u2014hold for 30 seconds.",
+          "result": "Core locks, shoulders tighten, and the mind starts dreaming of a couch.",
+          "skill": "endurance, willpower, strength",
+          "difficulty": "easy"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, triple\u2011jump_cone_crawl, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, one\u2011arm_wall_sit_drop, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 60\u2011second_handstand_push\u2011up, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 10_consecutive_180\u00b0_spin_jumps, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 30\u2011second_full\u2011body_freeze, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "Triple\u2011Jump Cone Crawl. Sprint 30 meters, jump over five cones, then reverse\u2011crawl under them\u2014no stopping, no hesitation. One\u2011Arm Wall Sit Drop. Hold a standard wall\u2011sit for 45 seconds, then drop from a 2\u2011meter platform while keeping one arm free. 60\u2011Second Handstand Push\u2011Up. Perform a full handstand push\u2011up for one minute continuously\u2014no rest, no feeling of ground. 10 Consecutive 180\u00b0 Spin Jumps. Jump, spin 180\u00b0 in mid\u2011air, land, and repeat\u2014ten times in a row\u2014without losing rhythm. 30\u2011Second Full\u2011Body Freeze. Enter a plank, transition to a side plank, then back to plank\u2014all in a single sigh\u2014hold for 30 seconds.",
+      "tts_script": "How far would YOU get? Be honest: Triple\u2011Jump Cone Crawl. Sprint 30 meters, jump over five cones, then reverse\u2011crawl under them\u2014no stopping, no hesitation. One\u2011Arm Wall Sit Drop. Hold a standard wall\u2011sit for 45 seconds, then drop from a 2\u2011meter platform while keeping one arm free. 60\u2011Second Handstand Push\u2011Up. Perform a full handstand push\u2011up for one minute continuously\u2014no rest, no feeling of ground. 10 Consecutive 180\u00b0 Spin Jumps. Jump, spin 180\u00b0 in mid\u2011air, land, and repeat\u2014ten times in a row\u2014without losing rhythm. 30\u2011Second Full\u2011Body Freeze. Enter a plank, transition to a side plank, then back to plank\u2014all in a single sigh\u2014hold for 30 seconds."
+    },
+    {
+      "title": "Can You Do This? One\u2011Arm Pedal\u2011Pop",
+      "hook": "99% of people fail this challenge. Can you?",
+      "challenges": [
+        {
+          "title": "One\u2011Arm Pedal\u2011Pop",
+          "description": "Spin a bike wheel with one hand while standing on a ladder rung\u2014proof that multitasking beats gravity.",
+          "result": "Most people wobble, lose balance, and end up face\u2011first on the carpet.",
+          "skill": "balance, dexterity, willpower",
+          "difficulty": "hard"
+        },
+        {
+          "title": "60\u2011Second Wall Sit Relay",
+          "description": "Hold a wall sit for 60\u202fseconds, then sprint 10\u202fyards and return\u2014testing endurance and speed in a single sprint.",
+          "result": "The pressure builds, legs start to tremble and many collapse before the final sprint.",
+          "skill": "endurance, speed, willpower",
+          "difficulty": "medium"
+        },
+        {
+          "title": "10\u2011Mushroom Grab",
+          "description": "From a standing start, hop forward and grab a 12\u2011inch \u201cmushroom\u201d (plastic bottle) from the floor\u2014testing timing and hand\u2011eye coordination.",
+          "result": "Most attempts end with a missed catch or a wobbling landing.",
+          "skill": "dexterity, balance, speed",
+          "difficulty": "easy"
+        },
+        {
+          "title": "30\u2011Second Handstand Dash",
+          "description": "Hold a handstand for 30\u202fseconds, then immediately do a 5\u2011meter sprint\u2014combining core strength and explosive speed.",
+          "result": "Arms buckle, shoulders wince, and the sprint often turns into a tumble.",
+          "skill": "strength, balance, speed",
+          "difficulty": "hard"
+        },
+        {
+          "title": "90\u2011Second Jump\u2011Stack",
+          "description": "Stack a deck of cards on your head, then jump in place for 90\u202fseconds while keeping the stack upright\u2014endurance meets precision.",
+          "result": "The deck shatters, the jumper\u2019s muscles burn, and the \u201cstack\u201d usually drops within the first minute.",
+          "skill": "endurance, balance, willpower",
+          "difficulty": "medium"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, one\u2011arm_pedal\u2011pop, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 60\u2011second_wall_sit_relay, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 10\u2011mushroom_grab, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 30\u2011second_handstand_dash, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 90\u2011second_jump\u2011stack, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "One\u2011Arm Pedal\u2011Pop. Spin a bike wheel with one hand while standing on a ladder rung\u2014proof that multitasking beats gravity. 60\u2011Second Wall Sit Relay. Hold a wall sit for 60\u202fseconds, then sprint 10\u202fyards and return\u2014testing endurance and speed in a single sprint. 10\u2011Mushroom Grab. From a standing start, hop forward and grab a 12\u2011inch \u201cmushroom\u201d (plastic bottle) from the floor\u2014testing timing and hand\u2011eye coordination. 30\u2011Second Handstand Dash. Hold a handstand for 30\u202fseconds, then immediately do a 5\u2011meter sprint\u2014combining core strength and explosive speed. 90\u2011Second Jump\u2011Stack. Stack a deck of cards on your head, then jump in place for 90\u202fseconds while keeping the stack upright\u2014endurance meets precision.",
+      "tts_script": "99% of people fail this challenge. Can you? One\u2011Arm Pedal\u2011Pop. Spin a bike wheel with one hand while standing on a ladder rung\u2014proof that multitasking beats gravity. 60\u2011Second Wall Sit Relay. Hold a wall sit for 60\u202fseconds, then sprint 10\u202fyards and return\u2014testing endurance and speed in a single sprint. 10\u2011Mushroom Grab. From a standing start, hop forward and grab a 12\u2011inch \u201cmushroom\u201d (plastic bottle) from the floor\u2014testing timing and hand\u2011eye coordination. 30\u2011Second Handstand Dash. Hold a handstand for 30\u202fseconds, then immediately do a 5\u2011meter sprint\u2014combining core strength and explosive speed. 90\u2011Second Jump\u2011Stack. Stack a deck of cards on your head, then jump in place for 90\u202fseconds while keeping the stack upright\u2014endurance meets precision."
+    },
+    {
+      "title": "Can You Do This? 1-Minute Handstand Wall Walk",
+      "hook": "This stunt requires serious skill. Ready?",
+      "challenges": [
+        {
+          "title": "1-Minute Handstand Wall Walk",
+          "description": "Kick into a handstand against a wall, walk your feet up until you reach your toes, then walk them down\u2014all in one continuous motion.",
+          "result": "Most people wobble, lose balance, or collapse into a crouch before finishing.",
+          "skill": "balance",
+          "difficulty": "hard"
+        },
+        {
+          "title": "10-Spot Jump Relay",
+          "description": "Stand on a 10\u2011spot hopscotch grid and jump with both feet onto each spot in order, moving faster with each jump until you finish.",
+          "result": "Feet blur, knees buckle, and many can\u2019t keep the rhythm past the sixth spot.",
+          "skill": "speed",
+          "difficulty": "medium"
+        },
+        {
+          "title": "60\u2011Second Wall Sit Flip",
+          "description": "Perform a deep wall sit, then explosively jump up, flipping over the wall and landing back inside the sit for the entire minute.",
+          "result": "People usually top out, lose the wall\u2011sit depth, or fail to flip cleanly on the final seconds.",
+          "skill": "strength",
+          "difficulty": "hard"
+        },
+        {
+          "title": "30\u2011Second Tongue\u2011Only Balancing Act",
+          "description": "Balance a small ball on your tongue for 30 seconds while staying still and laughing.",
+          "result": "The ball keeps sliding, the tongue swallows the ball, or you collapse into a giggle fit.",
+          "skill": "dexterity",
+          "difficulty": "easy"
+        },
+        {
+          "title": "20\u2011Floor Step\u2011Up Streak",
+          "description": "Step up and down a 20\u2011stair flight using only one hand per step, alternating hands, and keep a steady pace for the entire streak.",
+          "result": "Most can\u2019t maintain the rhythm, their legs buckle, or they switch hands too often and lose the flow.",
+          "skill": "endurance",
+          "difficulty": "medium"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, 1-minute_handstand_wall_walk, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 10-spot_jump_relay, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 60\u2011second_wall_sit_flip, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 30\u2011second_tongue\u2011only_balancing_act, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 20\u2011floor_step\u2011up_streak, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "1-Minute Handstand Wall Walk. Kick into a handstand against a wall, walk your feet up until you reach your toes, then walk them down\u2014all in one continuous motion. 10-Spot Jump Relay. Stand on a 10\u2011spot hopscotch grid and jump with both feet onto each spot in order, moving faster with each jump until you finish. 60\u2011Second Wall Sit Flip. Perform a deep wall sit, then explosively jump up, flipping over the wall and landing back inside the sit for the entire minute. 30\u2011Second Tongue\u2011Only Balancing Act. Balance a small ball on your tongue for 30 seconds while staying still and laughing. 20\u2011Floor Step\u2011Up Streak. Step up and down a 20\u2011stair flight using only one hand per step, alternating hands, and keep a steady pace for the entire streak.",
+      "tts_script": "This stunt requires serious skill. Ready? 1-Minute Handstand Wall Walk. Kick into a handstand against a wall, walk your feet up until you reach your toes, then walk them down\u2014all in one continuous motion. 10-Spot Jump Relay. Stand on a 10\u2011spot hopscotch grid and jump with both feet onto each spot in order, moving faster with each jump until you finish. 60\u2011Second Wall Sit Flip. Perform a deep wall sit, then explosively jump up, flipping over the wall and landing back inside the sit for the entire minute. 30\u2011Second Tongue\u2011Only Balancing Act. Balance a small ball on your tongue for 30 seconds while staying still and laughing. 20\u2011Floor Step\u2011Up Streak. Step up and down a 20\u2011stair flight using only one hand per step, alternating hands, and keep a steady pace for the entire streak."
+    },
+    {
+      "title": "Can You Do This? 30\u2011Second Wall Sit",
+      "hook": "99% of people fail this challenge. Can you?",
+      "challenges": [
+        {
+          "title": "30\u2011Second Wall Sit",
+          "description": "Slide down a wall until your thighs are parallel to the floor and hold the squat for a full 30 seconds\u2014no cheating with your hands.",
+          "result": "Your legs burn, your heart races, and you\u2019ll feel the triumph of keeping a rock\u2011solid pose.",
+          "skill": "endurance",
+          "difficulty": "easy"
+        },
+        {
+          "title": "One\u2011Arm Push\u2011Up Sprint",
+          "description": "Perform as many strict one\u2011arm push\u2011ups as you can in 45 seconds, switching arms at the 22\u2011second mark.",
+          "result": "Your chest and triceps scream, and the clock forces you to push past your usual rep limit.",
+          "skill": "strength",
+          "difficulty": "medium"
+        },
+        {
+          "title": "10\u2011Meter Backward Bear Crawl",
+          "description": "Crawl backward on all fours for 10 meters without touching your knees to the ground\u2014speed counts, but form is king.",
+          "result": "You tumble, you scramble, and when you finally hit the finish line you\u2019ll feel a wild mix of embarrassment and pride.",
+          "skill": "speed",
+          "difficulty": "medium"
+        },
+        {
+          "title": "20\u2011Second One\u2011Leg Balance on a Bosu",
+          "description": "Stand on a Bosu ball, lift one leg, and hold the pose for a solid 20 seconds; switch legs and repeat.",
+          "result": "Your core tightens, your ankle trembles, and you\u2019ll either wobble spectacularly or finish standing like a statue.",
+          "skill": "balance",
+          "difficulty": "hard"
+        },
+        {
+          "title": "60\u2011Second Hand\u2011Stand Hold (Wall\u2011Assisted)",
+          "description": "Kick up into a hand\u2011stand against a wall and maintain it for a full minute without dropping or using your feet for support.",
+          "result": "Your shoulders ache, blood rushes to your head, and if you nail the minute you\u2019ll feel like a superhero.",
+          "skill": "willpower",
+          "difficulty": "hard"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, 30\u2011second_wall_sit, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, one\u2011arm_push\u2011up_sprint, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 10\u2011meter_backward_bear_crawl, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 20\u2011second_one\u2011leg_balance_on_a_bosu, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 60\u2011second_hand\u2011stand_hold_(wall\u2011assisted), dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "30\u2011Second Wall Sit. Slide down a wall until your thighs are parallel to the floor and hold the squat for a full 30 seconds\u2014no cheating with your hands. One\u2011Arm Push\u2011Up Sprint. Perform as many strict one\u2011arm push\u2011ups as you can in 45 seconds, switching arms at the 22\u2011second mark. 10\u2011Meter Backward Bear Crawl. Crawl backward on all fours for 10 meters without touching your knees to the ground\u2014speed counts, but form is king. 20\u2011Second One\u2011Leg Balance on a Bosu. Stand on a Bosu ball, lift one leg, and hold the pose for a solid 20 seconds; switch legs and repeat. 60\u2011Second Hand\u2011Stand Hold (Wall\u2011Assisted). Kick up into a hand\u2011stand against a wall and maintain it for a full minute without dropping or using your feet for support.",
+      "tts_script": "99% of people fail this challenge. Can you? 30\u2011Second Wall Sit. Slide down a wall until your thighs are parallel to the floor and hold the squat for a full 30 seconds\u2014no cheating with your hands. One\u2011Arm Push\u2011Up Sprint. Perform as many strict one\u2011arm push\u2011ups as you can in 45 seconds, switching arms at the 22\u2011second mark. 10\u2011Meter Backward Bear Crawl. Crawl backward on all fours for 10 meters without touching your knees to the ground\u2014speed counts, but form is king. 20\u2011Second One\u2011Leg Balance on a Bosu. Stand on a Bosu ball, lift one leg, and hold the pose for a solid 20 seconds; switch legs and repeat. 60\u2011Second Hand\u2011Stand Hold (Wall\u2011Assisted). Kick up into a hand\u2011stand against a wall and maintain it for a full minute without dropping or using your feet for support."
+    },
+    {
+      "title": "Can You Do This? 1\u2011Minute Wall Sit Sprint",
+      "hook": "Most people give up before the end. Prove us wrong:",
+      "challenges": [
+        {
+          "title": "1\u2011Minute Wall Sit Sprint",
+          "description": "Slide into a perfect wall sit, then sprint 10 meters back and forth for 60 seconds total, dropping the wall sit each time you return.",
+          "result": "Most people collapse halfway, cheeks turning crimson and legs trembling.",
+          "skill": "endurance",
+          "difficulty": "hard"
+        },
+        {
+          "title": "30\u2011Second Handstand Countdown",
+          "description": "Kick into a handstand and count backwards from 30, refusing to touch the ground even as your arms go numb.",
+          "result": "The average person swallows a gasp and sways wildly before losing balance.",
+          "skill": "balance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "10\u2011Jump Rope Obstacle",
+          "description": "Complete ten double\u2011under jump ropes while standing on a narrow balance beam, all in one breath.",
+          "result": "Most stumble, lose rhythm, and bounce off the beam awkwardly.",
+          "skill": "dexterity",
+          "difficulty": "hard"
+        },
+        {
+          "title": "5\u2011Minute Plank With Leg Lift",
+          "description": "Hold a plank for five minutes, lifting one leg every 30 seconds to increase core strain.",
+          "result": "The plank becomes a wobbling masterpiece, ending in shaky knees and a sweaty face.",
+          "skill": "endurance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "20\u2011Second Wall Push\u2011Push",
+          "description": "Press against a wall with both hands, holding the arm position for 20 seconds while keeping your body perfectly vertical.",
+          "result": "Hands blister, shoulders burn, and the urge to let go peaks at the last second.",
+          "skill": "strength",
+          "difficulty": "easy"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, 1\u2011minute_wall_sit_sprint, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 30\u2011second_handstand_countdown, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 10\u2011jump_rope_obstacle, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 5\u2011minute_plank_with_leg_lift, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 20\u2011second_wall_push\u2011push, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "1\u2011Minute Wall Sit Sprint. Slide into a perfect wall sit, then sprint 10 meters back and forth for 60 seconds total, dropping the wall sit each time you return. 30\u2011Second Handstand Countdown. Kick into a handstand and count backwards from 30, refusing to touch the ground even as your arms go numb. 10\u2011Jump Rope Obstacle. Complete ten double\u2011under jump ropes while standing on a narrow balance beam, all in one breath. 5\u2011Minute Plank With Leg Lift. Hold a plank for five minutes, lifting one leg every 30 seconds to increase core strain. 20\u2011Second Wall Push\u2011Push. Press against a wall with both hands, holding the arm position for 20 seconds while keeping your body perfectly vertical.",
+      "tts_script": "Most people give up before the end. Prove us wrong: 1\u2011Minute Wall Sit Sprint. Slide into a perfect wall sit, then sprint 10 meters back and forth for 60 seconds total, dropping the wall sit each time you return. 30\u2011Second Handstand Countdown. Kick into a handstand and count backwards from 30, refusing to touch the ground even as your arms go numb. 10\u2011Jump Rope Obstacle. Complete ten double\u2011under jump ropes while standing on a narrow balance beam, all in one breath. 5\u2011Minute Plank With Leg Lift. Hold a plank for five minutes, lifting one leg every 30 seconds to increase core strain. 20\u2011Second Wall Push\u2011Push. Press against a wall with both hands, holding the arm position for 20 seconds while keeping your body perfectly vertical."
+    },
+    {
+      "title": "Can You Do This? One\u2011Handed Push\u2011Up Marathon",
+      "hook": "How far would YOU get? Be honest:",
+      "challenges": [
+        {
+          "title": "One\u2011Handed Push\u2011Up Marathon",
+          "description": "Perform as many push\u2011ups as possible using only one hand while the other hand clutches a stationary ball\u2014prove your upper\u2011body strength and core control.",
+          "result": "Most people wobble and fall off the floor within the first 10 reps, but a few manage a surprisingly high count before collapse.",
+          "skill": "strength",
+          "difficulty": "hard"
+        },
+        {
+          "title": "30\u2011Second Wall Sit Relay",
+          "description": "Sit against a wall for 30 seconds while holding a 10\u2011lb sandbag on your lap, then immediately stand and sprint 20 meters\u2014test endurance and speed in one quick burst.",
+          "result": "Viewers usually hit a wall, shudder, and stumble, yet some finish the sprint and shake off the fatigue.",
+          "skill": "endurance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "Infinite\u2011Loop Handstand Drop",
+          "description": "Kick into a handstand, hold for 5 seconds, then drop your feet onto a 30\u2011cm high box and immediately come back up\u2014measure your balance and body awareness.",
+          "result": "Many fail to land cleanly, crashing into the box or falling onto the floor, though a few land perfectly and bounce out.",
+          "skill": "balance",
+          "difficulty": "hard"
+        },
+        {
+          "title": "10\u2011Foot Rope Ladder Run",
+          "description": "Run up a 10\u2011foot rope ladder in under 20 seconds, then reverse direction\u2014demonstrate quick feet and agility.",
+          "result": "Most struggle to keep up, losing grip or timing, but some sprint through in record time.",
+          "skill": "speed",
+          "difficulty": "medium"
+        },
+        {
+          "title": "60\u2011Second T\u2011Pose Freeze",
+          "description": "Hold a perfect T\u2011pose for a full minute while blindfolded, counting the seconds in your head\u2014challenge willpower and body awareness.",
+          "result": "Count drifts, posture wavers, and many give up before 60 seconds, yet a few maintain the pose for the full minute.",
+          "skill": "willpower",
+          "difficulty": "easy"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, one\u2011handed_push\u2011up_marathon, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 30\u2011second_wall_sit_relay, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, infinite\u2011loop_handstand_drop, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 10\u2011foot_rope_ladder_run, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 60\u2011second_t\u2011pose_freeze, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "One\u2011Handed Push\u2011Up Marathon. Perform as many push\u2011ups as possible using only one hand while the other hand clutches a stationary ball\u2014prove your upper\u2011body strength and core control. 30\u2011Second Wall Sit Relay. Sit against a wall for 30 seconds while holding a 10\u2011lb sandbag on your lap, then immediately stand and sprint 20 meters\u2014test endurance and speed in one quick burst. Infinite\u2011Loop Handstand Drop. Kick into a handstand, hold for 5 seconds, then drop your feet onto a 30\u2011cm high box and immediately come back up\u2014measure your balance and body awareness. 10\u2011Foot Rope Ladder Run. Run up a 10\u2011foot rope ladder in under 20 seconds, then reverse direction\u2014demonstrate quick feet and agility. 60\u2011Second T\u2011Pose Freeze. Hold a perfect T\u2011pose for a full minute while blindfolded, counting the seconds in your head\u2014challenge willpower and body awareness.",
+      "tts_script": "How far would YOU get? Be honest: One\u2011Handed Push\u2011Up Marathon. Perform as many push\u2011ups as possible using only one hand while the other hand clutches a stationary ball\u2014prove your upper\u2011body strength and core control. 30\u2011Second Wall Sit Relay. Sit against a wall for 30 seconds while holding a 10\u2011lb sandbag on your lap, then immediately stand and sprint 20 meters\u2014test endurance and speed in one quick burst. Infinite\u2011Loop Handstand Drop. Kick into a handstand, hold for 5 seconds, then drop your feet onto a 30\u2011cm high box and immediately come back up\u2014measure your balance and body awareness. 10\u2011Foot Rope Ladder Run. Run up a 10\u2011foot rope ladder in under 20 seconds, then reverse direction\u2014demonstrate quick feet and agility. 60\u2011Second T\u2011Pose Freeze. Hold a perfect T\u2011pose for a full minute while blindfolded, counting the seconds in your head\u2014challenge willpower and body awareness."
+    },
+    {
+      "title": "Can You Do This? 5\u2011Minute Wall Sit",
+      "hook": "Only 1% can complete all of these. You?",
+      "challenges": [
+        {
+          "title": "5\u2011Minute Wall Sit",
+          "description": "Slide into a full squat against a wall and hold for 5 minutes\u2014watch your thighs burn while your mental focus is tested.",
+          "result": "Most people crack under the burn, letting their knees give out.",
+          "skill": "endurance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "20\u2011Second Handstand Pull\u2011Up",
+          "description": "Kick into a handstand above a sturdy table and pull your chest to the surface in 20 seconds\u2014gravity and balance collide.",
+          "result": "The floor usually wins; people frequently fall or lose momentum.",
+          "skill": "balance/dexterity",
+          "difficulty": "hard"
+        },
+        {
+          "title": "30\u2011Second Tumbling Roll",
+          "description": "Perform a forward roll from a standing start, keeping it fluid for a full 30 seconds\u2014speed, coordination, and precision all in one.",
+          "result": "Most stumble or over\u2011rotate, ending in a soft landing.",
+          "skill": "speed/dexterity",
+          "difficulty": "easy"
+        },
+        {
+          "title": "60\u2011Second Seated Stiff\u2011Leg Lunge",
+          "description": "Sit on the floor, legs straight, and thrust one leg forward while keeping it rigid for 60 seconds\u2014leg strength meets hip flexibility.",
+          "result": "Knees buckle or the back arch drops, revealing weak spot.",
+          "skill": "strength/endurance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "15\u2011Jump Box Vault Chain",
+          "description": "Vault over a 12\u2011inch box 15 consecutive times without pause\u2014combining power, rhythm, and mental grit.",
+          "result": "The cadence usually collapses mid\u2011sequence, forcing a break.",
+          "skill": "strength/speed",
+          "difficulty": "hard"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, 5\u2011minute_wall_sit, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 20\u2011second_handstand_pull\u2011up, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 30\u2011second_tumbling_roll, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 60\u2011second_seated_stiff\u2011leg_lunge, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 15\u2011jump_box_vault_chain, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "5\u2011Minute Wall Sit. Slide into a full squat against a wall and hold for 5 minutes\u2014watch your thighs burn while your mental focus is tested. 20\u2011Second Handstand Pull\u2011Up. Kick into a handstand above a sturdy table and pull your chest to the surface in 20 seconds\u2014gravity and balance collide. 30\u2011Second Tumbling Roll. Perform a forward roll from a standing start, keeping it fluid for a full 30 seconds\u2014speed, coordination, and precision all in one. 60\u2011Second Seated Stiff\u2011Leg Lunge. Sit on the floor, legs straight, and thrust one leg forward while keeping it rigid for 60 seconds\u2014leg strength meets hip flexibility. 15\u2011Jump Box Vault Chain. Vault over a 12\u2011inch box 15 consecutive times without pause\u2014combining power, rhythm, and mental grit.",
+      "tts_script": "Only 1% can complete all of these. You? 5\u2011Minute Wall Sit. Slide into a full squat against a wall and hold for 5 minutes\u2014watch your thighs burn while your mental focus is tested. 20\u2011Second Handstand Pull\u2011Up. Kick into a handstand above a sturdy table and pull your chest to the surface in 20 seconds\u2014gravity and balance collide. 30\u2011Second Tumbling Roll. Perform a forward roll from a standing start, keeping it fluid for a full 30 seconds\u2014speed, coordination, and precision all in one. 60\u2011Second Seated Stiff\u2011Leg Lunge. Sit on the floor, legs straight, and thrust one leg forward while keeping it rigid for 60 seconds\u2014leg strength meets hip flexibility. 15\u2011Jump Box Vault Chain. Vault over a 12\u2011inch box 15 consecutive times without pause\u2014combining power, rhythm, and mental grit."
+    },
+    {
+      "title": "Can You Do This? One\u2011Arm Floor Flip",
+      "hook": "This challenge looks easy. It's not:",
+      "challenges": [
+        {
+          "title": "One\u2011Arm Floor Flip",
+          "description": "Perform a forward roll using only one arm for support, keeping the other arm straight out in front of you for balance.",
+          "result": "Many collapse mid\u2011flip or lose balance, ending in a chaotic tumble.",
+          "skill": "Balance/Dexterity",
+          "difficulty": "Hard"
+        },
+        {
+          "title": "60\u2011Second Handstand Sit\u2011Up",
+          "description": "Hold a handstand and perform 10 consecutive sit\u2011ups while inverted, proving your core and shoulder endurance.",
+          "result": "Most hands shake, legs flop, or let go before finishing the third rep.",
+          "skill": "Strength/Endurance",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "Speed Ladder Dash",
+          "description": "Sprint 100 meters while weaving through a 3\u2011row agility ladder at 90\u202f% top speed.",
+          "result": "Many stumble over the rungs, losing momentum or tripping.",
+          "skill": "Speed/Agility",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "3\u2011Minute Wall Sit with One\u2011Leg Raise",
+          "description": "Hang a wall sit for 180\u202fseconds while lifting one leg straight in front of you, keeping it parallel to the floor.",
+          "result": "Legs wobble, knees buckle, and the wall\u2011sit starts to waver after 90\u202fseconds.",
+          "skill": "Strength/Endurance",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "Double Handstand Push\u2011Up",
+          "description": "From a handstand position against a wall, lower your head to the floor and push back up to a full handstand\u2014repeat 5 times.",
+          "result": "Many struggle to maintain a straight body line, causing a dramatic dip or falling over.",
+          "skill": "Strength/Balance",
+          "difficulty": "Hard"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, one\u2011arm_floor_flip, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 60\u2011second_handstand_sit\u2011up, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, speed_ladder_dash, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 3\u2011minute_wall_sit_with_one\u2011leg_raise, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, double_handstand_push\u2011up, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "One\u2011Arm Floor Flip. Perform a forward roll using only one arm for support, keeping the other arm straight out in front of you for balance. 60\u2011Second Handstand Sit\u2011Up. Hold a handstand and perform 10 consecutive sit\u2011ups while inverted, proving your core and shoulder endurance. Speed Ladder Dash. Sprint 100 meters while weaving through a 3\u2011row agility ladder at 90\u202f% top speed. 3\u2011Minute Wall Sit with One\u2011Leg Raise. Hang a wall sit for 180\u202fseconds while lifting one leg straight in front of you, keeping it parallel to the floor. Double Handstand Push\u2011Up. From a handstand position against a wall, lower your head to the floor and push back up to a full handstand\u2014repeat 5 times.",
+      "tts_script": "This challenge looks easy. It's not: One\u2011Arm Floor Flip. Perform a forward roll using only one arm for support, keeping the other arm straight out in front of you for balance. 60\u2011Second Handstand Sit\u2011Up. Hold a handstand and perform 10 consecutive sit\u2011ups while inverted, proving your core and shoulder endurance. Speed Ladder Dash. Sprint 100 meters while weaving through a 3\u2011row agility ladder at 90\u202f% top speed. 3\u2011Minute Wall Sit with One\u2011Leg Raise. Hang a wall sit for 180\u202fseconds while lifting one leg straight in front of you, keeping it parallel to the floor. Double Handstand Push\u2011Up. From a handstand position against a wall, lower your head to the floor and push back up to a full handstand\u2014repeat 5 times."
+    },
+    {
+      "title": "Can You Do This? One\u2011Handed Hangboard Drop",
+      "hook": "99% of people fail this challenge. Can you?",
+      "challenges": [
+        {
+          "title": "One\u2011Handed Hangboard Drop",
+          "description": "Grab a standard hangboard with one hand and drop to a lower rung, then immediately jump back up using only that hand\u2014repeat 10 times.",
+          "result": "Most people wipe out the first few drops, sending the board rattling and their arm trembling.",
+          "skill": "strength",
+          "difficulty": "hard"
+        },
+        {
+          "title": "60\u2011Second Wall Sit Relay",
+          "description": "Perform a wall sit for 30 seconds, then sprint 20 meters, return, and repeat; finish two rounds in 60 seconds total.",
+          "result": "Legs burn, viewers gasp as knees buckle and the wall sit becomes a shaky wobble.",
+          "skill": "endurance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "10\u2011Step Rope Swing",
+          "description": "Swing on a 10\u2011meter rope, perform a single 180\u00b0 spin mid\u2011air, and land back on the rope, counting each complete swing as one step\u2014complete 10 steps.",
+          "result": "Arms flail, sometimes the rope snaps\u2014and the dare becomes a wild, gravity\u2011defying spectacle.",
+          "skill": "balance",
+          "difficulty": "hard"
+        },
+        {
+          "title": "12\u2011Round Handstand Push\u2011Up Count",
+          "description": "Do a total of 12 handstand push\u2011ups in one go (no pause between), counting each rep aloud for drama.",
+          "result": "Skin turns red, shoulders scream, and the final push\u2011up often ends with a dramatic wobble.",
+          "skill": "strength",
+          "difficulty": "medium"
+        },
+        {
+          "title": "30\u2011Second \u201cCreeper\u201d Crawl",
+          "description": "Crawl on your hands and knees at a minimum speed of 3\u202fm/min for 30 seconds, covering a straight 10\u2011meter line\u2014no pauses or dragging.",
+          "result": "Arms burn, face flushes, and many people end up sloth\u2011like, losing the pace.",
+          "skill": "speed",
+          "difficulty": "easy"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, one\u2011handed_hangboard_drop, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 60\u2011second_wall_sit_relay, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 10\u2011step_rope_swing, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 12\u2011round_handstand_push\u2011up_count, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 30\u2011second_\u201ccreeper\u201d_crawl, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "One\u2011Handed Hangboard Drop. Grab a standard hangboard with one hand and drop to a lower rung, then immediately jump back up using only that hand\u2014repeat 10 times. 60\u2011Second Wall Sit Relay. Perform a wall sit for 30 seconds, then sprint 20 meters, return, and repeat; finish two rounds in 60 seconds total. 10\u2011Step Rope Swing. Swing on a 10\u2011meter rope, perform a single 180\u00b0 spin mid\u2011air, and land back on the rope, counting each complete swing as one step\u2014complete 10 steps. 12\u2011Round Handstand Push\u2011Up Count. Do a total of 12 handstand push\u2011ups in one go (no pause between), counting each rep aloud for drama. 30\u2011Second \u201cCreeper\u201d Crawl. Crawl on your hands and knees at a minimum speed of 3\u202fm/min for 30 seconds, covering a straight 10\u2011meter line\u2014no pauses or dragging.",
+      "tts_script": "99% of people fail this challenge. Can you? One\u2011Handed Hangboard Drop. Grab a standard hangboard with one hand and drop to a lower rung, then immediately jump back up using only that hand\u2014repeat 10 times. 60\u2011Second Wall Sit Relay. Perform a wall sit for 30 seconds, then sprint 20 meters, return, and repeat; finish two rounds in 60 seconds total. 10\u2011Step Rope Swing. Swing on a 10\u2011meter rope, perform a single 180\u00b0 spin mid\u2011air, and land back on the rope, counting each complete swing as one step\u2014complete 10 steps. 12\u2011Round Handstand Push\u2011Up Count. Do a total of 12 handstand push\u2011ups in one go (no pause between), counting each rep aloud for drama. 30\u2011Second \u201cCreeper\u201d Crawl. Crawl on your hands and knees at a minimum speed of 3\u202fm/min for 30 seconds, covering a straight 10\u2011meter line\u2014no pauses or dragging."
+    },
+    {
+      "title": "Can You Do This? One\u2011Arm Wall Sit",
+      "hook": "Most people give up before the end. Prove us wrong:",
+      "challenges": [
+        {
+          "title": "One\u2011Arm Wall Sit",
+          "description": "Slide down a wall holding a plank position on one arm for 45 seconds\u2014testing core stability while feeling the burn.",
+          "result": "Most people wobble, drop the leg, or collapse from core fatigue.",
+          "skill": "Strength",
+          "difficulty": "hard"
+        },
+        {
+          "title": "30\u2011Second Handstand Push\u2011Ups",
+          "description": "Perform as many handstand push\u2011ups as possible in 30 seconds, proving upper\u2011body power and balance.",
+          "result": "People often hit a wall, lose balance, or stall in the halfway point.",
+          "skill": "Strength/Balance",
+          "difficulty": "hard"
+        },
+        {
+          "title": "10\u2011Count Raging Bear Crawl",
+          "description": "Crawl in a bear\u2011style, moving 10 feet forward and 10 back in 10 counts\u2014speed and coordination combined.",
+          "result": "Many trip or switch sides too late, feeling \u201cbear\u2011ish\u201d but not quite finish.",
+          "skill": "Speed/Dexterity",
+          "difficulty": "medium"
+        },
+        {
+          "title": "Jump Rope Double\u2011Under Marathon",
+          "description": "Complete 50 consecutive double\u2011unders\u2014testing rhythm, stamina, and coordination.",
+          "result": "Most fumble, double\u2011under fails, or run out of rhythm mid\u2011count.",
+          "skill": "Endurance/Dexterity",
+          "difficulty": "medium"
+        },
+        {
+          "title": "30\u2011Second Lateral Hops",
+          "description": "Leap laterally over an imaginary line 30 times in 30 seconds, combining agility and willpower.",
+          "result": "People often lose timing, hop in the wrong direction, or freeze.",
+          "skill": "Speed/Dexterity",
+          "difficulty": "easy"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, one\u2011arm_wall_sit, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 30\u2011second_handstand_push\u2011ups, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 10\u2011count_raging_bear_crawl, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, jump_rope_double\u2011under_marathon, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 30\u2011second_lateral_hops, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "One\u2011Arm Wall Sit. Slide down a wall holding a plank position on one arm for 45 seconds\u2014testing core stability while feeling the burn. 30\u2011Second Handstand Push\u2011Ups. Perform as many handstand push\u2011ups as possible in 30 seconds, proving upper\u2011body power and balance. 10\u2011Count Raging Bear Crawl. Crawl in a bear\u2011style, moving 10 feet forward and 10 back in 10 counts\u2014speed and coordination combined. Jump Rope Double\u2011Under Marathon. Complete 50 consecutive double\u2011unders\u2014testing rhythm, stamina, and coordination. 30\u2011Second Lateral Hops. Leap laterally over an imaginary line 30 times in 30 seconds, combining agility and willpower.",
+      "tts_script": "Most people give up before the end. Prove us wrong: One\u2011Arm Wall Sit. Slide down a wall holding a plank position on one arm for 45 seconds\u2014testing core stability while feeling the burn. 30\u2011Second Handstand Push\u2011Ups. Perform as many handstand push\u2011ups as possible in 30 seconds, proving upper\u2011body power and balance. 10\u2011Count Raging Bear Crawl. Crawl in a bear\u2011style, moving 10 feet forward and 10 back in 10 counts\u2014speed and coordination combined. Jump Rope Double\u2011Under Marathon. Complete 50 consecutive double\u2011unders\u2014testing rhythm, stamina, and coordination. 30\u2011Second Lateral Hops. Leap laterally over an imaginary line 30 times in 30 seconds, combining agility and willpower."
+    },
+    {
+      "title": "Can You Do This? One\u2011Arm Chair Sit\u2011Down",
+      "hook": "How far would YOU get? Be honest:",
+      "challenges": [
+        {
+          "title": "One\u2011Arm Chair Sit\u2011Down",
+          "description": "Sit on a chair using only one hand, then stand back up, all while balancing a bottle of water on your head\u2014no hands allowed for the lift.",
+          "result": "Most people wobble, forget the bottle, or collapse in a splash of water.",
+          "skill": "balance / dexterity",
+          "difficulty": "medium"
+        },
+        {
+          "title": "60\u2011Second Wall Push\u2011Up Pyramid",
+          "description": "Perform a push\u2011up against a wall, starting at 1 rep, adding one rep each second until you hit 60 reps\u2014no rest.",
+          "result": "Muscles burn, breathing goes ragged, and many can\u2019t finish the 60th rep.",
+          "skill": "endurance / strength",
+          "difficulty": "hard"
+        },
+        {
+          "title": "30\u2011Second Handstand Hold with a Twist",
+          "description": "Maintain a handstand for 30 seconds while holding a 2\u2011pound weight in each hand and rotating your body 90\u00b0 every 10 seconds.",
+          "result": "Most people lose balance, drop the weights, or get dizzy by the 20\u2011second mark.",
+          "skill": "balance / strength",
+          "difficulty": "hard"
+        },
+        {
+          "title": "10\u2011Step Human Knot Relay",
+          "description": "In a group of 10, each person must step forward exactly 10 times while being tangled in a human knot that is continuously reshuffled by the leader.",
+          "result": "The knot unwinds, people stumble, and two or three end up laughing at their own blunders.",
+          "skill": "dexterity / teamwork",
+          "difficulty": "medium"
+        },
+        {
+          "title": "15\u2011Second \u201cNo\u2011Move\u201d Freeze",
+          "description": "Stand on one leg, eyes closed, and refuse to blink or move for a full 15 seconds while a loud beat plays in the background.",
+          "result": "Most people involuntarily flash a grin, let out a breath, or let their foot wobble.",
+          "skill": "willpower / balance",
+          "difficulty": "easy"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, one\u2011arm_chair_sit\u2011down, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 60\u2011second_wall_push\u2011up_pyramid, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 30\u2011second_handstand_hold_with_a_twist, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 10\u2011step_human_knot_relay, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 15\u2011second_\u201cno\u2011move\u201d_freeze, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "One\u2011Arm Chair Sit\u2011Down. Sit on a chair using only one hand, then stand back up, all while balancing a bottle of water on your head\u2014no hands allowed for the lift. 60\u2011Second Wall Push\u2011Up Pyramid. Perform a push\u2011up against a wall, starting at 1 rep, adding one rep each second until you hit 60 reps\u2014no rest. 30\u2011Second Handstand Hold with a Twist. Maintain a handstand for 30 seconds while holding a 2\u2011pound weight in each hand and rotating your body 90\u00b0 every 10 seconds. 10\u2011Step Human Knot Relay. In a group of 10, each person must step forward exactly 10 times while being tangled in a human knot that is continuously reshuffled by the leader. 15\u2011Second \u201cNo\u2011Move\u201d Freeze. Stand on one leg, eyes closed, and refuse to blink or move for a full 15 seconds while a loud beat plays in the background.",
+      "tts_script": "How far would YOU get? Be honest: One\u2011Arm Chair Sit\u2011Down. Sit on a chair using only one hand, then stand back up, all while balancing a bottle of water on your head\u2014no hands allowed for the lift. 60\u2011Second Wall Push\u2011Up Pyramid. Perform a push\u2011up against a wall, starting at 1 rep, adding one rep each second until you hit 60 reps\u2014no rest. 30\u2011Second Handstand Hold with a Twist. Maintain a handstand for 30 seconds while holding a 2\u2011pound weight in each hand and rotating your body 90\u00b0 every 10 seconds. 10\u2011Step Human Knot Relay. In a group of 10, each person must step forward exactly 10 times while being tangled in a human knot that is continuously reshuffled by the leader. 15\u2011Second \u201cNo\u2011Move\u201d Freeze. Stand on one leg, eyes closed, and refuse to blink or move for a full 15 seconds while a loud beat plays in the background."
+    },
+    {
+      "title": "Can You Do This? 30\u2011Second Wall Handstand",
+      "hook": "99% of people fail this challenge. Can you?",
+      "challenges": [
+        {
+          "title": "30\u2011Second Wall Handstand",
+          "description": "Kick up into a perfect handstand against a wall and hold it for a full 30 seconds without wobbling.",
+          "result": "Most wobble or tap the floor early, but a solid half\u2011minute feels like you\u2019ve conquered gravity.",
+          "skill": "balance",
+          "difficulty": "easy"
+        },
+        {
+          "title": "50\u2011Push\u2011Up Ladder (30\u201120\u201110)",
+          "description": "Complete 30 push\u2011ups, rest 15 seconds, then 20, rest 10 seconds, then finish with 10 straight\u2011arm push\u2011ups.",
+          "result": "Arms burn, heart races, and the final straight\u2011arm set usually leaves you shaking.",
+          "skill": "strength",
+          "difficulty": "medium"
+        },
+        {
+          "title": "45\u2011Second Single\u2011Leg Squat Hold",
+          "description": "Balance on one leg, lower into a deep pistol\u2011squat and stay there for 45 seconds without using the other foot for support.",
+          "result": "Knees tremble, core engages, and most people can\u2019t keep the pose past the 30\u2011second mark.",
+          "skill": "balance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "20\u2011Meter Backward Sprint",
+          "description": "Run 20 meters backward as fast as you can, staying low and keeping eyes forward.",
+          "result": "Feet slap the ground, you\u2019ll likely stumble, and the finish line feels like a victory lap.",
+          "skill": "speed",
+          "difficulty": "hard"
+        },
+        {
+          "title": "60\u2011Second Plank With Alternating Arm Reach",
+          "description": "Hold a plank while reaching one arm forward, alternating sides every 5 seconds, for a full minute.",
+          "result": "Core lights up, shoulders shake, and many drop out before the 45\u2011second mark.",
+          "skill": "endurance",
+          "difficulty": "hard"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, 30\u2011second_wall_handstand, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 50\u2011push\u2011up_ladder_(30\u201120\u201110), dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 45\u2011second_single\u2011leg_squat_hold, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 20\u2011meter_backward_sprint, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 60\u2011second_plank_with_alternating_arm_reach, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "30\u2011Second Wall Handstand. Kick up into a perfect handstand against a wall and hold it for a full 30 seconds without wobbling. 50\u2011Push\u2011Up Ladder (30\u201120\u201110). Complete 30 push\u2011ups, rest 15 seconds, then 20, rest 10 seconds, then finish with 10 straight\u2011arm push\u2011ups. 45\u2011Second Single\u2011Leg Squat Hold. Balance on one leg, lower into a deep pistol\u2011squat and stay there for 45 seconds without using the other foot for support. 20\u2011Meter Backward Sprint. Run 20 meters backward as fast as you can, staying low and keeping eyes forward. 60\u2011Second Plank With Alternating Arm Reach. Hold a plank while reaching one arm forward, alternating sides every 5 seconds, for a full minute.",
+      "tts_script": "99% of people fail this challenge. Can you? 30\u2011Second Wall Handstand. Kick up into a perfect handstand against a wall and hold it for a full 30 seconds without wobbling. 50\u2011Push\u2011Up Ladder (30\u201120\u201110). Complete 30 push\u2011ups, rest 15 seconds, then 20, rest 10 seconds, then finish with 10 straight\u2011arm push\u2011ups. 45\u2011Second Single\u2011Leg Squat Hold. Balance on one leg, lower into a deep pistol\u2011squat and stay there for 45 seconds without using the other foot for support. 20\u2011Meter Backward Sprint. Run 20 meters backward as fast as you can, staying low and keeping eyes forward. 60\u2011Second Plank With Alternating Arm Reach. Hold a plank while reaching one arm forward, alternating sides every 5 seconds, for a full minute."
+    },
+    {
+      "title": "Can You Do This? One\u2011Handed Wall Sit",
+      "hook": "This challenge separates the pros from the amateurs:",
+      "challenges": [
+        {
+          "title": "One\u2011Handed Wall Sit",
+          "description": "Push your legs against a wall in a squat, hold on with one hand extended for 45 seconds \u2013 it\u2019s a test of core lock\u2011in and unilateral balance.",
+          "result": "Most people wobble or let the chair touch the ground.",
+          "skill": "balance, endurance, willpower",
+          "difficulty": "medium"
+        },
+        {
+          "title": "10\u2011Second Handstand Jumps",
+          "description": "From a handstand, jump straight up and land back on your hands for 10 consecutive seconds \u2013 it\u2019s all about explosive upper\u2011body power and spotting.",
+          "result": "Many fall out of the handstand or lose momentum mid\u2011jump.",
+          "skill": "strength, speed, balance",
+          "difficulty": "hard"
+        },
+        {
+          "title": "30\u2011Second Squeeze\u2011Stance",
+          "description": "Sit on the floor, legs together, and squeeze your thighs with a tennis ball for 30 seconds \u2013 this forces the quadriceps to hold a constant contraction.",
+          "result": "The ball drops or the legs unintentionally lift.",
+          "skill": "endurance, willpower",
+          "difficulty": "easy"
+        },
+        {
+          "title": "20\u2011Step Obstacle Crawl",
+          "description": "Crawl under a low bar, over a cushion, and back under the bar 20 times; each crawl tests agility and core control in a cramped space.",
+          "result": "The majority of crawlers stumble or fail to keep their core engaged.",
+          "skill": "dexterity, endurance, balance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "15\u2011Second One\u2011Leg Jump Squat",
+          "description": "Perform a squat jump on one leg for 15 seconds straight \u2013 it\u2019s a brutal test of leg power, balance, and explosive timing.",
+          "result": "Most people take a step back or lose their balance before the time is up.",
+          "skill": "strength, speed, balance",
+          "difficulty": "hard"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, one\u2011handed_wall_sit, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 10\u2011second_handstand_jumps, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 30\u2011second_squeeze\u2011stance, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 20\u2011step_obstacle_crawl, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 15\u2011second_one\u2011leg_jump_squat, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "One\u2011Handed Wall Sit. Push your legs against a wall in a squat, hold on with one hand extended for 45 seconds \u2013 it\u2019s a test of core lock\u2011in and unilateral balance. 10\u2011Second Handstand Jumps. From a handstand, jump straight up and land back on your hands for 10 consecutive seconds \u2013 it\u2019s all about explosive upper\u2011body power and spotting. 30\u2011Second Squeeze\u2011Stance. Sit on the floor, legs together, and squeeze your thighs with a tennis ball for 30 seconds \u2013 this forces the quadriceps to hold a constant contraction. 20\u2011Step Obstacle Crawl. Crawl under a low bar, over a cushion, and back under the bar 20 times; each crawl tests agility and core control in a cramped space. 15\u2011Second One\u2011Leg Jump Squat. Perform a squat jump on one leg for 15 seconds straight \u2013 it\u2019s a brutal test of leg power, balance, and explosive timing.",
+      "tts_script": "This challenge separates the pros from the amateurs: One\u2011Handed Wall Sit. Push your legs against a wall in a squat, hold on with one hand extended for 45 seconds \u2013 it\u2019s a test of core lock\u2011in and unilateral balance. 10\u2011Second Handstand Jumps. From a handstand, jump straight up and land back on your hands for 10 consecutive seconds \u2013 it\u2019s all about explosive upper\u2011body power and spotting. 30\u2011Second Squeeze\u2011Stance. Sit on the floor, legs together, and squeeze your thighs with a tennis ball for 30 seconds \u2013 this forces the quadriceps to hold a constant contraction. 20\u2011Step Obstacle Crawl. Crawl under a low bar, over a cushion, and back under the bar 20 times; each crawl tests agility and core control in a cramped space. 15\u2011Second One\u2011Leg Jump Squat. Perform a squat jump on one leg for 15 seconds straight \u2013 it\u2019s a brutal test of leg power, balance, and explosive timing."
+    },
+    {
+      "title": "Can You Do This? 30\u2011Second Plank Push\u2011Up Combo",
+      "hook": "How far would YOU get? Be honest:",
+      "challenges": [
+        {
+          "title": "30\u2011Second Plank Push\u2011Up Combo",
+          "description": "Hold a solid plank while dropping into a push\u2011up every 5 seconds for a full 30 seconds\u2014core meets upper\u2011body endurance.",
+          "result": "Most people wobble or lose form, ending with a trembling core and a satisfied grin.",
+          "skill": "endurance",
+          "difficulty": "easy"
+        },
+        {
+          "title": "One\u2011Leg Wall Sit Sprint",
+          "description": "Plant one foot on the floor, lean back against a wall, and hold a 90\u2011degree sit while \u201crunning\u201d in place with the free leg for 20 seconds.",
+          "result": "Legs burn like fire, balance teeters, and you either finish the sprint or collapse into a wobble.",
+          "skill": "balance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "15\u2011Second Handstand Hold on a Sofa Cushion",
+          "description": "Kick up into a handstand on a soft couch cushion and stay upright for 15 seconds without falling off.",
+          "result": "Most attempts end in a gentle flop onto the cushion, but those who hold get a rush of upside\u2011down bragging rights.",
+          "skill": "strength",
+          "difficulty": "medium"
+        },
+        {
+          "title": "10\u2011Meter Backward Bear Crawl",
+          "description": "Crawl backward on hands and feet for a straight 10\u2011meter line without touching your knees to the ground.",
+          "result": "Coordination collapses, hips wobble, and you either complete the line with a goofy grin or tumble back to the start.",
+          "skill": "speed",
+          "difficulty": "hard"
+        },
+        {
+          "title": "60\u2011Second Breath\u2011Hold Freeze\u2011Tag",
+          "description": "Freeze in a squat, hold your breath for 60 seconds, and stay perfectly still\u2014any movement means you lose.",
+          "result": "Most people burst out gasping before the minute, while the few who make it feel like a superhero in a still\u2011frame.",
+          "skill": "willpower",
+          "difficulty": "hard"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, 30\u2011second_plank_push\u2011up_combo, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, one\u2011leg_wall_sit_sprint, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 15\u2011second_handstand_hold_on_a_sofa_cushion, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 10\u2011meter_backward_bear_crawl, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 60\u2011second_breath\u2011hold_freeze\u2011tag, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "30\u2011Second Plank Push\u2011Up Combo. Hold a solid plank while dropping into a push\u2011up every 5 seconds for a full 30 seconds\u2014core meets upper\u2011body endurance. One\u2011Leg Wall Sit Sprint. Plant one foot on the floor, lean back against a wall, and hold a 90\u2011degree sit while \u201crunning\u201d in place with the free leg for 20 seconds. 15\u2011Second Handstand Hold on a Sofa Cushion. Kick up into a handstand on a soft couch cushion and stay upright for 15 seconds without falling off. 10\u2011Meter Backward Bear Crawl. Crawl backward on hands and feet for a straight 10\u2011meter line without touching your knees to the ground. 60\u2011Second Breath\u2011Hold Freeze\u2011Tag. Freeze in a squat, hold your breath for 60 seconds, and stay perfectly still\u2014any movement means you lose.",
+      "tts_script": "How far would YOU get? Be honest: 30\u2011Second Plank Push\u2011Up Combo. Hold a solid plank while dropping into a push\u2011up every 5 seconds for a full 30 seconds\u2014core meets upper\u2011body endurance. One\u2011Leg Wall Sit Sprint. Plant one foot on the floor, lean back against a wall, and hold a 90\u2011degree sit while \u201crunning\u201d in place with the free leg for 20 seconds. 15\u2011Second Handstand Hold on a Sofa Cushion. Kick up into a handstand on a soft couch cushion and stay upright for 15 seconds without falling off. 10\u2011Meter Backward Bear Crawl. Crawl backward on hands and feet for a straight 10\u2011meter line without touching your knees to the ground. 60\u2011Second Breath\u2011Hold Freeze\u2011Tag. Freeze in a squat, hold your breath for 60 seconds, and stay perfectly still\u2014any movement means you lose."
+    },
+    {
+      "title": "Can You Do This? One\u2011Arm Wall Sit",
+      "hook": "Most people give up before the end. Prove us wrong:",
+      "challenges": [
+        {
+          "title": "One\u2011Arm Wall Sit",
+          "description": "Sit against a wall on one leg while balancing the other leg straight out, holding the position as long as possible\u2014testing core and balance in a single, awkward stance.",
+          "result": "Most people wobble and collapse before reaching 20 seconds, revealing how unstable the one\u2011leg wall sit really is.",
+          "skill": "balance, endurance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "60\u2011Second Handstand Push\u2011Ups",
+          "description": "Kick into a handstand and perform as many push\u2011ups as you can in 60 seconds\u2014combining upper\u2011body strength with perfect shoulder alignment.",
+          "result": "The average attempt ends in a flailing arms disaster or a quick tumble, because shoulder stability is surprisingly tough to maintain in the air.",
+          "skill": "strength, balance, willpower",
+          "difficulty": "hard"
+        },
+        {
+          "title": "30\u2011Second Tongue\u2011In\u2011Cheek Kick",
+          "description": "Stick your tongue out, place it on your cheek, and try to kick the ball of your tongue toward the other cheek\u2014testing both dexterity and tongue endurance.",
+          "result": "Most people end up laughing or with a tongue that can\u2019t quite reach the target, proving even simple tongue tricks are deceptively hard.",
+          "skill": "dexterity, willpower",
+          "difficulty": "easy"
+        },
+        {
+          "title": "5\u2011Minute Plank with Leg Lift",
+          "description": "Hold a standard plank while alternately lifting each leg 12 inches off the ground, maintaining a straight line\u2014this demands core endurance plus lower\u2011body strength.",
+          "result": "People usually lose core tension first, causing the plank to sag and the legs to wobble, highlighting how fragile \u201ccore\u201d really is.",
+          "skill": "endurance, balance, strength",
+          "difficulty": "medium"
+        },
+        {
+          "title": "10\u2011Jump Burpee Chain",
+          "description": "Perform a full burpee, jump as high as possible, then repeat the sequence 10 times in a row\u2014adding a high\u2011jump to the classic movement to amplify cardio and explosive power.",
+          "result": "The body usually cramps or the jump height drops dramatically, showing how quickly fatigue sabotages power.",
+          "skill": "speed, strength, endurance",
+          "difficulty": "hard"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, one\u2011arm_wall_sit, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 60\u2011second_handstand_push\u2011ups, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 30\u2011second_tongue\u2011in\u2011cheek_kick, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 5\u2011minute_plank_with_leg_lift, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 10\u2011jump_burpee_chain, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "One\u2011Arm Wall Sit. Sit against a wall on one leg while balancing the other leg straight out, holding the position as long as possible\u2014testing core and balance in a single, awkward stance. 60\u2011Second Handstand Push\u2011Ups. Kick into a handstand and perform as many push\u2011ups as you can in 60 seconds\u2014combining upper\u2011body strength with perfect shoulder alignment. 30\u2011Second Tongue\u2011In\u2011Cheek Kick. Stick your tongue out, place it on your cheek, and try to kick the ball of your tongue toward the other cheek\u2014testing both dexterity and tongue endurance. 5\u2011Minute Plank with Leg Lift. Hold a standard plank while alternately lifting each leg 12 inches off the ground, maintaining a straight line\u2014this demands core endurance plus lower\u2011body strength. 10\u2011Jump Burpee Chain. Perform a full burpee, jump as high as possible, then repeat the sequence 10 times in a row\u2014adding a high\u2011jump to the classic movement to amplify cardio and explosive power.",
+      "tts_script": "Most people give up before the end. Prove us wrong: One\u2011Arm Wall Sit. Sit against a wall on one leg while balancing the other leg straight out, holding the position as long as possible\u2014testing core and balance in a single, awkward stance. 60\u2011Second Handstand Push\u2011Ups. Kick into a handstand and perform as many push\u2011ups as you can in 60 seconds\u2014combining upper\u2011body strength with perfect shoulder alignment. 30\u2011Second Tongue\u2011In\u2011Cheek Kick. Stick your tongue out, place it on your cheek, and try to kick the ball of your tongue toward the other cheek\u2014testing both dexterity and tongue endurance. 5\u2011Minute Plank with Leg Lift. Hold a standard plank while alternately lifting each leg 12 inches off the ground, maintaining a straight line\u2014this demands core endurance plus lower\u2011body strength. 10\u2011Jump Burpee Chain. Perform a full burpee, jump as high as possible, then repeat the sequence 10 times in a row\u2014adding a high\u2011jump to the classic movement to amplify cardio and explosive power."
+    },
+    {
+      "title": "Can You Do This? 1\u2011Minute Wall Sit Hold",
+      "hook": "How far would YOU get? Be honest:",
+      "challenges": [
+        {
+          "title": "1\u2011Minute Wall Sit Hold",
+          "description": "Lean against a wall and squat until your thighs are parallel to the floor, holding the position for a full minute with no support.",
+          "result": "Most people start to sweat, their calves ache, and the urge to stand up becomes relentless.",
+          "skill": "Endurance",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "25\u2011Step Wall\u2011Climb",
+          "description": "Stand on a smooth wall and, using only your hands and feet, climb 25 steps in under 30 seconds without reaching for a handhold.",
+          "result": "The climber\u2019s arms burn, balance wavers, and sweat drips as the body fights gravity.",
+          "skill": "Strength",
+          "difficulty": "Hard"
+        },
+        {
+          "title": "One\u2011Hand Push\u2011Up Drop",
+          "description": "Perform a push\u2011up on one hand, then drop the other hand to the floor and push back up, completing 10 consecutive drop\u2011push\u2011ups.",
+          "result": "Upper\u2011body fatigue sets in quickly, shoulders tremble, and the rhythm of the descent becomes a test of control.",
+          "skill": "Balance/Dexterity",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "60\u2011Second No\u2011Parachute Jump Rope",
+          "description": "Skip rope for a full minute without ever landing on a footfall, only using a continuous rhythm.",
+          "result": "The faster the tempo, the quicker wrists burn, legs twitch, and the mind fights to keep the rhythm alive.",
+          "skill": "Speed",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "3\u2011Minute Handstand With One\u2011Eyed Hold",
+          "description": "Kick into a handstand, lock one eye closed, and hold for an uninterrupted three minutes while balancing on your hands.",
+          "result": "Core stabilizers fire, the body becomes oddly still, and the brain wrestles with the vision\u2011loss challenge.",
+          "skill": "Willpower",
+          "difficulty": "Hard"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, 1\u2011minute_wall_sit_hold, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 25\u2011step_wall\u2011climb, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, one\u2011hand_push\u2011up_drop, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 60\u2011second_no\u2011parachute_jump_rope, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 3\u2011minute_handstand_with_one\u2011eyed_hold, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "1\u2011Minute Wall Sit Hold. Lean against a wall and squat until your thighs are parallel to the floor, holding the position for a full minute with no support. 25\u2011Step Wall\u2011Climb. Stand on a smooth wall and, using only your hands and feet, climb 25 steps in under 30 seconds without reaching for a handhold. One\u2011Hand Push\u2011Up Drop. Perform a push\u2011up on one hand, then drop the other hand to the floor and push back up, completing 10 consecutive drop\u2011push\u2011ups. 60\u2011Second No\u2011Parachute Jump Rope. Skip rope for a full minute without ever landing on a footfall, only using a continuous rhythm. 3\u2011Minute Handstand With One\u2011Eyed Hold. Kick into a handstand, lock one eye closed, and hold for an uninterrupted three minutes while balancing on your hands.",
+      "tts_script": "How far would YOU get? Be honest: 1\u2011Minute Wall Sit Hold. Lean against a wall and squat until your thighs are parallel to the floor, holding the position for a full minute with no support. 25\u2011Step Wall\u2011Climb. Stand on a smooth wall and, using only your hands and feet, climb 25 steps in under 30 seconds without reaching for a handhold. One\u2011Hand Push\u2011Up Drop. Perform a push\u2011up on one hand, then drop the other hand to the floor and push back up, completing 10 consecutive drop\u2011push\u2011ups. 60\u2011Second No\u2011Parachute Jump Rope. Skip rope for a full minute without ever landing on a footfall, only using a continuous rhythm. 3\u2011Minute Handstand With One\u2011Eyed Hold. Kick into a handstand, lock one eye closed, and hold for an uninterrupted three minutes while balancing on your hands."
+    },
+    {
+      "title": "Can You Do This? 10-Second One-Leg Balance",
+      "hook": "This challenge looks easy. It's not:",
+      "challenges": [
+        {
+          "title": "10-Second One-Leg Balance",
+          "description": "Stand on one foot, arms outstretched, and hold the position for 10 seconds while another person counts loud and fast.",
+          "result": "Most people wobble and look like a statue, even though it feels simple.",
+          "skill": "balance",
+          "difficulty": "easy"
+        },
+        {
+          "title": "50 Push\u2011Ups in 30 Seconds",
+          "description": "Perform as many push\u2011ups as possible in 30 seconds, counting every rep, and try to hit 50 before your arms lock.",
+          "result": "The average person stalls at 20\u201125, gasping for air and dropping the pace.",
+          "skill": "endurance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "Whisper\u2011to\u2011Everyone on the Street",
+          "description": "Walk down a busy sidewalk and softly whisper a secret to each passerby for 60\u202fseconds; if someone says \u201cI heard you\u201d you lose.",
+          "result": "People startle, laugh, or politely ignore, making it hard to maintain the whisper rhythm.",
+          "skill": "dexterity (hands)",
+          "difficulty": "easy"
+        },
+        {
+          "title": "5\u2011Minute Wall Sit with a Twist",
+          "description": "Slide into a perfect wall sit and keep your thighs parallel to the floor for 300\u202fseconds while continuously rotating your torso 180\u00b0 every 30\u202fseconds.",
+          "result": "Legs burn, hips twist, and most give up well before 5\u202fminutes due to sheer fatigue.",
+          "skill": "endurance",
+          "difficulty": "hard"
+        },
+        {
+          "title": "Blink\u2011Right\u2011Away Marathon",
+          "description": "Blink your eyes as rapidly as you can for 90\u202fseconds while standing on a balance beam; each blink counts as a point.",
+          "result": "Eyes water, beam shakes, and the world feels like a spinning kitchen.",
+          "skill": "speed",
+          "difficulty": "medium"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, 10-second_one-leg_balance, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 50_push\u2011ups_in_30_seconds, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, whisper\u2011to\u2011everyone_on_the_street, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 5\u2011minute_wall_sit_with_a_twist, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, blink\u2011right\u2011away_marathon, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "10-Second One-Leg Balance. Stand on one foot, arms outstretched, and hold the position for 10 seconds while another person counts loud and fast. 50 Push\u2011Ups in 30 Seconds. Perform as many push\u2011ups as possible in 30 seconds, counting every rep, and try to hit 50 before your arms lock. Whisper\u2011to\u2011Everyone on the Street. Walk down a busy sidewalk and softly whisper a secret to each passerby for 60\u202fseconds; if someone says \u201cI heard you\u201d you lose. 5\u2011Minute Wall Sit with a Twist. Slide into a perfect wall sit and keep your thighs parallel to the floor for 300\u202fseconds while continuously rotating your torso 180\u00b0 every 30\u202fseconds. Blink\u2011Right\u2011Away Marathon. Blink your eyes as rapidly as you can for 90\u202fseconds while standing on a balance beam; each blink counts as a point.",
+      "tts_script": "This challenge looks easy. It's not: 10-Second One-Leg Balance. Stand on one foot, arms outstretched, and hold the position for 10 seconds while another person counts loud and fast. 50 Push\u2011Ups in 30 Seconds. Perform as many push\u2011ups as possible in 30 seconds, counting every rep, and try to hit 50 before your arms lock. Whisper\u2011to\u2011Everyone on the Street. Walk down a busy sidewalk and softly whisper a secret to each passerby for 60\u202fseconds; if someone says \u201cI heard you\u201d you lose. 5\u2011Minute Wall Sit with a Twist. Slide into a perfect wall sit and keep your thighs parallel to the floor for 300\u202fseconds while continuously rotating your torso 180\u00b0 every 30\u202fseconds. Blink\u2011Right\u2011Away Marathon. Blink your eyes as rapidly as you can for 90\u202fseconds while standing on a balance beam; each blink counts as a point."
+    },
+    {
+      "title": "Can You Do This? One\u2011Arm Wall Sit",
+      "hook": "99% of people fail this challenge. Can you?",
+      "challenges": [
+        {
+          "title": "One\u2011Arm Wall Sit",
+          "description": "Lean into the wall and hold a squat while balancing on one arm as if it were a handstand\u2014test your core and arm strength.",
+          "result": "Most people collapse within 15\u201320 seconds, arms shaking and knees wobbly.",
+          "skill": "Strength / Balance",
+          "difficulty": "Hard"
+        },
+        {
+          "title": "60\u2011Second Handstand Push\u2011Up",
+          "description": "Kick into a handstand, then lower and lift your body 30 times in a single minute\u2014shock your shoulders with rapid movement.",
+          "result": "Hands blister, shoulders ache, and after a few reps the descent slows dramatically.",
+          "skill": "Strength / Endurance",
+          "difficulty": "Hard"
+        },
+        {
+          "title": "10\u2011Second Crow Pose Burst",
+          "description": "Get into a crow pose (hands on floor, knees on elbows, feet off ground) and hold it while chanting \u201cI\u2019m a crow!\u201d\u2014balance in a tight spot.",
+          "result": "Most drop out after a heartbeat; balance collapses or knees pop.",
+          "skill": "Balance / Willpower",
+          "difficulty": "Medium"
+        },
+        {
+          "title": "30\u2011Second Frog Squat Hold",
+          "description": "Squat to a frog pose (hips wide, knees tucked), tuck your elbows in, and hold for 30 seconds\u2014lets your hips work hard.",
+          "result": "The hold typically fails as the knees lock and the hips start to roll.",
+          "skill": "Endurance / Flexibility",
+          "difficulty": "Easy"
+        },
+        {
+          "title": "12\u2011Jump High\u2011Knee Relay",
+          "description": "Sprint forward, perform 12 high\u2011knee jumps, and sprint back\u2014quick bursts to push your cardio limit.",
+          "result": "After the 12th jump, most people start stumbling or lose rhythm.",
+          "skill": "Speed / Endurance",
+          "difficulty": "Medium"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, one\u2011arm_wall_sit, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 60\u2011second_handstand_push\u2011up, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 10\u2011second_crow_pose_burst, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 30\u2011second_frog_squat_hold, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 12\u2011jump_high\u2011knee_relay, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "One\u2011Arm Wall Sit. Lean into the wall and hold a squat while balancing on one arm as if it were a handstand\u2014test your core and arm strength. 60\u2011Second Handstand Push\u2011Up. Kick into a handstand, then lower and lift your body 30 times in a single minute\u2014shock your shoulders with rapid movement. 10\u2011Second Crow Pose Burst. Get into a crow pose (hands on floor, knees on elbows, feet off ground) and hold it while chanting \u201cI\u2019m a crow!\u201d\u2014balance in a tight spot. 30\u2011Second Frog Squat Hold. Squat to a frog pose (hips wide, knees tucked), tuck your elbows in, and hold for 30 seconds\u2014lets your hips work hard. 12\u2011Jump High\u2011Knee Relay. Sprint forward, perform 12 high\u2011knee jumps, and sprint back\u2014quick bursts to push your cardio limit.",
+      "tts_script": "99% of people fail this challenge. Can you? One\u2011Arm Wall Sit. Lean into the wall and hold a squat while balancing on one arm as if it were a handstand\u2014test your core and arm strength. 60\u2011Second Handstand Push\u2011Up. Kick into a handstand, then lower and lift your body 30 times in a single minute\u2014shock your shoulders with rapid movement. 10\u2011Second Crow Pose Burst. Get into a crow pose (hands on floor, knees on elbows, feet off ground) and hold it while chanting \u201cI\u2019m a crow!\u201d\u2014balance in a tight spot. 30\u2011Second Frog Squat Hold. Squat to a frog pose (hips wide, knees tucked), tuck your elbows in, and hold for 30 seconds\u2014lets your hips work hard. 12\u2011Jump High\u2011Knee Relay. Sprint forward, perform 12 high\u2011knee jumps, and sprint back\u2014quick bursts to push your cardio limit."
+    },
+    {
+      "title": "Can You Do This? 10\u2011Step Wall Flip",
+      "hook": "99% of people fail this challenge. Can you?",
+      "challenges": [
+        {
+          "title": "10\u2011Step Wall Flip",
+          "description": "Stand at the edge of a 3\u2011ft wall, jump, and flip over it while landing on a balance beam.",
+          "result": "Most folks tumble, sprain ankles, or miss the beam entirely.",
+          "skill": "balance & dexterity",
+          "difficulty": "hard"
+        },
+        {
+          "title": "30\u2011Second Handstand Hold",
+          "description": "Do a full handstand on a public sidewalk for 30 seconds\u2014no walls, no support.",
+          "result": "Usually ends in a wobble, a fall, or a too\u2011short hold that\u2019s all the camera can capture.",
+          "skill": "balance & willpower",
+          "difficulty": "medium"
+        },
+        {
+          "title": "50\u2011Sit\u2011Up Relay",
+          "description": "Complete 50 consecutive sit\u2011ups in under 2 minutes, then sprint 100\u202fm; repeat 3 times.",
+          "result": "Breathing turns into a gasping, sweat\u2011sodden ritual, with most people collapsing before the final sprint.",
+          "skill": "endurance & speed",
+          "difficulty": "hard"
+        },
+        {
+          "title": "15\u2011Push\u2011Up\u2011On\u2011One\u2011Hand",
+          "description": "Perform 15 consecutive one\u2011hand push\u2011ups, alternating hands each rep, with a 5\u2011second pause at the bottom.",
+          "result": "The average person either drops the elbow or can\u2019t maintain the pause, turning the video into a slow\u2011mo scramble.",
+          "skill": "strength & willpower",
+          "difficulty": "medium"
+        },
+        {
+          "title": "5\u2011Minute Silent Squirrel Walk",
+          "description": "Walk from point A to point B in a crowded park while wearing a squirrel costume, staying completely silent for 5 minutes.",
+          "result": "The costume\u2019s weight causes accidental trips, while the crowd\u2019s noise makes silence nearly impossible.",
+          "skill": "balance & willpower",
+          "difficulty": "easy"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, 10\u2011step_wall_flip, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 30\u2011second_handstand_hold, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 50\u2011sit\u2011up_relay, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 15\u2011push\u2011up\u2011on\u2011one\u2011hand, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 5\u2011minute_silent_squirrel_walk, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "10\u2011Step Wall Flip. Stand at the edge of a 3\u2011ft wall, jump, and flip over it while landing on a balance beam. 30\u2011Second Handstand Hold. Do a full handstand on a public sidewalk for 30 seconds\u2014no walls, no support. 50\u2011Sit\u2011Up Relay. Complete 50 consecutive sit\u2011ups in under 2 minutes, then sprint 100\u202fm; repeat 3 times. 15\u2011Push\u2011Up\u2011On\u2011One\u2011Hand. Perform 15 consecutive one\u2011hand push\u2011ups, alternating hands each rep, with a 5\u2011second pause at the bottom. 5\u2011Minute Silent Squirrel Walk. Walk from point A to point B in a crowded park while wearing a squirrel costume, staying completely silent for 5 minutes.",
+      "tts_script": "99% of people fail this challenge. Can you? 10\u2011Step Wall Flip. Stand at the edge of a 3\u2011ft wall, jump, and flip over it while landing on a balance beam. 30\u2011Second Handstand Hold. Do a full handstand on a public sidewalk for 30 seconds\u2014no walls, no support. 50\u2011Sit\u2011Up Relay. Complete 50 consecutive sit\u2011ups in under 2 minutes, then sprint 100\u202fm; repeat 3 times. 15\u2011Push\u2011Up\u2011On\u2011One\u2011Hand. Perform 15 consecutive one\u2011hand push\u2011ups, alternating hands each rep, with a 5\u2011second pause at the bottom. 5\u2011Minute Silent Squirrel Walk. Walk from point A to point B in a crowded park while wearing a squirrel costume, staying completely silent for 5 minutes."
+    },
+    {
+      "title": "Can You Do This? 1\u2011Minute Wall Sit Blitz",
+      "hook": "Think you can do this? Watch till the end:",
+      "challenges": [
+        {
+          "title": "1\u2011Minute Wall Sit Blitz",
+          "description": "Slide into a perfect wall sit and hold for a full minute before your legs feel like jelly\u2014tougher than it sounds because your quads and core must stay locked without rest.",
+          "result": "Most people peel away after 30\u201145 seconds, leaving a burning sensation that can last hours.",
+          "skill": "endurance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "12\u2011Rep One\u2011Arm Push\u2011Up Drop",
+          "description": "Perform a one\u2011arm push\u2011up, drop the number of reps by one each round, and keep going until you can\u2019t do another\u2014an insane test of upper\u2011body strength and mental grit.",
+          "result": "The count usually collapses around 4\u20115 reps per arm, and the shoulders scream for mercy.",
+          "skill": "strength",
+          "difficulty": "hard"
+        },
+        {
+          "title": "30\u2011Second Handstand Hold on a Skateboard",
+          "description": "Kick into a handstand on a skateboard and balance for a full 30 seconds\u2014gravity, momentum, and the board\u2019s wobble combine to make this a real trick.",
+          "result": "Most folks wobble off the board within 10\u201115 seconds, ending up in a funny crash.",
+          "skill": "balance/dexterity",
+          "difficulty": "hard"
+        },
+        {
+          "title": "10\u2011Second One\u2011Foot Sprint on a Balance Beam",
+          "description": "Sprint for ten seconds across a narrow balance beam on one foot only\u2014speed meets coordination, and any misstep is a sure fall.",
+          "result": "Most people lose balance after 3\u20114 strides and tumble down the far edge.",
+          "skill": "balance/speed",
+          "difficulty": "medium"
+        },
+        {
+          "title": "90\u2011Second Sneeze\u2011Free Breath Holding",
+          "description": "Hold your breath for 90 seconds while attempting to sneeze\u2014you\u2019ll be tested on both lung capacity and the involuntary sneeze reflex.",
+          "result": "The sneeze usually erupts after 60\u201170 seconds, leaving you gasping for air and laughing.",
+          "skill": "willpower",
+          "difficulty": "easy"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, 1\u2011minute_wall_sit_blitz, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 12\u2011rep_one\u2011arm_push\u2011up_drop, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 30\u2011second_handstand_hold_on_a_skateboard, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 10\u2011second_one\u2011foot_sprint_on_a_balance_beam, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 90\u2011second_sneeze\u2011free_breath_holding, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "1\u2011Minute Wall Sit Blitz. Slide into a perfect wall sit and hold for a full minute before your legs feel like jelly\u2014tougher than it sounds because your quads and core must stay locked without rest. 12\u2011Rep One\u2011Arm Push\u2011Up Drop. Perform a one\u2011arm push\u2011up, drop the number of reps by one each round, and keep going until you can\u2019t do another\u2014an insane test of upper\u2011body strength and mental grit. 30\u2011Second Handstand Hold on a Skateboard. Kick into a handstand on a skateboard and balance for a full 30 seconds\u2014gravity, momentum, and the board\u2019s wobble combine to make this a real trick. 10\u2011Second One\u2011Foot Sprint on a Balance Beam. Sprint for ten seconds across a narrow balance beam on one foot only\u2014speed meets coordination, and any misstep is a sure fall. 90\u2011Second Sneeze\u2011Free Breath Holding. Hold your breath for 90 seconds while attempting to sneeze\u2014you\u2019ll be tested on both lung capacity and the involuntary sneeze reflex.",
+      "tts_script": "Think you can do this? Watch till the end: 1\u2011Minute Wall Sit Blitz. Slide into a perfect wall sit and hold for a full minute before your legs feel like jelly\u2014tougher than it sounds because your quads and core must stay locked without rest. 12\u2011Rep One\u2011Arm Push\u2011Up Drop. Perform a one\u2011arm push\u2011up, drop the number of reps by one each round, and keep going until you can\u2019t do another\u2014an insane test of upper\u2011body strength and mental grit. 30\u2011Second Handstand Hold on a Skateboard. Kick into a handstand on a skateboard and balance for a full 30 seconds\u2014gravity, momentum, and the board\u2019s wobble combine to make this a real trick. 10\u2011Second One\u2011Foot Sprint on a Balance Beam. Sprint for ten seconds across a narrow balance beam on one foot only\u2014speed meets coordination, and any misstep is a sure fall. 90\u2011Second Sneeze\u2011Free Breath Holding. Hold your breath for 90 seconds while attempting to sneeze\u2014you\u2019ll be tested on both lung capacity and the involuntary sneeze reflex."
+    },
+    {
+      "title": "Can You Do This? One\u2011Arm Wall Sit Slam",
+      "hook": "This challenge looks easy. It's not:",
+      "challenges": [
+        {
+          "title": "One\u2011Arm Wall Sit Slam",
+          "description": "Hold a wall sit on one arm for 45 seconds while slamming a medicine ball onto a target plate.",
+          "result": "Most people collapse before the ball hits the target.",
+          "skill": "Strength",
+          "difficulty": "hard"
+        },
+        {
+          "title": "10\u2011Second Handstand Hold",
+          "description": "Perform a strict handstand against a wall and hold for 10 seconds without touching the wall.",
+          "result": "Eyes get watery and elbows buckle for many.",
+          "skill": "Balance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "50\u2011Push\u2011Up Relentless",
+          "description": "Do 50 consecutive push\u2011ups with an 8\u2011second pause between each to test endurance.",
+          "result": "The last few reps become shaky, and form starts to break.",
+          "skill": "Endurance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "Color\u2011Coded Bounce Relay",
+          "description": "Jump on a trampoline and land on colored pads in exact order as shown, within 30 seconds.",
+          "result": "Legs wobble and the sequence often gets mixed up.",
+          "skill": "Dexterity",
+          "difficulty": "easy"
+        },
+        {
+          "title": "60\u2011Second Plank Wheel",
+          "description": "Hold a plank while spinning a 15\u2011lb wheel on a 3\u2011ft radius, maintaining position for 60 seconds.",
+          "result": "Core cramps and the wheel tips over if the grip fails.",
+          "skill": "Willpower",
+          "difficulty": "hard"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, one\u2011arm_wall_sit_slam, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 10\u2011second_handstand_hold, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 50\u2011push\u2011up_relentless, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, color\u2011coded_bounce_relay, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 60\u2011second_plank_wheel, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "One\u2011Arm Wall Sit Slam. Hold a wall sit on one arm for 45 seconds while slamming a medicine ball onto a target plate. 10\u2011Second Handstand Hold. Perform a strict handstand against a wall and hold for 10 seconds without touching the wall. 50\u2011Push\u2011Up Relentless. Do 50 consecutive push\u2011ups with an 8\u2011second pause between each to test endurance. Color\u2011Coded Bounce Relay. Jump on a trampoline and land on colored pads in exact order as shown, within 30 seconds. 60\u2011Second Plank Wheel. Hold a plank while spinning a 15\u2011lb wheel on a 3\u2011ft radius, maintaining position for 60 seconds.",
+      "tts_script": "This challenge looks easy. It's not: One\u2011Arm Wall Sit Slam. Hold a wall sit on one arm for 45 seconds while slamming a medicine ball onto a target plate. 10\u2011Second Handstand Hold. Perform a strict handstand against a wall and hold for 10 seconds without touching the wall. 50\u2011Push\u2011Up Relentless. Do 50 consecutive push\u2011ups with an 8\u2011second pause between each to test endurance. Color\u2011Coded Bounce Relay. Jump on a trampoline and land on colored pads in exact order as shown, within 30 seconds. 60\u2011Second Plank Wheel. Hold a plank while spinning a 15\u2011lb wheel on a 3\u2011ft radius, maintaining position for 60 seconds."
+    },
+    {
+      "title": "Can You Do This? Wall Sit With One\u2011Arm Push\u2011Ups",
+      "hook": "This challenge looks easy. It's not:",
+      "challenges": [
+        {
+          "title": "Wall Sit With One\u2011Arm Push\u2011Ups",
+          "description": "Squat against a wall, arms straight up, and perform a one\u2011arm push\u2011up on the floor beside you\u2014hand, foot, and core locked tight.",
+          "result": "Most people crack under the absurd combination of unilateral load and isometric hold.",
+          "skill": "strength, balance, willpower",
+          "difficulty": "hard"
+        },
+        {
+          "title": "60\u2011Second Handstand Wall Leap",
+          "description": "Start in a handstand against a wall, then jump forward in one explosive motion and land inside the wall\u2019s frame.",
+          "result": "Most end up sprawling out or wriggling out of the wall frame.",
+          "skill": "balance, speed, strength",
+          "difficulty": "medium"
+        },
+        {
+          "title": "30\u2011Second One\u2011Arm Bear Crawl Sprint",
+          "description": "Crawl forward on all fours using only one arm for propulsion, sprinting at full speed for 30 seconds.",
+          "result": "The crawl ends in a tumble or a hand\u2011to\u2011hand switch.",
+          "skill": "endurance, dexterity, willpower",
+          "difficulty": "medium"
+        },
+        {
+          "title": "10\u2011Reel Raccoon Jumps (Feet\u2011Only)",
+          "description": "Jump forward in a straight line using *only* your feet, landing on the heel of the next foot as you propel the other foot forward\u2014repeat 10 times.",
+          "result": "Feet slip, balance is lost, or the rhythm is broken.",
+          "skill": "balance, speed, coordination",
+          "difficulty": "easy"
+        },
+        {
+          "title": "45\u2011Second Planche Hold (Weighted)",
+          "description": "Hold a full planche position while wearing a weighted vest, keeping hips and shoulders level for 45 seconds.",
+          "result": "Most people sag into a tuck or bottom out before the time is up.",
+          "skill": "strength, willpower, balance",
+          "difficulty": "hard"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, wall_sit_with_one\u2011arm_push\u2011ups, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 60\u2011second_handstand_wall_leap, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 30\u2011second_one\u2011arm_bear_crawl_sprint, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 10\u2011reel_raccoon_jumps_(feet\u2011only), dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 45\u2011second_planche_hold_(weighted), dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "Wall Sit With One\u2011Arm Push\u2011Ups. Squat against a wall, arms straight up, and perform a one\u2011arm push\u2011up on the floor beside you\u2014hand, foot, and core locked tight. 60\u2011Second Handstand Wall Leap. Start in a handstand against a wall, then jump forward in one explosive motion and land inside the wall\u2019s frame. 30\u2011Second One\u2011Arm Bear Crawl Sprint. Crawl forward on all fours using only one arm for propulsion, sprinting at full speed for 30 seconds. 10\u2011Reel Raccoon Jumps (Feet\u2011Only). Jump forward in a straight line using *only* your feet, landing on the heel of the next foot as you propel the other foot forward\u2014repeat 10 times. 45\u2011Second Planche Hold (Weighted). Hold a full planche position while wearing a weighted vest, keeping hips and shoulders level for 45 seconds.",
+      "tts_script": "This challenge looks easy. It's not: Wall Sit With One\u2011Arm Push\u2011Ups. Squat against a wall, arms straight up, and perform a one\u2011arm push\u2011up on the floor beside you\u2014hand, foot, and core locked tight. 60\u2011Second Handstand Wall Leap. Start in a handstand against a wall, then jump forward in one explosive motion and land inside the wall\u2019s frame. 30\u2011Second One\u2011Arm Bear Crawl Sprint. Crawl forward on all fours using only one arm for propulsion, sprinting at full speed for 30 seconds. 10\u2011Reel Raccoon Jumps (Feet\u2011Only). Jump forward in a straight line using *only* your feet, landing on the heel of the next foot as you propel the other foot forward\u2014repeat 10 times. 45\u2011Second Planche Hold (Weighted). Hold a full planche position while wearing a weighted vest, keeping hips and shoulders level for 45 seconds."
+    },
+    {
+      "title": "Can You Do This? 30\u2011Second Wall\u2011Sit Freeze",
+      "hook": "This stunt requires serious skill. Ready?",
+      "challenges": [
+        {
+          "title": "30\u2011Second Wall\u2011Sit Freeze",
+          "description": "Slide down a wall until your thighs are parallel, then hold it for 30 seconds while keeping your back flat.",
+          "result": "Your legs burn, shaking starts, and you either survive the full time or collapse dramatically.",
+          "skill": "endurance",
+          "difficulty": "easy"
+        },
+        {
+          "title": "One\u2011Foot Balance Walk",
+          "description": "Walk a straight 10\u2011meter line on a narrow curb using only one foot, arms out for stability.",
+          "result": "Most wobble, dip, or fall off the line, but a few manage a smooth, swaggering stride.",
+          "skill": "balance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "20\u2011Push\u2011Up Hand\u2011Clap Challenge",
+          "description": "Perform 20 standard push\u2011ups, adding a quick hand\u2011clap at the top of each rep.",
+          "result": "Chest muscles quake, timing slips, and many end up with a missed clap or a shaky finish.",
+          "skill": "strength",
+          "difficulty": "medium"
+        },
+        {
+          "title": "60\u2011Second Jump\u2011Rope Double\u2011Unders",
+          "description": "Complete as many double\u2011unders (rope passes twice per jump) as possible in one minute.",
+          "result": "Breath shortens, rope tangles, and the count usually caps out between 30\u201145 reps for most people.",
+          "skill": "speed",
+          "difficulty": "hard"
+        },
+        {
+          "title": "15\u2011Second Freeze\u2011Frame Pose",
+          "description": "Assume a dramatic yoga pose (e.g., crow or forearm stand) and hold it perfectly still for 15 seconds while a friend films.",
+          "result": "Muscles tremble, the pose wobbles, and the video often ends with a comedic tumble or a flawless freeze.",
+          "skill": "willpower",
+          "difficulty": "hard"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, 30\u2011second_wall\u2011sit_freeze, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, one\u2011foot_balance_walk, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 20\u2011push\u2011up_hand\u2011clap_challenge, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 60\u2011second_jump\u2011rope_double\u2011unders, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 15\u2011second_freeze\u2011frame_pose, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "30\u2011Second Wall\u2011Sit Freeze. Slide down a wall until your thighs are parallel, then hold it for 30 seconds while keeping your back flat. One\u2011Foot Balance Walk. Walk a straight 10\u2011meter line on a narrow curb using only one foot, arms out for stability. 20\u2011Push\u2011Up Hand\u2011Clap Challenge. Perform 20 standard push\u2011ups, adding a quick hand\u2011clap at the top of each rep. 60\u2011Second Jump\u2011Rope Double\u2011Unders. Complete as many double\u2011unders (rope passes twice per jump) as possible in one minute. 15\u2011Second Freeze\u2011Frame Pose. Assume a dramatic yoga pose (e.g., crow or forearm stand) and hold it perfectly still for 15 seconds while a friend films.",
+      "tts_script": "This stunt requires serious skill. Ready? 30\u2011Second Wall\u2011Sit Freeze. Slide down a wall until your thighs are parallel, then hold it for 30 seconds while keeping your back flat. One\u2011Foot Balance Walk. Walk a straight 10\u2011meter line on a narrow curb using only one foot, arms out for stability. 20\u2011Push\u2011Up Hand\u2011Clap Challenge. Perform 20 standard push\u2011ups, adding a quick hand\u2011clap at the top of each rep. 60\u2011Second Jump\u2011Rope Double\u2011Unders. Complete as many double\u2011unders (rope passes twice per jump) as possible in one minute. 15\u2011Second Freeze\u2011Frame Pose. Assume a dramatic yoga pose (e.g., crow or forearm stand) and hold it perfectly still for 15 seconds while a friend films."
+    },
+    {
+      "title": "Can You Do This? The One\u2011Arm Squat Challenge",
+      "hook": "How far would YOU get? Be honest:",
+      "challenges": [
+        {
+          "title": "The One\u2011Arm Squat Challenge",
+          "description": "Drop into a full squat, hold it for 30 seconds using only one arm for balance \u2014 a test of core control and unilateral strength.",
+          "result": "Most people wobble, drop the squat early, or stumble into a spill.",
+          "skill": "balance / strength",
+          "difficulty": "medium"
+        },
+        {
+          "title": "Half\u2011Circle Handstand Hold",
+          "description": "Kick into a handstand and hold it for 15 seconds while maintaining a perfect half\u2011circle with your legs, pushing the limits of shoulder stability and brain\u2011body coordination.",
+          "result": "Arms shake, elbows bend, and the form collapses before the timer ends.",
+          "skill": "balance / strength",
+          "difficulty": "hard"
+        },
+        {
+          "title": "60\u2011Second Wall Sit Dash",
+          "description": "Slide down a wall into a deep squat and sprint 10 meters every 10 seconds while staying seated \u2014 endurance meets speed.",
+          "result": "The body starts to feel like a log; people usually break form before finishing the 60 seconds.",
+          "skill": "endurance / speed",
+          "difficulty": "medium"
+        },
+        {
+          "title": "5\u2011Minute Jump Rope Shadow",
+          "description": "Perform continuous single\u2011hand jump rope for five minutes, switching hands every minute, to test grip endurance and cardiovascular stamina.",
+          "result": "Hands sweat, wrists cramp, and many can\u2019t keep the rhythm past the third minute.",
+          "skill": "endurance / willpower",
+          "difficulty": "hard"
+        },
+        {
+          "title": "The 10\u2011Foot Balance Beam Walk",
+          "description": "Walk across a 10\u2011foot wide beam using a single 2\u2011inch block of cardboard under one foot, counting each step \u2014 a pure test of focus and agility.",
+          "result": "An accidental step off the beam happens within the first few strides for most dare\u2011devils.",
+          "skill": "balance / dexterity",
+          "difficulty": "easy"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, the_one\u2011arm_squat_challenge, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, half\u2011circle_handstand_hold, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 60\u2011second_wall_sit_dash, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 5\u2011minute_jump_rope_shadow, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, the_10\u2011foot_balance_beam_walk, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "The One\u2011Arm Squat Challenge. Drop into a full squat, hold it for 30 seconds using only one arm for balance \u2014 a test of core control and unilateral strength. Half\u2011Circle Handstand Hold. Kick into a handstand and hold it for 15 seconds while maintaining a perfect half\u2011circle with your legs, pushing the limits of shoulder stability and brain\u2011body coordination. 60\u2011Second Wall Sit Dash. Slide down a wall into a deep squat and sprint 10 meters every 10 seconds while staying seated \u2014 endurance meets speed. 5\u2011Minute Jump Rope Shadow. Perform continuous single\u2011hand jump rope for five minutes, switching hands every minute, to test grip endurance and cardiovascular stamina. The 10\u2011Foot Balance Beam Walk. Walk across a 10\u2011foot wide beam using a single 2\u2011inch block of cardboard under one foot, counting each step \u2014 a pure test of focus and agility.",
+      "tts_script": "How far would YOU get? Be honest: The One\u2011Arm Squat Challenge. Drop into a full squat, hold it for 30 seconds using only one arm for balance \u2014 a test of core control and unilateral strength. Half\u2011Circle Handstand Hold. Kick into a handstand and hold it for 15 seconds while maintaining a perfect half\u2011circle with your legs, pushing the limits of shoulder stability and brain\u2011body coordination. 60\u2011Second Wall Sit Dash. Slide down a wall into a deep squat and sprint 10 meters every 10 seconds while staying seated \u2014 endurance meets speed. 5\u2011Minute Jump Rope Shadow. Perform continuous single\u2011hand jump rope for five minutes, switching hands every minute, to test grip endurance and cardiovascular stamina. The 10\u2011Foot Balance Beam Walk. Walk across a 10\u2011foot wide beam using a single 2\u2011inch block of cardboard under one foot, counting each step \u2014 a pure test of focus and agility."
+    },
+    {
+      "title": "Can You Do This? One\u2011Arm Wall Sit",
+      "hook": "99% of people fail this challenge. Can you?",
+      "challenges": [
+        {
+          "title": "One\u2011Arm Wall Sit",
+          "description": "Lean against a wall, bend your knees, and hold a full wall sit using only one arm for balance\u2014no wobbling allowed.",
+          "result": "Most people collapse mid\u2011sits, their arm sags, and gravity wins the fight.",
+          "skill": "balance",
+          "difficulty": "hard"
+        },
+        {
+          "title": "Rapid\u2011Fire Jump Rope 60\u2011Second Combo",
+          "description": "Do a continuous 60\u2011second jump rope session mixing 30\u2011second double\u2011unders, 15\u2011second single jumps, and a 15\u2011second pause of curler\u2011style hops.",
+          "result": "Arms burn, breath hitches, and many end with a dramatic \u201cI\u2019m done\u201d mid\u2011combo.",
+          "skill": "endurance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "10\u2011Reel Handstand Push\u2011Up",
+          "description": "Drop into a handstand, perform a full push\u2011up, then land and immediately flip into the next one\u2014repeat ten times without a pause.",
+          "result": "The first few flips feel fluid, but form slumps, shoulders shake, and by the tenth one the arms wobble.",
+          "skill": "strength",
+          "difficulty": "hard"
+        },
+        {
+          "title": "5\u2011Minute Wall Flip\u2011Flap",
+          "description": "Hang from a sturdy wall frame, keep both feet off the ground, and continuously flip your body from side to side for 5 minutes straight.",
+          "result": "The motion becomes a frantic dance, muscles ache, and many give up before the 5\u2011minute mark.",
+          "skill": "endurance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "30\u2011Second Static L\u2011Sit",
+          "description": "Sit on the floor, lift both legs to a perfect L\u2011shape, and hold that position for a full 30 seconds\u2014no rocking, no shuffling.",
+          "result": "Legs tremble, core cramps, and most can\u2019t stay upright past 20 seconds.",
+          "skill": "willpower",
+          "difficulty": "easy"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, one\u2011arm_wall_sit, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, rapid\u2011fire_jump_rope_60\u2011second_combo, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 10\u2011reel_handstand_push\u2011up, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 5\u2011minute_wall_flip\u2011flap, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 30\u2011second_static_l\u2011sit, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "One\u2011Arm Wall Sit. Lean against a wall, bend your knees, and hold a full wall sit using only one arm for balance\u2014no wobbling allowed. Rapid\u2011Fire Jump Rope 60\u2011Second Combo. Do a continuous 60\u2011second jump rope session mixing 30\u2011second double\u2011unders, 15\u2011second single jumps, and a 15\u2011second pause of curler\u2011style hops. 10\u2011Reel Handstand Push\u2011Up. Drop into a handstand, perform a full push\u2011up, then land and immediately flip into the next one\u2014repeat ten times without a pause. 5\u2011Minute Wall Flip\u2011Flap. Hang from a sturdy wall frame, keep both feet off the ground, and continuously flip your body from side to side for 5 minutes straight. 30\u2011Second Static L\u2011Sit. Sit on the floor, lift both legs to a perfect L\u2011shape, and hold that position for a full 30 seconds\u2014no rocking, no shuffling.",
+      "tts_script": "99% of people fail this challenge. Can you? One\u2011Arm Wall Sit. Lean against a wall, bend your knees, and hold a full wall sit using only one arm for balance\u2014no wobbling allowed. Rapid\u2011Fire Jump Rope 60\u2011Second Combo. Do a continuous 60\u2011second jump rope session mixing 30\u2011second double\u2011unders, 15\u2011second single jumps, and a 15\u2011second pause of curler\u2011style hops. 10\u2011Reel Handstand Push\u2011Up. Drop into a handstand, perform a full push\u2011up, then land and immediately flip into the next one\u2014repeat ten times without a pause. 5\u2011Minute Wall Flip\u2011Flap. Hang from a sturdy wall frame, keep both feet off the ground, and continuously flip your body from side to side for 5 minutes straight. 30\u2011Second Static L\u2011Sit. Sit on the floor, lift both legs to a perfect L\u2011shape, and hold that position for a full 30 seconds\u2014no rocking, no shuffling."
+    },
+    {
+      "title": "Can You Do This? 10\u2011Minute Wall Sit Marathon",
+      "hook": "This stunt requires serious skill. Ready?",
+      "challenges": [
+        {
+          "title": "10\u2011Minute Wall Sit Marathon",
+          "description": "Slide down a wall into a perfect squat and hold for a full 10 minutes\u2014watch your legs burn and your mental focus fray.",
+          "result": "Most people wobble, tap the floor, or surrender halfway through, tearing a dramatic video montage of sweat and sighs.",
+          "skill": "endurance",
+          "difficulty": "hard"
+        },
+        {
+          "title": "One\u2011Arm Push\u2011Up Plank Drop",
+          "description": "Start in a plank, lift one arm off the ground, perform a push\u2011up, then drop back into a standard plank\u2014repeat for 20 reps to test core lock.",
+          "result": "Bodies shift, shoulders shake, and the drop often turns into a frantic scramble to maintain balance.",
+          "skill": "strength, balance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "15\u2011Second Handstand Karaoke",
+          "description": "Hold a handstand for 15 seconds while singing your favorite 90s hit\u2014tone control meets gravity, a perfect test of composure.",
+          "result": "Most participants wobble, lose pitch, and have to kiss the floor for a comedic finale.",
+          "skill": "balance, willpower",
+          "difficulty": "medium"
+        },
+        {
+          "title": "50\u2011Plyometric Jump Squats",
+          "description": "Perform 50 consecutive jump squats with maximum height each\u2014push your joints and lungs to the limit.",
+          "result": "Breathlessness, knee clunking, and a dramatic collapse at the end that\u2019s oddly satisfying.",
+          "skill": "endurance, speed",
+          "difficulty": "hard"
+        },
+        {
+          "title": "30\u2011Second Tandem Obstacle Crawl",
+          "description": "Crawl beneath a low bar while holding a partner\u2019s waist, keeping perfect sync for 30 seconds\u2014timing and coordination are key.",
+          "result": "Eyes meet, bodies twist, and usually the second person accidentally bumps into the bar, creating a hilarious chain reaction.",
+          "skill": "dexterity, balance",
+          "difficulty": "easy"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, 10\u2011minute_wall_sit_marathon, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, one\u2011arm_push\u2011up_plank_drop, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 15\u2011second_handstand_karaoke, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 50\u2011plyometric_jump_squats, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 30\u2011second_tandem_obstacle_crawl, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "10\u2011Minute Wall Sit Marathon. Slide down a wall into a perfect squat and hold for a full 10 minutes\u2014watch your legs burn and your mental focus fray. One\u2011Arm Push\u2011Up Plank Drop. Start in a plank, lift one arm off the ground, perform a push\u2011up, then drop back into a standard plank\u2014repeat for 20 reps to test core lock. 15\u2011Second Handstand Karaoke. Hold a handstand for 15 seconds while singing your favorite 90s hit\u2014tone control meets gravity, a perfect test of composure. 50\u2011Plyometric Jump Squats. Perform 50 consecutive jump squats with maximum height each\u2014push your joints and lungs to the limit. 30\u2011Second Tandem Obstacle Crawl. Crawl beneath a low bar while holding a partner\u2019s waist, keeping perfect sync for 30 seconds\u2014timing and coordination are key.",
+      "tts_script": "This stunt requires serious skill. Ready? 10\u2011Minute Wall Sit Marathon. Slide down a wall into a perfect squat and hold for a full 10 minutes\u2014watch your legs burn and your mental focus fray. One\u2011Arm Push\u2011Up Plank Drop. Start in a plank, lift one arm off the ground, perform a push\u2011up, then drop back into a standard plank\u2014repeat for 20 reps to test core lock. 15\u2011Second Handstand Karaoke. Hold a handstand for 15 seconds while singing your favorite 90s hit\u2014tone control meets gravity, a perfect test of composure. 50\u2011Plyometric Jump Squats. Perform 50 consecutive jump squats with maximum height each\u2014push your joints and lungs to the limit. 30\u2011Second Tandem Obstacle Crawl. Crawl beneath a low bar while holding a partner\u2019s waist, keeping perfect sync for 30 seconds\u2014timing and coordination are key."
+    },
+    {
+      "title": "Can You Do This? 10\u2011Knee Split Sprint",
+      "hook": "How far would YOU get? Be honest:",
+      "challenges": [
+        {
+          "title": "10\u2011Knee Split Sprint",
+          "description": "Sprint 10 meters, split into 5\u2011meter bursts with a single knee\u2011high jump at each break\u2014test your explosive leg power and rhythm!",
+          "result": "Most folks end up stumbling or losing the split, and the knees kick up much faster than anticipated.",
+          "skill": "strength/ speed",
+          "difficulty": "medium"
+        },
+        {
+          "title": "Human Flag Hold",
+          "description": "Hang from a sturdy pole using only arms, keeping your body as flat as a flag\u2014showcase upper\u2011body lock\u2011down and core control.",
+          "result": "Arms burn, wrists ache, and many crack the flag mid\u2011hold or slip.",
+          "skill": "balance/strength/willpower",
+          "difficulty": "hard"
+        },
+        {
+          "title": "60\u2011Second Handstand Nose Dive",
+          "description": "Perform a handstand, then dive through a curved ring of floating foam blocks for 60 seconds\u2014combine endurance with fearless acrobatics.",
+          "result": "Stamina falters, the handstand collapses, and the foam often splashes water.",
+          "skill": "balance/dexterity/endurance",
+          "difficulty": "hard"
+        },
+        {
+          "title": "30\u2011Second One\u2011Arm Push\u2011Up",
+          "description": "Complete as many one\u2011arm push\u2011ups as possible in 30 seconds\u2014tests unilateral strength and explosive coordination.",
+          "result": "Most people swap arms mid\u2011count or drop to knees, and the arm that\u2019s pushing really feels the burn.",
+          "skill": "strength/ balance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "20\u2011Second Wall Sit & Snap",
+          "description": "Perform a classic wall sit for 20 seconds, then jump into a figure\u2011eight hop with a snap of the fingers\u2014blend core endurance and explosive timing.",
+          "result": "Legs go numb quickly, and the jump often lands misaligned, causing a minor tumble.",
+          "skill": "endurance/speed",
+          "difficulty": "easy"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, 10\u2011knee_split_sprint, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, human_flag_hold, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 60\u2011second_handstand_nose_dive, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 30\u2011second_one\u2011arm_push\u2011up, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 20\u2011second_wall_sit_&_snap, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "10\u2011Knee Split Sprint. Sprint 10 meters, split into 5\u2011meter bursts with a single knee\u2011high jump at each break\u2014test your explosive leg power and rhythm! Human Flag Hold. Hang from a sturdy pole using only arms, keeping your body as flat as a flag\u2014showcase upper\u2011body lock\u2011down and core control. 60\u2011Second Handstand Nose Dive. Perform a handstand, then dive through a curved ring of floating foam blocks for 60 seconds\u2014combine endurance with fearless acrobatics. 30\u2011Second One\u2011Arm Push\u2011Up. Complete as many one\u2011arm push\u2011ups as possible in 30 seconds\u2014tests unilateral strength and explosive coordination. 20\u2011Second Wall Sit & Snap. Perform a classic wall sit for 20 seconds, then jump into a figure\u2011eight hop with a snap of the fingers\u2014blend core endurance and explosive timing.",
+      "tts_script": "How far would YOU get? Be honest: 10\u2011Knee Split Sprint. Sprint 10 meters, split into 5\u2011meter bursts with a single knee\u2011high jump at each break\u2014test your explosive leg power and rhythm! Human Flag Hold. Hang from a sturdy pole using only arms, keeping your body as flat as a flag\u2014showcase upper\u2011body lock\u2011down and core control. 60\u2011Second Handstand Nose Dive. Perform a handstand, then dive through a curved ring of floating foam blocks for 60 seconds\u2014combine endurance with fearless acrobatics. 30\u2011Second One\u2011Arm Push\u2011Up. Complete as many one\u2011arm push\u2011ups as possible in 30 seconds\u2014tests unilateral strength and explosive coordination. 20\u2011Second Wall Sit & Snap. Perform a classic wall sit for 20 seconds, then jump into a figure\u2011eight hop with a snap of the fingers\u2014blend core endurance and explosive timing."
+    },
+    {
+      "title": "Can You Do This? 30\u2011Second Freeze\u2011Frame",
+      "hook": "This challenge looks easy. It's not:",
+      "challenges": [
+        {
+          "title": "30\u2011Second Freeze\u2011Frame",
+          "description": "Stand perfectly still for 30 seconds while a friend films you, resisting any urge to sway or smile.",
+          "result": "Most people wobble, twitch, or burst into laughter before the timer ends.",
+          "skill": "willpower",
+          "difficulty": "easy"
+        },
+        {
+          "title": "One\u2011Legged Wall Sit Marathon",
+          "description": "Drop into a wall sit with one leg lifted off the ground and hold it for as long as possible, aiming for at least 45 seconds.",
+          "result": "Your thigh burns, balance falters, and the lifted leg inevitably drops.",
+          "skill": "endurance / balance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "10\u2011Second Handstand Push\u2011Up",
+          "description": "Kick up into a handstand against a wall and press yourself up and down for a solid 10 seconds without touching the floor.",
+          "result": "Most attempts end with a wobbly shake\u2011out or a quick tap\u2011down.",
+          "skill": "strength / balance",
+          "difficulty": "hard"
+        },
+        {
+          "title": "20\u2011Meter Backward Sprint",
+          "description": "Run 20 meters backward as fast as you can without tripping or looking over your shoulder.",
+          "result": "Players usually stumble, over\u2011rotate, or waste precious seconds turning around.",
+          "skill": "speed / coordination",
+          "difficulty": "easy"
+        },
+        {
+          "title": "60\u2011Second Plank\u2011to\u2011Push\u2011Up Ladder",
+          "description": "Start in a forearm plank, then transition to a full push\u2011up, back to plank, and repeat nonstop for a full minute.",
+          "result": "Core fatigue sets in fast, causing hips to sag or elbows to lock out early.",
+          "skill": "endurance / strength",
+          "difficulty": "medium"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, 30\u2011second_freeze\u2011frame, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, one\u2011legged_wall_sit_marathon, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 10\u2011second_handstand_push\u2011up, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 20\u2011meter_backward_sprint, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 60\u2011second_plank\u2011to\u2011push\u2011up_ladder, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "30\u2011Second Freeze\u2011Frame. Stand perfectly still for 30 seconds while a friend films you, resisting any urge to sway or smile. One\u2011Legged Wall Sit Marathon. Drop into a wall sit with one leg lifted off the ground and hold it for as long as possible, aiming for at least 45 seconds. 10\u2011Second Handstand Push\u2011Up. Kick up into a handstand against a wall and press yourself up and down for a solid 10 seconds without touching the floor. 20\u2011Meter Backward Sprint. Run 20 meters backward as fast as you can without tripping or looking over your shoulder. 60\u2011Second Plank\u2011to\u2011Push\u2011Up Ladder. Start in a forearm plank, then transition to a full push\u2011up, back to plank, and repeat nonstop for a full minute.",
+      "tts_script": "This challenge looks easy. It's not: 30\u2011Second Freeze\u2011Frame. Stand perfectly still for 30 seconds while a friend films you, resisting any urge to sway or smile. One\u2011Legged Wall Sit Marathon. Drop into a wall sit with one leg lifted off the ground and hold it for as long as possible, aiming for at least 45 seconds. 10\u2011Second Handstand Push\u2011Up. Kick up into a handstand against a wall and press yourself up and down for a solid 10 seconds without touching the floor. 20\u2011Meter Backward Sprint. Run 20 meters backward as fast as you can without tripping or looking over your shoulder. 60\u2011Second Plank\u2011to\u2011Push\u2011Up Ladder. Start in a forearm plank, then transition to a full push\u2011up, back to plank, and repeat nonstop for a full minute."
+    },
+    {
+      "title": "Can You Do This? One\u2011Arm Wall Sit",
+      "hook": "This challenge looks easy. It's not:",
+      "challenges": [
+        {
+          "title": "One\u2011Arm Wall Sit",
+          "description": "Sit in a full wall\u2011squat holding your body up on one arm for 45 seconds\u2014feel the burn in your core and shoulders!",
+          "result": "Most people collapse after 20\u201325 seconds; those who succeed feel a serious leg\u2011and\u2011back endurance test.",
+          "skill": "endurance",
+          "difficulty": "hard"
+        },
+        {
+          "title": "10\u2011Second Handstand Flip",
+          "description": "Kick into a handstand, then flip your body 180\u00b0 back to standing in just ten seconds\u2014high\u2011speed coordination required.",
+          "result": "Many fail to re\u2011orient in time and end up face\u2011planting; successful attempts are thrilling and Instagram\u2011worthy.",
+          "skill": "balance/dexterity",
+          "difficulty": "hard"
+        },
+        {
+          "title": "60\u2011Second Plank Jacks",
+          "description": "Hold a plank while explosively jumping your feet in and out for a full minute\u2014push your core's stamina to the limit.",
+          "result": "Usually the knees buckle after 30\u201340 seconds; those who finish feel a deep core burn.",
+          "skill": "endurance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "Triple Jump Triple Throw",
+          "description": "Perform three consecutive standing long jumps, immediately landing each into a 3\u2011meter cone toss\u2014combine distance, timing, and accuracy.",
+          "result": "Most people overshoot or mis\u2011timed, landing awkwardly; a good execution looks like a celebratory athletic stunt.",
+          "skill": "speed/dexterity",
+          "difficulty": "medium"
+        },
+        {
+          "title": "30\u2011Second One\u2011Leg Touch",
+          "description": "Balance on one leg while touching the ground behind you with the free foot for 30 seconds\u2014test your proprioception and core focus.",
+          "result": "People often wobble and lose balance within 10\u201315 seconds; the few who hold it showcase impressive stability.",
+          "skill": "balance",
+          "difficulty": "easy"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, one\u2011arm_wall_sit, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 10\u2011second_handstand_flip, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 60\u2011second_plank_jacks, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, triple_jump_triple_throw, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 30\u2011second_one\u2011leg_touch, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "One\u2011Arm Wall Sit. Sit in a full wall\u2011squat holding your body up on one arm for 45 seconds\u2014feel the burn in your core and shoulders! 10\u2011Second Handstand Flip. Kick into a handstand, then flip your body 180\u00b0 back to standing in just ten seconds\u2014high\u2011speed coordination required. 60\u2011Second Plank Jacks. Hold a plank while explosively jumping your feet in and out for a full minute\u2014push your core's stamina to the limit. Triple Jump Triple Throw. Perform three consecutive standing long jumps, immediately landing each into a 3\u2011meter cone toss\u2014combine distance, timing, and accuracy. 30\u2011Second One\u2011Leg Touch. Balance on one leg while touching the ground behind you with the free foot for 30 seconds\u2014test your proprioception and core focus.",
+      "tts_script": "This challenge looks easy. It's not: One\u2011Arm Wall Sit. Sit in a full wall\u2011squat holding your body up on one arm for 45 seconds\u2014feel the burn in your core and shoulders! 10\u2011Second Handstand Flip. Kick into a handstand, then flip your body 180\u00b0 back to standing in just ten seconds\u2014high\u2011speed coordination required. 60\u2011Second Plank Jacks. Hold a plank while explosively jumping your feet in and out for a full minute\u2014push your core's stamina to the limit. Triple Jump Triple Throw. Perform three consecutive standing long jumps, immediately landing each into a 3\u2011meter cone toss\u2014combine distance, timing, and accuracy. 30\u2011Second One\u2011Leg Touch. Balance on one leg while touching the ground behind you with the free foot for 30 seconds\u2014test your proprioception and core focus."
+    },
+    {
+      "title": "Can You Do This? 5\u2011Minute Wall Sit Relay",
+      "hook": "This stunt requires serious skill. Ready?",
+      "challenges": [
+        {
+          "title": "5\u2011Minute Wall Sit Relay",
+          "description": "Stack 5 people in a line, each doing a 5\u2011minute wall sit while passing a basketball to the next; the last person must keep the ball in motion the entire time.",
+          "result": "Most teams collapse before the final 2 minutes, with sweaty knees and shaking thumbs.",
+          "skill": "endurance",
+          "difficulty": "hard"
+        },
+        {
+          "title": "One\u2011Arm Push\u2011Up Parachute",
+          "description": "Perform a one\u2011arm push\u2011up while wearing a parachute\u2011sized blanket that pulls on your arm, forcing you to balance perfectly.",
+          "result": "Usually turns into a frantic flail, landing face\u2011first on the mat.",
+          "skill": "strength, balance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "60\u2011Second Water Balloon Toss",
+          "description": "Toss a water balloon back and forth with a partner for 60 seconds without letting it hit the ground\u2014each hit drenches both contestants.",
+          "result": "The balloons burst, leaving a soggy mess and everyone laughing hysterically.",
+          "skill": "dexterity",
+          "difficulty": "easy"
+        },
+        {
+          "title": "100\u2011Step Chair Ladder",
+          "description": "From a single low chair, climb up and down 100 steps using only the chair legs, no other support allowed.",
+          "result": "Leg cramps kick in by step 70, often leading to a dramatic mid\u2011run pause.",
+          "skill": "strength, endurance",
+          "difficulty": "hard"
+        },
+        {
+          "title": "Silent Dance Freeze",
+          "description": "Dance to a 30\u2011second beat while holding a yoga pose, then freeze for an additional 30 seconds\u2014no movement at all.",
+          "result": "The freeze becomes a masterful stillness until the timer pops, and then everyone bursts into giggles.",
+          "skill": "willpower",
+          "difficulty": "medium"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, 5\u2011minute_wall_sit_relay, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, one\u2011arm_push\u2011up_parachute, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 60\u2011second_water_balloon_toss, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 100\u2011step_chair_ladder, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, silent_dance_freeze, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "5\u2011Minute Wall Sit Relay. Stack 5 people in a line, each doing a 5\u2011minute wall sit while passing a basketball to the next; the last person must keep the ball in motion the entire time. One\u2011Arm Push\u2011Up Parachute. Perform a one\u2011arm push\u2011up while wearing a parachute\u2011sized blanket that pulls on your arm, forcing you to balance perfectly. 60\u2011Second Water Balloon Toss. Toss a water balloon back and forth with a partner for 60 seconds without letting it hit the ground\u2014each hit drenches both contestants. 100\u2011Step Chair Ladder. From a single low chair, climb up and down 100 steps using only the chair legs, no other support allowed. Silent Dance Freeze. Dance to a 30\u2011second beat while holding a yoga pose, then freeze for an additional 30 seconds\u2014no movement at all.",
+      "tts_script": "This stunt requires serious skill. Ready? 5\u2011Minute Wall Sit Relay. Stack 5 people in a line, each doing a 5\u2011minute wall sit while passing a basketball to the next; the last person must keep the ball in motion the entire time. One\u2011Arm Push\u2011Up Parachute. Perform a one\u2011arm push\u2011up while wearing a parachute\u2011sized blanket that pulls on your arm, forcing you to balance perfectly. 60\u2011Second Water Balloon Toss. Toss a water balloon back and forth with a partner for 60 seconds without letting it hit the ground\u2014each hit drenches both contestants. 100\u2011Step Chair Ladder. From a single low chair, climb up and down 100 steps using only the chair legs, no other support allowed. Silent Dance Freeze. Dance to a 30\u2011second beat while holding a yoga pose, then freeze for an additional 30 seconds\u2014no movement at all."
+    },
+    {
+      "title": "Can You Do This? 30\u2011Second Wall Sit Showdown",
+      "hook": "This stunt requires serious skill. Ready?",
+      "challenges": [
+        {
+          "title": "30\u2011Second Wall Sit Showdown",
+          "description": "Slide down a wall until your thighs are parallel to the floor and hold for 30 seconds\u2014feel the burn in every leg!",
+          "result": "Most people wobble or collapse before the timer ends, but those who nail it earn bragging rights (and sore quads).",
+          "skill": "endurance",
+          "difficulty": "easy"
+        },
+        {
+          "title": "One\u2011Leg Balance on a Rolling Chair",
+          "description": "Sit on a swivel office chair, lift one foot off the ground, and keep the chair from tipping for 20 seconds while scrolling your phone.",
+          "result": "The chair wobbles, you either master the core\u2011stability or take a gentle tumble onto a carpet.",
+          "skill": "balance",
+          "difficulty": "medium"
+        },
+        {
+          "title": "10\u2011Push\u2011Up Hand\u2011Clap Challenge",
+          "description": "Perform a standard push\u2011up, then explosively clap your hands before landing for a total of 10 reps.",
+          "result": "Your chest pumps, heart races, and many folks end up with shaky arms or a broken rhythm.",
+          "skill": "strength",
+          "difficulty": "medium"
+        },
+        {
+          "title": "60\u2011Second Fast\u2011Foot Ladder Sprint",
+          "description": "Set up a mini agility ladder (or tape strips) and sprint through it as fast as you can for a full minute, touching each rung with both feet.",
+          "result": "Speed spikes, coordination falters, and most people miss a few steps before the clock runs out.",
+          "skill": "speed",
+          "difficulty": "hard"
+        },
+        {
+          "title": "45\u2011Second Breath\u2011Hold Plank",
+          "description": "Get into a forearm plank, then hold your breath and stay still for 45 seconds\u2014no breathing, no dropping.",
+          "result": "The core screams, lungs burn, and many collapse into a shaky rest, but the ones who survive feel unstoppable.",
+          "skill": "willpower",
+          "difficulty": "hard"
+        }
+      ],
+      "image_prompts": [
+        "cinematic action shot, 30\u2011second_wall_sit_showdown, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, one\u2011leg_balance_on_a_rolling_chair, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 10\u2011push\u2011up_hand\u2011clap_challenge, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 60\u2011second_fast\u2011foot_ladder_sprint, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline",
+        "cinematic action shot, 45\u2011second_breath\u2011hold_plank, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+      ],
+      "script": "30\u2011Second Wall Sit Showdown. Slide down a wall until your thighs are parallel to the floor and hold for 30 seconds\u2014feel the burn in every leg! One\u2011Leg Balance on a Rolling Chair. Sit on a swivel office chair, lift one foot off the ground, and keep the chair from tipping for 20 seconds while scrolling your phone. 10\u2011Push\u2011Up Hand\u2011Clap Challenge. Perform a standard push\u2011up, then explosively clap your hands before landing for a total of 10 reps. 60\u2011Second Fast\u2011Foot Ladder Sprint. Set up a mini agility ladder (or tape strips) and sprint through it as fast as you can for a full minute, touching each rung with both feet. 45\u2011Second Breath\u2011Hold Plank. Get into a forearm plank, then hold your breath and stay still for 45 seconds\u2014no breathing, no dropping.",
+      "tts_script": "This stunt requires serious skill. Ready? 30\u2011Second Wall Sit Showdown. Slide down a wall until your thighs are parallel to the floor and hold for 30 seconds\u2014feel the burn in every leg! One\u2011Leg Balance on a Rolling Chair. Sit on a swivel office chair, lift one foot off the ground, and keep the chair from tipping for 20 seconds while scrolling your phone. 10\u2011Push\u2011Up Hand\u2011Clap Challenge. Perform a standard push\u2011up, then explosively clap your hands before landing for a total of 10 reps. 60\u2011Second Fast\u2011Foot Ladder Sprint. Set up a mini agility ladder (or tape strips) and sprint through it as fast as you can for a full minute, touching each rung with both feet. 45\u2011Second Breath\u2011Hold Plank. Get into a forearm plank, then hold your breath and stay still for 45 seconds\u2014no breathing, no dropping."
+    }
+  ],
+  "used": [],
+  "min_before_refill": 5,
+  "refill_target": 40
+}
