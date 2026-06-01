@@ -1,27 +1,6 @@
 {
   "entries": [
     {
-      "title": "Investigators are still baffled: The Zodiac Killer",
-      "hook": "Investigators are still baffled:",
-      "mysteries": [
-        "The Zodiac Killer",
-        "The Boy in the Box",
-        "The Somerton Man"
-      ],
-      "stories": [
-        "Between 1968 and 1974 the Zodiac killer murdered at least 5 people in Northern California. He taunted police with cryptic ciphers some never solved. His identity is still unknown.",
-        "In 1957 a young boy's body was found in a cardboard box in Philadelphia. He was clean and neatly dressed. Despite decades of investigation his identity and killer remain unknown.",
-        "In 1948 a well-dressed man was found dead on an Australian beach with no ID. All clothing tags were removed. Despite DNA testing in 2021 his identity is still debated."
-      ],
-      "image_prompts": [
-        "dark mysterious cinematic photograph, The Zodiac Killer, vintage crime scene style, dramatic shadows, film grain, 9:16 vertical, haunting atmosphere, noir aesthetic",
-        "dark mysterious cinematic photograph, The Boy in the Box, vintage crime scene style, dramatic shadows, film grain, 9:16 vertical, haunting atmosphere, noir aesthetic",
-        "dark mysterious cinematic photograph, The Somerton Man, vintage crime scene style, dramatic shadows, film grain, 9:16 vertical, haunting atmosphere, noir aesthetic"
-      ],
-      "script": "The Zodiac Killer. Between 1968 and 1974 the Zodiac killer murdered at least 5 people in Northern California. He taunted police with cryptic ciphers some never solved. His identity is still unknown. The Boy in the Box. In 1957 a young boy's body was found in a cardboard box in Philadelphia. He was clean and neatly dressed. Despite decades of investigation his identity and killer remain unknown. The Somerton Man. In 1948 a well-dressed man was found dead on an Australian beach with no ID. All clothing tags were removed. Despite DNA testing in 2021 his identity is still debated.",
-      "tts_script": "The Zodiac Killer. Between 1968 and 1974 the Zodiac killer murdered at least 5 people in Northern California. He taunted police with cryptic ciphers some never solved. His identity is still unknown. The Boy in the Box. In 1957 a young boy's body was found in a cardboard box in Philadelphia. He was clean and neatly dressed. Despite decades of investigation his identity and killer remain unknown. The Somerton Man. In 1948 a well-dressed man was found dead on an Australian beach with no ID. All clothing tags were removed. Despite DNA testing in 2021 his identity is still debated."
-    },
-    {
       "title": "The case went cold: Elisa Lam",
       "hook": "The case went cold:",
       "mysteries": [
@@ -10501,7 +10480,11 @@
       "tts_script": "DB Cooper. In 1971 a man calling himself Dan Cooper hijacked a Boeing 727 collected $200,000 in ransom then parachuted out over the Pacific Northwest. Despite 50 years of investigation his identity remains unknown. Amelia Earhart. In 1937 famed aviator Amelia Earhart vanished over the Pacific while attempting to fly around the world. Despite the largest naval search in history no trace of her plane was ever found. The Hinterkaifeck Murders. In 1922 six people were murdered on a remote German farm. Days earlier the family reported strange footprints voices in the attic and a newspaper no one bought. No one was ever convicted."
     }
   ],
-  "used": [],
+  "used": [
+    "the zodiac killer",
+    "the boy in the box",
+    "the somerton man"
+  ],
   "min_before_refill": 20,
   "refill_target": 500
 }
