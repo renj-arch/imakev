@@ -60,6 +60,18 @@ def generate_howitworks_script() -> dict:
     entry = bank_manager.pick("how_it_works")
     if entry:
         print(f"  Using banked how-it-works ({bank_manager.count('how_it_works')} left)")
+        topic = entry.get("topics", [""])[0]
+        explanation = entry.get("explanations", [""])[0]
+        tts = entry.get("tts_script", "")
+        # If tts_script is much longer than one topic's worth, rebuild it
+        if tts.count(".") > 3 or len(tts) > 150:
+            print(f"  Shortened bank entry to single topic: '{topic}'")
+            entry["title"] = topic
+            entry["topics"] = [topic]
+            entry["explanations"] = [explanation]
+            entry["image_prompts"] = [IMAGE_PROMPT_TEMPLATE.format(topic=topic)]
+            entry["script"] = f"{topic}. {explanation}"
+            entry["tts_script"] = f"{topic}. {explanation}"
         return entry
 
     print("  Bank empty, generating fresh...")
