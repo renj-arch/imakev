@@ -120,7 +120,7 @@ def main():
     tts_script = data["tts_script"]
     tts_path = temp_dir / "narration.mp3"
     # Deeper, more engaging voice
-    subprocess.run([sys.executable, "-m", "edge_tts", "--text", tts_script, "--voice", "en-US-DavisNeural", "--write-media", str(tts_path)], capture_output=True, text=True, timeout=120, check=True)
+    subprocess.run([sys.executable, "-m", "edge_tts", "--text", tts_script, "--voice", "en-US-ChristopherNeural", "--write-media", str(tts_path)], capture_output=True, text=True, timeout=120, check=True)
     audio = AudioFileClip(str(tts_path))
     total_dur = audio.duration
     audio.close()
