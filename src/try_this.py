@@ -1,6 +1,7 @@
 """Try This — interactive brain hacks, one quick illusion per short. Watch and experience."""
 
 import random
+import re
 import bank_manager
 from src.high_retention import retention_tts
 
@@ -98,13 +99,41 @@ TRICKS = [
 ]
 
 
+def _normalize(text: str) -> str:
+    return re.sub(r"[^a-z0-9]+", " ", text.lower()).strip()
+
+
+def _used_hooks() -> set:
+    data = bank_manager._read_bank("try_this")
+    return set(data.get("used", []))
+
+
+def _mark_used_hook(hook: str):
+    data = bank_manager._read_bank("try_this")
+    used = set(data.get("used", []))
+    n = _normalize(hook)
+    if n and n not in used:
+        used.add(n)
+        data["used"] = sorted(used)
+        bank_manager._write_bank("try_this", data)
+
+
 def generate_try_this_script() -> dict:
     entry = bank_manager.pick("try_this")
     if entry:
         print(f"  Using banked trick ({bank_manager.count('try_this')} left)")
         return entry
 
-    print("  Bank empty, using fresh trick...")
+    used = _used_hooks()
+    available = [t for t in TRICKS if _normalize(t["hook"]) not in used]
+    if available:
+        chosen = random.choice(available)
+        _mark_used_hook(chosen["hook"])
+        remaining = max(0, len(TRICKS) - len(used) - 1)
+        print(f"  Hardcoded trick ({remaining} left)")
+        return chosen
+
+    print("  All hardcoded tricks used, generating fresh via LLM...")
     return _try_llm() or random.choice(TRICKS)
 
 
