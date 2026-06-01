@@ -294,6 +294,21 @@ def run_challenges():
     bank_manager.ensure_refilled("challenges")
 
 
+def run_satisfying():
+    print("=" * 55)
+    print("  MODE: ODDLY SATISFYING & DIY")
+    print("=" * 55)
+
+    from upload_youtube import upload
+    import satisfying_video
+
+    out_path, data = satisfying_video.main()
+    print("\nUploading with viral SEO...")
+    upload(str(out_path), mode="satisfying", playlist_key="satisfying", script_data=data, made_for_kids=False)
+    print("Satisfying video done!")
+    bank_manager.ensure_refilled("satisfying")
+
+
 def main():
     mode = sys.argv[1] if len(sys.argv) > 1 else "story"
     if mode == "story":
@@ -332,8 +347,10 @@ def main():
         run_things()
     elif mode == "challenges":
         run_challenges()
+    elif mode == "satisfying":
+        run_satisfying()
     else:
-        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', 'movie_trivia', 'animal_kingdom', 'space_wonders', 'box_office', 'things_they_dont_teach', or 'challenges'")
+        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', 'movie_trivia', 'animal_kingdom', 'space_wonders', 'box_office', 'things_they_dont_teach', 'challenges', or 'satisfying'")
 
 
 if __name__ == "__main__":

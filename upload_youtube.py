@@ -34,6 +34,7 @@ PLAYLISTS = {
     "box_office": {"name": "Box Office Records", "desc": "Movie earnings records that will shock you."},
     "things_they_dont_teach": {"name": "Hard Truths", "desc": "Hard truths about life, money, career, and relationships they don't teach you in school."},
     "challenges": {"name": "Challenges & Stunts", "desc": "Fast-paced challenges and stunts that test your skills. Can you do them all?"},
+    "satisfying": {"name": "Oddly Satisfying & DIY", "desc": "Oddly satisfying visuals, satisfying restorations, cleaning transformations, and DIY projects."},
 }
 
 

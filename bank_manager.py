@@ -144,6 +144,18 @@ REFILL_PROMPTS = {
         "FACT: [3-4 sentences explaining with specific dollar amounts and details]\n\n"
         "Include specific numbers, years, and comparisons."
     ),
+    "satisfying": (
+        "Give me 5 oddly satisfying or DIY ideas for a short video. "
+        "Mix of satisfying visuals (like cutting soap, mixing paint), "
+        "restoration projects (like restoring rusty tools), "
+        "cleaning transformations, and organization tips. "
+        "Never repeat topics from this avoid list:"
+        "\n---\n{avoid}\n---\n"
+        "Format exactly:\n"
+        "TOPIC: [short name, 3-6 words]\n"
+        "DESCRIPTION: [one punchy sentence describing the satisfying process]\n\n"
+        "Make each one feel calming and visually satisfying."
+    ),
     "challenges": (
         "Give me 5 different fun physical challenges or stunts to attempt. "
         "Each should be specific and measurable (e.g., 'Hold your breath for 30 seconds'). "
@@ -190,6 +202,7 @@ IMAGE_PROMPT_ANIMAL_KINGDOM = "National Geographic wildlife photography, {title}
 IMAGE_PROMPT_SPACE_WONDERS = "NASA deep space photograph, {title}, stunning nebula and stars, cosmic colors, 9:16 vertical, ultra-detailed space photography, James Webb Space Telescope style"
 IMAGE_PROMPT_BOX_OFFICE = "vintage Hollywood movie poster, {title}, dramatic golden lighting, film strip border, 9:16 vertical, cinema marquee lights, retro box office aesthetic"
 IMAGE_PROMPT_CHALLENGES = "cinematic action shot, {challenge}, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
+IMAGE_PROMPT_SATISFYING = "macro close-up shot, {topic}, soft diffused lighting, satisfying textures, 9:16 vertical, clean minimalist aesthetic, vibrant colors"
 
 RIDDLE_TYPES = [
     "logic", "wordplay", "math", "lateral thinking", "observation",
@@ -358,6 +371,17 @@ CHALLENGES_HOOKS = [
     "This stunt requires serious skill. Ready?",
 ]
 
+SATISFYING_HOOKS = [
+    "This is so satisfying to watch:",
+    "You won't believe how satisfying this is:",
+    "Oddly satisfying content you didn't know you needed:",
+    "Watch till the end. Trust us, it's worth it:",
+    "There's something about this that just feels right:",
+    "Can't stop watching. This is pure satisfaction:",
+    "Oddly satisfying and oddly addictive:",
+    "The most satisfying thing you'll see today:",
+]
+
 URBAN_LEGENDS_FALLBACKS = [
     ("Bloody Mary", "Say Bloody Mary three times in front of a mirror and a ghostly woman appears to attack you. The legend has terrified children at sleepovers for decades.", "The legend likely originated from 16th century Queen Mary I. The modern version spread in the 1970s as a harmless dare game, inspired by mirror-gazing superstitions."),
     ("The Hook", "A couple parked at Lover's Lane hears a radio warning about an escaped convict with a hook for a hand. They drive away scared, and later find a bloody hook dangling from the car door handle.", "The story first appeared in 1950s teen folklore magazines. No real incident has ever matched the details, but it became the classic cautionary tale about teenage rebellion."),
@@ -481,6 +505,11 @@ def _mark_used(mode: str, entry: dict):
             n = _normalize(c.get("title", ""))
             if n and n not in used:
                 used.append(n)
+    elif mode == "satisfying":
+        for t in entry.get("topics", []):
+            n = _normalize(t)
+            if n and n not in used:
+                used.append(n)
     data["used"] = used
     _write_bank(mode, data)
 
@@ -558,6 +587,8 @@ def refill(mode: str, force_count: int | None = None):
             new_entries = _refill_3item("box_office", need, BOX_OFFICE_HOOKS, "box_office_titles", IMAGE_PROMPT_BOX_OFFICE)
         elif mode == "challenges":
             new_entries = _refill_challenges(need)
+        elif mode == "satisfying":
+            new_entries = _refill_satisfying(need)
         else:
             return
 
@@ -1062,6 +1093,57 @@ def _refill_3item(mode: str, need: int, hooks: list, list_key: str, img_prompt: 
                 "image_prompts": image_prompts,
                 "script": " ".join(tts_lines),
                 "tts_script": " ".join(tts_lines),
+            }
+            entries.append(entry)
+        attempts += 1
+    return entries
+
+
+def _refill_satisfying(need: int) -> list:
+    entries = []
+    attempts = 0
+    hooks = SATISFYING_HOOKS
+    while len(entries) < need and attempts < need * 5:
+        avoid = _avoid_sample("satisfying")
+        prompt = REFILL_PROMPTS["satisfying"].format(avoid=avoid)
+        try:
+            raw = _generate(prompt, temperature=0.8, max_tokens=600,
+                            system="You write about oddly satisfying content, DIY projects, restorations, and cleaning transformations. Be descriptive and visual.")
+        except Exception as e:
+            print(f"  LLM error (satisfying): {e}")
+            attempts += 1
+            continue
+        if not raw:
+            attempts += 1
+            continue
+
+        topics = []
+        descriptions = []
+        current = None
+        for line in raw.split("\n"):
+            line = line.strip()
+            if line.upper().startswith("TOPIC:"):
+                current = line.split(":", 1)[-1].strip()
+            elif line.upper().startswith("DESCRIPTION:") and current:
+                descriptions.append(line.split(":", 1)[-1].strip())
+                topics.append(current)
+                current = None
+
+        if len(topics) >= 3 and not _is_duplicate("satisfying", topics, _read_bank("satisfying")):
+            hook = random.choice(hooks)
+            image_prompts = [
+                IMAGE_PROMPT_SATISFYING.format(topic=t.lower().replace(" ", "_")[:50])
+                for t in topics
+            ]
+            tts_lines = [f"{t}. {d}" for t, d in zip(topics, descriptions)]
+            entry = {
+                "title": f"Oddly Satisfying: {topics[0][:50]}",
+                "hook": hook,
+                "topics": topics,
+                "descriptions": descriptions,
+                "image_prompts": image_prompts,
+                "script": " ".join(tts_lines),
+                "tts_script": f"{hook} {' '.join(tts_lines)}",
             }
             entries.append(entry)
         attempts += 1

@@ -7,6 +7,17 @@ CHANNEL_HANDLE = "@dingdong"
 
 # Curiosity gap title templates proven to boost CTR 2-5x
 TITLE_TEMPLATES = {
+    "satisfying": [
+        "Oddly Satisfying: {topic} 🎯",
+        "This {topic} Is So Satisfying To Watch",
+        "The Most Satisfying {topic} You'll See Today",
+        "Watch This {topic} If You Need To Relax 🧘",
+        "Oddly Satisfying {topic} — Pure ASMR Vibes",
+        "This {topic} Will Satisfy Your Brain 🧠",
+        "Can't Stop Watching This {topic}",
+        "DIY {topic} — You Need To Try This",
+        "Satisfying {topic} That Feels Illegal To Watch",
+    ],
     "challenges": [
         "Can You Complete This {topic} Challenge? ⚡",
         "99% Fail This {topic} Challenge. Can You Beat It?",
@@ -142,6 +153,10 @@ TITLE_TEMPLATES = {
 }
 
 DESCRIPTION_TEMPLATES = {
+    "satisfying": [
+        "{hook}\n\nSit back, relax, and enjoy these oddly satisfying visuals. Which one was your favorite?",
+        "{hook}\n\nDIY projects, satisfying restorations, and oddly calming visuals. Comment your favorite!",
+    ],
     "challenges": [
         "{hook}\n\nThink you can handle these challenges? Try them yourself and comment how far you got!",
         "{hook}\n\nWatch till the end — these challenges are harder than they look. Let us know your score in the comments!",
@@ -199,6 +214,7 @@ def generate_viral_title(mode: str, data: dict) -> str:
         "story": lambda d: d.get("title", "this story"),
         "things_they_dont_teach": lambda d: d.get("topics", ["hard truth"])[0] if d.get("topics") else "hard truth",
         "challenges": lambda d: d.get("challenges", [{"title": "this"}])[0]["title"] if d.get("challenges") else "this",
+        "satisfying": lambda d: d.get("topics", ["this"])[0] if d.get("topics") else "this",
     }
 
     get_topic = topic_map.get(mode, lambda d: "")
@@ -279,6 +295,7 @@ def generate_viral_tags(mode: str, data: dict) -> list[str]:
         "story": ["shorts", "story", "cinematic", "animation", "ai", "chapter", "series", "episode", "storytime", "youtubeshorts"],
         "things_they_dont_teach": ["shorts", "hardtruths", "lifelessons", "wisdom", "realitycheck", "adulting", "lifetips", "truth", "mindset", "youtubeshorts"],
         "challenges": ["shorts", "challenge", "stunts", "dare", "fail", "try", "competition", "funny", "youtubeshorts", "viral"],
+        "satisfying": ["shorts", "satisfying", "oddlysatisfying", "diy", "restoration", "cleaning", "asmr", "relaxing", "satisfyingvideo", "youtubeshorts"],
     }
 
     tags = base_tags.get(mode, ["shorts", "youtubeshorts", mode])[:]
@@ -327,6 +344,7 @@ def generate_viral_hashtags(mode: str, count: int = 6) -> str:
         "box_office": ["#boxoffice", "#shorts", "#movies", "#hollywood", "#moviefacts", "#records"],
         "things_they_dont_teach": ["#hardtruths", "#shorts", "#lifelessons", "#wisdom", "#realitycheck", "#mindset"],
         "challenges": ["#challenge", "#shorts", "#stunts", "#dare", "#tryit", "#viral", "#fail"],
+        "satisfying": ["#satisfying", "#shorts", "#oddlysatisfying", "#diy", "#restoration", "#asmr", "#relaxing"],
     }
 
     selected = mode_hashtags.get(mode, ["#shorts", mode, "#youtubeshorts"])
