@@ -2,6 +2,7 @@
 
 import sys, subprocess, time, io, random
 from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from PIL import Image, ImageEnhance, ImageDraw, ImageFont
 import numpy as np
 import requests as req
@@ -16,7 +17,7 @@ W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
 def gen_img(prompt: str) -> Image.Image | None:
     url = f"https://image.pollinations.ai/prompt/{req.utils.quote(prompt)}?width={config.VIDEO_WIDTH}&height={config.VIDEO_HEIGHT}&nofeed=true&seed={random.randint(0,999999)}&model=flux"
     try:
-        r = req.get(url, timeout=120)
+        r = req.get(url, timeout=45)
         if r.status_code == 200 and len(r.content) > 500:
             return Image.open(io.BytesIO(r.content)).convert("RGB")
     except:
@@ -127,26 +128,33 @@ def main():
     audio.close()
     print(f"  {total_dur:.1f}s | {len(TOPICS)} concepts")
 
-    print(f"\n[2/4] Generating {len(PROMPTS)} images...")
+    print(f"\n[2/4] Generating {len(PROMPTS)} images (parallel)...")
     images = {}
-    for i, (t, prompt) in enumerate(zip(TOPICS, PROMPTS)):
-        cached = temp_dir / f"upsc_{i}.png"
-        if cached.exists() and cached.stat().st_size > 50000:
-            img = Image.open(cached)
-        else:
-            print(f"  Image {i+1}/{len(PROMPTS)}...", end=" ", flush=True)
-            img = gen_img(prompt)
+    with ThreadPoolExecutor(max_workers=4) as pool:
+        fut_to_i = {}
+        for i, (t, prompt) in enumerate(zip(TOPICS, PROMPTS)):
+            cached = temp_dir / f"upsc_{i}.png"
+            if cached.exists() and cached.stat().st_size > 50000:
+                images[i] = Image.open(cached)
+                print(f"  Image {i+1}/{len(PROMPTS)}... cached")
+            else:
+                fut = pool.submit(gen_img, prompt)
+                fut_to_i[fut] = i
+        for fut in as_completed(fut_to_i):
+            i = fut_to_i[fut]
+            cached = temp_dir / f"upsc_{i}.png"
+            img = fut.result()
             if img:
                 img = upscale(img)
                 img.save(cached)
-                print("OK")
+                print(f"  Image {i+1}/{len(PROMPTS)}... OK")
             else:
-                print("fallback")
+                print(f"  Image {i+1}/{len(PROMPTS)}... fallback")
                 arr = np.zeros((H, W, 3), dtype=np.uint8)
                 for y in range(H):
                     arr[y,:] = [int(10+50*(y/H)), int(10+30*(1-y/H)), int(30+80*(y/H))]
                 img = Image.fromarray(arr)
-        images[i] = img
+            images[i] = img
 
     print("\n[3/4] Baking text...")
     dur_per = total_dur / len(TOPICS)
