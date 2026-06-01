@@ -123,5 +123,7 @@ jobs:
           else
             git commit -m "Auto-update content bank [skip ci]"
             git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+            git fetch origin main
+            git rebase origin/main
             git push
           fi
