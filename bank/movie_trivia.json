@@ -1,27 +1,6 @@
 {
   "entries": [
     {
-      "title": "This movie fact sounds fake but is true: Star Wars Sound Effects",
-      "hook": "This movie fact sounds fake but is true:",
-      "trivia_titles": [
-        "Star Wars Sound Effects",
-        "Psycho's Toilet Scene Changed Movies",
-        "Pulp Fiction's Chronological Order"
-      ],
-      "stories": [
-        "The lightsaber hum was created from a movie projector combined with TV interference. Blaster sounds came from striking a tight wire. Darth Vader's breathing was a scuba regulator.",
-        "Alfred Hitchcock's Psycho featured the first toilet flush ever shown on screen. The Hays Code had banned showing toilets but Hitchcock fought for it and broke a 30-year taboo.",
-        "Pulp Fiction is told out of order. Vincent Vega dies halfway through the story chronologically. Tarantino wrote it this way so audiences would rewatch it."
-      ],
-      "image_prompts": [
-        "cinematic movie poster style, Star Wars Sound Effects, dramatic lighting, film grain, 9:16 vertical, Hollywood golden hour, vintage movie set photography",
-        "cinematic movie poster style, Psycho's Toilet Scene Changed Movies, dramatic lighting, film grain, 9:16 vertical, Hollywood golden hour, vintage movie set photography",
-        "cinematic movie poster style, Pulp Fiction's Chronological Order, dramatic lighting, film grain, 9:16 vertical, Hollywood golden hour, vintage movie set photography"
-      ],
-      "script": "Star Wars Sound Effects. The lightsaber hum was created from a movie projector combined with TV interference. Blaster sounds came from striking a tight wire. Darth Vader's breathing was a scuba regulator. Psycho's Toilet Scene Changed Movies. Alfred Hitchcock's Psycho featured the first toilet flush ever shown on screen. The Hays Code had banned showing toilets but Hitchcock fought for it and broke a 30-year taboo. Pulp Fiction's Chronological Order. Pulp Fiction is told out of order. Vincent Vega dies halfway through the story chronologically. Tarantino wrote it this way so audiences would rewatch it.",
-      "tts_script": "Star Wars Sound Effects. The lightsaber hum was created from a movie projector combined with TV interference. Blaster sounds came from striking a tight wire. Darth Vader's breathing was a scuba regulator. Psycho's Toilet Scene Changed Movies. Alfred Hitchcock's Psycho featured the first toilet flush ever shown on screen. The Hays Code had banned showing toilets but Hitchcock fought for it and broke a 30-year taboo. Pulp Fiction's Chronological Order. Pulp Fiction is told out of order. Vincent Vega dies halfway through the story chronologically. Tarantino wrote it this way so audiences would rewatch it."
-    },
-    {
       "title": "You won't believe what happened behind the scenes: Frozen's Let It Go Was Almost Cut",
       "hook": "You won't believe what happened behind the scenes:",
       "trivia_titles": [
@@ -10501,7 +10480,11 @@
       "tts_script": "Jaws' Mechanical Shark. The mechanical shark named Bruce kept breaking down. Spielberg had to imply the shark's presence instead of showing it. This 'flaw' is what made the film terrifying. Pulp Fiction's Chronological Order. Pulp Fiction is told out of order. Vincent Vega dies halfway through the story chronologically. Tarantino wrote it this way so audiences would rewatch it. The Lion King's Hidden Message. An animator admitted to spelling 'SEX' in a dust cloud during the Circle of Life scene. Disney later digitally removed it. The animator said it was a prank."
     }
   ],
-  "used": [],
+  "used": [
+    "star wars sound effects",
+    "psycho s toilet scene changed movies",
+    "pulp fiction s chronological order"
+  ],
   "min_before_refill": 20,
   "refill_target": 500
 }
