@@ -209,24 +209,34 @@ def generate_voiceover_ssml(script: str, voice: str, tts_path: str, timeout: int
 
 
 def pad_audio_to_61s(tts_path: str) -> float:
-    """Stretch TTS audio to at least 61s via resampling for long-form ad revenue. Returns duration."""
-    from moviepy import AudioFileClip, AudioClip
+    """Stretch TTS audio to at least 61s. Tries numpy resample, falls back to adding brief intro/outro silence."""
+    from moviepy import AudioFileClip, AudioClip, concatenate_audioclips
     import numpy as np
     audio = AudioFileClip(tts_path)
     dur = audio.duration
-    if dur < 61 and dur > 5:
-        samples = audio.to_soundarray(fps=22050)
-        if samples.ndim == 1:
-            samples = samples[:, None]
-        target_frames = int(22050 * 61)
-        orig_frames = samples.shape[0]
-        x = np.arange(orig_frames)
-        xp = np.linspace(0, orig_frames - 1, target_frames)
-        stretched = np.column_stack([np.interp(xp, x, samples[:, ch]) for ch in range(samples.shape[1])])
-        stretched_clip = AudioClip(lambda t: stretched[int(t * 22050) % target_frames], duration=61, fps=22050)
-        stretched_clip.write_audiofile(str(tts_path), fps=22050, logger=None)
-        dur = 61
-        print(f"  Stretched {audio.duration:.1f}s → 61s (long-form minimum)")
+    if dur < 61 and dur > 3:
+        try:
+            # Attempt numpy-based stretch (tempo change)
+            samples = audio.to_soundarray(fps=22050)
+            if samples.ndim == 1:
+                samples = samples[:, None]
+            target_frames = int(22050 * 61)
+            orig_frames = samples.shape[0]
+            x = np.arange(orig_frames)
+            xp = np.linspace(0, orig_frames - 1, target_frames)
+            stretched = np.column_stack([np.interp(xp, x, samples[:, ch].astype(np.float64)) for ch in range(samples.shape[1])])
+            stretched = stretched.astype(np.float32)
+            stretched_clip = AudioClip(lambda t, arr=stretched: arr[min(int(t * 22050), len(arr) - 1)], duration=61, fps=22050)
+            stretched_clip.write_audiofile(str(tts_path), fps=22050, logger=None)
+            dur = 61
+            print(f"  Stretched {audio.duration:.1f}s → 61s")
+        except Exception as e:
+            print(f"  Stretch failed ({e}), adding silence pad instead")
+            pad = AudioClip(lambda t: np.zeros(2), duration=61 - dur, fps=22050)
+            combined = concatenate_audioclips([audio, pad])
+            combined.write_audiofile(str(tts_path), fps=22050, logger=None)
+            dur = 61
+            print(f"  Padded silence: {audio.duration:.1f}s → 61s")
     audio.close()
     return dur
 
