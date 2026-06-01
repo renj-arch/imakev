@@ -1,4 +1,4 @@
-"""How It Works Shorts video — general audience, not made for kids."""
+"""How It Works — Zack D. Films style: 1 topic, 45-60s, deep voice, cinematic."""
 
 import sys, subprocess, time, io, random
 from pathlib import Path
@@ -67,21 +67,19 @@ def draw_text(img, text, font_size, y, color=(255,255,255), stroke_color=(0,0,0)
     return img
 
 
-def make_title_card(img, text):
+def make_intro_card(img, topic):
     img = img.copy()
-    overlay = Image.new("RGBA", (W, int(H*0.3)), (0,0,0,160))
-    img.paste(overlay, (0, H-int(H*0.3)), overlay)
-    draw_text(img, text.upper(), 44, H-220, center=True)
-    draw_text(img, "HOW IT WORKS", 28, H-120, center=True, color=(255,200,0))
+    overlay = Image.new("RGBA", (W, H), (0,0,0,180))
+    img.paste(overlay, (0,0), overlay)
+    draw_text(img, topic.upper(), 48, H//2 - 80, center=True, color=(255,200,0))
     return img
 
 
-def make_topic_card(img, topic, explanation):
+def make_explanation_card(img, text_segment):
     img = img.copy()
     overlay = Image.new("RGBA", (W, int(H*0.45)), (0,0,0,180))
     img.paste(overlay, (0, H-int(H*0.45)), overlay)
-    draw_text(img, topic.upper(), 42, H-520, color=(255,204,0))
-    draw_text(img, explanation, 28, H-430)
+    draw_text(img, text_segment, 28, H-480)
     return img
 
 
@@ -89,8 +87,8 @@ def make_end_card(img):
     img = img.copy()
     overlay = Image.new("RGBA", (W, H), (0,0,0,120))
     img.paste(overlay, (0,0), overlay)
-    draw_text(img, "SUBSCRIBE", 60, H//2 - 60, center=True, color=(255,204,0))
-    draw_text(img, "FOR MORE HOW IT WORKS", 36, H//2 + 20, center=True)
+    draw_text(img, "SUBSCRIBE 🔔", 56, H//2 - 60, center=True, color=(255,200,0))
+    draw_text(img, "FOR MORE", 36, H//2 + 20, center=True)
     return img
 
 
@@ -99,35 +97,44 @@ motion_clip = fast_motion
 
 def main():
     print("="*50)
-    print("  HOW IT WORKS GENERATOR")
+    print("  HOW IT WORKS — ZACK D. STYLE")
     print("="*50)
 
     data = generate_howitworks_script()
     TITLE = data["title"]
-    TOPICS = data["topics"]
-    EXPLANATIONS = data["explanations"]
-    PROMPTS = data["image_prompts"]
+    TOPIC = data["topics"][0]
+    EXPLANATION = data["explanations"][0]
 
     temp_dir = config.TEMP_DIR / "how_it_works"
     temp_dir.mkdir(exist_ok=True)
 
+    # Generate 3 varied visual prompts for the same topic
+    visual_prompts = [
+        f"cinematic close-up detailed shot: {TOPIC}, cross-section view, dramatic lighting, photorealistic, 9:16 vertical, dark background",
+        f"macro extreme close-up: {TOPIC}, inner mechanism visible, glowing highlights, industrial design, detailed texture, 9:16 vertical, cinematic",
+        f"dramatic product shot: {TOPIC}, isolated on dark background, studio lighting, reflection, highly detailed texture, 9:16 vertical, professional",
+    ]
+    data["image_prompts"] = visual_prompts
+
     print("\n[1/4] Voiceover...")
     tts_script = data["tts_script"]
     tts_path = temp_dir / "narration.mp3"
-    subprocess.run([sys.executable, "-m", "edge_tts", "--text", tts_script, "--voice", "en-US-GuyNeural", "--write-media", str(tts_path)], capture_output=True, text=True, timeout=120, check=True)
+    # Deeper, more engaging voice
+    subprocess.run([sys.executable, "-m", "edge_tts", "--text", tts_script, "--voice", "en-US-DavisNeural", "--write-media", str(tts_path)], capture_output=True, text=True, timeout=120, check=True)
     audio = AudioFileClip(str(tts_path))
     total_dur = audio.duration
     audio.close()
-    print(f"  {total_dur:.1f}s | {len(TOPICS)} topics")
+    print(f"  {total_dur:.1f}s")
 
-    print(f"\n[2/4] Generating {len(PROMPTS)} images...")
-    images = {}
-    for i, (t, prompt) in enumerate(zip(TOPICS, PROMPTS)):
+    print(f"\n[2/4] Generating {len(visual_prompts)} images...")
+    images = []
+    for i, prompt in enumerate(visual_prompts):
         cached = temp_dir / f"how_{i}.png"
         if cached.exists() and cached.stat().st_size > 50000:
             img = Image.open(cached)
+            print(f"  Image {i+1}/{len(visual_prompts)}... cached")
         else:
-            print(f"  Image {i+1}/{len(PROMPTS)}...", end=" ", flush=True)
+            print(f"  Image {i+1}/{len(visual_prompts)}...", end=" ", flush=True)
             img = gen_img(prompt)
             if img:
                 img = upscale(img)
@@ -139,37 +146,47 @@ def main():
                 for y in range(H):
                     arr[y,:] = [int(30+100*(y/H)), int(60+80*(1-y/H)), int(100+120*(y/H))]
                 img = Image.fromarray(arr)
-        images[i] = img
+        images.append(img)
 
     print("\n[3/4] Baking text...")
-    dur_per = total_dur / len(TOPICS)
 
-    title_img = make_title_card(images[0], TITLE)
-    clips = [motion_clip(title_img, 0.8)]
+    # Split explanation into segments for varied visuals
+    sentences = EXPLANATION.replace(". ", ".|||").split("|||")
+    sentences = [s.strip() for s in sentences if s.strip()]
+    num_segments = min(len(sentences), 3)
 
-    for i, (t, e) in enumerate(zip(TOPICS, EXPLANATIONS)):
-        img = images.get(i, images[0])
-        card = make_topic_card(img, t, e)
-        shake = i == len(TOPICS) - 1
-        clips.append(fast_motion(card, dur_per, shake=shake))
+    clips = []
 
-    overlays = hook_overlays(1.8)
-    overlays += comment_prompt_overlay(start_time=max(total_dur * 0.4, 0.5), duration=2.0)
+    # Intro — show first image with title
+    intro_img = make_intro_card(images[0], TOPIC)
+    clips.append(motion_clip(intro_img, 1.2))
 
-    end_img = images.get(len(TOPICS)-1, images[0])
-    clips.append(subscribe_end_card(end_img, 1.2))
+    # Explanation segments — cycle through images
+    for i in range(num_segments):
+        img_idx = min(i, len(images) - 1)
+        seg = sentences[i] + "." if not sentences[i].endswith(".") else sentences[i]
+        card = make_explanation_card(images[img_idx], seg)
+        dur = max(total_dur / max(num_segments, 1), 2.0)
+        clips.append(fast_motion(card, dur, shake=False))
+
+    # End card
+    end_img = images[-1]
+    clips.append(subscribe_end_card(end_img, 1.5))
+
+    overlays = hook_overlays(2.0)
+    overlays += comment_prompt_overlay(start_time=max(total_dur * 0.5, 1.0), duration=2.5)
 
     bg = concatenate_videoclips(clips, method="compose")
     overlays += branding_overlays(bg.duration)
     final = CompositeVideoClip([bg] + overlays, size=config.SHORTS_SIZE)
     audio_clip = AudioFileClip(str(tts_path))
-    video_dur = total_dur + 0.8
+    video_dur = bg.duration
     if video_dur > audio_clip.duration:
         silence = AudioFileClip(str(tts_path)).with_duration(video_dur - audio_clip.duration).with_volume_scaled(0)
         audio_clip = concatenate_audioclips([audio_clip, silence])
     music_paths = list(config.MUSIC_DIR.glob("*.mp3"))
     if music_paths:
-        music = AudioFileClip(str(random.choice(music_paths))).with_duration(video_dur).with_volume_scaled(0.08)
+        music = AudioFileClip(str(random.choice(music_paths))).with_duration(video_dur).with_volume_scaled(0.06)
         final = final.with_audio(CompositeAudioClip([audio_clip, music]))
     else:
         final = final.with_audio(audio_clip)
@@ -178,7 +195,7 @@ def main():
     safe_title = TITLE.lower().replace(" ", "_").replace("?", "").replace("!", "").replace("'", "").replace(".","").replace(",","").replace(":","")[:50]
     out = config.OUTPUT_DIR / f"how_{safe_title}.mp4"
     out.unlink(missing_ok=True)
-    print(f"  {total_dur + 0.8:.1f}s | {W}x{H}")
+    print(f"  {video_dur:.1f}s | {W}x{H}")
     t0 = time.time()
     final.write_videofile(str(out), fps=config.VIDEO_FPS, codec="libx264", audio_codec="aac", threads=4, preset="ultrafast", ffmpeg_params=["-movflags", "+faststart"], logger=None)
     final.close()
