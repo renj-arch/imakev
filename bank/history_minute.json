@@ -1,14 +1,6 @@
 {
   "entries": [
     {
-      "title": "Wait till you hear this history story: **[Hook \u2013 0\u20113\u202fs]**  \n\u201cImagine a whole country disappearing\u2026 ...",
-      "niche": "asian history",
-      "hook": "Wait till you hear this history story:",
-      "script": "**[Hook \u2013 0\u20113\u202fs]**  \n\u201cImagine a whole country disappearing\u2026 without a single battle.\u201d\n\n**[Story]**  \nIn 1907 the tiny Republic of\u202fZanzibar\u2019s **\u201cSultan\u2019s Elephant\u201d**\u2014a 12\u2011ton ivory statue\u2014was secretly smuggled aboard a cargo ship bound for London. The British, thinking it a priceless artifact, displayed it at the British Museum. Only in 2023 did researchers match the carving to a forgotten royal decree, revealing the elephant was actually a **political protest** against colonial taxes.  \n\n**[Close]**  \nSo, one hidden sculpture helped a vanished sultan voice his defiance\u2014still standing silent in a museum today. \ud83c\udfa5\u2728",
-      "image_prompt": "vintage historical photograph style: **[Hook \u2013 0\u20113 s]** \u201cImagine a whole country disappearing\u2026 without a single battle.\u201d **[Story]** In, sepia tones, dramatic lighting, 9:16 vertical, weathered texture, cinematic",
-      "tts_script": "Wait till you hear this history story: **[Hook \u2013 0\u20113\u202fs]**  \n\u201cImagine a whole country disappearing\u2026 without a single battle.\u201d\n\n**[Story]**  \nIn 1907 the tiny Republic of\u202fZanzibar\u2019s **\u201cSultan\u2019s Elephant\u201d**\u2014a 12\u2011ton ivory statue\u2014was secretly smuggled aboard a cargo ship bound for London. The British, thinking it a priceless artifact, displayed it at the British Museum. Only in 2023 did researchers match the carving to a forgotten royal decree, revealing the elephant was actually a **political protest** against colonial taxes.  \n\n**[Close]**  \nSo, one hidden sculpture helped a vanished sultan voice his defiance\u2014still standing silent in a museum today. \ud83c\udfa5\u2728"
-    },
-    {
       "title": "This historical event will shock you: **Hook:** What if I told you hundreds danced themselves to d...",
       "niche": "american history",
       "hook": "This historical event will shock you:",
@@ -321,7 +313,9 @@
       "tts_script": "Mind-blowing history fact: [Opening beat, quick zoom on old map]  \n\"Ever heard of a war fought\u2026 with\u2026 pigeons?\"  \n\nIn 1942, the British Royal Air Force launched Operation **Pigeon\u2011Post**: they trained homing pigeons to carry tiny sabotage kits into Nazi\u2011occupied France. The birds slipped through enemy lines, delivering micro\u2011explosives that blew up railway bridges, crippling German supply routes.  \n\nSo next time you see a pigeon, remember\u2014it once helped win a war. \ud83c\udfaf\u2708\ufe0f\ud83d\udd4a\ufe0f"
     }
   ],
-  "used": [],
+  "used": [
+    "hook 0 3 s imagine a whole country disappearing without a single battle story in 1907 the tiny republic of zanzibar s sultan s elephant a 12 ton ivory statue was secretly smuggled aboard a cargo ship bound for london the british thinking it a priceless artifact displayed it at the british museum only in 2023 did researchers match the carving to a forgotten royal decree revealing the elephant was actually a political protest against colonial taxes close so one hidden sculpture helped a vanished sultan voice his defiance still standing silent in a museum today"
+  ],
   "min_before_refill": 20,
   "refill_target": 500
 }
