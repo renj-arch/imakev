@@ -147,6 +147,15 @@ def add_watermark(video_path: str) -> str:
     return video_path
 
 
+def get_audio_duration(tts_path: str) -> float:
+    """Return natural audio duration without stretching."""
+    from moviepy import AudioFileClip
+    audio = AudioFileClip(tts_path)
+    dur = audio.duration
+    audio.close()
+    return dur
+
+
 def subscribe_end_card(img_array, duration: float = 1.5) -> VideoClip:
     """End card with subscribe appeal on given image."""
     clip = fast_motion(img_array, duration, shake=False, intensity=0.6)
