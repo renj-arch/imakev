@@ -5,30 +5,6 @@
       "hook": "Ever wondered how this works?",
       "topics": [
         "a zipper",
-        "a microwave",
-        "a refrigerator",
-        "a compass"
-      ],
-      "explanations": [
-        "A zipper works using interlocking teeth. The slider forces teeth together locking hook into hollow. Pulling down splits them apart.",
-        "A microwave shoots waves at 2.4 gigahertz that excite water molecules in food making them vibrate and create friction heat.",
-        "Liquid refrigerant evaporates inside absorbing heat. A compressor squeezes it back to liquid outside releasing the heat.",
-        "A small magnetized needle aligns with Earth's magnetic field always pointing north. The housing lets you orient yourself."
-      ],
-      "image_prompts": [
-        "cinematic close-up illustration: a zipper, detailed technical cross-section view, clean lighting, educational style, 9:16 vertical",
-        "cinematic close-up illustration: a microwave, detailed technical cross-section view, clean lighting, educational style, 9:16 vertical",
-        "cinematic close-up illustration: a refrigerator, detailed technical cross-section view, clean lighting, educational style, 9:16 vertical",
-        "cinematic close-up illustration: a compass, detailed technical cross-section view, clean lighting, educational style, 9:16 vertical"
-      ],
-      "script": "A zipper works using interlocking teeth. The slider forces teeth together locking hook into hollow. Pulling down splits them apart. A microwave shoots waves at 2.4 gigahertz that excite water molecules in food making them vibrate and create friction heat. Liquid refrigerant evaporates inside absorbing heat. A compressor squeezes it back to liquid outside releasing the heat. A small magnetized needle aligns with Earth's magnetic field always pointing north. The housing lets you orient yourself.",
-      "tts_script": "A zipper works using interlocking teeth. The slider forces teeth together locking hook into hollow. Pulling down splits them apart. A microwave shoots waves at 2.4 gigahertz that excite water molecules in food making them vibrate and create friction heat. Liquid refrigerant evaporates inside absorbing heat. A compressor squeezes it back to liquid outside releasing the heat. A small magnetized needle aligns with Earth's magnetic field always pointing north. The housing lets you orient yourself."
-    },
-    {
-      "title": "Ever wondered how this works? A zipper",
-      "hook": "Ever wondered how this works?",
-      "topics": [
-        "a zipper",
         "a smoke detector",
         "a vacuum cleaner",
         "a pencil"
@@ -11960,7 +11936,10 @@
     "a sewing machine",
     "a ceiling fan",
     "a bicycle",
-    "a fluorescent light"
+    "a fluorescent light",
+    "a zipper",
+    "a microwave",
+    "a compass"
   ],
   "min_before_refill": 20,
   "refill_target": 500
