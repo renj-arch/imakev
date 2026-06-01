@@ -23,6 +23,7 @@ on:
           - life_hacks
           - urban_legends
           - coincidences
+          - unsolved_mysteries
 
 concurrency:
   group: video-pipeline
@@ -75,7 +76,7 @@ jobs:
           if [ "$MODE" = "auto" ]; then
             HOUR=$(date -u +%-H)
             IDX=$((HOUR / 2))
-            case $((IDX % 11)) in
+            case $((IDX % 12)) in
               0) MODE="story" ;;
               1) MODE="facts" ;;
               2) MODE="what_if" ;;
@@ -87,6 +88,7 @@ jobs:
               8) MODE="life_hacks" ;;
               9) MODE="urban_legends" ;;
               10) MODE="coincidences" ;;
+              11) MODE="unsolved_mysteries" ;;
             esac
           fi
           echo "mode=$MODE" >> $GITHUB_OUTPUT

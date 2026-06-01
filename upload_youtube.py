@@ -24,6 +24,7 @@ PLAYLISTS = {
     "life_hacks": {"name": "Life Hacks", "desc": "Clever life hacks that actually work — save time, money, and effort."},
     "urban_legends": {"name": "Urban Legends", "desc": "Famous urban legends — the spooky story vs the real truth."},
     "coincidences": {"name": "Crazy Coincidences", "desc": "Real coincidence stories that sound fake but are 100% true."},
+    "unsolved_mysteries": {"name": "Unsolved Mysteries", "desc": "Real unsolved mysteries and cold cases that still baffle investigators."},
 }
 
 
