@@ -1,4 +1,4 @@
-name: AI Video Automation
+﻿name: AI Video Automation
 
 on:
   schedule:
@@ -28,8 +28,8 @@ on:
           - movie_trivia
           - animal_kingdom
           - space_wonders
-           - box_office
-           - upsc
+          - box_office
+          - upsc
 
 concurrency:
   group: video-pipeline
