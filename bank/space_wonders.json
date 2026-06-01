@@ -1,27 +1,6 @@
 {
   "entries": [
     {
-      "title": "The cosmos has secrets we're just discovering: More Stars Than Sand",
-      "hook": "The cosmos has secrets we're just discovering:",
-      "space_facts": [
-        "More Stars Than Sand",
-        "The Sun Is 99.86% of All Mass",
-        "Uranus Rolls Sideways"
-      ],
-      "stories": [
-        "There are about 100 billion galaxies each with 100 billion stars. That is 10 sextillion stars more than all grains of sand on every beach on Earth.",
-        "The Sun contains 99.86% of all mass in our solar system. All planets moons asteroids and comets combined make up only 0.14%. 1.3 million Earths could fit inside the Sun.",
-        "Uranus is tilted 98 degrees essentially rolling around the Sun on its side. A massive collision with an Earth-sized object likely knocked it over 4 billion years ago."
-      ],
-      "image_prompts": [
-        "NASA deep space photograph, More Stars Than Sand, stunning nebula and stars, cosmic colors, 9:16 vertical, ultra-detailed space photography, James Webb style",
-        "NASA deep space photograph, The Sun Is 99.86% of All Mass, stunning nebula and stars, cosmic colors, 9:16 vertical, ultra-detailed space photography, James Webb style",
-        "NASA deep space photograph, Uranus Rolls Sideways, stunning nebula and stars, cosmic colors, 9:16 vertical, ultra-detailed space photography, James Webb style"
-      ],
-      "script": "More Stars Than Sand. There are about 100 billion galaxies each with 100 billion stars. That is 10 sextillion stars more than all grains of sand on every beach on Earth. The Sun Is 99.86% of All Mass. The Sun contains 99.86% of all mass in our solar system. All planets moons asteroids and comets combined make up only 0.14%. 1.3 million Earths could fit inside the Sun. Uranus Rolls Sideways. Uranus is tilted 98 degrees essentially rolling around the Sun on its side. A massive collision with an Earth-sized object likely knocked it over 4 billion years ago.",
-      "tts_script": "More Stars Than Sand. There are about 100 billion galaxies each with 100 billion stars. That is 10 sextillion stars more than all grains of sand on every beach on Earth. The Sun Is 99.86% of All Mass. The Sun contains 99.86% of all mass in our solar system. All planets moons asteroids and comets combined make up only 0.14%. 1.3 million Earths could fit inside the Sun. Uranus Rolls Sideways. Uranus is tilted 98 degrees essentially rolling around the Sun on its side. A massive collision with an Earth-sized object likely knocked it over 4 billion years ago."
-    },
-    {
       "title": "Space is weirder than science fiction: Venus Day Longer Than Year",
       "hook": "Space is weirder than science fiction:",
       "space_facts": [
@@ -10501,7 +10480,11 @@
       "tts_script": "The Solar System Has a Tail. The solar system moves through space at 828000 km/h with a comet-like tail called the heliotail made of charged particles. It extends trillions of kilometers. A Spoonful of Black Hole. A black hole the size of a golf ball would contain the mass of Mount Everest. A tennis ball-sized one would have the mass of Earth. The Sun Is a Million Earths. The Sun is so massive that 1.3 million Earths could fit inside it. It converts 600 million tons of hydrogen into helium every second."
     }
   ],
-  "used": [],
+  "used": [
+    "more stars than sand",
+    "the sun is 99 86 of all mass",
+    "uranus rolls sideways"
+  ],
   "min_before_refill": 20,
   "refill_target": 500
 }
