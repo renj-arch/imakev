@@ -1,6 +1,6 @@
 """Shared hook, fast-motion, and visual retention utilities for all video types."""
 
-import random, re
+import random
 from pathlib import Path
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
@@ -78,7 +78,7 @@ def hook_overlays(duration: float = 2.0) -> list:
 
 
 def fast_motion(img_array: np.ndarray, dur: float, shake: bool = False, intensity: float = 1.0) -> VideoClip:
-    """Create a fast-zoom Ken Burns clip — aggressive zoom + sweep for high energy."""
+    """Create a fast-zoom Ken Burns clip from a numpy array or PIL Image."""
     from PIL import Image
     if isinstance(img_array, Image.Image):
         w, h = img_array.size
@@ -87,19 +87,15 @@ def fast_motion(img_array: np.ndarray, dur: float, shake: bool = False, intensit
 
     def f(t):
         p = t / dur if dur > 0 else 1
-        scale = 1.0 + p * 0.35 * intensity
+        scale = 1.0 + p * 0.18 * intensity
         cw, ch = int(w / scale), int(h / scale)
-        # Sweep: start from slightly different position each time
-        sweep_x = int(np.sin(p * np.pi * 1.5) * (w - cw) * 0.2)
-        sweep_y = int(np.cos(p * np.pi * 1.5 + 0.5) * (h - ch) * 0.15)
-        # Shake
         if shake:
-            sx = int(np.sin(p * 80) * cw * 0.04 * intensity)
-            sy = int(np.cos(p * 72) * ch * 0.04 * intensity)
+            sx = int(np.sin(p * 50) * cw * 0.03 * intensity)
+            sy = int(np.cos(p * 45) * ch * 0.03 * intensity)
         else:
             sx = sy = 0
-        ox = max(0, min(sweep_x + sx, w - cw))
-        oy = max(0, min(sweep_y + sy, h - ch))
+        ox = max(0, min((w - cw) // 2 + sx, w - cw))
+        oy = max(0, min((h - ch) // 2 + sy, h - ch))
         arr = img_array if isinstance(img_array, np.ndarray) else np.array(img_array)
         return arr[oy:oy + ch, ox:ox + cw].copy()
     return VideoClip(lambda t: f(t), duration=dur)
@@ -151,106 +147,25 @@ def add_watermark(video_path: str) -> str:
     return video_path
 
 
-def text_to_ssml(text: str) -> str:
-    """Convert plain text to expressive SSML with emphasis, pauses, and pitch variation."""
-    parts = re.split(r'([.?!]+)', text)
-    ssml_parts = []
-    for i in range(0, len(parts) - 1, 2):
-        sentence = parts[i].strip()
-        punct = parts[i + 1].strip() if i + 1 < len(parts) else ""
-        if not sentence:
-            continue
-        # Vary pitch and rate per sentence for natural feel
-        pitch_var = random.choice(["+0%", "+5%", "+8%", "-3%", "+3%", "-5%"])
-        rate_var = random.choice(["+0%", "+5%", "+10%", "-5%", "+8%"])
-        # Emphasize first few words (hook words)
-        words = sentence.split()
-        if len(words) >= 3:
-            first = " ".join(words[:2])
-            rest = " ".join(words[2:])
-            ssml_sentence = f"<emphasis level='moderate'>{first}</emphasis> {rest}{punct}"
-        else:
-            ssml_sentence = f"{sentence}{punct}"
-        # Add dramatic pause before question marks or exclamations
-        if "?" in punct:
-            ssml_sentence = ssml_sentence.replace("?", "<break time='0.4s'/>?")
-        if "!" in punct:
-            ssml_sentence = ssml_sentence.replace("!", "<break time='0.3s'/>!")
-        ssml_parts.append(
-            f"<prosody pitch='{pitch_var}' rate='{rate_var}'>{ssml_sentence}</prosody>"
-        )
-    # Add final pause for end card
-    ssml = f"<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-US'>"
-    ssml += " ".join(ssml_parts)
-    ssml += "<break time='0.8s'/></speak>"
-    return ssml
-
-
-def generate_voiceover_ssml(script: str, voice: str, tts_path: str, timeout: int = 120):
-    """Generate TTS voiceover using edge_tts with SSML for expressiveness."""
-    import subprocess, sys
-    # Write SSML to a temp file and use edge_tts CLI (detects SSML automatically)
-    temp_ssml = Path(str(tts_path) + ".ssml")
-    ssml = text_to_ssml(script)
-    temp_ssml.write_text(ssml, encoding="utf-8")
-    try:
-        subprocess.run(
-            [sys.executable, "-m", "edge_tts", "--file", str(temp_ssml),
-             "--voice", voice, "--write-media", str(tts_path)],
-            capture_output=True, text=True, timeout=timeout, check=True
-        )
-        temp_ssml.unlink(missing_ok=True)
-        # Verify the file is valid MP3 (check header magic bytes)
-        data = Path(tts_path).read_bytes()
-        if len(data) < 500:
-            raise ValueError("Output too small, likely corrupt")
-        if not (data[:2] == b"ID" or (data[0] == 0xff and (data[1] & 0xe0) == 0xe0)):
-            raise ValueError("Output missing valid MP3 header")
-        return True
-    except Exception as e:
-        print(f"  SSML TTS failed ({e}), falling back to plain edge_tts")
-        temp_ssml.unlink(missing_ok=True)
-        subprocess.run(
-            [sys.executable, "-m", "edge_tts", "--text", script,
-             "--voice", voice, "--write-media", str(tts_path)],
-            capture_output=True, text=True, timeout=timeout, check=True
-        )
-        # Verify plain text fallback output too
-        data = Path(tts_path).read_bytes()
-        if len(data) < 500:
-            raise ValueError("Fallback output too small, likely corrupt")
-        return True
-
-
 def pad_audio_to_61s(tts_path: str) -> float:
-    """Stretch TTS audio to at least 61s. Tries numpy resample, falls back to adding brief intro/outro silence."""
-    from moviepy import AudioFileClip, AudioClip, concatenate_audioclips
+    """Stretch TTS audio to at least 61s via resampling for long-form ad revenue. Returns duration."""
+    from moviepy import AudioFileClip, AudioClip
     import numpy as np
     audio = AudioFileClip(tts_path)
     dur = audio.duration
-    if dur < 61 and dur > 3:
-        try:
-            # Attempt numpy-based stretch (tempo change)
-            samples = audio.to_soundarray(fps=22050)
-            if samples.ndim == 1:
-                samples = samples[:, None]
-            target_frames = int(22050 * 61)
-            orig_frames = samples.shape[0]
-            x = np.arange(orig_frames)
-            xp = np.linspace(0, orig_frames - 1, target_frames)
-            stretched = np.column_stack([np.interp(xp, x, samples[:, ch].astype(np.float64)) for ch in range(samples.shape[1])])
-            stretched = stretched.astype(np.float32)
-            stretched_clip = AudioClip(lambda t, arr=stretched: arr[min(int(t * 22050), len(arr) - 1)], duration=61, fps=22050)
-            stretched_clip.write_audiofile(str(tts_path), fps=22050, logger=None)
-            dur = 61
-            print(f"  Stretched {audio.duration:.1f}s → 61s")
-        except Exception as e:
-            print(f"  Stretch failed ({e}), adding silence pad instead")
-            pad = AudioClip(lambda t: np.zeros(2), duration=61 - dur, fps=22050)
-            combined = concatenate_audioclips([audio, pad])
-            combined.write_audiofile(str(tts_path), fps=22050, logger=None)
-            dur = 61
-            print(f"  Padded silence: {audio.duration:.1f}s → 61s")
+    if dur < 61 and dur > 5:
+        samples = audio.to_soundarray(fps=22050)
+        if samples.ndim == 1:
+            samples = samples[:, None]
+        target_frames = int(22050 * 61)
+        orig_frames = samples.shape[0]
+        x = np.arange(orig_frames)
+        xp = np.linspace(0, orig_frames - 1, target_frames)
+        stretched = np.column_stack([np.interp(xp, x, samples[:, ch]) for ch in range(samples.shape[1])])
+        stretched_clip = AudioClip(lambda t: stretched[int(t * 22050) % target_frames], duration=61, fps=22050)
+        stretched_clip.write_audiofile(str(tts_path), fps=22050, logger=None)
+        dur = 61
+        print(f"  Stretched {audio.duration:.1f}s → 61s (long-form minimum)")
     audio.close()
     return dur
 
