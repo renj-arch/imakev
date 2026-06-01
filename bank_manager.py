@@ -90,6 +90,60 @@ REFILL_PROMPTS = {
         "TRUTH: [the real origin in 2-3 sentences]\n\n"
         "Make it engaging and surprising. Suitable for all ages."
     ),
+    "coincidences": (
+        "Give me 3 amazing true coincidence stories. Each must be a documented real event. "
+        "Never repeat stories from this avoid list:"
+        "\n---\n{avoid}\n---\n"
+        "Format exactly:\n"
+        "TITLE: [short name of the coincidence]\n"
+        "STORY: [3-4 sentences telling what happened with specific details and dates]\n\n"
+        "Make them shocking, memorable, and 100% real."
+    ),
+    "unsolved_mysteries": (
+        "Give me 3 famous unsolved mysteries or cold cases. Each must be a real, documented case. "
+        "Never repeat cases from this avoid list:"
+        "\n---\n{avoid}\n---\n"
+        "Format exactly:\n"
+        "CASE: [name of the mystery/case]\n"
+        "STORY: [3-4 sentences telling what happened, key facts, dates, and why it remains unsolved]\n\n"
+        "Make them fascinating, chilling, and accurate."
+    ),
+    "movie_trivia": (
+        "Give me 3 true behind-the-scenes movie trivia facts. Each must be a verified real fact from a well-known movie. "
+        "Never repeat trivia from this avoid list:"
+        "\n---\n{avoid}\n---\n"
+        "Format exactly:\n"
+        "MOVIE: [movie title and the trivia headline]\n"
+        "TRIVIA: [3-4 sentences explaining the real behind-the-scenes story]\n\n"
+        "Make them fascinating, surprising, and 100% factual."
+    ),
+    "animal_kingdom": (
+        "Give me 3 incredible animal facts. Each must be a verified documented fact about a real animal. "
+        "Never repeat facts from this avoid list:"
+        "\n---\n{avoid}\n---\n"
+        "Format exactly:\n"
+        "ANIMAL: [name of animal and the surprising fact headline]\n"
+        "FACT: [3-4 sentences explaining the fact with specific details]\n\n"
+        "Make them mind-blowing, accurate, and fascinating."
+    ),
+    "space_wonders": (
+        "Give me 3 incredible space and astronomy facts. Each must be a verified documented fact from NASA or research. "
+        "Never repeat facts from this avoid list:"
+        "\n---\n{avoid}\n---\n"
+        "Format exactly:\n"
+        "TITLE: [short headline for the space fact]\n"
+        "FACT: [3-4 sentences explaining the fact with specific numbers and details]\n\n"
+        "Make them mind-blowing, accurate, and fascinating."
+    ),
+    "box_office": (
+        "Give me 3 fascinating box office or movie earnings facts. Each must be a verified real fact. "
+        "Never repeat facts from this avoid list:"
+        "\n---\n{avoid}\n---\n"
+        "Format exactly:\n"
+        "TITLE: [short headline for the box office fact]\n"
+        "FACT: [3-4 sentences explaining with specific dollar amounts and details]\n\n"
+        "Include specific numbers, years, and comparisons."
+    ),
 }
 
 NICHES = [
@@ -115,6 +169,12 @@ IMAGE_PROMPT_PSYCHOLOGY = "cinematic surreal brain illustration: {hack}, glowing
 IMAGE_PROMPT_LIFE_HACKS = "clean bright flat lay photography: {hack}, household objects arranged neatly, top down view, natural lighting, minimalist, 9:16 vertical, white background"
 IMAGE_PROMPT_URBAN_LEGENDS_MYTH = "dark cinematic horror scene: {legend}, foggy night, creepy atmosphere, vintage style, 9:16 vertical, moody lighting, shadows"
 IMAGE_PROMPT_URBAN_LEGENDS_TRUTH = "bright cinematic reveal scene: {legend}, warm sunlight, documentary style, clean, 9:16 vertical, educational"
+IMAGE_PROMPT_COINCIDENCES = "surreal vintage photograph style, {title}, mysterious dreamlike atmosphere, sepia tones, double exposure effect, 9:16 vertical, cinematic lighting, historical aesthetic"
+IMAGE_PROMPT_UNSOLVED = "dark mysterious cinematic photograph, {title}, vintage crime scene style, dramatic shadows, film grain, 9:16 vertical, haunting atmosphere, noir aesthetic"
+IMAGE_PROMPT_MOVIE_TRIVIA = "cinematic movie poster style, {title}, dramatic lighting, film grain, 9:16 vertical, Hollywood golden hour, vintage movie set photography"
+IMAGE_PROMPT_ANIMAL_KINGDOM = "National Geographic wildlife photography, {title}, stunning animal portrait, golden hour lighting, 9:16 vertical, hyper-realistic, nature documentary style"
+IMAGE_PROMPT_SPACE_WONDERS = "NASA deep space photograph, {title}, stunning nebula and stars, cosmic colors, 9:16 vertical, ultra-detailed space photography, James Webb Space Telescope style"
+IMAGE_PROMPT_BOX_OFFICE = "vintage Hollywood movie poster, {title}, dramatic golden lighting, film strip border, 9:16 vertical, cinema marquee lights, retro box office aesthetic"
 
 RIDDLE_TYPES = [
     "logic", "wordplay", "math", "lateral thinking", "observation",
@@ -213,6 +273,65 @@ URBAN_LEGENDS_HOOKS = [
     "You've been told this spooky story since childhood. Let me ruin it with facts:",
 ]
 
+COINCIDENCES_HOOKS = [
+    "You won't believe this coincidence actually happened:",
+    "What are the odds? This is 100% true:",
+    "This coincidence is so wild it sounds fake but it's real:",
+    "The universe has a weird sense of humor:",
+    "Some things just can't be explained:",
+    "Statistically impossible, yet it happened:",
+    "You couldn't make this up even if you tried:",
+]
+
+UNSOLVED_HOOKS = [
+    "This mystery has never been solved:",
+    "Decades later, we still don't know what happened:",
+    "The case went cold and no one knows why:",
+    "This real mystery has no explanation:",
+    "Investigators are still baffled by this one:",
+    "To this day, no one has the answers:",
+    "This unsolved case will keep you up at night:",
+]
+
+MOVIE_TRIVIA_HOOKS = [
+    "You won't believe what happened behind the scenes:",
+    "This movie secret was hidden for years:",
+    "Most people don't know this about their favorite movie:",
+    "This famous scene almost didn't make the cut:",
+    "The real story behind this movie moment is incredible:",
+    "Hollywood kept this secret quiet for decades:",
+    "This movie fact sounds fake but it's 100% true:",
+]
+
+ANIMAL_KINGDOM_HOOKS = [
+    "Nature is absolutely mind-blowing:",
+    "You won't believe what this animal can do:",
+    "Mother Nature has some incredible secrets:",
+    "This animal fact sounds fake but it's true:",
+    "The animal kingdom never stops surprising us:",
+    "Evolution created something truly amazing:",
+    "Most people don't know this about animals:",
+]
+
+SPACE_WONDERS_HOOKS = [
+    "The universe is bigger than you can imagine:",
+    "This space fact will blow your mind:",
+    "Space is weirder than science fiction:",
+    "NASA confirms this incredible space fact:",
+    "Looking at the stars is looking into the past:",
+    "The cosmos has secrets we're only beginning to understand:",
+]
+
+BOX_OFFICE_HOOKS = [
+    "You won't believe how much this movie earned:",
+    "This box office record still stands today:",
+    "The numbers behind this film are insane:",
+    "This movie broke every record in Hollywood:",
+    "Made on a tiny budget, earned millions:",
+    "The most profitable movie ever made:",
+    "Hollywood didn't see this coming:",
+]
+
 URBAN_LEGENDS_FALLBACKS = [
     ("Bloody Mary", "Say Bloody Mary three times in front of a mirror and a ghostly woman appears to attack you. The legend has terrified children at sleepovers for decades.", "The legend likely originated from 16th century Queen Mary I. The modern version spread in the 1970s as a harmless dare game, inspired by mirror-gazing superstitions."),
     ("The Hook", "A couple parked at Lover's Lane hears a radio warning about an escaped convict with a hook for a hand. They drive away scared, and later find a bloody hook dangling from the car door handle.", "The story first appeared in 1950s teen folklore magazines. No real incident has ever matched the details, but it became the classic cautionary tale about teenage rebellion."),
@@ -301,6 +420,36 @@ def _mark_used(mode: str, entry: dict):
         n = _normalize(entry.get("legend", ""))
         if n and n not in used:
             used.append(n)
+    elif mode == "coincidences":
+        for c in entry.get("coincidences", []):
+            n = _normalize(c)
+            if n and n not in used:
+                used.append(n)
+    elif mode == "unsolved_mysteries":
+        for m in entry.get("mysteries", []):
+            n = _normalize(m)
+            if n and n not in used:
+                used.append(n)
+    elif mode == "movie_trivia":
+        for t in entry.get("trivia_titles", []):
+            n = _normalize(t)
+            if n and n not in used:
+                used.append(n)
+    elif mode == "animal_kingdom":
+        for f in entry.get("animal_facts", []):
+            n = _normalize(f)
+            if n and n not in used:
+                used.append(n)
+    elif mode == "space_wonders":
+        for f in entry.get("space_facts", []):
+            n = _normalize(f)
+            if n and n not in used:
+                used.append(n)
+    elif mode == "box_office":
+        for f in entry.get("box_office_titles", []):
+            n = _normalize(f)
+            if n and n not in used:
+                used.append(n)
     data["used"] = used
     _write_bank(mode, data)
 
@@ -370,6 +519,18 @@ def refill(mode: str, force_count: int | None = None):
             new_entries = _refill_life_hacks(need)
         elif mode == "urban_legends":
             new_entries = _refill_urban_legends(need)
+        elif mode == "coincidences":
+            new_entries = _refill_3item("coincidences", need, COINCIDENCES_HOOKS, "coincidences", IMAGE_PROMPT_COINCIDENCES)
+        elif mode == "unsolved_mysteries":
+            new_entries = _refill_3item("unsolved_mysteries", need, UNSOLVED_HOOKS, "mysteries", IMAGE_PROMPT_UNSOLVED)
+        elif mode == "movie_trivia":
+            new_entries = _refill_3item("movie_trivia", need, MOVIE_TRIVIA_HOOKS, "trivia_titles", IMAGE_PROMPT_MOVIE_TRIVIA)
+        elif mode == "animal_kingdom":
+            new_entries = _refill_3item("animal_kingdom", need, ANIMAL_KINGDOM_HOOKS, "animal_facts", IMAGE_PROMPT_ANIMAL_KINGDOM)
+        elif mode == "space_wonders":
+            new_entries = _refill_3item("space_wonders", need, SPACE_WONDERS_HOOKS, "space_facts", IMAGE_PROMPT_SPACE_WONDERS)
+        elif mode == "box_office":
+            new_entries = _refill_3item("box_office", need, BOX_OFFICE_HOOKS, "box_office_titles", IMAGE_PROMPT_BOX_OFFICE)
         else:
             return
 
@@ -824,6 +985,59 @@ def _refill_urban_legends(need: int) -> list:
             entries.append(entry)
         attempts += 1
 
+    return entries
+
+
+def _refill_3item(mode: str, need: int, hooks: list, list_key: str, img_prompt: str) -> list:
+    """Generic refill for 3-item-per-entry modes (coincidences, unsolved, trivia, etc)."""
+    entries = []
+    attempts = 0
+    title_keys = {"coincidences": "TITLE", "unsolved_mysteries": "CASE", "movie_trivia": "MOVIE", "animal_kingdom": "ANIMAL", "space_wonders": "TITLE", "box_office": "TITLE"}
+    story_keys = {"coincidences": "STORY", "unsolved_mysteries": "STORY", "movie_trivia": "TRIVIA", "animal_kingdom": "FACT", "space_wonders": "FACT", "box_office": "FACT"}
+    tk = title_keys[mode]
+    sk = story_keys[mode]
+    while len(entries) < need and attempts < need * 5:
+        avoid = _avoid_sample(mode)
+        prompt = REFILL_PROMPTS[mode].format(avoid=avoid)
+        try:
+            raw = _generate(prompt, temperature=0.8, max_tokens=1000,
+                            system="You write verified true content. Every detail must be accurate and documented.")
+        except Exception as e:
+            print(f"  LLM error ({mode}): {e}")
+            attempts += 1
+            continue
+        if not raw:
+            attempts += 1
+            continue
+        items = []
+        current = {}
+        for line in raw.split("\n"):
+            line = line.strip()
+            if line.upper().startswith(tk + ":"):
+                if current.get("title") and current.get("story"):
+                    items.append((current["title"], current["story"]))
+                current = {"title": line.split(":", 1)[-1].strip()}
+            elif line.upper().startswith(sk + ":") and current:
+                current["story"] = line.split(":", 1)[-1].strip()
+        if current.get("title") and current.get("story"):
+            items.append((current["title"], current["story"]))
+        titles = [i[0] for i in items]
+        if len(items) >= 3 and not _is_duplicate(mode, titles, _read_bank(mode)):
+            hook = random.choice(hooks)
+            stories = [i[1] for i in items]
+            image_prompts = [img_prompt.format(title=t) for t in titles]
+            tts_lines = [f"{t}. {s}" for t, s in items]
+            entry = {
+                "title": f"{hook} {titles[0]}",
+                "hook": hook,
+                list_key: titles,
+                "stories": stories,
+                "image_prompts": image_prompts,
+                "script": " ".join(tts_lines),
+                "tts_script": " ".join(tts_lines),
+            }
+            entries.append(entry)
+        attempts += 1
     return entries
 
 
