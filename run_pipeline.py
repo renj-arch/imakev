@@ -333,7 +333,7 @@ def main():
     elif mode == "neet":
         run_neet()
     else:
-        print(f"Unknown mode: {mode}. Use 'how_it_works' or 'facts'")
+        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', 'movie_trivia', 'animal_kingdom', 'space_wonders', 'box_office', 'upsc', or 'neet'")
 
 
 if __name__ == "__main__":
