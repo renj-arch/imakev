@@ -1,27 +1,6 @@
 {
   "entries": [
     {
-      "title": "This is 100% true: The Bookstore Dream",
-      "hook": "This is 100% true:",
-      "coincidences": [
-        "The Bookstore Dream",
-        "Prison Photo Coincidence",
-        "The Two Roberts"
-      ],
-      "stories": [
-        "In the 1920s author Anne Parrish found a book she remembered from childhood in a Paris bookstore. She bought it and showed her husband. When she opened it she found her own name and childhood address written inside as the previous owner.",
-        "In 2011 a British man was arrested in Spain. His mugshot turned out identical to a photo taken at the same police station 12 years earlier of a man who committed the exact same crime.",
-        "In 1975 two men named Robert Smith from different states sat next to each other at a Chicago convention. Both worked for the same company in different offices. Both had the same birthday."
-      ],
-      "image_prompts": [
-        "surreal vintage photograph style, The Bookstore Dream, mysterious dreamlike atmosphere, sepia tones, double exposure, 9:16 vertical, cinematic lighting, historical aesthetic",
-        "surreal vintage photograph style, Prison Photo Coincidence, mysterious dreamlike atmosphere, sepia tones, double exposure, 9:16 vertical, cinematic lighting, historical aesthetic",
-        "surreal vintage photograph style, The Two Roberts, mysterious dreamlike atmosphere, sepia tones, double exposure, 9:16 vertical, cinematic lighting, historical aesthetic"
-      ],
-      "script": "The Bookstore Dream. In the 1920s author Anne Parrish found a book she remembered from childhood in a Paris bookstore. She bought it and showed her husband. When she opened it she found her own name and childhood address written inside as the previous owner. Prison Photo Coincidence. In 2011 a British man was arrested in Spain. His mugshot turned out identical to a photo taken at the same police station 12 years earlier of a man who committed the exact same crime. The Two Roberts. In 1975 two men named Robert Smith from different states sat next to each other at a Chicago convention. Both worked for the same company in different offices. Both had the same birthday.",
-      "tts_script": "The Bookstore Dream. In the 1920s author Anne Parrish found a book she remembered from childhood in a Paris bookstore. She bought it and showed her husband. When she opened it she found her own name and childhood address written inside as the previous owner. Prison Photo Coincidence. In 2011 a British man was arrested in Spain. His mugshot turned out identical to a photo taken at the same police station 12 years earlier of a man who committed the exact same crime. The Two Roberts. In 1975 two men named Robert Smith from different states sat next to each other at a Chicago convention. Both worked for the same company in different offices. Both had the same birthday."
-    },
-    {
       "title": "Statistically impossible yet it happened: Prison Photo Coincidence",
       "hook": "Statistically impossible yet it happened:",
       "coincidences": [
@@ -10501,7 +10480,11 @@
       "tts_script": "The Titanic Omen. In 1898 Morgan Robertson wrote 'Futility' about an unsinkable ship called the Titan that hit an iceberg and sank. 14 years later the Titanic eerily similar in size and design sank exactly the same way. The Composer Dream. In 1736 composer Giuseppe Tartini dreamed the devil played a violin sonata. He wrote down 'The Devil's Trill Sonata' one of the most famous violin works. In 1959 another composer had the same dream and wrote a strikingly similar piece. The Identical Strangers. Three men in the Canary Islands discovered they were identical triplets separated at birth by an adoption agency as part of a secret study. All three grew up with similar habits and married women with the same name."
     }
   ],
-  "used": [],
+  "used": [
+    "the bookstore dream",
+    "prison photo coincidence",
+    "the two roberts"
+  ],
   "min_before_refill": 20,
   "refill_target": 500
 }
