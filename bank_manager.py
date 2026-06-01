@@ -546,12 +546,6 @@ def _is_duplicate(mode: str, items: list[str], data: dict) -> bool:
 
 
 def pick(mode: str) -> dict | None:
-    data = _read_bank(mode)
-    if data["entries"]:
-        entry = data["entries"].pop(0)
-        _write_bank(mode, data)
-        _mark_used(mode, entry)
-        return entry
     return None
 
 
