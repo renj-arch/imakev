@@ -49,7 +49,7 @@ def generate_movie_trivia_script() -> dict:
 
 
 def _fallback() -> dict:
-    items = random.sample(FALLBACKS, min(2, len(FALLBACKS)))
+    items = random.sample(FALLBACKS, min(4, len(FALLBACKS)))
     hook = random.choice(HOOKS)
     image_prompts = [
         f"cinematic movie poster style, {title}, dramatic lighting, film grain, 9:16 vertical, Hollywood golden hour, vintage movie set photography"
@@ -71,7 +71,7 @@ def _try_llm() -> dict | None:
     try:
         from src.script_generator import _generate
         prompt = (
-            "Give me 2 true behind-the-scenes movie trivia facts with short explanations (8-12 words each). "
+            "Give me 4 true behind-the-scenes movie trivia facts with short explanations (12-15 words each). "
             "Each must be a verified real fact from a well-known movie. "
             "Format exactly:\n"
             "MOVIE: [movie title and the trivia headline]\n"
@@ -94,7 +94,7 @@ def _try_llm() -> dict | None:
                 current["trivia"] = line.split(":", 1)[-1].strip()
         if current.get("movie") and current.get("trivia"):
             items.append((current["movie"], current["trivia"]))
-        if items and len(items) >= 2:
+        if items and len(items) >= 3:
             hook = random.choice(HOOKS)
             image_prompts = [
                 f"cinematic movie poster style, {movie}, dramatic lighting, film grain, 9:16 vertical, Hollywood golden hour, vintage movie set photography"

@@ -75,11 +75,11 @@ def _try_llm() -> dict | None:
     try:
         from src.script_generator import _generate
         prompt = (
-            "Give me 1 UPSC exam concept with a short explanation (8-12 words). "
-            "Topic should be high-yield from Polity, Economy, History, or Geography. "
+            "Give me 1 UPSC exam concept with a detailed explanation (100-150 words). "
+            "Topic should be high-yield from Polity, Economy, History, or Geography. Include key facts, dates, and significance. "
             "Format exactly:\n"
             "TOPIC: [Name of the concept]\n"
-            "EXPLANATION: [short explanation, 8-12 words]\n"
+            "EXPLANATION: [detailed explanation, 100-150 words]\n"
             "SUBJECT: [Polity/Economy/History/Geography]"
         )
         system = "You are a UPSC mentor teaching complex topics in simple words. Only include verified facts."

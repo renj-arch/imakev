@@ -147,6 +147,22 @@ def add_watermark(video_path: str) -> str:
     return video_path
 
 
+def pad_audio_to_61s(tts_path: str) -> float:
+    """Pad TTS audio file to at least 61s for long-form ad revenue. Returns duration."""
+    from moviepy import AudioFileClip, concatenate_audioclips
+    audio = AudioFileClip(tts_path)
+    dur = audio.duration
+    audio.close()
+    if dur < 61:
+        pad = AudioFileClip(tts_path).with_duration(61 - dur).with_volume_scaled(0)
+        combined = concatenate_audioclips([AudioFileClip(tts_path), pad])
+        combined.write_audiofile(tts_path, fps=22050, logger=None)
+        combined.close()
+        dur = 61
+        print(f"  Padded audio to 61s (long-form minimum)")
+    return dur
+
+
 def subscribe_end_card(img_array, duration: float = 1.5) -> VideoClip:
     """End card with subscribe appeal on given image."""
     clip = fast_motion(img_array, duration, shake=False, intensity=0.6)

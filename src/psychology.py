@@ -44,7 +44,7 @@ def generate_psychology_script() -> dict:
 
 
 def _fallback() -> dict:
-    hacks = random.sample(FALLBACKS, min(2, len(FALLBACKS)))
+    hacks = random.sample(FALLBACKS, min(5, len(FALLBACKS)))
     hook = random.choice(HOOKS)
     image_prompts = [
         f"cinematic surreal brain illustration: {h}, glowing neural connections, moody atmospheric lighting, 9:16 vertical, dark background with neon accents, highly detailed"
@@ -66,11 +66,11 @@ def _try_llm() -> dict | None:
     try:
         from src.script_generator import _generate
         prompt = (
-            "Give me 2 different psychology hacks or brain facts. "
+            "Give me 5 different psychology hacks or brain facts. "
             "Each should be a real psychological effect with a surprising explanation. "
             "Format exactly:\n"
             "HACK: [Name of the effect, 3-5 words]\n"
-            "EXPLANATION: [1 short sentence, 8-12 words]\n\n"
+            "EXPLANATION: [1 sentence, 12-15 words]\n\n"
             "Make each one feel like a secret about the human mind."
         )
         system = "You write about real psychology effects in simple, fascinating terms. Only include verified psychological phenomena."
@@ -89,7 +89,7 @@ def _try_llm() -> dict | None:
                 current["explanation"] = line.split(":", 1)[-1].strip()
         if current.get("hack") and current.get("explanation"):
             hacks.append((current["hack"], current["explanation"]))
-        if hacks and len(hacks) >= 2:
+        if hacks and len(hacks) >= 4:
             hook = random.choice(HOOKS)
             image_prompts = [
                 f"cinematic surreal brain illustration: {h}, glowing neural connections, moody atmospheric lighting, 9:16 vertical, dark background with neon accents, highly detailed"

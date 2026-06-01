@@ -31,7 +31,7 @@ def generate_what_if_script() -> dict:
     scenarios = _try_llm()
     if not scenarios:
         print("  LLM unavailable, using fallback")
-        scenarios = random.sample(FALLBACKS, min(2, len(FALLBACKS)))
+        scenarios = random.sample(FALLBACKS, min(5, len(FALLBACKS)))
 
     hook = random.choice(HOOKS)
     title = f"{hook} {scenarios[0][0]}"
@@ -53,10 +53,10 @@ def _try_llm() -> list | None:
     try:
         from src.script_generator import _generate
         prompt = (
-            "Give me 2 imaginative 'What If' scenarios for kids. "
+            "Give me 5 imaginative 'What If' scenarios for kids. "
             "Format each as:\n"
             "SCENARIO: what if ... (5-8 words)\n"
-            "EXPLANATION: very short fun explanation (8-12 words)\n"
+            "EXPLANATION: fun explanation (10-15 words)\n"
             "Make them creative, magical, and fun. No scary content."
         )
         system = "You write creative 'What If' scenarios for children's videos."
@@ -75,7 +75,7 @@ def _try_llm() -> list | None:
                 current["explanation"] = line.split(":", 1)[-1].strip()
         if current.get("scenario") and current.get("explanation"):
             scenarios.append((current["scenario"], current["explanation"]))
-        return scenarios[:2] if len(scenarios) >= 2 else None
+        return scenarios[:5] if len(scenarios) >= 4 else None
     except Exception as e:
         print(f"  LLM error: {e}")
         return None

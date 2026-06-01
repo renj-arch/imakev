@@ -50,9 +50,9 @@ def generate_fact_script(niche: str = "") -> dict:
     facts = _try_llm(niche)
     if not facts:
         print("  LLM unavailable, using fallback bank")
-        facts = random.sample(FALLBACK_FACTS, min(3, len(FALLBACK_FACTS)))
+        facts = random.sample(FALLBACK_FACTS, min(6, len(FALLBACK_FACTS)))
     else:
-        facts = facts[:3]
+        facts = facts[:6]
 
     hook = random.choice(FACT_HOOKS)
     title = f"{hook} {facts[0][:50]}..." if facts else f"Amazing {niche} Facts"
@@ -79,9 +79,9 @@ def _try_llm(niche: str) -> list | None:
     try:
         from src.script_generator import _generate
         prompt = (
-            f"Write 3 surprising true facts about {niche}. "
-            f"Each fact: keep it SHORT (max 8 words, punchy). "
-            f"Number them 1-3, one per line."
+            f"Write 6 surprising true facts about {niche}. "
+            f"Each fact: keep it punchy and interesting (10-15 words each). "
+            f"Number them 1-6, one per line."
         )
         system = "You write verified facts. Only include facts you are certain are true. One fact per line, numbered."
         raw = _generate(prompt, temperature=0.7, max_tokens=600, system=system)
@@ -96,7 +96,7 @@ def _try_llm(niche: str) -> list | None:
                 clean = line.split(". ", 1)[-1].split(") ", 1)[-1].strip()
                 if clean and len(clean) > 10:
                     facts.append(clean.rstrip(".") + ".")
-        return facts[:3] if len(facts) >= 2 else None
+        return facts[:6] if len(facts) >= 4 else None
     except Exception as e:
         print(f"  LLM error: {e}")
         return None

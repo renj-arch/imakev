@@ -8,7 +8,7 @@ import requests as req
 from moviepy import VideoClip, AudioFileClip, concatenate_videoclips, CompositeAudioClip, concatenate_audioclips, CompositeVideoClip
 import config
 from src.how_it_works import generate_howitworks_script
-from src.engagement import hook_overlays, fast_motion, comment_prompt_overlay, subscribe_end_card, branding_overlays
+from src.engagement import hook_overlays, fast_motion, comment_prompt_overlay, subscribe_end_card, branding_overlays, pad_audio_to_61s
 
 FONT_PATH = config.get_font()
 W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
@@ -121,18 +121,7 @@ def main():
     tts_path = temp_dir / "narration.mp3"
     # Deeper, more engaging voice
     subprocess.run([sys.executable, "-m", "edge_tts", "--text", tts_script, "--voice", "en-US-ChristopherNeural", "--write-media", str(tts_path)], capture_output=True, text=True, timeout=120, check=True)
-    audio = AudioFileClip(str(tts_path))
-    total_dur = audio.duration
-    audio.close()
-    # Pad TTS to 61s+ for long-form ad revenue
-    if total_dur < 61:
-        silent_pad = AudioFileClip(str(tts_path)).with_duration(61 - total_dur).with_volume_scaled(0)
-        from moviepy import concatenate_audioclips
-        combined = concatenate_audioclips([AudioFileClip(str(tts_path)), silent_pad])
-        combined.write_audiofile(str(tts_path), fps=22050, logger=None)
-        combined.close()
-        total_dur = 61
-        print(f"  Padded to {total_dur:.0f}s (long-form minimum)")
+    total_dur = pad_audio_to_61s(str(tts_path))
     print(f"  {total_dur:.1f}s | ~{len(tts_script.split())} words")
 
     print(f"\n[2/4] Generating {len(visual_prompts)} images...")

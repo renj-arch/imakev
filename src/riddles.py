@@ -26,17 +26,18 @@ def generate_riddle_script() -> dict:
 
 
 def _fallback() -> dict:
-    riddle = random.choice(FALLBACKS)
+    selected = random.sample(FALLBACKS, min(3, len(FALLBACKS)))
     hook = random.choice(HOOKS)
+    tts_parts = [f"Riddle {i+1}: {r[0]} The answer is {r[1]}. {r[2]}" for i, r in enumerate(selected)]
     return {
-        "title": f"Can You Solve This Riddle?",
+        "title": f"Can You Solve These Riddles?",
         "hook": hook,
-        "riddle": riddle[0],
-        "answer": riddle[1],
-        "explanation": riddle[2],
-        "image_prompt_riddle": f"mysterious cinematic scene: {riddle[0][:80]}, dark moody lighting, question marks, 9:16 vertical, intrigue",
-        "image_prompt_answer": f"cinematic reveal scene: {riddle[1][:80]}, bright warm lighting, discovery moment, 9:16 vertical",
-        "tts_script": f"{hook} {riddle[0]} The answer is {riddle[1]}. {riddle[2]}",
+        "riddle": f"{selected[0][0]} And here's another: {selected[1][0] if len(selected) > 1 else ''}",
+        "answer": selected[0][1],
+        "explanation": selected[0][2],
+        "image_prompt_riddle": f"mysterious cinematic scene: {selected[0][0][:80]}, dark moody lighting, question marks, 9:16 vertical, intrigue",
+        "image_prompt_answer": f"cinematic reveal scene: {selected[0][1][:80]}, bright warm lighting, discovery moment, 9:16 vertical",
+        "tts_script": f"{hook} {' '.join(tts_parts)}",
     }
 
 
@@ -72,16 +73,15 @@ FALLBACKS = [
 def _try_llm() -> dict | None:
     try:
         from src.script_generator import _generate
-        rtype = random.choice(RIDDLE_TYPES)
         prompt = (
-            f"Write a {rtype} riddle. Format exactly:\n"
-            f"RIDDLE: [the riddle question]\n"
-            f"ANSWER: [short answer]\n"
-            f"EXPLANATION: [one sentence explanation]\n"
-            f"Make it clever but solvable. Suitable for all ages."
+            "Write 3 clever riddles. Format each exactly:\n"
+            "RIDDLE: [the riddle question]\n"
+            "ANSWER: [short answer]\n"
+            "EXPLANATION: [one sentence explanation]\n\n"
+            "Make them clever but solvable. Suitable for all ages."
         )
         system = "You write clever riddles suitable for all ages."
-        raw = _generate(prompt, temperature=0.8, max_tokens=300, system=system)
+        raw = _generate(prompt, temperature=0.8, max_tokens=600, system=system)
         if not raw:
             return None
         riddle = answer = explanation = ""

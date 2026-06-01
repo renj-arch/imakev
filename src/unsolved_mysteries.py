@@ -49,7 +49,7 @@ def generate_unsolved_mysteries_script() -> dict:
 
 
 def _fallback() -> dict:
-    items = random.sample(FALLBACKS, min(2, len(FALLBACKS)))
+    items = random.sample(FALLBACKS, min(4, len(FALLBACKS)))
     hook = random.choice(HOOKS)
     image_prompts = [
         f"dark mysterious cinematic photograph, {title}, vintage crime scene photography style, dramatic shadows, film grain, 9:16 vertical, haunting atmosphere, noir aesthetic"
@@ -71,7 +71,7 @@ def _try_llm() -> dict | None:
     try:
         from src.script_generator import _generate
         prompt = (
-            "Give me 2 famous unsolved mysteries or cold cases with short explanations (8-12 words each). "
+            "Give me 4 famous unsolved mysteries or cold cases with short explanations (12-15 words each). "
             "Each must be a real, documented case. "
             "Format exactly:\n"
             "CASE: [name of the mystery/case]\n"
@@ -94,7 +94,7 @@ def _try_llm() -> dict | None:
                 current["story"] = line.split(":", 1)[-1].strip()
         if current.get("case") and current.get("story"):
             items.append((current["case"], current["story"]))
-        if items and len(items) >= 2:
+        if items and len(items) >= 3:
             hook = random.choice(HOOKS)
             image_prompts = [
                 f"dark mysterious cinematic photograph, {case}, vintage crime scene photography style, dramatic shadows, film grain, 9:16 vertical, haunting atmosphere, noir aesthetic"

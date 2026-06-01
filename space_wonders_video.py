@@ -7,7 +7,7 @@ import numpy as np
 import requests as req
 from moviepy import VideoClip, AudioFileClip, concatenate_videoclips, CompositeAudioClip, CompositeVideoClip
 import config
-from src.engagement import hook_overlays, fast_motion, comment_prompt_overlay, subscribe_end_card, branding_overlays
+from src.engagement import hook_overlays, fast_motion, comment_prompt_overlay, subscribe_end_card, branding_overlays, pad_audio_to_61s
 from src.space_wonders import generate_space_wonders_script
 
 FONT_PATH = config.get_font()
@@ -115,9 +115,7 @@ def main():
     tts_script = data["tts_script"]
     tts_path = temp_dir / "narration.mp3"
     subprocess.run([sys.executable, "-m", "edge_tts", "--text", tts_script, "--voice", "en-US-GuyNeural", "--write-media", str(tts_path)], capture_output=True, text=True, timeout=120, check=True)
-    audio = AudioFileClip(str(tts_path))
-    total_dur = audio.duration
-    audio.close()
+    total_dur = pad_audio_to_61s(str(tts_path))
     print(f"  {total_dur:.1f}s | {len(TITLES)} facts")
 
     print(f"\n[2/4] Generating {len(PROMPTS)} images...")

@@ -17,14 +17,14 @@ NICHE_NAMES = [
 ]
 
 FALLBACK_SCRIPTS = [
-    "The Great Fire of London in 1666 started in a baker's shop on Pudding Lane and destroyed over 13,000 houses. Incredibly, only six deaths were recorded. The disaster led to brick buildings and modern fire insurance.",
-    "In 1947, engineers found a moth trapped in the Harvard Mark II computer. They taped it in the logbook calling it the 'first actual case of bug being found.' That's how we got the term computer bug.",
-    "Cleopatra lived closer to the invention of the iPhone than to the building of the Great Pyramid. The pyramid was built around 2560 BC, while Cleopatra was born in 69 BC. The iPhone launched in 2007.",
-    "The shortest war in history was the Anglo-Zanzibar War of 1896. It lasted only 38 minutes. The British Navy bombarded the palace until surrender was declared almost immediately.",
-    "Oxford University began teaching in 1096, over 300 years before the Aztec Empire was founded in 1428. When Oxford was already centuries old, the Aztecs were just building their capital Tenochtitlan.",
-    "In 1814, a massive beer vat burst at the Meux Brewery in London, releasing over 323,000 gallons of beer. The wave killed eight people. Parliament ruled it an Act of God.",
-    "The Dancing Plague of 1518 saw hundreds of people in Strasbourg dance uncontrollably for days. Some danced until they collapsed from exhaustion or heart attacks. The cause remains unknown.",
-    "Napoleon once faced his most embarrassing defeat from rabbits. He ordered a rabbit hunt, but the rabbits charged at him instead of running away. He was forced to flee from the swarm.",
+    "The Great Fire of London in 1666 started in a baker's shop on Pudding Lane and destroyed over 13,000 houses. Incredibly, only six deaths were recorded. The disaster led to brick buildings and modern fire insurance. It took nearly 50 years to rebuild the city, and architect Christopher Wren designed 51 new churches including St. Paul's Cathedral.",
+    "In 1947, engineers found a moth trapped in the Harvard Mark II computer. They taped it in the logbook calling it the 'first actual case of bug being found.' That's how we got the term computer bug. The logbook is now preserved at the Smithsonian Museum.",
+    "Cleopatra lived closer to the invention of the iPhone than to the building of the Great Pyramid. The pyramid was built around 2560 BC, while Cleopatra was born in 69 BC. The iPhone launched in 2007. That means the Great Pyramid was already over 2,400 years old when Cleopatra was born.",
+    "The shortest war in history was the Anglo-Zanzibar War of 1896. It lasted only 38 minutes. The British Navy bombarded the palace until surrender was declared almost immediately. The sultan hid in the German consulate and later escaped into exile.",
+    "Oxford University began teaching in 1096, over 300 years before the Aztec Empire was founded in 1428. When Oxford was already centuries old, the Aztecs were just building their capital Tenochtitlan. Oxford is the oldest university in the English-speaking world.",
+    "In 1814, a massive beer vat burst at the Meux Brewery in London, releasing over 323,000 gallons of beer. The wave killed eight people. Parliament ruled it an Act of God. The brewery was later demolished and the site became a theater.",
+    "The Dancing Plague of 1518 saw hundreds of people in Strasbourg dance uncontrollably for days. Some danced until they collapsed from exhaustion or heart attacks. The cause remains unknown. Modern theories suggest mass hysteria or ergot poisoning from contaminated rye bread.",
+    "Napoleon once faced his most embarrassing defeat from rabbits. He ordered a rabbit hunt, but the rabbits charged at him instead of running away. He was forced to flee from the swarm. The rabbits had been raised in captivity and expected to be fed, not hunted.",
 ]
 
 IMAGE_STYLES = [
@@ -73,10 +73,10 @@ def _try_llm(niche: str) -> str | None:
     try:
         from src.script_generator import _generate
         prompt = (
-            f"Write a short engaging YouTube Shorts script about a fascinating event in {niche}. "
+            f"Write an engaging YouTube Shorts script about a fascinating event in {niche}. "
             f"Make it surprising, conversational, and hook in the first 3 seconds. "
             f"Focus on a single specific historical event or fact. "
-            f"40-80 words max. Return ONLY the script text."
+            f"120-180 words. Include interesting details and what happened after. Return ONLY the script text."
         )
         system = "You write verified historical facts. Only include events you are certain are accurate. Make it engaging for short-form video."
         raw = _generate(prompt, temperature=0.8, max_tokens=400, system=system)
