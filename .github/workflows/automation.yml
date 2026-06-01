@@ -28,7 +28,7 @@ on:
           - movie_trivia
           - animal_kingdom
           - space_wonders
-          - box_office
+           - box_office
            - upsc
            - neet
 
