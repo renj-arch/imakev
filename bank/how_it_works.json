@@ -1,30 +1,6 @@
 {
   "entries": [
     {
-      "title": "You use it every day but how does it work? A lock and key",
-      "hook": "You use it every day but how does it work?",
-      "topics": [
-        "a lock and key",
-        "a refrigerator",
-        "an escalator",
-        "a sewing machine"
-      ],
-      "explanations": [
-        "Spring-loaded pins block the cylinder. The correct key pushes pins to the right height so the cylinder can rotate and unlock.",
-        "Liquid refrigerant evaporates inside absorbing heat. A compressor squeezes it back to liquid outside releasing the heat.",
-        "A motor turns a chain loop that pulls steps in a circle. Wheels on two tracks flatten at ends so you can step on and off.",
-        "A needle pushes thread through fabric. A shuttle below catches the thread with a second bobbin thread locking the stitch."
-      ],
-      "image_prompts": [
-        "cinematic close-up illustration: a lock and key, detailed technical cross-section view, clean lighting, educational style, 9:16 vertical",
-        "cinematic close-up illustration: a refrigerator, detailed technical cross-section view, clean lighting, educational style, 9:16 vertical",
-        "cinematic close-up illustration: an escalator, detailed technical cross-section view, clean lighting, educational style, 9:16 vertical",
-        "cinematic close-up illustration: a sewing machine, detailed technical cross-section view, clean lighting, educational style, 9:16 vertical"
-      ],
-      "script": "Spring-loaded pins block the cylinder. The correct key pushes pins to the right height so the cylinder can rotate and unlock. Liquid refrigerant evaporates inside absorbing heat. A compressor squeezes it back to liquid outside releasing the heat. A motor turns a chain loop that pulls steps in a circle. Wheels on two tracks flatten at ends so you can step on and off. A needle pushes thread through fabric. A shuttle below catches the thread with a second bobbin thread locking the stitch.",
-      "tts_script": "Spring-loaded pins block the cylinder. The correct key pushes pins to the right height so the cylinder can rotate and unlock. Liquid refrigerant evaporates inside absorbing heat. A compressor squeezes it back to liquid outside releasing the heat. A motor turns a chain loop that pulls steps in a circle. Wheels on two tracks flatten at ends so you can step on and off. A needle pushes thread through fabric. A shuttle below catches the thread with a second bobbin thread locking the stitch."
-    },
-    {
       "title": "You use it every day but how does it work? A refrigerator",
       "hook": "You use it every day but how does it work?",
       "topics": [
@@ -12001,7 +11977,12 @@
       "tts_script": "Liquid refrigerant evaporates inside absorbing heat. A compressor squeezes it back to liquid outside releasing the heat. Flushing opens a valve. Water rushes from tank to bowl creating a siphon that pulls everything out. The tank then refills. Electricity excites mercury vapor emitting UV light. UV hits a phosphor coating inside the tube which glows visible white. A needle pushes thread through fabric. A shuttle below catches the thread with a second bobbin thread locking the stitch."
     }
   ],
-  "used": [],
+  "used": [
+    "a lock and key",
+    "a refrigerator",
+    "an escalator",
+    "a sewing machine"
+  ],
   "min_before_refill": 20,
   "refill_target": 500
 }
