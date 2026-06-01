@@ -189,17 +189,24 @@ def text_to_ssml(text: str) -> str:
 def generate_voiceover_ssml(script: str, voice: str, tts_path: str, timeout: int = 120):
     """Generate TTS voiceover using edge_tts with SSML for expressiveness."""
     import subprocess, sys
-    from edge_tts import Communicate
-    import asyncio
+    # Write SSML to a temp file and use edge_tts CLI (detects SSML automatically)
+    temp_ssml = Path(str(tts_path) + ".ssml")
     ssml = text_to_ssml(script)
-    async def _run():
-        comm = Communicate(ssml, voice)
-        await comm.save(str(tts_path))
+    temp_ssml.write_text(ssml, encoding="utf-8")
     try:
-        asyncio.run(_run())
+        subprocess.run(
+            [sys.executable, "-m", "edge_tts", "--text", ssml,
+             "--voice", voice, "--write-media", str(tts_path)],
+            capture_output=True, text=True, timeout=timeout, check=True
+        )
+        temp_ssml.unlink(missing_ok=True)
+        # Verify the file is valid
+        if Path(tts_path).stat().st_size < 500:
+            raise ValueError("Output too small, likely corrupt")
         return True
     except Exception as e:
         print(f"  SSML TTS failed ({e}), falling back to plain edge_tts")
+        temp_ssml.unlink(missing_ok=True)
         subprocess.run(
             [sys.executable, "-m", "edge_tts", "--text", script,
              "--voice", voice, "--write-media", str(tts_path)],
