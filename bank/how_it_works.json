@@ -1,30 +1,6 @@
 {
   "entries": [
     {
-      "title": "Here's how it actually works: A toilet",
-      "hook": "Here's how it actually works:",
-      "topics": [
-        "a toilet",
-        "an umbrella",
-        "a bicycle",
-        "a toaster"
-      ],
-      "explanations": [
-        "Flushing opens a valve. Water rushes from tank to bowl creating a siphon that pulls everything out. The tank then refills.",
-        "A sliding mechanism pushes metal ribs outward stretching fabric into a dome. The curved shape deflects rain and wind.",
-        "Pedals turn a chainring that drives the rear wheel through a chain. Gears change the ratio for speed or climbing.",
-        "Electric current passes through nichrome wires which resist electricity and glow red hot. The heat toasts the bread."
-      ],
-      "image_prompts": [
-        "cinematic close-up illustration: a toilet, detailed technical cross-section view, clean lighting, educational style, 9:16 vertical",
-        "cinematic close-up illustration: an umbrella, detailed technical cross-section view, clean lighting, educational style, 9:16 vertical",
-        "cinematic close-up illustration: a bicycle, detailed technical cross-section view, clean lighting, educational style, 9:16 vertical",
-        "cinematic close-up illustration: a toaster, detailed technical cross-section view, clean lighting, educational style, 9:16 vertical"
-      ],
-      "script": "Flushing opens a valve. Water rushes from tank to bowl creating a siphon that pulls everything out. The tank then refills. A sliding mechanism pushes metal ribs outward stretching fabric into a dome. The curved shape deflects rain and wind. Pedals turn a chainring that drives the rear wheel through a chain. Gears change the ratio for speed or climbing. Electric current passes through nichrome wires which resist electricity and glow red hot. The heat toasts the bread.",
-      "tts_script": "Flushing opens a valve. Water rushes from tank to bowl creating a siphon that pulls everything out. The tank then refills. A sliding mechanism pushes metal ribs outward stretching fabric into a dome. The curved shape deflects rain and wind. Pedals turn a chainring that drives the rear wheel through a chain. Gears change the ratio for speed or climbing. Electric current passes through nichrome wires which resist electricity and glow red hot. The heat toasts the bread."
-    },
-    {
       "title": "You use it every day but how does it work? A microwave",
       "hook": "You use it every day but how does it work?",
       "topics": [
@@ -11918,7 +11894,10 @@
     "a compass",
     "a smoke detector",
     "a vacuum cleaner",
-    "a pencil"
+    "a pencil",
+    "a toilet",
+    "an umbrella",
+    "a toaster"
   ],
   "min_before_refill": 20,
   "refill_target": 500
