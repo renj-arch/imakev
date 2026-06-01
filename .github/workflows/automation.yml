@@ -29,8 +29,7 @@ on:
            - animal_kingdom
            - space_wonders
            - box_office
-           - upsc
-           - neet
+
 
 concurrency:
   group: video-pipeline
