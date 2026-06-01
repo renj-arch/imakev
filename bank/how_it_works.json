@@ -1,30 +1,6 @@
 {
   "entries": [
     {
-      "title": "You use it every day but how does it work? A refrigerator",
-      "hook": "You use it every day but how does it work?",
-      "topics": [
-        "a refrigerator",
-        "a ceiling fan",
-        "a bicycle",
-        "a fluorescent light"
-      ],
-      "explanations": [
-        "Liquid refrigerant evaporates inside absorbing heat. A compressor squeezes it back to liquid outside releasing the heat.",
-        "Spinning blades at an angle push air downward for wind chill. Reversing circulates warm trapped air back down.",
-        "Pedals turn a chainring that drives the rear wheel through a chain. Gears change the ratio for speed or climbing.",
-        "Electricity excites mercury vapor emitting UV light. UV hits a phosphor coating inside the tube which glows visible white."
-      ],
-      "image_prompts": [
-        "cinematic close-up illustration: a refrigerator, detailed technical cross-section view, clean lighting, educational style, 9:16 vertical",
-        "cinematic close-up illustration: a ceiling fan, detailed technical cross-section view, clean lighting, educational style, 9:16 vertical",
-        "cinematic close-up illustration: a bicycle, detailed technical cross-section view, clean lighting, educational style, 9:16 vertical",
-        "cinematic close-up illustration: a fluorescent light, detailed technical cross-section view, clean lighting, educational style, 9:16 vertical"
-      ],
-      "script": "Liquid refrigerant evaporates inside absorbing heat. A compressor squeezes it back to liquid outside releasing the heat. Spinning blades at an angle push air downward for wind chill. Reversing circulates warm trapped air back down. Pedals turn a chainring that drives the rear wheel through a chain. Gears change the ratio for speed or climbing. Electricity excites mercury vapor emitting UV light. UV hits a phosphor coating inside the tube which glows visible white.",
-      "tts_script": "Liquid refrigerant evaporates inside absorbing heat. A compressor squeezes it back to liquid outside releasing the heat. Spinning blades at an angle push air downward for wind chill. Reversing circulates warm trapped air back down. Pedals turn a chainring that drives the rear wheel through a chain. Gears change the ratio for speed or climbing. Electricity excites mercury vapor emitting UV light. UV hits a phosphor coating inside the tube which glows visible white."
-    },
-    {
       "title": "Ever wondered how this works? A zipper",
       "hook": "Ever wondered how this works?",
       "topics": [
@@ -11981,7 +11957,10 @@
     "a lock and key",
     "a refrigerator",
     "an escalator",
-    "a sewing machine"
+    "a sewing machine",
+    "a ceiling fan",
+    "a bicycle",
+    "a fluorescent light"
   ],
   "min_before_refill": 20,
   "refill_target": 500
