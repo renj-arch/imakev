@@ -148,24 +148,25 @@ def add_watermark(video_path: str) -> str:
 
 
 def pad_audio_to_61s(tts_path: str) -> float:
-    """Stretch TTS audio to at least 61s using tempo slowdown for long-form ad revenue. Returns duration."""
-    from moviepy import AudioFileClip
+    """Stretch TTS audio to at least 61s via resampling for long-form ad revenue. Returns duration."""
+    from moviepy import AudioFileClip, AudioClip
+    import numpy as np
     audio = AudioFileClip(tts_path)
     dur = audio.duration
-    audio.close()
-    if dur < 61:
-        speed = dur / 61
-        import subprocess, shlex
-        padded = str(Path(tts_path).with_stem(Path(tts_path).stem + "_padded"))
-        subprocess.run([
-            "ffmpeg", "-i", tts_path,
-            "-filter:a", f"atempo={max(speed, 0.5)}",
-            "-vn", "-y", padded
-        ], capture_output=True, timeout=30)
-        import os
-        os.replace(padded, tts_path)
+    if dur < 61 and dur > 5:
+        samples = audio.to_soundarray(fps=22050)
+        if samples.ndim == 1:
+            samples = samples[:, None]
+        target_frames = int(22050 * 61)
+        orig_frames = samples.shape[0]
+        x = np.arange(orig_frames)
+        xp = np.linspace(0, orig_frames - 1, target_frames)
+        stretched = np.column_stack([np.interp(xp, x, samples[:, ch]) for ch in range(samples.shape[1])])
+        stretched_clip = AudioClip(lambda t: stretched[int(t * 22050) % target_frames], duration=61, fps=22050)
+        stretched_clip.write_audiofile(str(tts_path), fps=22050, logger=None)
         dur = 61
-        print(f"  Stretched audio {speed:.2f}x to 61s (long-form minimum)")
+        print(f"  Stretched {audio.duration:.1f}s → 61s (long-form minimum)")
+    audio.close()
     return dur
 
 
