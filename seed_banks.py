@@ -542,6 +542,42 @@ def seed_urban_legends():
         json.dump({"entries": entries, "used": [], "min_before_refill": 20, "refill_target": 500}, f, indent=2)
     print(f"  urban_legends: {len(entries)} entries written")
 
+def seed_neet():
+    from src.neet import FALLBACKS as NEET_FALLBACKS, HOOKS as NEET_HOOKS
+    items = NEET_FALLBACKS
+    hooks = NEET_HOOKS
+    entries = []
+    combos = list(itertools.combinations(range(len(items)), 4))
+    random.shuffle(combos)
+    target = min(500, len(combos))
+    for idxs in combos[:target]:
+        chosen = [items[i] for i in idxs]
+        topics = [c[0] for c in chosen]
+        explanations = [c[1] for c in chosen]
+        subjects = [c[2] for c in chosen]
+        hook = random.choice(hooks)
+        image_prompts = [
+            f"cinematic educational illustration: {t}, NEET exam preparation, biology chemistry physics, clean professional style, 9:16 vertical, dark green and gold theme, highly detailed"
+            for t in topics
+        ]
+        tts = " ".join(f"{t}. {e}" for t, e in zip(topics, explanations))
+        entries.append({
+            "title": f"NEET: {topics[0]}",
+            "hook": hook,
+            "topics": topics,
+            "explanations": explanations,
+            "subjects": subjects,
+            "image_prompts": image_prompts,
+            "script": tts,
+            "tts_script": tts,
+        })
+        if len(entries) % 100 == 0:
+            print(f"  neet: {len(entries)} entries...")
+    filepath = BANK_DIR / "neet.json"
+    with open(filepath, "w") as f:
+        json.dump({"entries": entries, "used": [], "min_before_refill": 10, "refill_target": 100}, f, indent=2)
+    print(f"  neet: {len(entries)} entries written to {filepath}")
+
 if __name__ == "__main__":
     print("Seeding bank files with verified content...\n")
 
@@ -563,5 +599,9 @@ if __name__ == "__main__":
 
     # Category E: urban legends (1 per entry)
     seed_urban_legends()
+
+    # Category F: NEET concepts (4 per entry with subjects)
+    print("  neet: seeding from NCERT fallbacks...")
+    seed_neet()
 
     print("\nDone! All banks seeded.")

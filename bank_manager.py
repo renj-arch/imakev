@@ -155,6 +155,17 @@ REFILL_PROMPTS = {
         "SUBJECT: [Polity/Economy/History/Geography]\n\n"
         "Make explanations simple, accurate, and exam-focused. Focus on topics that appear in UPSC Prelims and Mains."
     ),
+    "neet": (
+        "Give me 4 different NEET exam concepts to explain in a short video. "
+        "Each should be a high-yield topic from Biology, Physics, or Chemistry based on NCERT Class 11 and 12 syllabus. "
+        "Never repeat topics from this avoid list:"
+        "\n---\n{avoid}\n---\n"
+        "Format exactly:\n"
+        "TOPIC: [Name of the concept]\n"
+        "EXPLANATION: [2-3 sentence clear explanation as if teaching a beginner]\n"
+        "SUBJECT: [Biology/Physics/Chemistry]\n\n"
+        "Make explanations simple, accurate, and exam-focused. Focus on topics that appear in NEET UG."
+    ),
 }
 
 NICHES = [
@@ -187,6 +198,7 @@ IMAGE_PROMPT_ANIMAL_KINGDOM = "National Geographic wildlife photography, {title}
 IMAGE_PROMPT_SPACE_WONDERS = "NASA deep space photograph, {title}, stunning nebula and stars, cosmic colors, 9:16 vertical, ultra-detailed space photography, James Webb Space Telescope style"
 IMAGE_PROMPT_BOX_OFFICE = "vintage Hollywood movie poster, {title}, dramatic golden lighting, film strip border, 9:16 vertical, cinema marquee lights, retro box office aesthetic"
 IMAGE_PROMPT_UPSC = "cinematic educational illustration: {topic}, Indian government building background, clean professional style, 9:16 vertical, dark blue and gold theme, highly detailed, upsc exam preparation theme"
+IMAGE_PROMPT_NEET = "cinematic educational illustration: {topic}, NEET exam preparation, biology chemistry physics, clean professional style, 9:16 vertical, dark green and gold theme, highly detailed"
 
 RIDDLE_TYPES = [
     "logic", "wordplay", "math", "lateral thinking", "observation",
@@ -363,6 +375,17 @@ UPSC_FALLBACKS = [
     ("Lok Sabha vs Rajya Sabha", "Lok Sabha has 543 elected members with a 5-year term. Rajya Sabha has 245 members, 12 nominated by President. Rajya Sabha is permanent with 1/3 retiring every 2 years.", "Polity"),
 ]
 
+NEET_HOOKS = [
+    "NEET aspirants, listen up:",
+    "This concept is a must-know for NEET:",
+    "Most students get this wrong in NEET:",
+    "High-yield topic for your NEET exam:",
+    "This keeps appearing in NEET papers:",
+    "Master this NEET concept once and for all:",
+    "Stop missing this question in mock tests:",
+    "NEET topper secret: master this concept:",
+]
+
 BOX_OFFICE_HOOKS = [
     "You won't believe how much this movie earned:",
     "This box office record still stands today:",
@@ -496,6 +519,11 @@ def _mark_used(mode: str, entry: dict):
             n = _normalize(t)
             if n and n not in used:
                 used.append(n)
+    elif mode == "neet":
+        for t in entry.get("topics", []):
+            n = _normalize(t)
+            if n and n not in used:
+                used.append(n)
     data["used"] = used
     _write_bank(mode, data)
 
@@ -579,6 +607,8 @@ def refill(mode: str, force_count: int | None = None):
             new_entries = _refill_3item("box_office", need, BOX_OFFICE_HOOKS, "box_office_titles", IMAGE_PROMPT_BOX_OFFICE)
         elif mode == "upsc":
             new_entries = _refill_upsc(need)
+        elif mode == "neet":
+            new_entries = _refill_neet(need)
         else:
             return
 
@@ -1132,6 +1162,63 @@ def _refill_upsc(need: int) -> list:
             tts_lines = [f"{t}. {e}" for t, e, _ in concepts]
             entry = {
                 "title": f"UPSC: {concepts[0][0]}",
+                "hook": hook,
+                "topics": [t for t, _, _ in concepts],
+                "explanations": [e for _, e, _ in concepts],
+                "subjects": [s for _, _, s in concepts],
+                "image_prompts": image_prompts,
+                "script": " ".join(tts_lines),
+                "tts_script": " ".join(tts_lines),
+            }
+            entries.append(entry)
+        attempts += 1
+
+    return entries
+
+
+def _refill_neet(need: int) -> list:
+    entries = []
+    attempts = 0
+    hooks = NEET_HOOKS
+    while len(entries) < need and attempts < need * 5:
+        avoid = _avoid_sample("neet")
+        prompt = REFILL_PROMPTS["neet"].format(avoid=avoid)
+        try:
+            raw = _generate(prompt, temperature=0.8, max_tokens=800,
+                            system="You are a NEET mentor teaching complex topics in simple words. Only include verified facts from NCERT.")
+        except Exception as e:
+            print(f"  LLM error (neet): {e}")
+            attempts += 1
+            continue
+        if not raw:
+            attempts += 1
+            continue
+
+        concepts = []
+        current = {}
+        for line in raw.split("\n"):
+            line = line.strip()
+            if line.upper().startswith("TOPIC:"):
+                if current.get("topic") and current.get("explanation"):
+                    concepts.append((current["topic"], current["explanation"], current.get("subject", "Biology")))
+                current = {"topic": line.split(":", 1)[-1].strip()}
+            elif line.upper().startswith("EXPLANATION:") and current:
+                current["explanation"] = line.split(":", 1)[-1].strip()
+            elif line.upper().startswith("SUBJECT:") and current:
+                current["subject"] = line.split(":", 1)[-1].strip()
+        if current.get("topic") and current.get("explanation"):
+            concepts.append((current["topic"], current["explanation"], current.get("subject", "Biology")))
+
+        topic_texts = [t for t, _, _ in concepts]
+        if len(concepts) >= 3 and not _is_duplicate("neet", topic_texts, _read_bank("neet")):
+            hook = random.choice(hooks)
+            image_prompts = [
+                IMAGE_PROMPT_NEET.format(topic=t)
+                for t, _, _ in concepts
+            ]
+            tts_lines = [f"{t}. {e}" for t, e, _ in concepts]
+            entry = {
+                "title": f"NEET: {concepts[0][0]}",
                 "hook": hook,
                 "topics": [t for t, _, _ in concepts],
                 "explanations": [e for _, e, _ in concepts],

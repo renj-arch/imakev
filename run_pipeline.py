@@ -391,6 +391,28 @@ def run_upsc():
     bank_manager.ensure_refilled("upsc")
 
 
+def run_neet():
+    print("=" * 55)
+    print("  MODE: NEET CONCEPTS")
+    print("=" * 55)
+
+    from upload_youtube import upload
+    import neet_video
+
+    out_path, data = neet_video.main()
+
+    desc = "NEET concept explained in 60 seconds.\n\n"
+    for t, e in zip(data["topics"], data["explanations"]):
+        desc += f"{t}: {e}\n\n"
+    desc += "#neet #neet2024 #neetpreparation #shorts #biology #physics #chemistry #neetug #medical #ncert"
+    tags = ["neet", "neet preparation", "neet exam", "shorts", "medical", "biology", "physics", "chemistry", "ncert", "neet ug", "mbbs"]
+
+    print("\nUploading...")
+    upload(str(out_path), data["title"], desc, tags, "public", "neet", made_for_kids=False)
+    print("NEET video done!")
+    bank_manager.ensure_refilled("neet")
+
+
 def main():
     mode = sys.argv[1] if len(sys.argv) > 1 else "story"
     if mode == "story":
@@ -427,8 +449,10 @@ def main():
         run_box_office()
     elif mode == "upsc":
         run_upsc()
+    elif mode == "neet":
+        run_neet()
     else:
-        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', 'movie_trivia', 'animal_kingdom', 'space_wonders', 'box_office', or 'upsc'")
+        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', 'movie_trivia', 'animal_kingdom', 'space_wonders', 'box_office', 'upsc', or 'neet'")
 
 
 if __name__ == "__main__":

@@ -30,6 +30,7 @@ PLAYLISTS = {
     "space_wonders": {"name": "Space Wonders", "desc": "Incredible space facts from NASA and astronomy."},
     "box_office": {"name": "Box Office Facts", "desc": "Incredible box office facts and movie earnings records."},
     "upsc": {"name": "UPSC Exam Concepts", "desc": "Quick UPSC concept explanations — master Polity, Economy, History, Geography and more, one short at a time."},
+    "neet": {"name": "NEET Complete Course", "desc": "Complete NEET concept series covering Biology, Physics, and Chemistry based on NCERT Class 11 and 12 syllabus. Master NEET UG one short at a time."},
 }
 
 
