@@ -294,6 +294,21 @@ def run_challenges():
     bank_manager.ensure_refilled("challenges")
 
 
+def run_negative_hooks():
+    print("=" * 55)
+    print("  MODE: NEGATIVE HOOKS")
+    print("=" * 55)
+
+    from upload_youtube import upload
+    import negative_hooks_video
+
+    out_path, data = negative_hooks_video.main()
+    print("\nUploading with viral SEO...")
+    upload(str(out_path), mode="negative_hooks", playlist_key="negative_hooks", script_data=data, made_for_kids=False)
+    print("Negative Hooks video done!")
+    bank_manager.ensure_refilled("negative_hooks")
+
+
 def run_satisfying():
     print("=" * 55)
     print("  MODE: ODDLY SATISFYING & DIY")
@@ -349,8 +364,10 @@ def main():
         run_challenges()
     elif mode == "satisfying":
         run_satisfying()
+    elif mode == "negative_hooks":
+        run_negative_hooks()
     else:
-        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', 'movie_trivia', 'animal_kingdom', 'space_wonders', 'box_office', 'things_they_dont_teach', 'challenges', or 'satisfying'")
+        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', 'movie_trivia', 'animal_kingdom', 'space_wonders', 'box_office', 'things_they_dont_teach', 'challenges', 'satisfying', or 'negative_hooks'")
 
 
 if __name__ == "__main__":

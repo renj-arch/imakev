@@ -144,6 +144,17 @@ REFILL_PROMPTS = {
         "FACT: [3-4 sentences explaining with specific dollar amounts and details]\n\n"
         "Include specific numbers, years, and comparisons."
     ),
+    "negative_hooks": (
+        "Give me 5 dark, shocking truths or uncomfortable realities. "
+        "Each should be a brutal fact about life, society, human nature, or the future. "
+        "The tone: unsettling but factual. Make people think. "
+        "Never repeat truths from this avoid list:"
+        "\n---\n{avoid}\n---\n"
+        "Format exactly:\n"
+        "TRUTH: [short shocking headline, 3-8 words]\n"
+        "EXPLANATION: [one punchy sentence explaining why it's dark]\n\n"
+        "Make each one feel like a cold dose of reality."
+    ),
     "satisfying": (
         "Give me 5 oddly satisfying or DIY ideas for a short video. "
         "Mix of satisfying visuals (like cutting soap, mixing paint), "
@@ -203,6 +214,7 @@ IMAGE_PROMPT_SPACE_WONDERS = "NASA deep space photograph, {title}, stunning nebu
 IMAGE_PROMPT_BOX_OFFICE = "vintage Hollywood movie poster, {title}, dramatic golden lighting, film strip border, 9:16 vertical, cinema marquee lights, retro box office aesthetic"
 IMAGE_PROMPT_CHALLENGES = "cinematic action shot, {challenge}, dramatic lighting, fast-paced motion blur, 9:16 vertical, intense atmosphere, adrenaline"
 IMAGE_PROMPT_SATISFYING = "macro close-up shot, {topic}, soft diffused lighting, satisfying textures, 9:16 vertical, clean minimalist aesthetic, vibrant colors"
+IMAGE_PROMPT_NEGATIVE = "dark cinematic scene, {topic}, moody lighting, deep shadows, 9:16 vertical, unsettling atmosphere, noir style"
 
 RIDDLE_TYPES = [
     "logic", "wordplay", "math", "lateral thinking", "observation",
@@ -382,6 +394,18 @@ SATISFYING_HOOKS = [
     "The most satisfying thing you'll see today:",
 ]
 
+NEGATIVE_HOOKS = [
+    "This will ruin your day:",
+    "Here's something dark you need to hear:",
+    "This fact will haunt you:",
+    "You're not ready for this truth:",
+    "The darker side of things you didn't know:",
+    "This will change how you see everything — not in a good way:",
+    "Warning: this is disturbing:",
+    "You can't unlearn this:",
+    "Reality check incoming:",
+]
+
 URBAN_LEGENDS_FALLBACKS = [
     ("Bloody Mary", "Say Bloody Mary three times in front of a mirror and a ghostly woman appears to attack you. The legend has terrified children at sleepovers for decades.", "The legend likely originated from 16th century Queen Mary I. The modern version spread in the 1970s as a harmless dare game, inspired by mirror-gazing superstitions."),
     ("The Hook", "A couple parked at Lover's Lane hears a radio warning about an escaped convict with a hook for a hand. They drive away scared, and later find a bloody hook dangling from the car door handle.", "The story first appeared in 1950s teen folklore magazines. No real incident has ever matched the details, but it became the classic cautionary tale about teenage rebellion."),
@@ -510,6 +534,11 @@ def _mark_used(mode: str, entry: dict):
             n = _normalize(t)
             if n and n not in used:
                 used.append(n)
+    elif mode == "negative_hooks":
+        for t in entry.get("topics", []):
+            n = _normalize(t)
+            if n and n not in used:
+                used.append(n)
     data["used"] = used
     _write_bank(mode, data)
 
@@ -589,6 +618,8 @@ def refill(mode: str, force_count: int | None = None):
             new_entries = _refill_challenges(need)
         elif mode == "satisfying":
             new_entries = _refill_satisfying(need)
+        elif mode == "negative_hooks":
+            new_entries = _refill_negative_hooks(need)
         else:
             return
 
@@ -1093,6 +1124,55 @@ def _refill_3item(mode: str, need: int, hooks: list, list_key: str, img_prompt: 
                 "image_prompts": image_prompts,
                 "script": " ".join(tts_lines),
                 "tts_script": " ".join(tts_lines),
+            }
+            entries.append(entry)
+        attempts += 1
+    return entries
+
+
+def _refill_negative_hooks(need: int) -> list:
+    entries = []
+    attempts = 0
+    hooks = NEGATIVE_HOOKS
+    while len(entries) < need and attempts < need * 5:
+        avoid = _avoid_sample("negative_hooks")
+        prompt = REFILL_PROMPTS["negative_hooks"].format(avoid=avoid)
+        try:
+            raw = _generate(prompt, temperature=0.9, max_tokens=600,
+                            system="You write dark, uncomfortable truths about life, society, human nature, and reality. Be brutally honest.")
+        except Exception as e:
+            print(f"  LLM error (negative_hooks): {e}")
+            attempts += 1
+            continue
+        if not raw:
+            attempts += 1
+            continue
+        topics = []
+        truths = []
+        current = None
+        for line in raw.split("\n"):
+            line = line.strip()
+            if line.upper().startswith("TRUTH:"):
+                current = line.split(":", 1)[-1].strip()
+            elif line.upper().startswith("EXPLANATION:") and current:
+                truths.append(line.split(":", 1)[-1].strip())
+                topics.append(current)
+                current = None
+        if len(topics) >= 3 and not _is_duplicate("negative_hooks", topics, _read_bank("negative_hooks")):
+            hook = random.choice(hooks)
+            image_prompts = [
+                IMAGE_PROMPT_NEGATIVE.format(topic=t.lower().replace(" ", "_")[:50])
+                for t in topics
+            ]
+            tts_lines = [f"{t}. {d}" for t, d in zip(topics, truths)]
+            entry = {
+                "title": f"Dark Truth: {topics[0][:50]}",
+                "hook": hook,
+                "topics": topics,
+                "truths": truths,
+                "image_prompts": image_prompts,
+                "script": " ".join(tts_lines),
+                "tts_script": f"{hook} {' '.join(tts_lines)}",
             }
             entries.append(entry)
         attempts += 1
