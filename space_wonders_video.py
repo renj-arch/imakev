@@ -7,7 +7,7 @@ import numpy as np
 import requests as req
 from moviepy import VideoClip, AudioFileClip, concatenate_videoclips, CompositeAudioClip, CompositeVideoClip
 import config
-from src.engagement import hook_overlays, fast_motion, comment_prompt_overlay, subscribe_end_card, branding_overlays, get_audio_duration, generate_voiceover_ssml
+from src.engagement import hook_overlays, fast_motion, comment_prompt_overlay, subscribe_end_card, branding_overlays, get_audio_duration
 from src.space_wonders import generate_space_wonders_script
 
 FONT_PATH = config.get_font()
@@ -114,7 +114,7 @@ def main():
     print("\n[1/4] Voiceover...")
     tts_script = data["tts_script"]
     tts_path = temp_dir / "narration.mp3"
-    generate_voiceover_ssml(tts_script, "en-US-GuyNeural", str(tts_path))
+    subprocess.run([sys.executable, "-m", "edge_tts", "--text", tts_script, "--voice", "en-US-GuyNeural", "--write-media", str(tts_path)], capture_output=True, text=True, timeout=120, check=True)
     total_dur = get_audio_duration(str(tts_path))
     print(f"  {total_dur:.1f}s | {len(TITLES)} facts")
 

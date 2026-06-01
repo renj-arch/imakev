@@ -11,7 +11,7 @@ from moviepy import (
     CompositeAudioClip,
 )
 import config
-from src.engagement import hook_overlays, fast_motion, comment_prompt_overlay, subscribe_end_card, branding_overlays, generate_voiceover_ssml
+from src.engagement import hook_overlays, fast_motion, comment_prompt_overlay, subscribe_end_card, branding_overlays
 
 FONT = config.get_font()
 W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
@@ -91,7 +91,7 @@ def main():
     # Step 1: TTS
     print("\n[1/4] Voiceover...")
     tts_path = temp_dir / "narration.mp3"
-    generate_voiceover_ssml(SCRIPT, "en-US-GuyNeural", str(tts_path))
+    subprocess.run([sys.executable, "-m", "edge_tts", "--text", SCRIPT, "--voice", "en-US-GuyNeural", "--write-media", str(tts_path)], capture_output=True, text=True, timeout=120, check=True)
     audio = AudioFileClip(str(tts_path))
     total_dur = audio.duration
     audio.close()

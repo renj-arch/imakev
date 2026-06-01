@@ -12,7 +12,7 @@ from moviepy import (
 )
 import config
 from src.riddles import generate_riddle_script
-from src.engagement import hook_overlays, fast_motion, comment_prompt_overlay, subscribe_end_card, branding_overlays, get_audio_duration, generate_voiceover_ssml
+from src.engagement import hook_overlays, fast_motion, comment_prompt_overlay, subscribe_end_card, branding_overlays, get_audio_duration
 
 FONT_PATH = config.get_font()
 W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
@@ -122,7 +122,7 @@ def main():
     print("\n[1/4] Voiceover...")
     tts_text = f"{HOOK} {RIDDLE} ... The answer is {ANSWER}. {EXPLANATION}"
     tts_path = temp_dir / "narration.mp3"
-    generate_voiceover_ssml(tts_text, "en-US-JennyNeural", str(tts_path))
+    subprocess.run([sys.executable, "-m", "edge_tts", "--text", tts_text, "--voice", "en-US-JennyNeural", "--write-media", str(tts_path)], capture_output=True, text=True, timeout=120, check=True)
     total_dur = get_audio_duration(str(tts_path))
 
     pause_before_answer = 1.5
