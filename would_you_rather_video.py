@@ -8,7 +8,7 @@ import requests as req
 from moviepy import VideoClip, AudioFileClip, concatenate_videoclips, CompositeAudioClip, concatenate_audioclips, CompositeVideoClip
 import config
 from src.would_you_rather import generate_wyr_script
-from src.engagement import hook_overlays, fast_motion, comment_prompt_overlay, subscribe_end_card, branding_overlays, pad_audio_to_61s, generate_voiceover_ssml
+from src.engagement import hook_overlays, fast_motion, comment_prompt_overlay, subscribe_end_card, branding_overlays, get_audio_duration, generate_voiceover_ssml
 
 FONT_PATH = config.get_font()
 W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
@@ -128,7 +128,7 @@ def main():
     tts_text = f"{HOOK} {A} or {B}. Which one would you choose? Comment below!"
     tts_path = temp_dir / "narration.mp3"
     generate_voiceover_ssml(tts_text, "en-US-GuyNeural", str(tts_path))
-    total_dur = pad_audio_to_61s(str(tts_path))
+    total_dur = get_audio_duration(str(tts_path))
     dur_a = total_dur * 0.35
     dur_b = total_dur * 0.35
     dur_split = total_dur * 0.3

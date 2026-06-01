@@ -232,25 +232,11 @@ def generate_voiceover_ssml(script: str, voice: str, tts_path: str, timeout: int
     raise RuntimeError("edge_tts failed to generate valid MP3 after 6 attempts")
 
 
-def pad_audio_to_61s(tts_path: str) -> float:
-    """Stretch TTS audio to at least 61s via resampling for long-form ad revenue. Returns duration."""
-    from moviepy import AudioFileClip, AudioClip
-    import numpy as np
+def get_audio_duration(tts_path: str) -> float:
+    """Return natural audio duration without stretching — Shorts should be short."""
+    from moviepy import AudioFileClip
     audio = AudioFileClip(tts_path)
     dur = audio.duration
-    if dur < 61 and dur > 5:
-        samples = audio.to_soundarray(fps=22050)
-        if samples.ndim == 1:
-            samples = samples[:, None]
-        target_frames = int(22050 * 61)
-        orig_frames = samples.shape[0]
-        x = np.arange(orig_frames)
-        xp = np.linspace(0, orig_frames - 1, target_frames)
-        stretched = np.column_stack([np.interp(xp, x, samples[:, ch]) for ch in range(samples.shape[1])])
-        stretched_clip = AudioClip(lambda t: stretched[int(t * 22050) % target_frames], duration=61, fps=22050)
-        stretched_clip.write_audiofile(str(tts_path), fps=22050, logger=None)
-        dur = 61
-        print(f"  Stretched {audio.duration:.1f}s → 61s (long-form minimum)")
     audio.close()
     return dur
 
