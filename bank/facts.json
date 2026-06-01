@@ -1,33 +1,6 @@
 {
   "entries": [
     {
-      "title": "Here's something crazy: is longer than a year on Venus (the time it takes to orbit t...",
-      "niche": "space",
-      "hook": "Here's something crazy:",
-      "facts": [
-        "is longer than a year on Venus (the time it takes to orbit the Sun).",
-        "In the vacuum of space, a flame can burn in a spherical shape because the lack of gravity prevents the hot gases from rising.",
-        "The largest known star, UY Scuti, would extend beyond the orbit of Jupiter if placed at the center of our Solar System.",
-        "Space is not completely empty; a single cubic meter of interstellar space contains, on average, about one hydrogen atom.",
-        "galaxies, far more than the previously estimated 100\u202fbillion.",
-        "Neutron stars are so dense that a sugar\u2011cube\u2011size amount of their material would weigh about a billion tons on Earth.",
-        "The coldest natural place known in the universe is the Boomerang Nebula, where temperatures drop to 1\u202fkelvin, just one degree above absolute zero.",
-        "Astronauts on the International Space Station see 16 sunrises and 16 sunsets each day because the station orbits Earth roughly every 90\u202fminutes."
-      ],
-      "image_prompts": [
-        "cinematic illustration: is longer than a year on Venus (the time it takes to, atmospheric lighting, 9:16 vertical, highly detailed, moody",
-        "cinematic illustration: In the vacuum of space, a flame can burn in a spherical, atmospheric lighting, 9:16 vertical, highly detailed, moody",
-        "cinematic illustration: The largest known star, UY Scuti, would extend beyond the orbit of, atmospheric lighting, 9:16 vertical, highly detailed, moody",
-        "cinematic illustration: Space is not completely empty; a single cubic meter of interstellar space, atmospheric lighting, 9:16 vertical, highly detailed, moody",
-        "cinematic illustration: galaxies, far more than the previously estimated 100 billion., atmospheric lighting, 9:16 vertical, highly detailed, moody",
-        "cinematic illustration: Neutron stars are so dense that a sugar\u2011cube\u2011size amount of their material, atmospheric lighting, 9:16 vertical, highly detailed, moody",
-        "cinematic illustration: The coldest natural place known in the universe is the Boomerang Nebula,, atmospheric lighting, 9:16 vertical, highly detailed, moody",
-        "cinematic illustration: Astronauts on the International Space Station see 16 sunrises and 16 sunsets, atmospheric lighting, 9:16 vertical, highly detailed, moody"
-      ],
-      "script": "Here's something crazy: is longer than a year on Venus (the time it takes to orbit the Sun). In the vacuum of space, a flame can burn in a spherical shape because the lack of gravity prevents the hot gases from rising. The largest known star, UY Scuti, would extend beyond the orbit of Jupiter if placed at the center of our Solar System. Space is not completely empty; a single cubic meter of interstellar space contains, on average, about one hydrogen atom. galaxies, far more than the previously estimated 100\u202fbillion. Neutron stars are so dense that a sugar\u2011cube\u2011size amount of their material would weigh about a billion tons on Earth. The coldest natural place known in the universe is the Boomerang Nebula, where temperatures drop to 1\u202fkelvin, just one degree above absolute zero. Astronauts on the International Space Station see 16 sunrises and 16 sunsets each day because the station orbits Earth roughly every 90\u202fminutes.",
-      "tts_script": "Here's something crazy: is longer than a year on Venus (the time it takes to orbit the Sun). In the vacuum of space, a flame can burn in a spherical shape because the lack of gravity prevents the hot gases from rising. The largest known star, UY Scuti, would extend beyond the orbit of Jupiter if placed at the center of our Solar System. Space is not completely empty; a single cubic meter of interstellar space contains, on average, about one hydrogen atom. galaxies, far more than the previously estimated 100\u202fbillion. Neutron stars are so dense that a sugar\u2011cube\u2011size amount of their material would weigh about a billion tons on Earth. The coldest natural place known in the universe is the Boomerang Nebula, where temperatures drop to 1\u202fkelvin, just one degree above absolute zero. Astronauts on the International Space Station see 16 sunrises and 16 sunsets each day because the station orbits Earth roughly every 90\u202fminutes."
-    },
-    {
       "title": "This will blow your mind... can revert its adult cells back to a juvenile polyp stage, e...",
       "niche": "nature",
       "hook": "This will blow your mind...",
@@ -1081,7 +1054,16 @@
       "tts_script": "Wait till you hear this: A single bolt of lightning contains enough energy to power a 100\u2011watt light bulb for about three months. The human brain consumes roughly 20\u202f% of the body's oxygen supply despite representing only about 2\u202f% of body weight. There are more possible iterations of a game of chess than there are atoms in the observable universe (\u224810\u2078\u2070). Water can exist in a supercritical state above 374\u202f\u00b0C and 22\u202fMPa, where it behaves simultaneously like a liquid and a gas. Some bacteria, such as *Deinococcus radiodurans*, can survive doses of ionizing radiation up to 5,000\u202fGy, far beyond the lethal dose for humans (\u22485\u202fGy). The longest-lived animal known is the ocean quahog clam (*Arctica islandica*), with individuals verified to be over 500 years old. can propagate because they do not require a material medium. Quantum entanglement has been demonstrated over distances exceeding 1,200\u202fkilometers using satellite\u2011based experiments, confirming that entangled particles remain correlated instantly across vast separations."
     }
   ],
-  "used": [],
+  "used": [
+    "is longer than a year on venus the time it takes to orbit the sun",
+    "in the vacuum of space a flame can burn in a spherical shape because the lack of gravity prevents the hot gases from rising",
+    "the largest known star uy scuti would extend beyond the orbit of jupiter if placed at the center of our solar system",
+    "space is not completely empty a single cubic meter of interstellar space contains on average about one hydrogen atom",
+    "galaxies far more than the previously estimated 100 billion",
+    "neutron stars are so dense that a sugar cube size amount of their material would weigh about a billion tons on earth",
+    "the coldest natural place known in the universe is the boomerang nebula where temperatures drop to 1 kelvin just one degree above absolute zero",
+    "astronauts on the international space station see 16 sunrises and 16 sunsets each day because the station orbits earth roughly every 90 minutes"
+  ],
   "min_before_refill": 20,
   "refill_target": 500
 }
