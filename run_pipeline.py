@@ -369,6 +369,28 @@ def run_box_office():
     bank_manager.ensure_refilled("box_office")
 
 
+def run_upsc():
+    print("=" * 55)
+    print("  MODE: UPSC CONCEPTS")
+    print("=" * 55)
+
+    from upload_youtube import upload
+    import upsc_video
+
+    out_path, data = upsc_video.main()
+
+    desc = "UPSC concept explained in 60 seconds.\n\n"
+    for t, e in zip(data["topics"], data["explanations"]):
+        desc += f"{t}: {e}\n\n"
+    desc += "#upsc #upscpreparation #upscexam #shorts #cse #ias #upscconcepts #competitiveexams"
+    tags = ["upsc", "upsc preparation", "upsc exam", "shorts", "ias", "civil services", "upsc concepts", "competitive exams", "upsc syllabus", "upsc prelims"]
+
+    print("\nUploading...")
+    upload(str(out_path), data["title"], desc, tags, "public", "upsc", made_for_kids=False)
+    print("UPSC video done!")
+    bank_manager.ensure_refilled("upsc")
+
+
 def main():
     mode = sys.argv[1] if len(sys.argv) > 1 else "story"
     if mode == "story":
@@ -403,8 +425,10 @@ def main():
         run_space_wonders()
     elif mode == "box_office":
         run_box_office()
+    elif mode == "upsc":
+        run_upsc()
     else:
-        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', 'movie_trivia', 'animal_kingdom', 'space_wonders', or 'box_office'")
+        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', 'movie_trivia', 'animal_kingdom', 'space_wonders', 'box_office', or 'upsc'")
 
 
 if __name__ == "__main__":

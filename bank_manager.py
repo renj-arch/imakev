@@ -144,6 +144,17 @@ REFILL_PROMPTS = {
         "FACT: [3-4 sentences explaining with specific dollar amounts and details]\n\n"
         "Include specific numbers, years, and comparisons."
     ),
+    "upsc": (
+        "Give me 4 different UPSC exam concepts to explain in a short video. "
+        "Each should be a high-yield topic from Polity, Economy, History, or Geography. "
+        "Never repeat topics from this avoid list:"
+        "\n---\n{avoid}\n---\n"
+        "Format exactly:\n"
+        "TOPIC: [Name of the concept]\n"
+        "EXPLANATION: [2-3 sentence clear explanation as if teaching a beginner]\n"
+        "SUBJECT: [Polity/Economy/History/Geography]\n\n"
+        "Make explanations simple, accurate, and exam-focused. Focus on topics that appear in UPSC Prelims and Mains."
+    ),
 }
 
 NICHES = [
@@ -175,6 +186,7 @@ IMAGE_PROMPT_MOVIE_TRIVIA = "cinematic movie poster style, {title}, dramatic lig
 IMAGE_PROMPT_ANIMAL_KINGDOM = "National Geographic wildlife photography, {title}, stunning animal portrait, golden hour lighting, 9:16 vertical, hyper-realistic, nature documentary style"
 IMAGE_PROMPT_SPACE_WONDERS = "NASA deep space photograph, {title}, stunning nebula and stars, cosmic colors, 9:16 vertical, ultra-detailed space photography, James Webb Space Telescope style"
 IMAGE_PROMPT_BOX_OFFICE = "vintage Hollywood movie poster, {title}, dramatic golden lighting, film strip border, 9:16 vertical, cinema marquee lights, retro box office aesthetic"
+IMAGE_PROMPT_UPSC = "cinematic educational illustration: {topic}, Indian government building background, clean professional style, 9:16 vertical, dark blue and gold theme, highly detailed, upsc exam preparation theme"
 
 RIDDLE_TYPES = [
     "logic", "wordplay", "math", "lateral thinking", "observation",
@@ -322,6 +334,35 @@ SPACE_WONDERS_HOOKS = [
     "The cosmos has secrets we're only beginning to understand:",
 ]
 
+UPSC_HOOKS = [
+    "UPSC aspirants, listen up:",
+    "This concept is a must-know for prelims:",
+    "Most students confuse this UPSC topic:",
+    "Here's a high-weightage concept for your exam:",
+    "One concept that keeps appearing in UPSC papers:",
+    "Clear this UPSC topic once and for all:",
+    "Stop getting this question wrong in mock tests:",
+    "UPSC topper secret: master this concept:",
+]
+
+UPSC_FALLBACKS = [
+    ("Fiscal Deficit", "The difference between the government's total expenditure and its total revenue excluding borrowing. A high deficit means the government is spending beyond its means and borrowing to cover the gap.", "Economy"),
+    ("Fundamental Rights", "Six fundamental rights guaranteed by the Indian Constitution — Right to Equality, Freedom, Against Exploitation, Freedom of Religion, Cultural/Educational Rights, and Right to Constitutional Remedies. Article 32 is the heart and soul of the Constitution.", "Polity"),
+    ("Monsoon Mechanism", "The southwest monsoon is driven by the differential heating of land and sea. The Tibetan Plateau acts as a heat source, creating a low-pressure zone that draws moist air from the Indian Ocean.", "Geography"),
+    ("Battle of Plassey", "Fought in 1757 between the British East India Company and Siraj-ud-Daulah. Robert Clive bribed Mir Jafar who betrayed the Nawab. This marked the beginning of British political control in India.", "History"),
+    ("Directive Principles", "Article 36-51 of the Indian Constitution. Non-justiciable guidelines for the state to create a welfare state. Inspired by the Irish Constitution.", "Polity"),
+    ("Greenhouse Effect", "The trapping of heat by greenhouse gases like CO2 and methane in Earth's atmosphere. Without it Earth would be -18°C. Human activities have intensified it causing global warming.", "Environment"),
+    ("WTO and India", "The World Trade Organization replaced GATT in 1995. India is a founding member. Key issues include agricultural subsidies and intellectual property rights under TRIPS.", "International Relations"),
+    ("Right to Information", "Enacted in 2005, RTI empowers citizens to seek information from public authorities. Promotes transparency and accountability in government. Any citizen can file an RTI application.", "Polity"),
+    ("Inflation Types", "Demand-pull inflation occurs when demand exceeds supply. Cost-push inflation happens when production costs rise. RBI uses repo rate to control inflation.", "Economy"),
+    ("Western Ghats", "A UNESCO World Heritage Site and one of the world's eight hottest biodiversity hotspots. They run parallel to India's west coast spanning 1600 km.", "Geography"),
+    ("Preamble of India", "The Preamble declares India as a Sovereign, Socialist, Secular, Democratic Republic. Adopted on 26 November 1949. Socialist and Secular were added by the 42nd Amendment in 1976.", "Polity"),
+    ("Banking Structure in India", "RBI is the supreme monetary authority. Scheduled commercial banks include public sector, private sector, foreign banks and regional rural banks.", "Economy"),
+    ("Harappan Civilization", "One of the three great ancient civilizations. Known for advanced urban planning with grid streets, drainage systems and standardized bricks. Major sites: Harappa, Mohenjo-Daro.", "History"),
+    ("NAPCC", "India's National Action Plan on Climate Change has 8 national missions including Solar Mission, Water Mission and Green India Mission. Launched in 2008.", "Environment"),
+    ("Lok Sabha vs Rajya Sabha", "Lok Sabha has 543 elected members with a 5-year term. Rajya Sabha has 245 members, 12 nominated by President. Rajya Sabha is permanent with 1/3 retiring every 2 years.", "Polity"),
+]
+
 BOX_OFFICE_HOOKS = [
     "You won't believe how much this movie earned:",
     "This box office record still stands today:",
@@ -450,6 +491,11 @@ def _mark_used(mode: str, entry: dict):
             n = _normalize(f)
             if n and n not in used:
                 used.append(n)
+    elif mode == "upsc":
+        for t in entry.get("topics", []):
+            n = _normalize(t)
+            if n and n not in used:
+                used.append(n)
     data["used"] = used
     _write_bank(mode, data)
 
@@ -531,6 +577,8 @@ def refill(mode: str, force_count: int | None = None):
             new_entries = _refill_3item("space_wonders", need, SPACE_WONDERS_HOOKS, "space_facts", IMAGE_PROMPT_SPACE_WONDERS)
         elif mode == "box_office":
             new_entries = _refill_3item("box_office", need, BOX_OFFICE_HOOKS, "box_office_titles", IMAGE_PROMPT_BOX_OFFICE)
+        elif mode == "upsc":
+            new_entries = _refill_upsc(need)
         else:
             return
 
@@ -1038,6 +1086,63 @@ def _refill_3item(mode: str, need: int, hooks: list, list_key: str, img_prompt: 
             }
             entries.append(entry)
         attempts += 1
+    return entries
+
+
+def _refill_upsc(need: int) -> list:
+    entries = []
+    attempts = 0
+    hooks = UPSC_HOOKS
+    while len(entries) < need and attempts < need * 5:
+        avoid = _avoid_sample("upsc")
+        prompt = REFILL_PROMPTS["upsc"].format(avoid=avoid)
+        try:
+            raw = _generate(prompt, temperature=0.8, max_tokens=800,
+                            system="You are a UPSC mentor teaching complex topics in simple words. Only include verified facts.")
+        except Exception as e:
+            print(f"  LLM error (upsc): {e}")
+            attempts += 1
+            continue
+        if not raw:
+            attempts += 1
+            continue
+
+        concepts = []
+        current = {}
+        for line in raw.split("\n"):
+            line = line.strip()
+            if line.upper().startswith("TOPIC:"):
+                if current.get("topic") and current.get("explanation"):
+                    concepts.append((current["topic"], current["explanation"], current.get("subject", "Polity")))
+                current = {"topic": line.split(":", 1)[-1].strip()}
+            elif line.upper().startswith("EXPLANATION:") and current:
+                current["explanation"] = line.split(":", 1)[-1].strip()
+            elif line.upper().startswith("SUBJECT:") and current:
+                current["subject"] = line.split(":", 1)[-1].strip()
+        if current.get("topic") and current.get("explanation"):
+            concepts.append((current["topic"], current["explanation"], current.get("subject", "Polity")))
+
+        topic_texts = [t for t, _, _ in concepts]
+        if len(concepts) >= 3 and not _is_duplicate("upsc", topic_texts, _read_bank("upsc")):
+            hook = random.choice(hooks)
+            image_prompts = [
+                IMAGE_PROMPT_UPSC.format(topic=t)
+                for t, _, _ in concepts
+            ]
+            tts_lines = [f"{t}. {e}" for t, e, _ in concepts]
+            entry = {
+                "title": f"UPSC: {concepts[0][0]}",
+                "hook": hook,
+                "topics": [t for t, _, _ in concepts],
+                "explanations": [e for _, e, _ in concepts],
+                "subjects": [s for _, _, s in concepts],
+                "image_prompts": image_prompts,
+                "script": " ".join(tts_lines),
+                "tts_script": " ".join(tts_lines),
+            }
+            entries.append(entry)
+        attempts += 1
+
     return entries
 
 

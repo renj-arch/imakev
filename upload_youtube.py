@@ -29,6 +29,7 @@ PLAYLISTS = {
     "animal_kingdom": {"name": "Animal Kingdom", "desc": "Incredible animal facts from around the world."},
     "space_wonders": {"name": "Space Wonders", "desc": "Incredible space facts from NASA and astronomy."},
     "box_office": {"name": "Box Office Facts", "desc": "Incredible box office facts and movie earnings records."},
+    "upsc": {"name": "UPSC Exam Concepts", "desc": "Quick UPSC concept explanations — master Polity, Economy, History, Geography and more, one short at a time."},
 }
 
 
