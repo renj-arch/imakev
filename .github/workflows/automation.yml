@@ -90,8 +90,11 @@ jobs:
             HOUR=$(date -u +%-H)
             MIN=$(date -u +%-M)
               DAY=$(date -u +%-j)
+              HOUR=$(date -u +%-H)
+              MIN=$(date -u +%-M)
               MODES=("how_it_works" "facts" "what_if" "riddles" "history_minute" "psychology" "life_hacks" "urban_legends" "coincidences" "unsolved_mysteries" "movie_trivia" "animal_kingdom" "space_wonders" "box_office" "things_they_dont_teach" "challenges" "satisfying" "negative_hooks" "try_this")
-              MODE="${MODES[$((DAY % ${#MODES[@]}))]}"
+              SLOT=$(( DAY * 48 + HOUR * 2 + MIN / 30 ))
+              MODE="${MODES[$((SLOT % ${#MODES[@]}))]}"
           fi
           echo "mode=$MODE" >> $GITHUB_OUTPUT
           echo "Running: $MODE"
