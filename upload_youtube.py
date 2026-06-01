@@ -1,36 +1,39 @@
-"""Upload video to YouTube via API v3 + auto-playlist + auto-comment."""
+"""Upload video to YouTube via API v3 + auto-playlist + viral SEO."""
 
-import sys, os, pickle
+import sys, os, json, pickle, random
 from pathlib import Path
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
+from src.viral_seo import generate_viral_title, generate_viral_description, generate_viral_tags, generate_viral_hashtags, CHANNEL_HANDLE
+from src.viral_thumbnail import save_viral_thumbnail
 
 SCOPES = ["https://www.googleapis.com/auth/youtube"]
 CLIENT_SECRET = "client_secret.json"
 TOKEN_FILE = "token.pickle"
+PERF_FILE = Path(__file__).parent / "performance.json"
 
 PLAYLISTS = {
-    "story": {"name": "Neon City Chronicles", "desc": "A continuous AI-generated cinematic series. Each chapter continues the story."},
+    "story": {"name": "Glitchverse: Story", "desc": "AI-generated cinematic series with edge-of-seat storytelling."},
     "facts": {"name": "Mind-Blowing Facts", "desc": "Daily facts that will change how you see the world."},
-    "what_if": {"name": "What If? For Kids", "desc": "Imaginative 'what if' scenarios that spark curiosity and wonder."},
-    "how_it_works": {"name": "How Things Work", "desc": "Everyday objects explained — how they actually work."},
-    "riddles": {"name": "Riddles & Brain Teasers", "desc": "Fun riddles to test your brain — can you solve them?"},
-    "would_you_rather": {"name": "Would You Rather?", "desc": "Fun choices — which one would you pick?"},
-    "history_minute": {"name": "History Minute", "desc": "Fascinating history shorts — one minute at a time."},
-    "psychology": {"name": "Psychology Hacks", "desc": "Mind-blowing psychology hacks your brain doesn't want you to know."},
-    "life_hacks": {"name": "Life Hacks", "desc": "Clever life hacks that actually work — save time, money, and effort."},
-    "urban_legends": {"name": "Urban Legends", "desc": "Famous urban legends — the spooky story vs the real truth."},
-    "coincidences": {"name": "Crazy Coincidences", "desc": "Real coincidence stories that sound fake but are 100% true."},
-    "unsolved_mysteries": {"name": "Unsolved Mysteries", "desc": "Real unsolved mysteries and cold cases that still baffle investigators."},
-    "movie_trivia": {"name": "Movie Trivia", "desc": "Real behind-the-scenes movie secrets you never knew."},
-    "animal_kingdom": {"name": "Animal Kingdom", "desc": "Incredible animal facts from around the world."},
-    "space_wonders": {"name": "Space Wonders", "desc": "Incredible space facts from NASA and astronomy."},
-    "box_office": {"name": "Box Office Facts", "desc": "Incredible box office facts and movie earnings records."},
-    "upsc": {"name": "UPSC Exam Concepts", "desc": "Quick UPSC concept explanations — master Polity, Economy, History, Geography and more, one short at a time."},
-    "neet": {"name": "NEET Complete Course", "desc": "Complete NEET concept series covering Biology, Physics, and Chemistry based on NCERT Class 11 and 12 syllabus. Master NEET UG one short at a time."},
+    "what_if": {"name": "What If? Imagination", "desc": "Imaginative what if scenarios that spark curiosity."},
+    "how_it_works": {"name": "How Things Actually Work", "desc": "Everyday objects explained in 30 seconds."},
+    "riddles": {"name": "Riddles That Break Your Brain", "desc": "Riddles only 1% can solve. Are you that 1%?"},
+    "would_you_rather": {"name": "Would You Rather?", "desc": "Impossible choices. Which side are you on?"},
+    "history_minute": {"name": "History You Weren't Taught", "desc": "History facts they didn't put in textbooks."},
+    "psychology": {"name": "Psychology Hacks", "desc": "Mind tricks your brain doesn't want you to know."},
+    "life_hacks": {"name": "Life Hacks That Work", "desc": "Clever hacks that save time, money, and effort."},
+    "urban_legends": {"name": "Urban Legends Debunked", "desc": "Spooky stories vs the real truth."},
+    "coincidences": {"name": "Crazy Coincidences", "desc": "Real coincidences that sound fake but are 100% true."},
+    "unsolved_mysteries": {"name": "Unsolved Mysteries", "desc": "Real cold cases that still baffle investigators."},
+    "movie_trivia": {"name": "Movie Secrets Revealed", "desc": "Behind-the-scenes secrets Hollywood kept hidden."},
+    "animal_kingdom": {"name": "Animal Kingdom Facts", "desc": "Incredible animal facts from around the world."},
+    "space_wonders": {"name": "Space Wonders", "desc": "NASA-confirmed space facts that break your brain."},
+    "box_office": {"name": "Box Office Records", "desc": "Movie earnings records that will shock you."},
+    "upsc": {"name": "UPSC Concept Crack", "desc": "Master UPSC concepts in 30 seconds."},
+    "neet": {"name": "NEET Concept Crack", "desc": "Master NEET concepts in 30 seconds."},
 }
 
 
@@ -83,15 +86,48 @@ def add_to_playlist(youtube, playlist_id: str, video_id: str, playlist_key: str 
     print(f"  Added to playlist: {info['name']}")
 
 
-def upload(video_path: str, title: str, description: str = "", tags: list[str] = None, privacy: str = "public", playlist_key: str = "story",     made_for_kids: bool = False):
+def log_performance(video_id: str, title: str, mode: str):
+    """Log uploaded video for performance tracking."""
+    from datetime import datetime
+    perf = {"videos": []}
+    if PERF_FILE.exists():
+        perf = json.loads(PERF_FILE.read_text())
+    perf["videos"].append({
+        "video_id": video_id,
+        "title": title,
+        "mode": mode,
+        "uploaded_at": datetime.now().isoformat(),
+    })
+    PERF_FILE.write_text(json.dumps(perf, indent=2))
+
+
+def upload(video_path: str, title: str = "", description: str = "", tags: list[str] = None,
+           privacy: str = "public", playlist_key: str = "story", made_for_kids: bool = False,
+           mode: str = "facts", script_data: dict = None):
+    """Upload with viral SEO optimization."""
     youtube = get_service()
 
-    # Upload video
+    # Generate viral title, description, tags if not provided
+    if script_data and not title:
+        title = generate_viral_title(mode, script_data)
+    if script_data and not description:
+        description = generate_viral_description(mode, script_data)
+        hashtags = generate_viral_hashtags(mode)
+        description += f"\n\n{hashtags}"
+    if script_data and not tags:
+        tags = generate_viral_tags(mode, script_data)
+    if not title:
+        title = "Amazing #Shorts"
+    if not description:
+        description = f"Subscribe for more! {CHANNEL_HANDLE}\n#shorts"
+    if not tags:
+        tags = ["shorts", mode, "youtubeshorts"]
+
     body = {
         "snippet": {
             "title": title,
             "description": description,
-            "tags": tags or [],
+            "tags": tags,
             "categoryId": "22",
         },
         "status": {
@@ -101,27 +137,28 @@ def upload(video_path: str, title: str, description: str = "", tags: list[str] =
     }
 
     media = MediaFileUpload(video_path, chunksize=-1, resumable=True)
-    print(f"Uploading: {title[:50]}...")
+    print(f"\n📤 Uploading: {title[:60]}...")
+    print(f"   Mode: {mode.upper()} | Tags: {len(tags)}")
     request = youtube.videos().insert(part="snippet,status", body=body, media_body=media)
     response = None
     while response is None:
         status, response = request.next_chunk()
         if status:
-            print(f"  {int(status.progress() * 100)}%")
+            print(f"   {int(status.progress() * 100)}%")
     video_id = response["id"]
-    print(f"Done! https://youtu.be/{video_id}")
+    print(f"✅ Uploaded! https://youtu.be/{video_id}")
 
     # Add to playlist
     try:
         playlist_id = get_or_create_playlist(youtube, playlist_key)
         add_to_playlist(youtube, playlist_id, video_id, playlist_key)
     except Exception as e:
-        print(f"  Playlist skipped: {e}")
+        print(f"   Playlist skipped: {e}")
 
-    # Comments now available (not marked as made for kids)
-    print("  Comments enabled")
+    # Log for performance tracking
+    log_performance(video_id, title, mode)
 
-    print(f"  Channel: https://youtube.com/@Glitchverse12-i8i")
+    print(f"   Channel: https://youtube.com/{CHANNEL_HANDLE}")
     return video_id
 
 

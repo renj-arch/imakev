@@ -56,22 +56,18 @@ def generate_upsc_script() -> dict:
 
 
 def _fallback() -> dict:
-    concepts = random.sample(FALLBACKS, min(4, len(FALLBACKS)))
+    concept = random.choice(FALLBACKS)
     hook = random.choice(HOOKS)
-    image_prompts = [
-        f"cinematic educational illustration: {topic}, Indian government building background, clean professional style, 9:16 vertical, dark blue and gold theme, highly detailed, upsc exam preparation theme"
-        for topic, _, _ in concepts
-    ]
-    tts_lines = [f"{topic}. {explanation}" for topic, explanation, _ in concepts]
+    topic, explanation, subject = concept
     return {
-        "title": f"UPSC: {concepts[0][0]}",
+        "title": f"UPSC: {topic}",
         "hook": hook,
-        "topics": [t for t, _, _ in concepts],
-        "explanations": [e for _, e, _ in concepts],
-        "subjects": [s for _, _, s in concepts],
-        "image_prompts": image_prompts,
-        "script": " ".join(tts_lines),
-        "tts_script": " ".join(tts_lines),
+        "topics": [topic],
+        "explanations": [explanation],
+        "subjects": [subject],
+        "image_prompts": [f"cinematic educational illustration: {topic}, Indian government building background, clean professional style, 9:16 vertical, dark blue and gold theme, highly detailed, upsc exam preparation theme"],
+        "script": f"{topic}. {explanation}",
+        "tts_script": f"{topic}. {explanation}",
     }
 
 
@@ -79,48 +75,37 @@ def _try_llm() -> dict | None:
     try:
         from src.script_generator import _generate
         prompt = (
-            "Give me 4 different UPSC exam concepts to explain in a short video. "
-            "Each should be a high-yield topic from Polity, Economy, History, or Geography. "
+            "Give me 1 UPSC exam concept with a short explanation (8-12 words). "
+            "Topic should be high-yield from Polity, Economy, History, or Geography. "
             "Format exactly:\n"
             "TOPIC: [Name of the concept]\n"
-            "EXPLANATION: [2-3 sentence clear explanation as if teaching a beginner]\n"
-            "SUBJECT: [Polity/Economy/History/Geography]\n\n"
-            "Make explanations simple, accurate, and exam-focused."
+            "EXPLANATION: [short explanation, 8-12 words]\n"
+            "SUBJECT: [Polity/Economy/History/Geography]"
         )
         system = "You are a UPSC mentor teaching complex topics in simple words. Only include verified facts."
         raw = _generate(prompt, temperature=0.8, max_tokens=800, system=system)
         if not raw:
             return None
-        concepts = []
-        current = {}
+        topic = explanation = subject = None
         for line in raw.split("\n"):
             line = line.strip()
             if line.upper().startswith("TOPIC:"):
-                if current.get("topic") and current.get("explanation"):
-                    concepts.append((current["topic"], current["explanation"], current.get("subject", "Polity")))
-                current = {"topic": line.split(":", 1)[-1].strip()}
-            elif line.upper().startswith("EXPLANATION:") and current:
-                current["explanation"] = line.split(":", 1)[-1].strip()
-            elif line.upper().startswith("SUBJECT:") and current:
-                current["subject"] = line.split(":", 1)[-1].strip()
-        if current.get("topic") and current.get("explanation"):
-            concepts.append((current["topic"], current["explanation"], current.get("subject", "Polity")))
-        if concepts and len(concepts) >= 2:
+                topic = line.split(":", 1)[-1].strip()
+            elif line.upper().startswith("EXPLANATION:"):
+                explanation = line.split(":", 1)[-1].strip()
+            elif line.upper().startswith("SUBJECT:"):
+                subject = line.split(":", 1)[-1].strip()
+        if topic and explanation:
             hook = random.choice(HOOKS)
-            image_prompts = [
-                f"cinematic educational illustration: {t}, Indian government building background, clean professional style, 9:16 vertical, dark blue and gold theme, highly detailed, upsc exam preparation theme"
-                for t, _, _ in concepts
-            ]
-            tts_lines = [f"{t}. {e}" for t, e, _ in concepts]
             return {
-                "title": f"UPSC: {concepts[0][0]}",
+                "title": f"UPSC: {topic}",
                 "hook": hook,
-                "topics": [t for t, _, _ in concepts],
-                "explanations": [e for _, e, _ in concepts],
-                "subjects": [s for _, _, s in concepts],
-                "image_prompts": image_prompts,
-                "script": " ".join(tts_lines),
-                "tts_script": " ".join(tts_lines),
+                "topics": [topic],
+                "explanations": [explanation],
+                "subjects": [subject or "Polity"],
+                "image_prompts": [f"cinematic educational illustration: {topic}, Indian government building background, clean professional style, 9:16 vertical, dark blue and gold theme, highly detailed, upsc exam preparation theme"],
+                "script": f"{topic}. {explanation}",
+                "tts_script": f"{topic}. {explanation}",
             }
     except Exception as e:
         print(f"  LLM error: {e}")

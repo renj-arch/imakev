@@ -131,70 +131,55 @@ def generate_neet_script() -> dict:
     return _try_llm() or _fallback()
 
 def _fallback() -> dict:
-    concepts = random.sample(FALLBACKS, min(4, len(FALLBACKS)))
+    concept = random.choice(FALLBACKS)
     hook = random.choice(HOOKS)
-    image_prompts = [
-        f"cinematic educational illustration: {topic}, NEET exam preparation, biology chemistry physics, clean professional style, 9:16 vertical, dark green and gold theme, highly detailed"
-        for topic, _, _ in concepts
-    ]
-    tts_lines = [f"{topic}. {explanation}" for topic, explanation, _ in concepts]
+    topic, explanation, subject = concept
     return {
-        "title": f"NEET: {concepts[0][0]}",
+        "title": f"NEET: {topic}",
         "hook": hook,
-        "topics": [t for t, _, _ in concepts],
-        "explanations": [e for _, e, _ in concepts],
-        "subjects": [s for _, _, s in concepts],
-        "image_prompts": image_prompts,
-        "script": " ".join(tts_lines),
-        "tts_script": " ".join(tts_lines),
+        "topics": [topic],
+        "explanations": [explanation],
+        "subjects": [subject],
+        "image_prompts": [f"cinematic educational illustration: {topic}, NEET exam preparation, biology chemistry physics, clean professional style, 9:16 vertical, dark green and gold theme, highly detailed"],
+        "script": f"{topic}. {explanation}",
+        "tts_script": f"{topic}. {explanation}",
     }
 
 def _try_llm() -> dict | None:
     try:
         from src.script_generator import _generate
         prompt = (
-            "Give me 4 different NEET exam concepts to explain in a short video. "
-            "Each should be a high-yield topic from Biology, Physics, or Chemistry based on NCERT Class 11 and 12 syllabus. "
+            "Give me 1 NEET exam concept with a short explanation (8-12 words). "
+            "Topic should be high-yield from Biology, Physics, or Chemistry based on NCERT Class 11 and 12 syllabus. "
             "Format exactly:\n"
             "TOPIC: [Name of the concept]\n"
-            "EXPLANATION: [2-3 sentence clear explanation as if teaching a beginner]\n"
-            "SUBJECT: [Biology/Physics/Chemistry]\n\n"
-            "Make explanations simple, accurate, and exam-focused. Focus on topics that appear in NEET UG."
+            "EXPLANATION: [short explanation, 8-12 words]\n"
+            "SUBJECT: [Biology/Physics/Chemistry]"
         )
         system = "You are a NEET mentor teaching complex topics in simple words. Only include verified facts from NCERT."
         raw = _generate(prompt, temperature=0.8, max_tokens=800, system=system)
         if not raw:
             return None
-        concepts = []
-        current = {}
+        topic = explanation = subject = None
         for line in raw.split("\n"):
             line = line.strip()
             if line.upper().startswith("TOPIC:"):
-                if current.get("topic") and current.get("explanation"):
-                    concepts.append((current["topic"], current["explanation"], current.get("subject", "Biology")))
-                current = {"topic": line.split(":", 1)[-1].strip()}
-            elif line.upper().startswith("EXPLANATION:") and current:
-                current["explanation"] = line.split(":", 1)[-1].strip()
-            elif line.upper().startswith("SUBJECT:") and current:
-                current["subject"] = line.split(":", 1)[-1].strip()
-        if current.get("topic") and current.get("explanation"):
-            concepts.append((current["topic"], current["explanation"], current.get("subject", "Biology")))
-        if concepts and len(concepts) >= 2:
+                topic = line.split(":", 1)[-1].strip()
+            elif line.upper().startswith("EXPLANATION:"):
+                explanation = line.split(":", 1)[-1].strip()
+            elif line.upper().startswith("SUBJECT:"):
+                subject = line.split(":", 1)[-1].strip()
+        if topic and explanation:
             hook = random.choice(HOOKS)
-            image_prompts = [
-                f"cinematic educational illustration: {t}, NEET exam preparation, biology chemistry physics, clean professional style, 9:16 vertical, dark green and gold theme, highly detailed"
-                for t, _, _ in concepts
-            ]
-            tts_lines = [f"{t}. {e}" for t, e, _ in concepts]
             return {
-                "title": f"NEET: {concepts[0][0]}",
+                "title": f"NEET: {topic}",
                 "hook": hook,
-                "topics": [t for t, _, _ in concepts],
-                "explanations": [e for _, e, _ in concepts],
-                "subjects": [s for _, _, s in concepts],
-                "image_prompts": image_prompts,
-                "script": " ".join(tts_lines),
-                "tts_script": " ".join(tts_lines),
+                "topics": [topic],
+                "explanations": [explanation],
+                "subjects": [subject or "Biology"],
+                "image_prompts": [f"cinematic educational illustration: {topic}, NEET exam preparation, biology chemistry physics, clean professional style, 9:16 vertical, dark green and gold theme, highly detailed"],
+                "script": f"{topic}. {explanation}",
+                "tts_script": f"{topic}. {explanation}",
             }
     except Exception as e:
         print(f"  LLM error: {e}")

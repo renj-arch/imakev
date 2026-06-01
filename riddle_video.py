@@ -8,9 +8,11 @@ import requests as req
 from moviepy import (
     VideoClip, AudioFileClip, ImageClip,
     concatenate_videoclips, CompositeAudioClip, concatenate_audioclips,
+    CompositeVideoClip,
 )
 import config
 from src.riddles import generate_riddle_script
+from src.engagement import hook_overlays, fast_motion, comment_prompt_overlay, subscribe_end_card, branding_overlays
 
 FONT_PATH = config.get_font()
 W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
@@ -100,15 +102,7 @@ def make_answer_card(img, answer, explanation):
     return img
 
 
-def motion_clip(img, dur):
-    w, h = img.size
-    def f(t):
-        p = t / dur if dur > 0 else 1
-        scale = 1.0 + p * 0.04
-        cw, ch = int(w / scale), int(h / scale)
-        ox, oy = (w - cw) // 2, (h - ch) // 2
-        return np.array(img.crop((ox, oy, ox + cw, oy + ch)).resize((w, h), Image.LANCZOS))
-    return VideoClip(f, duration=dur)
+motion_clip = fast_motion
 
 
 def main():
@@ -180,7 +174,7 @@ def main():
     riddle_card = make_riddle_card(riddle_img, RIDDLE)
     answer_card = make_answer_card(answer_img, ANSWER, EXPLANATION)
 
-    riddle_clip = motion_clip(riddle_card, riddle_dur)
+    riddle_clip = motion_clip(riddle_card, riddle_dur, shake=True)
 
     silence = AudioFileClip(str(tts_path)).with_duration(0).with_volume_scaled(0)
     pause_clip = VideoClip(lambda t: np.array(answer_card.resize((W, H))), duration=pause_before_answer)
@@ -188,10 +182,16 @@ def main():
 
     answer_clip = motion_clip(answer_card, answer_dur)
 
-    final = concatenate_videoclips(
-        [motion_clip(hook_card, 1.5), riddle_clip, pause_clip, answer_clip],
-        method="compose",
-    )
+    overlays = hook_overlays(1.5)
+    hook_with_overlays = CompositeVideoClip([motion_clip(hook_card, 1.5)] + overlays, size=config.SHORTS_SIZE)
+
+    # Wrap answer clip with comment prompt overlay
+    answer_composite = CompositeVideoClip([answer_clip, comment_prompt_overlay(start_time=0.5, duration=2.0)[0]], size=config.SHORTS_SIZE)
+
+    raw_clips = [hook_with_overlays, riddle_clip, pause_clip, answer_composite]
+    bg = concatenate_videoclips(raw_clips, method="compose")
+    branding = branding_overlays(bg.duration)
+    final = CompositeVideoClip([bg] + branding, size=config.SHORTS_SIZE) if branding else bg
 
     print("\n[4/4] Applying audio...")
     audio_riddle = AudioFileClip(str(tts_path))

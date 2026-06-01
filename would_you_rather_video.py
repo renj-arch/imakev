@@ -5,9 +5,10 @@ from pathlib import Path
 from PIL import Image, ImageEnhance, ImageDraw, ImageFont
 import numpy as np
 import requests as req
-from moviepy import VideoClip, AudioFileClip, concatenate_videoclips, CompositeAudioClip, concatenate_audioclips
+from moviepy import VideoClip, AudioFileClip, concatenate_videoclips, CompositeAudioClip, concatenate_audioclips, CompositeVideoClip
 import config
 from src.would_you_rather import generate_wyr_script
+from src.engagement import hook_overlays, fast_motion, comment_prompt_overlay, subscribe_end_card, branding_overlays
 
 FONT_PATH = config.get_font()
 W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
@@ -107,15 +108,7 @@ def make_end_card(img):
     return img
 
 
-def motion_clip(img, dur):
-    w, h = img.size
-    def f(t):
-        p = t / dur if dur > 0 else 1
-        scale = 1.0 + p * 0.04
-        cw, ch = int(w/scale), int(h/scale)
-        ox, oy = (w-cw)//2, (h-ch)//2
-        return np.array(img.crop((ox, oy, ox+cw, oy+ch)).resize((w,h), Image.LANCZOS))
-    return VideoClip(f, duration=dur)
+motion_clip = fast_motion
 
 
 def main():
@@ -169,14 +162,14 @@ def main():
     split = make_split_card(img.copy(), A, B)
     end = make_end_card(img.copy())
 
-    clips = [
-        motion_clip(intro, 1.5),
-        motion_clip(option_a, dur_a),
-        motion_clip(option_b, dur_b),
-        motion_clip(split, dur_split),
-        motion_clip(end, 2.0),
-    ]
-    final = concatenate_videoclips(clips, method="compose")
+    overlays = hook_overlays(1.8)
+    overlays += comment_prompt_overlay(start_time=max(total_dur * 0.4, 0.5), duration=2.0)
+
+    raw_clips = [fast_motion(intro, 1.2), fast_motion(option_a, dur_a), fast_motion(option_b, dur_b),
+                 fast_motion(split, dur_split, shake=True), subscribe_end_card(end, 1.2)]
+    bg = concatenate_videoclips(raw_clips, method="compose")
+    overlays += branding_overlays(bg.duration)
+    final = CompositeVideoClip([bg] + overlays, size=config.SHORTS_SIZE)
     audio_clip = AudioFileClip(str(tts_path))
     video_dur = final.duration
     if video_dur > audio_clip.duration:

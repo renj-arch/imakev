@@ -49,7 +49,7 @@ def generate_box_office_script() -> dict:
 
 
 def _fallback() -> dict:
-    items = random.sample(FALLBACKS, min(3, len(FALLBACKS)))
+    items = random.sample(FALLBACKS, min(2, len(FALLBACKS)))
     hook = random.choice(HOOKS)
     image_prompts = [
         f"vintage Hollywood movie poster, {title}, dramatic golden lighting, film strip border, 9:16 vertical, cinema marquee lights, retro box office aesthetic"
@@ -71,11 +71,11 @@ def _try_llm() -> dict | None:
     try:
         from src.script_generator import _generate
         prompt = (
-            "Give me 3 fascinating box office or movie earnings facts. "
+            "Give me 2 fascinating box office or movie earnings facts with short explanations (8-12 words each). "
             "Each must be a verified real fact about movie budgets, earnings, or records. "
             "Format exactly:\n"
             "TITLE: [short headline for the box office fact]\n"
-            "FACT: [3-4 sentences explaining with specific dollar amounts and details]\n\n"
+            "FACT: [short explanation, 8-12 words]\n\n"
             "Include specific numbers, years, and comparisons."
         )
         system = "You write verified true box office facts. Every dollar amount and record must be accurate."

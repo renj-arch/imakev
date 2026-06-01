@@ -49,7 +49,7 @@ def generate_life_hacks_script() -> dict:
 
 
 def _fallback() -> dict:
-    hacks = random.sample(FALLBACKS, min(4, len(FALLBACKS)))
+    hacks = random.sample(FALLBACKS, min(2, len(FALLBACKS)))
     hook = random.choice(HOOKS)
     image_prompts = [
         f"clean bright flat lay photography: {h}, household objects arranged neatly, top down view, natural lighting, minimalist, 9:16 vertical, white background"
@@ -71,11 +71,11 @@ def _try_llm() -> dict | None:
     try:
         from src.script_generator import _generate
         prompt = (
-            "Give me 4 useful life hacks or clever everyday tips. "
+            "Give me 2 useful life hacks. "
             "Each must be practical, surprising, and actually work. "
             "Format exactly:\n"
-            "HACK: [short name of the hack]\n"
-            "EXPLANATION: [1-2 sentence how to do it and why it works]\n\n"
+            "HACK: [short name, 3-5 words]\n"
+            "EXPLANATION: [one short sentence, 8-12 words]\n\n"
             "Make them simple, clever, and immediately usable."
         )
         system = "You write practical, clever life hacks that actually work. Each hack must be safe, simple, and useful."

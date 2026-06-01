@@ -49,7 +49,7 @@ def generate_unsolved_mysteries_script() -> dict:
 
 
 def _fallback() -> dict:
-    items = random.sample(FALLBACKS, min(3, len(FALLBACKS)))
+    items = random.sample(FALLBACKS, min(2, len(FALLBACKS)))
     hook = random.choice(HOOKS)
     image_prompts = [
         f"dark mysterious cinematic photograph, {title}, vintage crime scene photography style, dramatic shadows, film grain, 9:16 vertical, haunting atmosphere, noir aesthetic"
@@ -71,11 +71,11 @@ def _try_llm() -> dict | None:
     try:
         from src.script_generator import _generate
         prompt = (
-            "Give me 3 famous unsolved mysteries or cold cases. "
+            "Give me 2 famous unsolved mysteries or cold cases with short explanations (8-12 words each). "
             "Each must be a real, documented case. "
             "Format exactly:\n"
             "CASE: [name of the mystery/case]\n"
-            "STORY: [3-4 sentences telling what happened, key facts, dates, and why it remains unsolved]\n\n"
+            "STORY: [short explanation, 8-12 words]\n\n"
             "Make them fascinating, chilling, and accurate."
         )
         system = "You write about real unsolved mysteries and cold cases. Every detail must be factually accurate and documented."

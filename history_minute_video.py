@@ -7,9 +7,10 @@ import numpy as np
 import requests as req
 from moviepy import (
     VideoClip, AudioFileClip, ImageClip,
-    concatenate_videoclips, CompositeAudioClip, concatenate_audioclips,
+    concatenate_videoclips, CompositeAudioClip, concatenate_audioclips, CompositeVideoClip,
 )
 import config
+from src.engagement import hook_overlays, fast_motion, comment_prompt_overlay, subscribe_end_card, branding_overlays
 
 FONT_PATH = config.get_font()
 W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
@@ -95,15 +96,7 @@ def make_end_card(img: Image.Image) -> Image.Image:
     return img
 
 
-def motion_clip(img: Image.Image, dur: float) -> VideoClip:
-    w, h = img.size
-    def f(t):
-        p = t / dur if dur > 0 else 1
-        scale = 1.0 + p * 0.05
-        cw, ch = int(w / scale), int(h / scale)
-        ox, oy = (w - cw) // 2, (h - ch) // 2
-        return np.array(img.crop((ox, oy, ox + cw, oy + ch)).resize((w, h), Image.LANCZOS))
-    return VideoClip(f, duration=dur)
+motion_clip = fast_motion
 
 
 def main():
@@ -162,15 +155,19 @@ def main():
     end_card = make_end_card(img)
 
     clips = [
-        motion_clip(title_card, 1.5),
+        motion_clip(title_card, 0.8),
         motion_clip(script_card, total_dur),
-        motion_clip(end_card, 2.0),
+        subscribe_end_card(end_card, 1.2),
     ]
 
-    bg = concatenate_videoclips(clips, method="compose")
-    final = bg
+    overlays = hook_overlays(1.8)
+    overlays += comment_prompt_overlay(start_time=max(total_dur * 0.4, 0.5), duration=2.0)
 
-    video_dur = total_dur + 1.5 + 2.0
+    bg = concatenate_videoclips(clips, method="compose")
+    overlays += branding_overlays(bg.duration)
+    final = CompositeVideoClip([bg] + overlays, size=config.SHORTS_SIZE)
+
+    video_dur = total_dur + 0.8 + 1.2
     audio_clip = AudioFileClip(str(tts_path))
     if video_dur > audio_clip.duration:
         silence = AudioFileClip(str(tts_path)).with_duration(video_dur - audio_clip.duration).with_volume_scaled(0)

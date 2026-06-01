@@ -39,7 +39,7 @@ def generate_howitworks_script() -> dict:
     topics = _try_llm()
     if not topics:
         print("  LLM unavailable, using fallback")
-        topics = random.sample(FALLBACKS, min(4, len(FALLBACKS)))
+        topics = random.sample(FALLBACKS, min(2, len(FALLBACKS)))
 
     hook = random.choice(HOOKS)
     title = f"{hook} {topics[0][0].capitalize()}"
@@ -61,10 +61,10 @@ def _try_llm() -> list | None:
     try:
         from src.script_generator import _generate
         prompt = (
-            "Give me 4 different everyday objects and explain how each works in 2-3 simple sentences. "
+            "Give me 2 different everyday objects and explain each in 1 short sentence. "
             "Format exactly:\n"
             "TOPIC: [object name]\n"
-            "EXPLANATION: [how it works in 2-3 sentences]\n\n"
+            "EXPLANATION: [how it works in 8-12 words]\n\n"
             "Make each explanation clear and correct. Choose common household objects."
         )
         system = "You explain how everyday things work in simple, accurate terms."
@@ -83,7 +83,7 @@ def _try_llm() -> list | None:
                 current["explanation"] = line.split(":", 1)[-1].strip()
         if current.get("topic") and current.get("explanation"):
             topics.append((current["topic"], current["explanation"]))
-        return topics[:4] if len(topics) >= 2 else None
+        return topics[:2] if len(topics) >= 2 else None
     except Exception as e:
         print(f"  LLM error: {e}")
         return None

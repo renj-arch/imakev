@@ -8,6 +8,7 @@ import requests as req
 from moviepy import VideoClip, AudioFileClip, concatenate_videoclips, CompositeAudioClip
 import config
 from src.life_hacks import generate_life_hacks_script
+from src.engagement import hook_overlays, fast_motion, comment_prompt_overlay, subscribe_end_card, branding_overlays
 
 FONT_PATH = config.get_font()
 W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
@@ -93,15 +94,7 @@ def make_end_card(img):
     return img
 
 
-def motion_clip(img, dur):
-    w, h = img.size
-    def f(t):
-        p = t / dur if dur > 0 else 1
-        scale = 1.0 + p * 0.05
-        cw, ch = int(w/scale), int(h/scale)
-        ox, oy = (w-cw)//2, (h-ch)//2
-        return np.array(img.crop((ox, oy, ox+cw, oy+ch)).resize((w,h), Image.LANCZOS))
-    return VideoClip(f, duration=dur)
+motion_clip = fast_motion
 
 
 def main():
@@ -152,22 +145,27 @@ def main():
     dur_per = total_dur / len(HACKS)
 
     title_img = make_title_card(images[0], TITLE)
-    clips = [motion_clip(title_img, 1.5)]
+    clips = [motion_clip(title_img, 0.8)]
 
     for i, (h, e) in enumerate(zip(HACKS, EXPLANATIONS)):
         img = images.get(i, images[0])
         card = make_hack_card(img, h, e)
-        clips.append(motion_clip(card, dur_per))
+        shake = i == len(HACKS) - 1
+        clips.append(fast_motion(card, dur_per, shake=shake))
+
+    overlays = hook_overlays(1.8)
+    overlays += comment_prompt_overlay(start_time=max(total_dur * 0.4, 0.5), duration=2.0)
 
     end_img = images.get(len(HACKS)-1, images[0])
-    clips.append(motion_clip(make_end_card(end_img), 2.0))
+    clips.append(subscribe_end_card(end_img, 1.2))
 
     bg = concatenate_videoclips(clips, method="compose")
-    final = bg
+    overlays += branding_overlays(bg.duration)
+    final = CompositeVideoClip([bg] + overlays, size=config.SHORTS_SIZE)
     audio_clip = AudioFileClip(str(tts_path))
     music_paths = list(config.MUSIC_DIR.glob("*.mp3"))
     if music_paths:
-        music = AudioFileClip(str(random.choice(music_paths))).with_duration(total_dur + 1.5).with_volume_scaled(0.08)
+        music = AudioFileClip(str(random.choice(music_paths))).with_duration(total_dur + 0.8).with_volume_scaled(0.08)
         final = final.with_audio(CompositeAudioClip([audio_clip, music]))
     else:
         final = final.with_audio(audio_clip)
@@ -176,7 +174,7 @@ def main():
     safe_title = TITLE.lower().replace(" ", "_").replace("?", "").replace("!", "").replace("'", "").replace(".","").replace(",","").replace(":","")[:50]
     out = config.OUTPUT_DIR / f"lifehack_{safe_title}.mp4"
     out.unlink(missing_ok=True)
-    print(f"  {total_dur + 1.5:.1f}s | {W}x{H}")
+    print(f"  {total_dur + 0.8:.1f}s | {W}x{H}")
     t0 = time.time()
     final.write_videofile(str(out), fps=config.VIDEO_FPS, codec="libx264", audio_codec="aac", threads=4, preset="ultrafast", ffmpeg_params=["-movflags", "+faststart"], logger=None)
     final.close()

@@ -49,7 +49,7 @@ def generate_coincidences_script() -> dict:
 
 
 def _fallback() -> dict:
-    items = random.sample(FALLBACKS, min(3, len(FALLBACKS)))
+    items = random.sample(FALLBACKS, min(2, len(FALLBACKS)))
     hook = random.choice(HOOKS)
     image_prompts = [
         f"surreal vintage photograph style, {title}, mysterious and dreamlike atmosphere, sepia tones, double exposure effect, 9:16 vertical, cinematic lighting, historical aesthetic"
@@ -71,11 +71,11 @@ def _try_llm() -> dict | None:
     try:
         from src.script_generator import _generate
         prompt = (
-            "Give me 3 amazing true coincidence stories. "
+            "Give me 2 amazing true coincidence stories with short explanations (8-12 words each). "
             "Each must be a documented real event. "
             "Format exactly:\n"
             "TITLE: [short name of the coincidence]\n"
-            "STORY: [3-4 sentences telling what happened, with specific details and dates]\n\n"
+            "STORY: [short explanation, 8-12 words]\n\n"
             "Make them shocking, memorable, and 100% real."
         )
         system = "You write verified real coincidence stories. Every fact must be historically accurate and documented."

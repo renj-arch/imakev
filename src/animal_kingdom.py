@@ -49,7 +49,7 @@ def generate_animal_kingdom_script() -> dict:
 
 
 def _fallback() -> dict:
-    items = random.sample(FALLBACKS, min(3, len(FALLBACKS)))
+    items = random.sample(FALLBACKS, min(2, len(FALLBACKS)))
     hook = random.choice(HOOKS)
     image_prompts = [
         f"National Geographic wildlife photography, {title}, stunning animal portrait, golden hour lighting, 9:16 vertical, hyper-realistic, nature documentary style"
@@ -71,11 +71,11 @@ def _try_llm() -> dict | None:
     try:
         from src.script_generator import _generate
         prompt = (
-            "Give me 3 incredible animal facts. "
+            "Give me 2 incredible animal facts with short explanations (8-12 words each). "
             "Each must be a verified documented fact about a real animal. "
             "Format exactly:\n"
             "ANIMAL: [name of animal and the surprising fact headline]\n"
-            "FACT: [3-4 sentences explaining the fact with specific details]\n\n"
+            "FACT: [short explanation, 8-12 words]\n\n"
             "Make them mind-blowing, accurate, and fascinating."
         )
         system = "You write verified true animal facts. Every detail must be scientifically accurate and documented in research."

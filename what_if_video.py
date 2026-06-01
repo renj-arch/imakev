@@ -8,6 +8,7 @@ import requests as req
 from moviepy import VideoClip, AudioFileClip, concatenate_videoclips, CompositeAudioClip, concatenate_audioclips
 import config
 from src.what_if import generate_what_if_script
+from src.engagement import hook_overlays, fast_motion, comment_prompt_overlay, subscribe_end_card, branding_overlays
 
 FONT_PATH = config.get_font()
 W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
@@ -93,15 +94,7 @@ def make_end_card(img):
     return img
 
 
-def motion_clip(img, dur):
-    w, h = img.size
-    def f(t):
-        p = t / dur if dur > 0 else 1
-        scale = 1.0 + p * 0.05
-        cw, ch = int(w/scale), int(h/scale)
-        ox, oy = (w-cw)//2, (h-ch)//2
-        return np.array(img.crop((ox, oy, ox+cw, oy+ch)).resize((w,h), Image.LANCZOS))
-    return VideoClip(f, duration=dur)
+motion_clip = fast_motion
 
 
 def main():
@@ -152,20 +145,25 @@ def main():
     dur_per = total_dur / len(SCENARIOS)
 
     title_img = make_title_card(images[0], TITLE)
-    clips = [motion_clip(title_img, 1.5)]
+    clips = [motion_clip(title_img, 0.8)]
 
     for i, (s, e) in enumerate(zip(SCENARIOS, EXPLANATIONS)):
         img = images.get(i, images[0])
         card = make_scenario_card(img, s, e)
-        clips.append(motion_clip(card, dur_per))
+        shake = i == len(SCENARIOS) - 1
+        clips.append(fast_motion(card, dur_per, shake=shake))
+
+    overlays = hook_overlays(1.8)
+    overlays += comment_prompt_overlay(start_time=max(total_dur * 0.4, 0.5), duration=2.0)
 
     end_img = images.get(len(SCENARIOS)-1, images[0])
-    clips.append(motion_clip(make_end_card(end_img), 2.0))
+    clips.append(subscribe_end_card(end_img, 1.2))
 
     bg = concatenate_videoclips(clips, method="compose")
-    final = bg
+    overlays += branding_overlays(bg.duration)
+    final = CompositeVideoClip([bg] + overlays, size=config.SHORTS_SIZE)
     audio_clip = AudioFileClip(str(tts_path))
-    video_dur = total_dur + 1.5
+    video_dur = total_dur + 0.8
     if video_dur > audio_clip.duration:
         silence = AudioFileClip(str(tts_path)).with_duration(video_dur - audio_clip.duration).with_volume_scaled(0)
         audio_clip = concatenate_audioclips([audio_clip, silence])
@@ -180,7 +178,7 @@ def main():
     safe_title = TITLE.lower().replace(" ", "_").replace("?", "").replace("!", "").replace("'", "").replace(".","").replace(",","").replace(":","")[:50]
     out = config.OUTPUT_DIR / f"whatif_{safe_title}.mp4"
     out.unlink(missing_ok=True)
-    print(f"  {total_dur + 1.5:.1f}s | {W}x{H}")
+    print(f"  {total_dur + 0.8:.1f}s | {W}x{H}")
     t0 = time.time()
     final.write_videofile(str(out), fps=config.VIDEO_FPS, codec="libx264", audio_codec="aac", threads=4, preset="ultrafast", ffmpeg_params=["-movflags", "+faststart"], logger=None)
     final.close()

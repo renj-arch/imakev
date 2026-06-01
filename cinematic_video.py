@@ -11,6 +11,7 @@ from moviepy import (
     CompositeAudioClip,
 )
 import config
+from src.engagement import hook_overlays, fast_motion, comment_prompt_overlay, subscribe_end_card, branding_overlays
 
 FONT = config.get_font()
 W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
@@ -24,23 +25,22 @@ SCENES = [
 ]
 
 SUBTITLES = [
-    "In the neon-lit shadows of the dream city, a mysterious cat villain emerges.",
-    "A child is taken in a surreal moment of light and shadow.",
-    "A brave rescue squad assembles, mounting their futuristic bicycles.",
-    "The chase begins through impossible streets that bend and shift.",
-    "In a final burst of speed, the rescue squad closes in. Justice prevails.",
+    "A mysterious cat villain emerges in the neon-lit shadows.",
+    "A child taken in a surreal beam of light.",
+    "The rescue squad assembles on futuristic bikes.",
+    "The chase through streets that bend and shift.",
+    "In a final burst of speed, justice prevails.",
 ]
 
 TITLE = "CAT KIDNAPPING & BIKE RESCUE SQUAD"
 CHAPTER = 1  # will be overridden by pipeline
 
 SCRIPT = (
-    "In the neon-lit shadows of the dream city, a mysterious cat villain emerges from the darkness. "
-    "A child is taken in a surreal moment of light and shadow. "
-    "A brave rescue squad assembles, mounting their futuristic bicycles. "
-    "The chase begins through impossible streets that bend and shift. "
-    "In a final burst of speed and courage, the rescue squad closes in. "
-    "Justice prevails in the heart of the dream city."
+    "A mysterious cat villain emerges in the neon-lit shadows. "
+    "A child taken in a surreal beam of light. "
+    "The rescue squad assembles on futuristic bikes. "
+    "The chase through streets that bend and shift. "
+    "In a final burst of speed, justice prevails."
 )
 
 
@@ -77,23 +77,7 @@ def upscale(img: Image.Image) -> Image.Image:
     return Image.fromarray(arr)
 
 
-def motion_clip(img: Image.Image, dur: float, shake=False) -> VideoClip:
-    w, h = img.size
-    def f(t):
-        p = t / dur if dur > 0 else 1
-        if shake:
-            scale = 1.0 + p * 0.08
-            cw, ch = int(w / scale), int(h / scale)
-            sx = int(np.sin(p * 40) * cw * 0.02)
-            sy = int(np.cos(p * 35) * ch * 0.02)
-            ox = max(0, min((w - cw) // 2 + sx, w - cw))
-            oy = max(0, min((h - ch) // 2 + sy, h - ch))
-            return np.array(img.crop((ox, oy, ox + cw, oy + ch)).resize((w, h), Image.LANCZOS))
-        scale = 1.0 + p * 0.15
-        cw, ch = int(w / scale), int(h / scale)
-        ox, oy = (w - cw) // 2, (h - ch) // 2
-        return np.array(img.crop((ox, oy, ox + cw, oy + ch)).resize((w, h), Image.LANCZOS))
-    return VideoClip(f, duration=dur)
+motion_clip = fast_motion
 
 
 def main():
@@ -144,23 +128,21 @@ def main():
 
     scene_ids = [s[0] for s in SCENES]
 
-    # Hook overlay (first 3 seconds - critical for retention)
-    hook_text = TextClip(text="👀 WATCH TILL THE END", font=FONT, font_size=44, color="#FFCC00", stroke_color="black", stroke_width=3, method="label").with_position(("center", H//2 - 80)).with_duration(1.8).with_start(0.3)
-    hook_sub = TextClip(text="it gets wild...", font=FONT, font_size=28, color="white", stroke_color="black", stroke_width=2, method="label").with_position(("center", H//2)).with_duration(1.8).with_start(0.3)
-    overlays.extend([hook_text, hook_sub])
+    # Hook overlays from engagement module
+    overlays = hook_overlays(1.8)
 
-    # Title card (use first scene)
+    # Title card (use first scene) - shorter
     title_img = images.get(scene_ids[0], Image.new("RGB", (W, H), (10, 5, 40)))
-    clips.append(motion_clip(title_img, 2.5))
-    title_txt = TextClip(text=TITLE, font=FONT, font_size=40, color="white", stroke_color="black", stroke_width=3, method="label").with_position(("center", "center")).with_duration(2.5)
+    clips.append(motion_clip(title_img, 1.2))
+    title_txt = TextClip(text=TITLE, font=FONT, font_size=36, color="white", stroke_color="black", stroke_width=3, method="label").with_position(("center", "center")).with_duration(1.2)
     overlays.append(title_txt)
 
     # Scene clips
-    ct = 2.5
+    ct = 1.2
     for i, (sid, sub) in enumerate(zip(scene_ids, SUBTITLES)):
-        shake = i in (len(scene_ids)//2, len(scene_ids)-1)  # middle and last get shake cam
+        shake = i in (len(scene_ids)//2, len(scene_ids)-1)
         if sid in images:
-            clip = motion_clip(images[sid], dur, shake=shake)
+            clip = fast_motion(images[sid], dur, shake=shake, intensity=1.3)
         else:
             def fb(t, s=sid):
                 arr = np.zeros((H, W, 3), dtype=np.uint8)
@@ -171,36 +153,26 @@ def main():
                                  int(30 + 50 * p + abs(np.sin(t*0.4 + p*7))*25)]
                 return arr
             clip = VideoClip(fb, duration=dur)
-        txt = TextClip(text=sub, font=FONT, font_size=32, color="white", stroke_color="black", stroke_width=2, method="label").with_position(("center", H-220)).with_start(ct + 0.3).with_duration(dur - 0.6)
+        txt = TextClip(text=sub, font=FONT, font_size=30, color="white", stroke_color="black", stroke_width=2, method="label").with_position(("center", H-200)).with_start(ct + 0.2).with_duration(dur - 0.4)
         overlays.append(txt)
         clips.append(clip)
         ct += dur
 
-    # "Watch again" prompt mid-video (boosts repeat views)
-    mid_time = total_dur * 0.6
-    watch_again = TextClip(text="👀 WATCH AGAIN - you missed something", font=FONT, font_size=26, color="white", stroke_color="black", stroke_width=2, method="label").with_position(("center", H-300)).with_duration(2.0).with_start(mid_time)
-    overlays.append(watch_again)
+    # Comment prompt
+    overlays += comment_prompt_overlay(start_time=max(total_dur * 0.4, 0.5), duration=2.0)
 
-    # End card (use LAST scene, then loop back to first scene for seamless loop)
+    # End card (use LAST scene)
     end_img = images.get(scene_ids[-1], Image.new("RGB", (W, H), (10, 5, 40)))
-    clips.append(motion_clip(end_img, 2.0))
-    # Loop-ready: replay title image briefly so Shorts auto-loop looks seamless
+    clips.append(subscribe_end_card(end_img, 1.5))
+    # Loop-ready: replay first image
     loop_img = images.get(scene_ids[0], Image.new("RGB", (W, H), (10, 5, 40)))
-    clips.append(motion_clip(loop_img, 0.5))
-    end_line1 = TextClip(text="TO BE CONTINUED...", font=FONT, font_size=44, color="white", stroke_color="black", stroke_width=3, method="label").with_position(("center", H//2 - 30)).with_duration(3.5).with_start(total_dur - 3.5)
-    end_line2 = TextClip(text="SUBSCRIBE FOR CHAPTER " + str(CHAPTER + 1), font=FONT, font_size=32, color="#FFCC00", stroke_color="black", stroke_width=2, method="label").with_position(("center", H//2 + 30)).with_duration(3.5).with_start(total_dur - 3.5)
-    overlays.extend([end_line1, end_line2])
-
-    # Comment prompt (halfway)
-    comment_txt = TextClip(text="Comment what happens next  👇", font=FONT, font_size=28, color="white", stroke_color="black", stroke_width=2, method="label").with_position(("center", H - 300)).with_duration(2.5).with_start(total_dur * 0.5)
-    overlays.append(comment_txt)
+    clips.append(fast_motion(loop_img, 0.5, intensity=0.5))
+    end_text = TextClip(text="TO BE CONTINUED... CHAPTER " + str(CHAPTER + 1), font=FONT, font_size=30, color="#FFCC00", stroke_color="black", stroke_width=2, method="label").with_position(("center", H-100)).with_duration(2.0).with_start(total_dur - 2.0)
+    overlays.append(end_text)
 
     bg = concatenate_videoclips(clips, method="compose")
-    bh = int(H * 0.08)
-    top = ColorClip(color=(0, 0, 0), size=(W, bh)).with_position((0, 0)).with_duration(bg.duration)
-    bot = ColorClip(color=(0, 0, 0), size=(W, bh)).with_position((0, H - bh)).with_duration(bg.duration)
-
-    final = CompositeVideoClip([bg, top, bot] + overlays, size=config.SHORTS_SIZE)
+    overlays += branding_overlays(bg.duration)
+    final = CompositeVideoClip([bg] + overlays, size=config.SHORTS_SIZE)
     audio = AudioFileClip(str(tts_path))
     music = None
     music_paths = list(config.MUSIC_DIR.glob("*.mp3"))

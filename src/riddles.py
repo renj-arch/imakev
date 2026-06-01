@@ -36,7 +36,7 @@ def _fallback() -> dict:
         "explanation": riddle[2],
         "image_prompt_riddle": f"mysterious cinematic scene: {riddle[0][:80]}, dark moody lighting, question marks, 9:16 vertical, intrigue",
         "image_prompt_answer": f"cinematic reveal scene: {riddle[1][:80]}, bright warm lighting, discovery moment, 9:16 vertical",
-        "tts_script": f"{hook} {riddle[0]} Pause and think about it. The answer is... {riddle[1]}. {riddle[2]}",
+        "tts_script": f"{hook} {riddle[0]} The answer is {riddle[1]}. {riddle[2]}",
     }
 
 
@@ -103,7 +103,7 @@ def _try_llm() -> dict | None:
                 "explanation": explanation or f"The answer is {answer}.",
                 "image_prompt_riddle": f"mysterious cinematic scene: {riddle[:80]}, dark moody lighting, question marks, 9:16 vertical, intrigue",
                 "image_prompt_answer": f"cinematic reveal scene: {answer[:80]}, bright warm lighting, discovery moment, 9:16 vertical",
-                "tts_script": f"{hook} {riddle} Pause and think about it. The answer is... {answer}. {explanation or f'The answer is {answer}.'}",
+                "tts_script": f"{hook} {riddle} The answer is {answer}. {explanation or f'The answer is {answer}.'}",
             }
     except Exception as e:
         print(f"  LLM error: {e}")

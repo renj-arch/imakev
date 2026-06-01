@@ -49,7 +49,7 @@ def generate_movie_trivia_script() -> dict:
 
 
 def _fallback() -> dict:
-    items = random.sample(FALLBACKS, min(3, len(FALLBACKS)))
+    items = random.sample(FALLBACKS, min(2, len(FALLBACKS)))
     hook = random.choice(HOOKS)
     image_prompts = [
         f"cinematic movie poster style, {title}, dramatic lighting, film grain, 9:16 vertical, Hollywood golden hour, vintage movie set photography"
@@ -71,11 +71,11 @@ def _try_llm() -> dict | None:
     try:
         from src.script_generator import _generate
         prompt = (
-            "Give me 3 true behind-the-scenes movie trivia facts. "
+            "Give me 2 true behind-the-scenes movie trivia facts with short explanations (8-12 words each). "
             "Each must be a verified real fact from a well-known movie. "
             "Format exactly:\n"
             "MOVIE: [movie title and the trivia headline]\n"
-            "TRIVIA: [3-4 sentences explaining the real behind-the-scenes story, with specific details]\n\n"
+            "TRIVIA: [short explanation, 8-12 words]\n\n"
             "Make them fascinating, surprising, and 100% factual."
         )
         system = "You write verified true movie trivia facts. Every detail must be accurate and sourced from documented production history."
