@@ -249,6 +249,21 @@ def run_space_wonders():
     bank_manager.ensure_refilled("space_wonders")
 
 
+def run_things():
+    print("=" * 55)
+    print("  MODE: THINGS THEY DON'T TEACH YOU")
+    print("=" * 55)
+
+    from upload_youtube import upload
+    import things_they_dont_teach_video
+
+    out_path, data = things_they_dont_teach_video.main()
+    print("\nUploading with viral SEO...")
+    upload(str(out_path), mode="things_they_dont_teach", playlist_key="things_they_dont_teach", script_data=data, made_for_kids=False)
+    print("Things They Don't Teach You video done!")
+    bank_manager.ensure_refilled("things_they_dont_teach")
+
+
 def run_box_office():
     print("=" * 55)
     print("  MODE: BOX OFFICE")
@@ -330,10 +345,12 @@ def main():
         run_box_office()
     elif mode == "upsc":
         run_upsc()
+    elif mode == "things_they_dont_teach":
+        run_things()
     elif mode == "neet":
         run_neet()
     else:
-        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', 'movie_trivia', 'animal_kingdom', 'space_wonders', or 'box_office'")
+        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', 'movie_trivia', 'animal_kingdom', 'space_wonders', 'box_office', or 'things_they_dont_teach'")
 
 
 if __name__ == "__main__":
