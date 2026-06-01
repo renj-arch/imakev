@@ -1,30 +1,6 @@
 {
   "entries": [
     {
-      "title": "Most people don't know this about their brain: Anchoring",
-      "hook": "Most people don't know this about their brain:",
-      "hacks": [
-        "Anchoring",
-        "The Dunning-Kruger Effect",
-        "Placebo Effect",
-        "Peak-End Rule"
-      ],
-      "explanations": [
-        "The first number you hear sets a mental anchor. That's why $99 feels much cheaper after seeing $199 first.",
-        "Incompetent people overestimate their skills. Experts underestimate theirs. The more you know the less confident you feel.",
-        "Your brain can heal you just by believing you received treatment. Fake pills work because your mind believes they will.",
-        "People judge an experience based on how it felt at its peak and at its end not the total sum of moments."
-      ],
-      "image_prompts": [
-        "cinematic surreal brain illustration: Anchoring, glowing neural connections, moody atmospheric lighting, 9:16 vertical, dark background with neon accents, highly detailed",
-        "cinematic surreal brain illustration: The Dunning-Kruger Effect, glowing neural connections, moody atmospheric lighting, 9:16 vertical, dark background with neon accents, highly detailed",
-        "cinematic surreal brain illustration: Placebo Effect, glowing neural connections, moody atmospheric lighting, 9:16 vertical, dark background with neon accents, highly detailed",
-        "cinematic surreal brain illustration: Peak-End Rule, glowing neural connections, moody atmospheric lighting, 9:16 vertical, dark background with neon accents, highly detailed"
-      ],
-      "script": "The first number you hear sets a mental anchor. That's why $99 feels much cheaper after seeing $199 first. Incompetent people overestimate their skills. Experts underestimate theirs. The more you know the less confident you feel. Your brain can heal you just by believing you received treatment. Fake pills work because your mind believes they will. People judge an experience based on how it felt at its peak and at its end not the total sum of moments.",
-      "tts_script": "The first number you hear sets a mental anchor. That's why $99 feels much cheaper after seeing $199 first. Incompetent people overestimate their skills. Experts underestimate theirs. The more you know the less confident you feel. Your brain can heal you just by believing you received treatment. Fake pills work because your mind believes they will. People judge an experience based on how it felt at its peak and at its end not the total sum of moments."
-    },
-    {
       "title": "Psychology says: The halo effect",
       "hook": "Psychology says:",
       "hacks": [
@@ -12001,7 +11977,12 @@
       "tts_script": "You think everyone notices your mistakes. They don't. People are too busy thinking about themselves. When someone gives you something your brain feels an overwhelming urge to give back. It's automatic. People remember the first and last items in a list but forget the middle. First impressions and final moments matter most. Your brain can heal you just by believing you received treatment. Fake pills work because your mind believes they will."
     }
   ],
-  "used": [],
+  "used": [
+    "anchoring",
+    "the dunning kruger effect",
+    "placebo effect",
+    "peak end rule"
+  ],
   "min_before_refill": 20,
   "refill_target": 500
 }
