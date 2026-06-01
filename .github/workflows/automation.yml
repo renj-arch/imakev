@@ -2,7 +2,8 @@ name: AI Video Automation
 
 on:
   schedule:
-    - cron: '0 * * * *'
+    - cron: '0 0-21/3 * * *'
+    - cron: '30 1-22/3 * * *'
   workflow_dispatch:
     inputs:
       mode:
@@ -79,7 +80,10 @@ jobs:
           MODE="${{ inputs.mode || 'auto' }}"
           if [ "$MODE" = "auto" ]; then
             HOUR=$(date -u +%-H)
-            case $((HOUR % 16)) in
+            MIN=$(date -u +%-M)
+            TOTAL=$((HOUR * 60 + MIN))
+            SLOT=$((TOTAL / 90))
+            case $((SLOT % 16)) in
               0) MODE="story" ;;
               1) MODE="facts" ;;
               2) MODE="what_if" ;;
