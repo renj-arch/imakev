@@ -11,7 +11,7 @@ from moviepy import (
     CompositeVideoClip,
 )
 import config
-from src.engagement import hook_overlays, fast_motion, comment_prompt_overlay, subscribe_end_card, branding_overlays, get_audio_duration
+from src.engagement import hook_overlays, fast_motion, comment_prompt_overlay, subscribe_end_card, branding_overlays, get_audio_duration, retention_prompt, countdown_overlay
 
 FONT_PATH = config.get_font()
 W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
@@ -165,7 +165,9 @@ def main():
         clips.append(fast_motion(card, dur_per, shake=True))
 
     # Hook overlays
-    overlays = hook_overlays(2.0)
+    overlays = hook_overlays(2.5)
+    overlays += countdown_overlay(start_time=max(total_dur * 0.2, 0.3), duration=2.0)
+    overlays += retention_prompt(start_time=total_dur * 0.5, duration=2.0)
     overlays += comment_prompt_overlay(start_time=max(total_dur * 0.3, 0.5), duration=2.5)
 
     # Subscribe end card

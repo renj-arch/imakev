@@ -2,6 +2,7 @@
 
 import random
 import bank_manager
+from src.high_retention import retention_tts
 
 NEGATIVE_HOOKS = [
     "This will ruin your day:",
@@ -81,14 +82,15 @@ def _fallback() -> dict:
         style = random.choice(IMAGE_STYLES)
         image_prompts.append(style.format(topic=kw))
     tts_lines = [f"{t}. {d}" for t, d in items]
+    items_data = [{"title": t, "description": d} for t, d in items]
     return {
         "title": f"Dark Truth: {items[0][0][:50]}",
         "hook": hook,
         "topics": topics,
         "truths": truths,
         "image_prompts": image_prompts,
-        "script": " ".join(tts_lines),
-        "tts_script": f"{hook} {' '.join(tts_lines)}",
+        "script": retention_tts(items_data, "negative_hooks", hook),
+        "tts_script": retention_tts(items_data, "negative_hooks", hook),
     }
 
 
@@ -125,15 +127,15 @@ def _try_llm() -> dict | None:
             for t in topics:
                 kw = t.lower().replace(" ", "_")[:50]
                 image_prompts.append(random.choice(IMAGE_STYLES).format(topic=kw))
-            tts_lines = [f"{t}. {d}" for t, d in zip(topics, truths)]
+            items_data = [{"title": t, "description": d} for t, d in zip(topics, truths)]
             return {
                 "title": f"Dark Truth: {topics[0][:50]}",
                 "hook": hook,
                 "topics": topics,
                 "truths": truths,
                 "image_prompts": image_prompts,
-                "script": " ".join(tts_lines),
-                "tts_script": f"{hook} {' '.join(tts_lines)}",
+                "script": retention_tts(items_data, "negative_hooks", hook),
+                "tts_script": retention_tts(items_data, "negative_hooks", hook),
             }
     except Exception as e:
         print(f"  LLM error: {e}")

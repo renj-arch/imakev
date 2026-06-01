@@ -103,10 +103,34 @@ def fast_motion(img_array: np.ndarray, dur: float, shake: bool = False, intensit
 
 def countdown_overlay(start_time: float, duration: float = 2.0) -> list:
     """Floating countdown bar that creates urgency."""
-    count_text = TextClip(text="⏱ Only 30 seconds!", font=FONT, font_size=28, color="#FFCC00",
+    labels = [
+        "⏱ Only 30 seconds!",
+        "⏱ Halfway there!",
+        "⏱ Watch till the end!",
+        "⏱ The best part is coming!",
+    ]
+    count_text = TextClip(text=random.choice(labels), font=FONT, font_size=28, color="#FFCC00",
                           stroke_color="black", stroke_width=2, method="label")
     count_text = count_text.with_position((10, 100)).with_duration(duration).with_start(start_time)
     return [count_text]
+
+
+def retention_prompt(start_time: float, duration: float = 2.0) -> list:
+    """Mid-roll retention overlay — re-engages viewers who might drop off."""
+    prompts = [
+        ("👀 DON'T SCROLL AWAY", "#FF4444"),
+        ("🔥 THIS GETS BETTER", "#FF6600"),
+        ("💥 WAIT FOR IT...", "#FFCC00"),
+        ("⚡ KEEP WATCHING", "#00FF88"),
+        ("🎯 ALMOST THERE", "#FF00FF"),
+    ]
+    text, color = random.choice(prompts)
+    txt = TextClip(text=text, font=FONT, font_size=40, color=color,
+                   stroke_color="black", stroke_width=3, method="label")
+    txt = txt.with_position(("center", H // 2)).with_duration(duration).with_start(start_time)
+    bar_arr = np.zeros((60, W, 3), dtype=np.uint8)
+    bar = ImageClip(bar_arr, duration=duration).with_position((0, H // 2 - 40)).with_start(start_time).with_opacity(0.8)
+    return [bar, txt]
 
 
 def comment_prompt_overlay(start_time: float, duration: float = 2.5) -> list:

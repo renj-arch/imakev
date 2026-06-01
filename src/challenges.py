@@ -2,6 +2,7 @@
 
 import random
 import bank_manager
+from src.high_retention import retention_tts
 
 CHALLENGE_HOOKS = [
     "Think you can do this? Watch till the end:",
@@ -80,13 +81,14 @@ def _fallback() -> dict:
         style = random.choice(IMAGE_STYLES)
         image_prompts.append(style.format(challenge=kw))
         tts_lines.append(f"{title}. {desc}")
+    challenges_data = [{"title": t, "description": d} for t, d, _, _, _ in items]
     return {
         "title": f"Can You Do This? {items[0][0][:50]}",
         "hook": hook,
-        "challenges": [{"title": t, "description": d} for t, d, _, _, _ in items],
+        "challenges": challenges_data,
         "image_prompts": image_prompts,
-        "script": " ".join(tts_lines),
-        "tts_script": f"{hook} {' '.join(tts_lines)}",
+        "script": retention_tts(challenges_data, "challenges", hook),
+        "tts_script": retention_tts(challenges_data, "challenges", hook),
     }
 
 
@@ -125,14 +127,13 @@ def _try_llm() -> dict | None:
             for c in challenges:
                 kw = c["title"].lower().replace(" ", "_")[:50]
                 image_prompts.append(random.choice(IMAGE_STYLES).format(challenge=kw))
-            tts_lines = [f"{c['title']}. {c['description']}" for c in challenges]
             return {
                 "title": f"Can You Do This? {challenges[0]['title'][:50]}",
                 "hook": hook,
                 "challenges": challenges,
                 "image_prompts": image_prompts,
-                "script": " ".join(tts_lines),
-                "tts_script": f"{hook} {' '.join(tts_lines)}",
+                "script": retention_tts(challenges, "challenges", hook),
+                "tts_script": retention_tts(challenges, "challenges", hook),
             }
     except Exception as e:
         print(f"  LLM error: {e}")
