@@ -1,27 +1,6 @@
 {
   "entries": [
     {
-      "title": "Mother Nature has incredible secrets: Octopus Has Three Hearts",
-      "hook": "Mother Nature has incredible secrets:",
-      "animal_facts": [
-        "Octopus Has Three Hearts",
-        "Honeybees Recognize Faces",
-        "Pistol Shrimp Hotter Than Sun"
-      ],
-      "stories": [
-        "An octopus has three hearts. Two pump blood to the gills and one pumps to the body. When swimming the body heart stops beating. That's why octopuses prefer crawling.",
-        "Honeybees recognize human faces using configural processing the same way humans do. They count to four understand zero and communicate flower locations through the waggle dance.",
-        "The pistol shrimp snaps its claw creating a cavitation bubble that reaches 4700\u00b0C hotter than the sun's surface. The bubble collapses louder than a gunshot stunning prey."
-      ],
-      "image_prompts": [
-        "National Geographic wildlife photography, Octopus Has Three Hearts, stunning animal portrait, golden hour lighting, 9:16 vertical, hyper-realistic, nature documentary style",
-        "National Geographic wildlife photography, Honeybees Recognize Faces, stunning animal portrait, golden hour lighting, 9:16 vertical, hyper-realistic, nature documentary style",
-        "National Geographic wildlife photography, Pistol Shrimp Hotter Than Sun, stunning animal portrait, golden hour lighting, 9:16 vertical, hyper-realistic, nature documentary style"
-      ],
-      "script": "Octopus Has Three Hearts. An octopus has three hearts. Two pump blood to the gills and one pumps to the body. When swimming the body heart stops beating. That's why octopuses prefer crawling. Honeybees Recognize Faces. Honeybees recognize human faces using configural processing the same way humans do. They count to four understand zero and communicate flower locations through the waggle dance. Pistol Shrimp Hotter Than Sun. The pistol shrimp snaps its claw creating a cavitation bubble that reaches 4700\u00b0C hotter than the sun's surface. The bubble collapses louder than a gunshot stunning prey.",
-      "tts_script": "Octopus Has Three Hearts. An octopus has three hearts. Two pump blood to the gills and one pumps to the body. When swimming the body heart stops beating. That's why octopuses prefer crawling. Honeybees Recognize Faces. Honeybees recognize human faces using configural processing the same way humans do. They count to four understand zero and communicate flower locations through the waggle dance. Pistol Shrimp Hotter Than Sun. The pistol shrimp snaps its claw creating a cavitation bubble that reaches 4700\u00b0C hotter than the sun's surface. The bubble collapses louder than a gunshot stunning prey."
-    },
-    {
       "title": "Evolution created something amazing: Crows Hold Grudges",
       "hook": "Evolution created something amazing:",
       "animal_facts": [
@@ -10501,7 +10480,11 @@
       "tts_script": "Octopus Has Three Hearts. An octopus has three hearts. Two pump blood to the gills and one pumps to the body. When swimming the body heart stops beating. That's why octopuses prefer crawling. Honeybees Recognize Faces. Honeybees recognize human faces using configural processing the same way humans do. They count to four understand zero and communicate flower locations through the waggle dance. Sloths Poop Weekly. Sloths only defecate once a week. They climb down from trees specifically to do it their most vulnerable moment. Losing 30% of body weight in one bowel movement is normal."
     }
   ],
-  "used": [],
+  "used": [
+    "octopus has three hearts",
+    "honeybees recognize faces",
+    "pistol shrimp hotter than sun"
+  ],
   "min_before_refill": 20,
   "refill_target": 500
 }
