@@ -1,6 +1,6 @@
 """Shared hook, fast-motion, and visual retention utilities for all video types."""
 
-import random
+import html, random, re, time
 from pathlib import Path
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
@@ -145,6 +145,91 @@ def add_watermark(video_path: str) -> str:
     if Path(logo_path).exists():
         Path(logo_path).unlink()
     return video_path
+
+
+def text_to_ssml(text: str) -> str:
+    """Convert plain text to expressive SSML with emphasis, pauses, and pitch variation."""
+    safe = html.escape(text)
+    parts = re.split(r'([.?!]+)', safe)
+    ssml_parts = []
+    for i in range(0, len(parts) - 1, 2):
+        sentence = parts[i].strip()
+        punct = parts[i + 1].strip() if i + 1 < len(parts) else ""
+        if not sentence:
+            continue
+        pitch_var = random.choice(["+0%", "+5%", "+8%", "-3%", "+3%", "-5%"])
+        rate_var = random.choice(["+0%", "+5%", "+10%", "-5%", "+8%"])
+        words = sentence.split()
+        if len(words) >= 3:
+            first = " ".join(words[:2])
+            rest = " ".join(words[2:])
+            ssml_sentence = f"<emphasis level='moderate'>{first}</emphasis> {rest}{punct}"
+        else:
+            ssml_sentence = f"{sentence}{punct}"
+        if "?" in punct:
+            ssml_sentence = ssml_sentence.replace("?", "<break time='0.4s'/>?")
+        if "!" in punct:
+            ssml_sentence = ssml_sentence.replace("!", "<break time='0.3s'/>!")
+        ssml_parts.append(
+            f"<prosody pitch='{pitch_var}' rate='{rate_var}'>{ssml_sentence}</prosody>"
+        )
+    ssml = "<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-US'>"
+    ssml += " ".join(ssml_parts)
+    ssml += "<break time='0.8s'/></speak>"
+    return ssml
+
+
+def _verify_mp3(path: Path) -> bool:
+    """Check file has valid MP3 header (ID3 tag or MPEG frame sync)."""
+    if path.stat().st_size < 500:
+        return False
+    data = path.read_bytes()[:4]
+    if data[:2] == b"ID":
+        return True
+    if data[0] == 0xff and (data[1] & 0xe0) == 0xe0:
+        return True
+    return False
+
+
+def generate_voiceover_ssml(script: str, voice: str, tts_path: str, timeout: int = 120):
+    """Generate TTS using edge_tts with SSML for expressiveness. Retries on failure."""
+    import subprocess, sys
+    temp_ssml = Path(str(tts_path) + ".ssml")
+    ssml = text_to_ssml(script)
+    temp_ssml.write_text(ssml, encoding="utf-8")
+
+    for attempt in range(3):
+        try:
+            subprocess.run(
+                [sys.executable, "-m", "edge_tts", "--file", str(temp_ssml),
+                 "--voice", voice, "--write-media", str(tts_path)],
+                capture_output=True, text=True, timeout=timeout, check=True
+            )
+            if _verify_mp3(Path(tts_path)):
+                temp_ssml.unlink(missing_ok=True)
+                return True
+            print(f"  SSML attempt {attempt+1}: invalid MP3, retrying...")
+        except Exception as e:
+            print(f"  SSML attempt {attempt+1} failed ({e}), retrying...")
+        time.sleep(1)
+
+    # Fallback to plain text
+    print("  SSML failed, falling back to plain edge_tts")
+    for attempt in range(3):
+        try:
+            subprocess.run(
+                [sys.executable, "-m", "edge_tts", "--text", script,
+                 "--voice", voice, "--write-media", str(tts_path)],
+                capture_output=True, text=True, timeout=timeout, check=True
+            )
+            if _verify_mp3(Path(tts_path)):
+                return True
+            print(f"  Plain TTS attempt {attempt+1}: invalid MP3, retrying...")
+        except Exception as e:
+            print(f"  Plain TTS attempt {attempt+1} failed ({e}), retrying...")
+        time.sleep(1)
+
+    raise RuntimeError("edge_tts failed to generate valid MP3 after 6 attempts")
 
 
 def pad_audio_to_61s(tts_path: str) -> float:
