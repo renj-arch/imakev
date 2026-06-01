@@ -195,14 +195,17 @@ def generate_voiceover_ssml(script: str, voice: str, tts_path: str, timeout: int
     temp_ssml.write_text(ssml, encoding="utf-8")
     try:
         subprocess.run(
-            [sys.executable, "-m", "edge_tts", "--text", ssml,
+            [sys.executable, "-m", "edge_tts", "--file", str(temp_ssml),
              "--voice", voice, "--write-media", str(tts_path)],
             capture_output=True, text=True, timeout=timeout, check=True
         )
         temp_ssml.unlink(missing_ok=True)
-        # Verify the file is valid
-        if Path(tts_path).stat().st_size < 500:
+        # Verify the file is valid MP3 (check header magic bytes)
+        data = Path(tts_path).read_bytes()
+        if len(data) < 500:
             raise ValueError("Output too small, likely corrupt")
+        if not (data[:2] == b"ID" or (data[0] == 0xff and (data[1] & 0xe0) == 0xe0)):
+            raise ValueError("Output missing valid MP3 header")
         return True
     except Exception as e:
         print(f"  SSML TTS failed ({e}), falling back to plain edge_tts")
@@ -212,6 +215,10 @@ def generate_voiceover_ssml(script: str, voice: str, tts_path: str, timeout: int
              "--voice", voice, "--write-media", str(tts_path)],
             capture_output=True, text=True, timeout=timeout, check=True
         )
+        # Verify plain text fallback output too
+        data = Path(tts_path).read_bytes()
+        if len(data) < 500:
+            raise ValueError("Fallback output too small, likely corrupt")
         return True
 
 
