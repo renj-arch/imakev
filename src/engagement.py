@@ -1,6 +1,6 @@
 """Shared hook, fast-motion, and visual retention utilities for all video types."""
 
-import random
+import random, re
 from pathlib import Path
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
@@ -78,7 +78,7 @@ def hook_overlays(duration: float = 2.0) -> list:
 
 
 def fast_motion(img_array: np.ndarray, dur: float, shake: bool = False, intensity: float = 1.0) -> VideoClip:
-    """Create a fast-zoom Ken Burns clip from a numpy array or PIL Image."""
+    """Create a fast-zoom Ken Burns clip — aggressive zoom + sweep for high energy."""
     from PIL import Image
     if isinstance(img_array, Image.Image):
         w, h = img_array.size
@@ -87,15 +87,19 @@ def fast_motion(img_array: np.ndarray, dur: float, shake: bool = False, intensit
 
     def f(t):
         p = t / dur if dur > 0 else 1
-        scale = 1.0 + p * 0.18 * intensity
+        scale = 1.0 + p * 0.35 * intensity
         cw, ch = int(w / scale), int(h / scale)
+        # Sweep: start from slightly different position each time
+        sweep_x = int(np.sin(p * np.pi * 1.5) * (w - cw) * 0.2)
+        sweep_y = int(np.cos(p * np.pi * 1.5 + 0.5) * (h - ch) * 0.15)
+        # Shake
         if shake:
-            sx = int(np.sin(p * 50) * cw * 0.03 * intensity)
-            sy = int(np.cos(p * 45) * ch * 0.03 * intensity)
+            sx = int(np.sin(p * 80) * cw * 0.04 * intensity)
+            sy = int(np.cos(p * 72) * ch * 0.04 * intensity)
         else:
             sx = sy = 0
-        ox = max(0, min((w - cw) // 2 + sx, w - cw))
-        oy = max(0, min((h - ch) // 2 + sy, h - ch))
+        ox = max(0, min(sweep_x + sx, w - cw))
+        oy = max(0, min(sweep_y + sy, h - ch))
         arr = img_array if isinstance(img_array, np.ndarray) else np.array(img_array)
         return arr[oy:oy + ch, ox:ox + cw].copy()
     return VideoClip(lambda t: f(t), duration=dur)
@@ -145,6 +149,63 @@ def add_watermark(video_path: str) -> str:
     if Path(logo_path).exists():
         Path(logo_path).unlink()
     return video_path
+
+
+def text_to_ssml(text: str) -> str:
+    """Convert plain text to expressive SSML with emphasis, pauses, and pitch variation."""
+    parts = re.split(r'([.?!]+)', text)
+    ssml_parts = []
+    for i in range(0, len(parts) - 1, 2):
+        sentence = parts[i].strip()
+        punct = parts[i + 1].strip() if i + 1 < len(parts) else ""
+        if not sentence:
+            continue
+        # Vary pitch and rate per sentence for natural feel
+        pitch_var = random.choice(["+0%", "+5%", "+8%", "-3%", "+3%", "-5%"])
+        rate_var = random.choice(["+0%", "+5%", "+10%", "-5%", "+8%"])
+        # Emphasize first few words (hook words)
+        words = sentence.split()
+        if len(words) >= 3:
+            first = " ".join(words[:2])
+            rest = " ".join(words[2:])
+            ssml_sentence = f"<emphasis level='moderate'>{first}</emphasis> {rest}{punct}"
+        else:
+            ssml_sentence = f"{sentence}{punct}"
+        # Add dramatic pause before question marks or exclamations
+        if "?" in punct:
+            ssml_sentence = ssml_sentence.replace("?", "<break time='0.4s'/>?")
+        if "!" in punct:
+            ssml_sentence = ssml_sentence.replace("!", "<break time='0.3s'/>!")
+        ssml_parts.append(
+            f"<prosody pitch='{pitch_var}' rate='{rate_var}'>{ssml_sentence}</prosody>"
+        )
+    # Add final pause for end card
+    ssml = f"<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xml:lang='en-US'>"
+    ssml += " ".join(ssml_parts)
+    ssml += "<break time='0.8s'/></speak>"
+    return ssml
+
+
+def generate_voiceover_ssml(script: str, voice: str, tts_path: str, timeout: int = 120):
+    """Generate TTS voiceover using edge_tts with SSML for expressiveness."""
+    import subprocess, sys
+    from edge_tts import Communicate
+    import asyncio
+    ssml = text_to_ssml(script)
+    async def _run():
+        comm = Communicate(ssml, voice)
+        await comm.save(str(tts_path))
+    try:
+        asyncio.run(_run())
+        return True
+    except Exception as e:
+        print(f"  SSML TTS failed ({e}), falling back to plain edge_tts")
+        subprocess.run(
+            [sys.executable, "-m", "edge_tts", "--text", script,
+             "--voice", voice, "--write-media", str(tts_path)],
+            capture_output=True, text=True, timeout=timeout, check=True
+        )
+        return True
 
 
 def pad_audio_to_61s(tts_path: str) -> float:
