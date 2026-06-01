@@ -30,6 +30,7 @@ on:
             - space_wonders
             - box_office
             - things_they_dont_teach
+            - challenges
 
 
 concurrency:
@@ -84,7 +85,7 @@ jobs:
             HOUR=$(date -u +%-H)
             MIN=$(date -u +%-M)
               DAY=$(date -u +%-j)
-              MODES=("how_it_works" "facts" "what_if" "riddles" "history_minute" "psychology" "life_hacks" "urban_legends" "coincidences" "unsolved_mysteries" "movie_trivia" "animal_kingdom" "space_wonders" "box_office" "things_they_dont_teach")
+              MODES=("how_it_works" "facts" "what_if" "riddles" "history_minute" "psychology" "life_hacks" "urban_legends" "coincidences" "unsolved_mysteries" "movie_trivia" "animal_kingdom" "space_wonders" "box_office" "things_they_dont_teach" "challenges")
               MODE="${MODES[$((DAY % ${#MODES[@]}))]}"
           fi
           echo "mode=$MODE" >> $GITHUB_OUTPUT
