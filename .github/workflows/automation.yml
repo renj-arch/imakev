@@ -25,6 +25,7 @@ on:
           - coincidences
           - unsolved_mysteries
           - movie_trivia
+          - animal_kingdom
 
 concurrency:
   group: video-pipeline
@@ -76,7 +77,7 @@ jobs:
           MODE="${{ inputs.mode || 'auto' }}"
           if [ "$MODE" = "auto" ]; then
             HOUR=$(date -u +%-H)
-            case $((HOUR % 13)) in
+            case $((HOUR % 14)) in
               0) MODE="story" ;;
               1) MODE="facts" ;;
               2) MODE="what_if" ;;
@@ -90,6 +91,7 @@ jobs:
               10) MODE="coincidences" ;;
               11) MODE="unsolved_mysteries" ;;
               12) MODE="movie_trivia" ;;
+              13) MODE="animal_kingdom" ;;
             esac
           fi
           echo "mode=$MODE" >> $GITHUB_OUTPUT

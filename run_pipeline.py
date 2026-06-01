@@ -303,6 +303,28 @@ def run_movie_trivia():
     bank_manager.ensure_refilled("movie_trivia")
 
 
+def run_animal_kingdom():
+    print("=" * 55)
+    print("  MODE: ANIMAL KINGDOM")
+    print("=" * 55)
+
+    from upload_youtube import upload
+    import animal_kingdom_video
+
+    out_path, data = animal_kingdom_video.main()
+
+    desc = "Incredible animal facts from around the world.\n\n"
+    for title, story in zip(data["animal_facts"], data["stories"]):
+        desc += f"{title}: {story}\n\n"
+    desc += "#animals #animalfacts #shorts #nature #wildlife"
+    tags = ["animals", "animal facts", "shorts", "nature", "wildlife", "amazing animals", "did you know"]
+
+    print("\nUploading...")
+    upload(str(out_path), data["title"], desc, tags, "public", "animal_kingdom")
+    print("Animal Kingdom video done!")
+    bank_manager.ensure_refilled("animal_kingdom")
+
+
 def main():
     mode = sys.argv[1] if len(sys.argv) > 1 else "story"
     if mode == "story":
@@ -331,8 +353,10 @@ def main():
         run_unsolved_mysteries()
     elif mode == "movie_trivia":
         run_movie_trivia()
+    elif mode == "animal_kingdom":
+        run_animal_kingdom()
     else:
-        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', or 'movie_trivia'")
+        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', 'movie_trivia', or 'animal_kingdom'")
 
 
 if __name__ == "__main__":

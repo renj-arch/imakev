@@ -26,6 +26,7 @@ PLAYLISTS = {
     "coincidences": {"name": "Crazy Coincidences", "desc": "Real coincidence stories that sound fake but are 100% true."},
     "unsolved_mysteries": {"name": "Unsolved Mysteries", "desc": "Real unsolved mysteries and cold cases that still baffle investigators."},
     "movie_trivia": {"name": "Movie Trivia", "desc": "Real behind-the-scenes movie secrets you never knew."},
+    "animal_kingdom": {"name": "Animal Kingdom", "desc": "Incredible animal facts from around the world."},
 }
 
 
