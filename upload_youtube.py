@@ -9,6 +9,7 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from src.viral_seo import generate_viral_title, generate_viral_description, generate_viral_tags, generate_viral_hashtags, CHANNEL_HANDLE
 from src.viral_thumbnail import save_viral_thumbnail
+from src.keywords import get_youtube_category
 
 SCOPES = ["https://www.googleapis.com/auth/youtube"]
 CLIENT_SECRET = "client_secret.json"
@@ -125,12 +126,13 @@ def upload(video_path: str, title: str = "", description: str = "", tags: list[s
     if not tags:
         tags = ["shorts", mode, "youtubeshorts"]
 
+    cat_id = {"education": "27", "entertainment": "24", "howto": "26"}.get(get_youtube_category(mode), "22")
     body = {
         "snippet": {
             "title": title,
             "description": description,
             "tags": tags,
-            "categoryId": "22",
+            "categoryId": cat_id,
         },
         "status": {
             "privacyStatus": privacy,

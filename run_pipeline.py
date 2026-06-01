@@ -324,9 +324,52 @@ def run_satisfying():
     bank_manager.ensure_refilled("satisfying")
 
 
+def run_loop():
+    import time, random
+    interval = int(sys.argv[2]) if len(sys.argv) > 2 else 3600
+    modes = [
+        "facts", "what_if", "how_it_works", "riddles",
+        "would_you_rather", "history_minute", "psychology",
+        "life_hacks", "urban_legends", "coincidences",
+        "unsolved_mysteries", "movie_trivia", "animal_kingdom",
+        "space_wonders", "box_office", "things_they_dont_teach",
+        "challenges", "satisfying", "negative_hooks",
+    ]
+    print(f"\n{'='*55}")
+    print(f"  LOOP MODE — generating every {interval}s")
+    print(f"  Modes: {', '.join(modes)}")
+    print(f"{'='*55}\n")
+    while True:
+        mode = random.choice(modes)
+        runner = {
+            "facts": run_facts, "what_if": run_what_if,
+            "how_it_works": run_how_it_works, "riddles": run_riddle,
+            "would_you_rather": run_wyr, "history_minute": run_history_minute,
+            "psychology": run_psychology, "life_hacks": run_life_hacks,
+            "urban_legends": run_urban_legends, "coincidences": run_coincidences,
+            "unsolved_mysteries": run_unsolved_mysteries, "movie_trivia": run_movie_trivia,
+            "animal_kingdom": run_animal_kingdom, "space_wonders": run_space_wonders,
+            "box_office": run_box_office, "things_they_dont_teach": run_things,
+            "challenges": run_challenges, "satisfying": run_satisfying,
+            "negative_hooks": run_negative_hooks,
+        }[mode]
+        try:
+            runner()
+        except Exception as e:
+            print(f"  {mode} failed: {e}")
+        print(f"\n  Sleeping {interval}s... (Ctrl+C to stop)")
+        try:
+            time.sleep(interval)
+        except KeyboardInterrupt:
+            print("\n  Loop stopped.")
+            break
+
+
 def main():
     mode = sys.argv[1] if len(sys.argv) > 1 else "story"
-    if mode == "story":
+    if mode == "loop":
+        run_loop()
+    elif mode == "story":
         run_story()
     elif mode == "facts":
         run_facts()

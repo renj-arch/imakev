@@ -317,7 +317,13 @@ def generate_viral_tags(mode: str, data: dict) -> list[str]:
 
     tags = base_tags.get(mode, ["shorts", "youtubeshorts", mode])[:]
 
-    # Add topic-specific tags from data
+    from src.keywords import generate_keyword_tags, generate_audience_tags
+    kw_tags = generate_keyword_tags(mode, data)
+    audience_tags = generate_audience_tags(mode)
+
+    tags.extend(kw_tags)
+    tags.extend(random.sample(audience_tags, min(2, len(audience_tags))))
+
     if "niche" in data and data["niche"]:
         tags.append(data["niche"].lower().replace(" ", ""))
     if mode == "facts" and "facts" in data:
@@ -330,7 +336,6 @@ def generate_viral_tags(mode: str, data: dict) -> list[str]:
     if mode == "would_you_rather":
         tags.append("chooseyourpath")
 
-    # Deduplicate and limit to 30 (YouTube max is 500 chars total)
     seen = set()
     unique_tags = []
     for tag in tags:
