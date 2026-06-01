@@ -148,18 +148,24 @@ def add_watermark(video_path: str) -> str:
 
 
 def pad_audio_to_61s(tts_path: str) -> float:
-    """Pad TTS audio file to at least 61s for long-form ad revenue. Returns duration."""
-    from moviepy import AudioFileClip, concatenate_audioclips
+    """Stretch TTS audio to at least 61s using tempo slowdown for long-form ad revenue. Returns duration."""
+    from moviepy import AudioFileClip
     audio = AudioFileClip(tts_path)
     dur = audio.duration
     audio.close()
     if dur < 61:
-        pad = AudioFileClip(tts_path).with_duration(61 - dur).with_volume_scaled(0)
-        combined = concatenate_audioclips([AudioFileClip(tts_path), pad])
-        combined.write_audiofile(tts_path, fps=22050, logger=None)
-        combined.close()
+        speed = dur / 61
+        import subprocess, shlex
+        padded = str(Path(tts_path).with_stem(Path(tts_path).stem + "_padded"))
+        subprocess.run([
+            "ffmpeg", "-i", tts_path,
+            "-filter:a", f"atempo={max(speed, 0.5)}",
+            "-vn", "-y", padded
+        ], capture_output=True, timeout=30)
+        import os
+        os.replace(padded, tts_path)
         dur = 61
-        print(f"  Padded audio to 61s (long-form minimum)")
+        print(f"  Stretched audio {speed:.2f}x to 61s (long-form minimum)")
     return dur
 
 
