@@ -13,24 +13,8 @@ on:
         type: choice
         options:
            - auto
-           - story
-           - facts
-           - what_if
            - how_it_works
-           - riddles
-           - would_you_rather
-           - history_minute
-           - psychology
-           - life_hacks
-           - urban_legends
-           - coincidences
-           - unsolved_mysteries
-           - movie_trivia
-           - animal_kingdom
-           - space_wonders
-           - box_office
-           - upsc
-           - neet
+           - facts
 
 concurrency:
   group: video-pipeline
@@ -84,28 +68,11 @@ jobs:
             HOUR=$(date -u +%-H)
             MIN=$(date -u +%-M)
              DAY=$(date -u +%-j)
-             TOTAL=$((HOUR * 60 + MIN))
-             SLOT=$((TOTAL / 90))
-             case $(((SLOT + DAY) % 18)) in
-              0) MODE="story" ;;
-              1) MODE="facts" ;;
-              2) MODE="what_if" ;;
-              3) MODE="how_it_works" ;;
-              4) MODE="riddles" ;;
-              5) MODE="would_you_rather" ;;
-              6) MODE="history_minute" ;;
-              7) MODE="psychology" ;;
-              8) MODE="life_hacks" ;;
-              9) MODE="urban_legends" ;;
-              10) MODE="coincidences" ;;
-              11) MODE="unsolved_mysteries" ;;
-              12) MODE="movie_trivia" ;;
-              13) MODE="animal_kingdom" ;;
-              14) MODE="space_wonders" ;;
-              15) MODE="box_office" ;;
-              16) MODE="upsc" ;;
-              17) MODE="neet" ;;
-             esac
+              # Alternate between how_it_works and facts
+              case $((DAY % 2)) in
+               0) MODE="how_it_works" ;;
+               1) MODE="facts" ;;
+              esac
           fi
           echo "mode=$MODE" >> $GITHUB_OUTPUT
           echo "Running: $MODE"
