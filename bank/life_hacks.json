@@ -1,30 +1,6 @@
 {
   "entries": [
     {
-      "title": "This simple trick changes everything: Peel garlic in 10 seconds",
-      "hook": "This simple trick changes everything:",
-      "hacks": [
-        "Peel garlic in 10 seconds",
-        "Cool drinks faster",
-        "Double headphone battery",
-        "Keep ice cream soft"
-      ],
-      "explanations": [
-        "Put garlic cloves in a metal bowl cover with another bowl and shake hard for 10 seconds. The skin falls right off.",
-        "Wrap a wet paper towel around the bottle and put it in the freezer. Evaporative cooling works in 15 minutes.",
-        "Store wireless earbuds in the case upside down. Contacts don't connect so trickle charging stops and battery lasts longer.",
-        "Store ice cream in a ziplock bag inside the carton. The bag prevents ice crystals from forming so it stays scoopable."
-      ],
-      "image_prompts": [
-        "clean bright flat lay photography: Peel garlic in 10 seconds, household objects arranged neatly, top down view, natural lighting, minimalist, 9:16 vertical, white background",
-        "clean bright flat lay photography: Cool drinks faster, household objects arranged neatly, top down view, natural lighting, minimalist, 9:16 vertical, white background",
-        "clean bright flat lay photography: Double headphone battery, household objects arranged neatly, top down view, natural lighting, minimalist, 9:16 vertical, white background",
-        "clean bright flat lay photography: Keep ice cream soft, household objects arranged neatly, top down view, natural lighting, minimalist, 9:16 vertical, white background"
-      ],
-      "script": "Put garlic cloves in a metal bowl cover with another bowl and shake hard for 10 seconds. The skin falls right off. Wrap a wet paper towel around the bottle and put it in the freezer. Evaporative cooling works in 15 minutes. Store wireless earbuds in the case upside down. Contacts don't connect so trickle charging stops and battery lasts longer. Store ice cream in a ziplock bag inside the carton. The bag prevents ice crystals from forming so it stays scoopable.",
-      "tts_script": "Put garlic cloves in a metal bowl cover with another bowl and shake hard for 10 seconds. The skin falls right off. Wrap a wet paper towel around the bottle and put it in the freezer. Evaporative cooling works in 15 minutes. Store wireless earbuds in the case upside down. Contacts don't connect so trickle charging stops and battery lasts longer. Store ice cream in a ziplock bag inside the carton. The bag prevents ice crystals from forming so it stays scoopable."
-    },
-    {
       "title": "Here's a hack you wish you knew sooner: Find wall studs with a magnet",
       "hook": "Here's a hack you wish you knew sooner:",
       "hacks": [
@@ -12001,7 +11977,12 @@
       "tts_script": "Draw over the stain with a dry erase marker then wipe both off together. The solvents lift the permanent ink. Wrap duct tape around the lid in opposite directions leaving two tails to pull. The leverage opens any jar easily. Store wireless earbuds in the case upside down. Contacts don't connect so trickle charging stops and battery lasts longer. Microwave the lemon for 15 seconds before squeezing. Heat breaks down membranes and releases twice the juice."
     }
   ],
-  "used": [],
+  "used": [
+    "peel garlic in 10 seconds",
+    "cool drinks faster",
+    "double headphone battery",
+    "keep ice cream soft"
+  ],
   "min_before_refill": 20,
   "refill_target": 500
 }
