@@ -281,6 +281,28 @@ def run_unsolved_mysteries():
     bank_manager.ensure_refilled("unsolved_mysteries")
 
 
+def run_movie_trivia():
+    print("=" * 55)
+    print("  MODE: MOVIE TRIVIA")
+    print("=" * 55)
+
+    from upload_youtube import upload
+    import movie_trivia_video
+
+    out_path, data = movie_trivia_video.main()
+
+    desc = "Real behind-the-scenes movie secrets you never knew.\n\n"
+    for title, story in zip(data["trivia_titles"], data["stories"]):
+        desc += f"{title}: {story}\n\n"
+    desc += "#movietrivia #behindthescenes #shorts #hollywood #moviefacts"
+    tags = ["movie trivia", "behind the scenes", "shorts", "hollywood", "movie facts", "cinema", "did you know"]
+
+    print("\nUploading...")
+    upload(str(out_path), data["title"], desc, tags, "public", "movie_trivia")
+    print("Movie Trivia video done!")
+    bank_manager.ensure_refilled("movie_trivia")
+
+
 def main():
     mode = sys.argv[1] if len(sys.argv) > 1 else "story"
     if mode == "story":
@@ -307,8 +329,10 @@ def main():
         run_coincidences()
     elif mode == "unsolved_mysteries":
         run_unsolved_mysteries()
+    elif mode == "movie_trivia":
+        run_movie_trivia()
     else:
-        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', or 'unsolved_mysteries'")
+        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', or 'movie_trivia'")
 
 
 if __name__ == "__main__":

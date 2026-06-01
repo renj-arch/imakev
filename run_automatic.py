@@ -16,7 +16,7 @@ def log(msg: str):
         f.write(line + "\n")
 
 
-MODES = ["story", "facts", "what_if", "how_it_works", "riddles", "would_you_rather", "history_minute", "psychology", "life_hacks", "urban_legends", "coincidences", "unsolved_mysteries"]
+MODES = ["story", "facts", "what_if", "how_it_works", "riddles", "would_you_rather", "history_minute", "psychology", "life_hacks", "urban_legends", "coincidences", "unsolved_mysteries", "movie_trivia"]
 
 def get_mode() -> str:
     count = 0
