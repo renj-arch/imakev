@@ -1,36 +1,6 @@
 {
   "entries": [
     {
-      "title": "NEET: Mitochondria",
-      "hook": "Stop missing this question in mock tests:",
-      "topics": [
-        "Mitochondria",
-        "Transcription",
-        "Biomolecules: Proteins",
-        "States of Matter"
-      ],
-      "explanations": [
-        "Double-membrane organelle with inner membrane folded into cristae. Powerhouse of the cell producing ATP via oxidative phosphorylation. Contains its own DNA.",
-        "DNA to mRNA by RNA polymerase. Pre-mRNA capped, tailed, spliced in eukaryotes. In nucleus. Initiation, elongation, termination.",
-        "Polymers of amino acids. Peptide bonds link amino acids. Primary: sequence. Secondary: alpha helix, beta sheet. Tertiary: 3D folding. Quaternary: multiple subunits.",
-        "Gas: no fixed shape/volume. Liquid: fixed volume, no shape. Solid: fixed shape and volume. Ideal gas law: PV = nRT. Real gases deviate at high pressure."
-      ],
-      "subjects": [
-        "Biology",
-        "Biology",
-        "Chemistry",
-        "Chemistry"
-      ],
-      "image_prompts": [
-        "cinematic educational illustration: Mitochondria, NEET exam preparation, biology chemistry physics, clean professional style, 9:16 vertical, dark green and gold theme, highly detailed",
-        "cinematic educational illustration: Transcription, NEET exam preparation, biology chemistry physics, clean professional style, 9:16 vertical, dark green and gold theme, highly detailed",
-        "cinematic educational illustration: Biomolecules: Proteins, NEET exam preparation, biology chemistry physics, clean professional style, 9:16 vertical, dark green and gold theme, highly detailed",
-        "cinematic educational illustration: States of Matter, NEET exam preparation, biology chemistry physics, clean professional style, 9:16 vertical, dark green and gold theme, highly detailed"
-      ],
-      "script": "Mitochondria. Double-membrane organelle with inner membrane folded into cristae. Powerhouse of the cell producing ATP via oxidative phosphorylation. Contains its own DNA. Transcription. DNA to mRNA by RNA polymerase. Pre-mRNA capped, tailed, spliced in eukaryotes. In nucleus. Initiation, elongation, termination. Biomolecules: Proteins. Polymers of amino acids. Peptide bonds link amino acids. Primary: sequence. Secondary: alpha helix, beta sheet. Tertiary: 3D folding. Quaternary: multiple subunits. States of Matter. Gas: no fixed shape/volume. Liquid: fixed volume, no shape. Solid: fixed shape and volume. Ideal gas law: PV = nRT. Real gases deviate at high pressure.",
-      "tts_script": "Mitochondria. Double-membrane organelle with inner membrane folded into cristae. Powerhouse of the cell producing ATP via oxidative phosphorylation. Contains its own DNA. Transcription. DNA to mRNA by RNA polymerase. Pre-mRNA capped, tailed, spliced in eukaryotes. In nucleus. Initiation, elongation, termination. Biomolecules: Proteins. Polymers of amino acids. Peptide bonds link amino acids. Primary: sequence. Secondary: alpha helix, beta sheet. Tertiary: 3D folding. Quaternary: multiple subunits. States of Matter. Gas: no fixed shape/volume. Liquid: fixed volume, no shape. Solid: fixed shape and volume. Ideal gas law: PV = nRT. Real gases deviate at high pressure."
-    },
-    {
       "title": "NEET: Mendel's Laws",
       "hook": "This concept is a must-know for NEET:",
       "topics": [
@@ -15001,7 +14971,12 @@
       "tts_script": "Biotechnology Tools. Restriction enzymes cut DNA. Vectors: plasmids, viruses. PCR amplifies DNA. Gel electrophoresis separates. Sequencing reads genetic code. Conservation of Energy. Energy cannot be created or destroyed, only converted. Total mechanical energy (KE+PE) constant without non-conservative forces. Biomolecules: Proteins. Polymers of amino acids. Peptide bonds link amino acids. Primary: sequence. Secondary: alpha helix, beta sheet. Tertiary: 3D folding. Quaternary: multiple subunits. Polymers. Addition polymers: polyethylene, PVC, polystyrene. Condensation polymers: nylon, polyester, proteins. Natural: rubber, cellulose. Synthetic: plastics, fibers."
     }
   ],
-  "used": [],
+  "used": [
+    "mitochondria",
+    "transcription",
+    "biomolecules proteins",
+    "states of matter"
+  ],
   "min_before_refill": 10,
   "refill_target": 100
 }
