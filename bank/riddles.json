@@ -2,16 +2,6 @@
   "entries": [
     {
       "title": "Can You Solve This Riddle?",
-      "hook": "Think you're smart? Try this:",
-      "riddle": "What is always in front of you but can't be seen?",
-      "answer": "The future",
-      "explanation": "The future lies ahead of you but is invisible.",
-      "image_prompt_riddle": "mysterious cinematic scene: What is always in front of you but can't be seen?, dark moody lighting, question marks, 9:16 vertical, intrigue",
-      "image_prompt_answer": "cinematic reveal scene: The future, bright warm lighting, discovery moment, 9:16 vertical",
-      "tts_script": "Think you're smart? Try this: What is always in front of you but can't be seen? Pause and think about it. The answer is... The future. The future lies ahead of you but is invisible."
-    },
-    {
-      "title": "Can You Solve This Riddle?",
       "hook": "Test your brain with this riddle:",
       "riddle": "What starts with T ends with T and has T in it?",
       "answer": "A teapot",
@@ -5001,7 +4991,9 @@
       "tts_script": "Only 1 in 10 can solve this: What has a head and a tail but no body? Pause and think about it. The answer is... A coin. A coin has a heads side and a tails side but no body."
     }
   ],
-  "used": [],
+  "used": [
+    "what is always in front of you but can t be seen"
+  ],
   "min_before_refill": 20,
   "refill_target": 500
 }
