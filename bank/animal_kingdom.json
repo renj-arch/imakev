@@ -1,27 +1,6 @@
 {
   "entries": [
     {
-      "title": "Nature is absolutely mind-blowing: Honeybees Recognize Faces",
-      "hook": "Nature is absolutely mind-blowing:",
-      "animal_facts": [
-        "Honeybees Recognize Faces",
-        "Elephants Hear With Feet",
-        "Pistol Shrimp Hotter Than Sun"
-      ],
-      "stories": [
-        "Honeybees recognize human faces using configural processing the same way humans do. They count to four understand zero and communicate flower locations through the waggle dance.",
-        "Elephants detect seismic vibrations through special sensory cells in their feet. They pick up low-frequency rumbles from 20 miles away and communicate using infrasound across vast distances.",
-        "The pistol shrimp snaps its claw creating a cavitation bubble that reaches 4700\u00b0C hotter than the sun's surface. The bubble collapses louder than a gunshot stunning prey."
-      ],
-      "image_prompts": [
-        "National Geographic wildlife photography, Honeybees Recognize Faces, stunning animal portrait, golden hour lighting, 9:16 vertical, hyper-realistic, nature documentary style",
-        "National Geographic wildlife photography, Elephants Hear With Feet, stunning animal portrait, golden hour lighting, 9:16 vertical, hyper-realistic, nature documentary style",
-        "National Geographic wildlife photography, Pistol Shrimp Hotter Than Sun, stunning animal portrait, golden hour lighting, 9:16 vertical, hyper-realistic, nature documentary style"
-      ],
-      "script": "Honeybees Recognize Faces. Honeybees recognize human faces using configural processing the same way humans do. They count to four understand zero and communicate flower locations through the waggle dance. Elephants Hear With Feet. Elephants detect seismic vibrations through special sensory cells in their feet. They pick up low-frequency rumbles from 20 miles away and communicate using infrasound across vast distances. Pistol Shrimp Hotter Than Sun. The pistol shrimp snaps its claw creating a cavitation bubble that reaches 4700\u00b0C hotter than the sun's surface. The bubble collapses louder than a gunshot stunning prey.",
-      "tts_script": "Honeybees Recognize Faces. Honeybees recognize human faces using configural processing the same way humans do. They count to four understand zero and communicate flower locations through the waggle dance. Elephants Hear With Feet. Elephants detect seismic vibrations through special sensory cells in their feet. They pick up low-frequency rumbles from 20 miles away and communicate using infrasound across vast distances. Pistol Shrimp Hotter Than Sun. The pistol shrimp snaps its claw creating a cavitation bubble that reaches 4700\u00b0C hotter than the sun's surface. The bubble collapses louder than a gunshot stunning prey."
-    },
-    {
       "title": "Nature is absolutely mind-blowing: Octopus Has Three Hearts",
       "hook": "Nature is absolutely mind-blowing:",
       "animal_facts": [
@@ -10501,7 +10480,11 @@
       "tts_script": "Dolphins Have Names. Dolphins give each other unique signature whistles within their first year. They call each other by name and remember whistles of dolphins not seen for 20 years. Koala Fingerprints. Koalas have fingerprints nearly identical to humans. Even under microscopes experts struggle to distinguish them. They are the only non-primate animals with true fingerprints. Rats Laugh When Tickled. Rats produce ultrasonic vocalizations when tickled essentially laughter. Humans need special equipment to hear it. They seek out being tickled and return to researchers who tickle them."
     }
   ],
-  "used": [],
+  "used": [
+    "honeybees recognize faces",
+    "elephants hear with feet",
+    "pistol shrimp hotter than sun"
+  ],
   "min_before_refill": 20,
   "refill_target": 500
 }
