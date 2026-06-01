@@ -27,6 +27,7 @@ PLAYLISTS = {
     "unsolved_mysteries": {"name": "Unsolved Mysteries", "desc": "Real unsolved mysteries and cold cases that still baffle investigators."},
     "movie_trivia": {"name": "Movie Trivia", "desc": "Real behind-the-scenes movie secrets you never knew."},
     "animal_kingdom": {"name": "Animal Kingdom", "desc": "Incredible animal facts from around the world."},
+    "space_wonders": {"name": "Space Wonders", "desc": "Incredible space facts from NASA and astronomy."},
 }
 
 
