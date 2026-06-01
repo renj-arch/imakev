@@ -237,6 +237,28 @@ def run_urban_legends():
     bank_manager.ensure_refilled("urban_legends")
 
 
+def run_coincidences():
+    print("=" * 55)
+    print("  MODE: COINCIDENCES")
+    print("=" * 55)
+
+    from upload_youtube import upload
+    import coincidences_video
+
+    out_path, data = coincidences_video.main()
+
+    desc = "Real coincidences that sound fake but are 100% true.\n\n"
+    for title, story in zip(data["coincidences"], data["stories"]):
+        desc += f"{title}: {story}\n\n"
+    desc += "#coincidences #truestories #shorts #mindblown #didyouknow"
+    tags = ["coincidences", "true stories", "shorts", "mind blown", "amazing", "unbelievable", "did you know"]
+
+    print("\nUploading...")
+    upload(str(out_path), data["title"], desc, tags, "public", "coincidences")
+    print("Coincidences video done!")
+    bank_manager.ensure_refilled("coincidences")
+
+
 def main():
     mode = sys.argv[1] if len(sys.argv) > 1 else "story"
     if mode == "story":
@@ -259,8 +281,10 @@ def main():
         run_life_hacks()
     elif mode == "urban_legends":
         run_urban_legends()
+    elif mode == "coincidences":
+        run_coincidences()
     else:
-        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', or 'urban_legends'")
+        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', or 'coincidences'")
 
 
 if __name__ == "__main__":
