@@ -1,0 +1,369 @@
+{
+  "entries": [
+    {
+      "hook": "Stare at the center of this spinning dot for **2 seconds**.",
+      "setup": "Your brain\u2019s motion detectors will lock onto the movement, creating a false sense of stability.",
+      "action": "**3\u20262\u20261\u2026** keep your eyes fixed while the dot spins faster, then **blink** twice quickly.",
+      "reveal": "The background now looks like it\u2019s **rotating in the opposite direction**\u2014your vision has flipped!",
+      "explanation": "Your visual cortex predicts motion; a sudden blink resets the prediction, flipping the perceived rotation.",
+      "prompt": "Try it again with a different speed\u2014watch your brain dance.",
+      "image_style": "A black circle with a bright white dot at its edge, rotating clockwise against a gray backdrop., 9:16"
+    },
+    {
+      "hook": "Close your eyes for 3 seconds, then open them.",
+      "setup": "While your brain holds the image of a still wheel, your pulse starts to tick.",
+      "action": "Count 1\u20112\u20113\u20114\u20115\u2026 until you feel your pulse at 2\u202fHz.",
+      "reveal": "The wheel you see is spinning, even though nothing moved!",
+      "explanation": "Your pulse rhythm tricks the brain into perceiving motion in a still image.",
+      "prompt": "Feel the spin\u2014your heart made it happen!",
+      "image_style": "A static circular wheel with faint, alternating black\u2011white spokes, half\u2011hidden by a subtle glow., 9:16"
+    },
+    {
+      "hook": "\u201cClose your eyes, then open them slowly.\u201d",
+      "setup": "Your brain's eye\u2011muscles are still in the dark, so the first light that hits them is a brief flash that seems brighter than reality.",
+      "action": "Count down\u2014\u201c3, 2, 1, open!\u201d",
+      "reveal": "The world looks almost like a glowing, slightly diffused scene.",
+      "explanation": "Your brain\u2019s quick\u2011start photoreceptors think everything\u2019s brighter until they settle.",
+      "prompt": "\u201cClose, open, feel the glow\u2014your eyes did the trick.\u201d",
+      "image_style": "A pair of eyes opening in front of a dimly lit room that suddenly appears brighter., 9:16"
+    },
+    {
+      "hook": "Look at the pink square and say \u201cblink\u201d right now.",
+      "setup": "Your brain will split the word into two tiny parts, making the square pop.",
+      "action": "Count **3, 2, 1, blink**.",
+      "reveal": "The pink square suddenly flashes brighter for a moment, like a pulse.",
+      "explanation": "Your brain hiccups the color signal when it hears \u201cblink,\u201d creating a brief flash.",
+      "prompt": "\u201cBlink to light up the square\u2014magic in your mind!\u201d",
+      "image_style": "A plain pink square centered on a white background, with a subtle glow around the edges., 9:16"
+    },
+    {
+      "hook": "Look at the picture for 5 seconds.",
+      "setup": "Your eye's retina stores the image for a moment after you stop looking.",
+      "action": "5\u20264\u20263\u20262\u20261\u2026 Cover the picture with a black card.",
+      "reveal": "You just saw a faint afterimage of the picture on the card.",
+      "explanation": "Your brain keeps a brief digital copy so the scene lingers.",
+      "prompt": "\"Did you see the ghost?\"",
+      "image_style": "A bright picture next to a plain black card, with a subtle ghostly outline of the picture over the card., 9:16"
+    },
+    {
+      "hook": "Stare at the black dot in the centre of the screen.",
+      "setup": "Your eyes will try to \u201cfill in\u201d the empty space, pulling the surrounding pattern toward it.",
+      "action": "Count down silently \u201c5\u20114\u20113\u20112\u20111\u201d and then **blink twice as fast as you can**.",
+      "reveal": "The dot vanished \u2013 the surrounding swirl looks like it\u2019s moving toward the centre.",
+      "explanation": "Your visual system \u201cfills\u2011in\u201d missing info, and rapid blinking resets the eye\u2011muscle map, creating a fleeting motion illusion.",
+      "prompt": "Try it again slower and watch the swirl dance.",
+      "image_style": "A simple black circle on a white canvas surrounded by faint concentric gray rings., 9:16"
+    },
+    {
+      "hook": "**\"Close your eyes, count to four, and stop.\"**",
+      "setup": "Your brain is wiring a brief echo of what you just saw, even when the eyes are shut.",
+      "action": "**1, 2, 3, 4.** Quickly open your eyes.",
+      "reveal": "The blinking spot from the last thing you saw lingers, bright and still, as if time paused.",
+      "explanation": "When you close your eyes, the visual cortex stays on a *memory flash*\u2014you just tapped the brain\u2019s \u201creplay button.\u201d",
+      "prompt": "Say it again: close, count, open\u2014feel the moment freeze.",
+      "image_style": "*A silhouette of a hand closing over an eye, a glowing, translucent square light drifting where the eye was, fading into nothing.*, 9:16"
+    },
+    {
+      "hook": "Stare at the black dot in the center of this screen.",
+      "setup": "Your brain will try to \u201cfill in\u201d the missing detail around it, creating a moving swirl.",
+      "action": "Keep your eyes fixed for a 5\u2011second countdown\u20143\u20262\u20261\u2026\u2014then blink fast three times.",
+      "reveal": "The swirl vanishes, and the dot now looks like it\u2019s glowing.",
+      "explanation": "Your visual system constantly predicts motion; the blink resets the prediction, turning the illusion into a flash of light.",
+      "prompt": "Try it again with a different dot size and feel the brain\u2019s trick change.",
+      "image_style": "A plain white background with a small, solid black circle exactly in the middle., 9:16"
+    },
+    {
+      "hook": "**\"Open your eyes and focus on the white dot.\"**",
+      "setup": "Your brain is trying to keep the dot centered while your eye muscles twitch.",
+      "action": "**Count 10, 9, 8, 7, 6, 5, 4, 3, 2, 1** while you keep your gaze locked on the dot.",
+      "reveal": "The dot has hopped two spots to the left, but then jumps right back to its original spot.",
+      "explanation": "Your eyes misjudge the dot\u2019s position because of a subtle shift in focus, tricking the brain into a brief mislocation.",
+      "prompt": "**\"Did your brain cheat you? Try it again!\"**",
+      "image_style": "**A bright white dot on a dark background with a subtle, slightly offset shadow on one side.**, 9:16"
+    },
+    {
+      "hook": "Stare at the center of this spinning dot for just 2 seconds.",
+      "setup": "Your visual cortex will lock onto the motion and create a \u201cphantom\u201d swirl.",
+      "action": "3\u2026 2\u2026 1\u2026 keep watching the dot while you slowly shift your gaze outward.",
+      "reveal": "You just saw a rotating vortex appear out of nowhere \u2013 even though the image is static!",
+      "explanation": "Your brain fills in movement to smooth out motion, so a still point can conjure a whole spiral.",
+      "prompt": "Try it again with a different color and notice the swirl change its speed.",
+      "image_style": "A black background with a single bright white dot in the middle, subtly blurred to suggest motion., 9:16"
+    },
+    {
+      "hook": "**\"Hold your breath\u2026 and look straight ahead!\"**",
+      "setup": "Your brain is primed to keep your focus steady, but a tiny movement is about to break that illusion.",
+      "action": "",
+      "reveal": "The target you were staring at has *slid* 4.6 inches to the right.",
+      "explanation": "Your brain uses your eye muscles as a compass; when one eye closes, the brain momentarily recalibrates, gliding the image in a playful shift.",
+      "prompt": "**\"Stare, close, count, and let your eye tell a story.\"**",
+      "image_style": "A rectangle with a bright dot, the dot shifting left to right like a small optical slide., 9:16"
+    },
+    {
+      "hook": "**\"Now, look straight ahead.\"**",
+      "setup": "Your brain is pulling two straight lines into a single, invisible fourth line that will disappear.",
+      "action": "**Count 1, 2, 3, 4\u2014on 4, cover the left eye and move your head to the right, then right eye, then left.**",
+      "reveal": "The straight line you saw for 3 seconds has vanished\u2014your eyes have just \"hidden\" it!",
+      "explanation": "Your brain uses the uncrossed visual field to merge the line\u2019s duplicate, so when you shift eyes it drops out of sight.",
+      "prompt": "**\u201cBlink\u2014now what\u2019s missing?\u201d**",
+      "image_style": "A straight line drawn on a plain white surface, the right eye covered by an eraser, the viewer\u2019s head moving slightly side\u2011to\u2011side, the line fading into a gray blur., 9:16"
+    },
+    {
+      "hook": "Close one eye and look straight ahead.",
+      "setup": "Your brain will try to merge the two images it sees.",
+      "action": "Count \u201c1, 2, 3\u201d while keeping your eyes closed for 3 seconds, then open both eyes.",
+      "reveal": "The picture on the screen has shifted \u2013 the blue square jumped a few centimeters!",
+      "explanation": "Blending two slightly offset views tricks your brain into moving the image.",
+      "prompt": "You just slid an object with your mind\u2014remember to keep a keen eye on the horizon!",
+      "image_style": "A simple white background with a bold blue square half a centimeter to the right of a subtle gray grid., 9:16"
+    },
+    {
+      "hook": "**\u201cHold still, stare at the square and count to ten.\u201d**",
+      "setup": "**Your brain locks onto the red square, but your eyes are jittering underneath.**",
+      "action": "**Start counting slowly: 1\u20262\u20263\u20264\u20265\u20266\u20267\u20268\u20269\u202610.**",
+      "reveal": "**The square has now shifted to a deep blue, yet you remember it was red.**",
+      "explanation": "**Your brain is fooled by the very same subtle contrast that tricks a viewer of a flickering LED.**",
+      "prompt": "**\u201cColor illusion: blink, stare, repeat.\u201d**",
+      "image_style": "**A square with a red edge fading into blue at the center, surrounded by grey background.**, 9:16"
+    },
+    {
+      "hook": "\"Look at the numbers slowly, then say 'stop' when you\u2019re ready.\"",
+      "setup": "Your brain is trained to focus on a sequence of digits, so the next digit felt is the one you anticipate.",
+      "action": "Count \u201c1, 2, 3, 4, 5,\u201d pause, then say \u201cSTOP\u201d at the exact moment you feel the next number.",
+      "reveal": "The number you see next is the one you said \u201cSTOP\u201d on, always 7.",
+      "explanation": "Timing syncs your attention to a hidden cue in the cadence.",
+      "prompt": "\"Can your brain keep up with the rhythm?\"",
+      "image_style": "A hand holding a rolled notebook with a single bold 7 written on top, surrounded by faint, ghosted numbers 1\u20116., 9:16"
+    },
+    {
+      "hook": "Close your eyes.",
+      "setup": "Your brain is silently predicting where your hand is\u2014no visual feedback means it relies on outdated body maps.",
+      "action": "Count to 3 aloud, then *without opening your eyes*, bring your index fingers together until they touch\u2014and keep them closed for 5 seconds.",
+      "reveal": "Your fingers likely missed\u2014bumping air, crossing paths, or missing entirely\u2014even though they feel perfectly aligned.",
+      "explanation": "Your brain\u2019s internal \u201chand model\u201d drifts when vision is removed, and the touch illusion overrides spatial reality.",
+      "prompt": "Your brain guesses where your body ends\u2014then believes the guess.",
+      "image_style": "Two fingers in darkness, slightly apart, with faint motion trails suggesting crossing paths., 9:16"
+    },
+    {
+      "hook": "Stand right, look straight ahead now.",
+      "setup": "Your brain will be tricked into thinking you\u2019re staring through a tunnel.",
+      "action": "Blink slowly, once every second, for 10 seconds.",
+      "reveal": "Notice how the edges of the room seem to bend inward, and the corners look \u201ccurved.\u201d",
+      "explanation": "Your eyes send the brain \u201chole\u2011in\u2011the\u2011eye\u201d cues, turning straight lines into curves.",
+      "prompt": "You just did a live 3\u2011D perception shift\u2014how did the room change?",
+      "image_style": "A rectangular room with slightly bowed walls, a small circular zone in front of the viewer\u2019s face., 9:16"
+    },
+    {
+      "hook": "**Hold a single dot in front of you for 10 seconds.**",
+      "setup": "**Your brain is filling in the gap between brightness and color, creating a complementary afterimage.**",
+      "action": "**Close your eyes, count 1\u201310, looking at the dot. Then open your eyes and glance at a plain white surface.**",
+      "reveal": "**A bright ring of the opposite color pops up around the original dot!**",
+      "explanation": "**Your photoreceptors fatigue in the color you stared at, so you briefly see its complement.**",
+      "prompt": "**Try it again\u2014watch how the ring changes with different colors.**",
+      "image_style": "**A single black dot centered on a white background, with a faint color halo appearing when the eyes open.**, 9:16"
+    },
+    {
+      "hook": "**\"Close your eyes for 5 seconds and count aloud from 1 to 5.\"**",
+      "setup": "Your brain is *trying* to keep the numbers lined up in order, but your eyes are still processing the world.",
+      "action": "**Start counting: 1, 2, 3, 4, 5.**",
+      "reveal": "**The order of the numbers has flipped\u2014 you remember them as 5, 4, 3, 2, 1.**",
+      "explanation": "**Closing the eyes swaps the brain\u2019s left\u2011to\u2011right map, so numbers read right\u2011to\u2011left.**",
+      "prompt": "**Did your mind just reverse order?**",
+      "image_style": "**A stylized silhouette of a brain with a subtle arrow pointing backwards, framed by two closed eyes.**, 9:16"
+    },
+    {
+      "hook": "\u201cHold my pencil up straight and move your wrist now.\u201d",
+      "setup": "While you focus on the long linear shape, your brain is primed to see straight lines and stable objects.",
+      "action": "Slowly rotate the pencil 360\u00b0 in a circle while keeping your eyes locked on its tip for 3\u20135 seconds, then stop and look straight ahead.",
+      "reveal": "The pencil is now invisible!",
+      "explanation": "Your eyes caught only motion \u2013 the brain lost track of the static shape, so it vanishes from perception.",
+      "prompt": "\u201cSee how a simple motion trick makes a solid object disappear.\u201d",
+      "image_style": "A hand holding a bright yellow pencil, rotating it slowly against a plain white background., 9:16"
+    },
+    {
+      "hook": "Close your eyes, and just count to 10.",
+      "setup": "While you pause, your brain starts to fill the empty space with whatever it hears.",
+      "action": "Count silently: ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN.",
+      "reveal": "Now open your eyes\u2014everything looks exactly the same, yet your mind has just rehearsed the act of seeing.",
+      "explanation": "By closing your eyes, you let your brain \u201clisten\u201d to the world; when you reopen, the perception is instantly restored\u2014no magic, just a reset.",
+      "prompt": "Remember, the mind can be tricked with silence\u2014try it again anytime you need a mental reset.",
+      "image_style": "A subtle reflection of a hand holding a clock, with a faint blur around the edges, hinting at the moment before eye opening., 9:16"
+    },
+    {
+      "hook": "**\"Close your eyes and count to 3.\"**",
+      "setup": "**Your brain's eye\u2011closure trick waits to misalign the colors you see.**",
+      "action": "**1\u2026 2\u2026 3, open your eyes.**",
+      "reveal": "**What looks solid is actually fading\u2014blur, then a bright stripe glows where the object once was.**",
+      "explanation": "**Your brain fills in missing data; when you open, the incomplete memory flashes as a phantom line.**",
+      "prompt": "**Try it again\u2014watch the phantom line shift as you blink.**",
+      "image_style": "**A simple black rectangle on a white background, a thin glowing orange stripe appearing where the rectangle once was.**, 9:16"
+    },
+    {
+      "hook": "**Close your left eye now!**",
+      "setup": "While your brain is still processing the image, focus on the bright light behind your hand.",
+      "action": "**Count 1\u20112\u20113\u20114, then blink and stare straight ahead.**",
+      "reveal": "The light suddenly enlarges and looks brighter, as if you\u2019re looking at a bigger ball.",
+      "explanation": "Closing one eye forces your brain to re\u2011validate depth, amplifying the perceived size of the light.",
+      "prompt": "**Notice how a simple eye switch tricks your brain into seeing bigger!**",
+      "image_style": "A hand holding a fingertip illuminated by a small LED, with one eye closed, the other wide open., 9:16"
+    },
+    {
+      "hook": "**\u201cHold this circle and watch what happens.\u201d**",
+      "setup": "Your brain tricks your eyes into thinking space is different when you focus on a single point.",
+      "action": "**Close your left eye, keep the right open. Hold your thumb out, distance ~12\u202fin. Now rotate the thumb slowly\u201412\u202fseconds total.**",
+      "reveal": "Suddenly the thumb looks like it\u2019s moving faster and farther than it actually is.",
+      "explanation": "Your brain\u2019s depth perception is tricked by monocular focus\u2014no second eye to confirm distance.",
+      "prompt": "\u201cSame trick, different eye\u2014see how your brain plays with depth.\u201d",
+      "image_style": "A close\u2011up of a thumb held at arm\u2019s length, with the viewer\u2019s left eye closed and the thumb gradually turning., 9:16"
+    },
+    {
+      "hook": "\u201cLook straight ahead and keep your eye on the green dot\u2014no blinking for 5 seconds.\u201d",
+      "setup": "The brain locks onto the dot and suppresses peripheral blur while your hand moves.",
+      "action": "Slowly raise your left hand, then pause and lower it\u2014do this 3 times, counting silently.",
+      "reveal": "The dot\u2019s line has \u201ctilted\u201d and now appears to wobble\u2014though it never moved.",
+      "explanation": "Your eyes track the dot, but your hand\u2019s motion tricks depth perception\u2014creating a phantom tilt.",
+      "prompt": "\u201cYour eyes did the illusion; give your hand a break.\u201d",
+      "image_style": "A straight green line over a plain background with a subtle, curved overlay., 9:16"
+    },
+    {
+      "hook": "\u201cHold a pencil, now stare at it as I count.\u201d",
+      "setup": "\u201cYour brain\u2019s visual cortex is primed to focus on a single point, but it\u2019s also craving variety.\u201d",
+      "action": "5\u20112\u20111: \u201cLook straight at the pencil, 5\u20264\u20263\u20262\u20261. Now, slowly tilt the paper 90\u00b0.",
+      "reveal": "The pencil seems to bend, as if it\u2019s turning into a wavy line.\u201d",
+      "explanation": "\u201cYour eye muscles lock on the angle, while your brain misreads depth\u2014creating a false 3\u2011D shape.\u201d",
+      "prompt": "\u201cNext time, tilt your perspective to bend reality.\u201d",
+      "image_style": "A straight pencil on a white sheet, the paper gradually rotated, the pencil appearing to lean and curve., 9:16"
+    },
+    {
+      "hook": "**\"Grab the card with your left hand\u2014no, with your right!\"**",
+      "setup": "Your brain is wired to trust the first movement it sees.",
+      "action": "5\u20114\u20113\u20112\u20111, lift the card and try to touch the opposite eye with the back of your hand.",
+      "reveal": "The card feels oddly farther than it should.",
+      "explanation": "Your fingers are tricking your sight into a \u201chand\u2011over\u2011vision\u201d illusion.",
+      "prompt": "\"Feel the cardstretch\u2014then snap back.\"",
+      "image_style": "A simple spread of three playing cards in a hand, the middle card lifted, a bright spotlight on the hand., 9:16"
+    },
+    {
+      "hook": "\u201cHold your breath, look straight ahead for 5 seconds.\u201d",
+      "setup": "Your brain locks onto a steady visual cue while the rest of your senses start to drift.",
+      "action": "1\u20262\u20263\u20264\u20265\u2026 (now let your gaze stay fixed).",
+      "reveal": "The still point you stared at has subtly slid 6\u20138 degrees to the left.",
+      "explanation": "Your eyes keep hunting for motion, pulling that point into the periphery you ignore.",
+      "prompt": "\u201cYour eyes were dancing\u2014watch the world tilt for a moment!\u201d",
+      "image_style": "A bright, single dot on a plain white background, with a faint arrow pointing leftwards., 9:16"
+    },
+    {
+      "hook": "\u201cHold your breath, then look at the line.\u201d",
+      "setup": "Your eye is trying to focus on a single point while your brain wants to see two.",
+      "action": "Take a deep breath, stop breathing for 5 seconds, and stare straight ahead at the white line on the screen.",
+      "reveal": "The line suddenly splits into a shimmering, double rainbow.",
+      "explanation": "The oxygen dip tricks the visual cortex into creating a phantom reflection.",
+      "prompt": "\u201cBreathe, stare, and watch your vision turn into a second line.\u201d",
+      "image_style": "A clear white line centered against a dark background, with a subtle shimmering distortion., 9:16"
+    },
+    {
+      "hook": "Look at your left hand and keep it still.",
+      "setup": "Your brain will lock onto the shape of your fingers, making the next shape feel familiar.",
+      "action": "Count \u201cone\u201d aloud, then \u201ctwo.\u201d",
+      "reveal": "The two fingers you raised are now, in your mind, a letter \u201cV.\u201d",
+      "explanation": "Your brain fills in the missing piece, turning a count into a shape.",
+      "prompt": "Try counting again, but this time say \u201cthree\u201d: your fingers will form an \u201cA\u201d in your mind.",
+      "image_style": "A close\u2011up of a hand with the index and middle fingers together, forming a V shape against a neutral background., 9:16"
+    },
+    {
+      "hook": "Stare at the center of this dot for 5 seconds.",
+      "setup": "Your visual cortex will lock onto the spot, suppressing the surrounding field.",
+      "action": "5\u20264\u20263\u20262\u20261\u2026 now shift your gaze to the left edge of the screen.",
+      "reveal": "The whole background seems to drift right\u2014your brain is filling in the missing motion.",
+      "explanation": "Your eyes create \u201cfilling\u2011in\u201d motion after a static anchor, so the world appears to slide opposite your eye movement.",
+      "prompt": "Try it again, but swipe right\u2014watch the world flip!",
+      "image_style": "A plain gray screen with a single black dot dead\u2011center, surrounded by a faint, invisible grid., 9:16"
+    },
+    {
+      "hook": "\u201cHold your breath for 5 seconds, then start counting 1, 2, 3\u2026\u201d",
+      "setup": "\u201cYour brain keeps a mental clock that\u2019s throwing off when you start counting after holding your breath.\u201d",
+      "action": "Count silently 1, 2, 3, 4, 5, 6, 7, 8, 9, 10\u2026 while keeping your breath still.",
+      "reveal": "\u201cThe numbers feel like they\u2019re slipping backward, as if you\u2019re hearing them in reverse.\u201d",
+      "explanation": "\u201cHolding your breath slows your brain\u2019s rhythm, making the counts feel delayed\u2014an auditory illusion of time\u2011warp.\u201d",
+      "prompt": "\u201cYou just made numbers talk backward\u2014stay surprised!\u201d",
+      "image_style": "A hand resting on a calm face, breath visibly held, mind\u2019s clock icon spinning oddly., 9:16"
+    },
+    {
+      "hook": "\"Hold your breath and look at the clock for five seconds.\"",
+      "setup": "Your brain starts chasing the ticking hands, racing to keep up.",
+      "action": "5\u20112\u20111\u2026 now stop breathing, then quick\u2011yell \"STOP\" in your head.",
+      "reveal": "The tick\u2011to\u2011to\u2011to feels like a thunderclap, even though the clock is still.",
+      "explanation": "Your brain, deprived of oxygen, boosts focus\u2014making ordinary sounds sound mind\u2011blowing.",
+      "prompt": "Freeze the moment and share the surprise with a friend.",
+      "image_style": "A classic analog clock with a bold red second hand, a silhouette of a breathing figure, and a light flare around the clock face., 9:16"
+    },
+    {
+      "hook": "Hold a pen with your left hand, eyes closed for 2\u202fs.",
+      "setup": "Your brain locks the pen in memory, waiting for your eyes to find it.",
+      "action": "Open your eyes, then stare at the pen for 3\u202fs.",
+      "reveal": "The pen now looks 3\u2011inch longer than it does.",
+      "explanation": "Your brain's \u201cfamiliar object\u201d bias enlarges the familiar shape.",
+      "prompt": "The next time you see a pen with closed eyes, try it again.",
+      "image_style": "A hand gripping a simple, blank pen against a plain background, eyes closed., 9:16"
+    },
+    {
+      "hook": "**\"Close your eyes for 5 seconds, then open them\u2014watch what happens!\"**",
+      "setup": "Your brain locks the visual cortex in a brief idle state.",
+      "action": "**Count 5\u20264\u20263\u20262\u20261\u2026** open your eyes.",
+      "reveal": "**The world suddenly feels sharper, colors almost brighter, as if a shutter has just opened.**",
+      "explanation": "**The pause resets your visual neurons, giving your eyes a fresh second\u2011hand look.**",
+      "prompt": "**\"Give your vision a quick reset\u2014quiet for 5, then watch it re\u2011ignite!\"**",
+      "image_style": "**A dark silhouette of a human eye slowly opening to reveal a vibrant, slightly over\u2011saturated cityscape.**, 9:16"
+    },
+    {
+      "hook": "**Hold one card in front of your eye and focus on the color you\u2019re asked to name.**",
+      "setup": "Your brain is primed to see colors as fixed, but light that bounces off nearby colors can trick it.",
+      "action": "Take a red card, hold it 6 inches from your eye, then a green card 6 inches behind the red one. Name **\u201cgreen.\u201d**",
+      "reveal": "The red card may shimmer with a faint green tint that wasn't there before.",
+      "explanation": "Light mixing tricks your retina into blending the two colors\u2014your brain fills in what it expects.",
+      "prompt": "*\u201cColors are more fluid than you think.\u201d*",
+      "image_style": "A close\u2011up of a red card, a green card behind it, with a subtle green halo around the red card., 9:16"
+    },
+    {
+      "hook": "\u201cHold this pen, stare at its shadow, and I\u2019ll show you magic.\u201d",
+      "setup": "While you focus on a single point, your brain locks onto that single image and ignores the rest.",
+      "action": "1\u20112\u20113\u2026 Start counting in your head, *one, two, three*, and keep looking at the pen\u2019s shadow.",
+      "reveal": "The shadow has shifted 180\u00b0; the lines you followed are now reversed.",
+      "explanation": "Your mind is following the same visual cue, but the brain flips it because the light\u2019s direction changed.",
+      "prompt": "\u201cBlink and see the trick for yourself every time you stare at a single point.\u201d",
+      "image_style": "A close\u2011up of a pen on a white surface, with a dark shadow cast on the wall beside it., 9:16"
+    },
+    {
+      "hook": "**Close your eyes for 5 seconds, then open them.**",
+      "setup": "Your brain thinks the world is still blank, so it\u2019s primed for a sudden conflict.",
+      "action": "**Close your eyes, hold for 5, then open them immediately.**",
+      "reveal": "A bright flash of light seems to appear out of nowhere.",
+      "explanation": "Your brain\u2019s visual cortex is momentarily \u201creset,\u201d so the first light it receives feels like an over\u2011exposure.",
+      "prompt": "Remember: \u201cClose, then open\u2014light up the brain!\u201d",
+      "image_style": "A dark silhouette of a hand closing over a screen, then a sudden burst of white light filling the frame., 9:16"
+    },
+    {
+      "hook": "Close your eyes for 5 seconds, then open them.",
+      "setup": "Your brain\u2019s visual cortex expects continuity\u2014when a line disappears it stitches the missing part.",
+      "action": "Hold a pen in front of your face and move it smoothly from left to right, coming straight toward you, then stop.",
+      "reveal": "The pen looks like it vanished and reappeared behind your hand.",
+      "explanation": "Your brain interpolates the missing space, so it tricks you into thinking the pen is two separate objects.",
+      "prompt": "Blink once\u2014your brain will double\u2011take the effect.",
+      "image_style": "A close\u2011up of a hand with a pen held off\u2011center, moving from left to right, with a faint, ghostly outline where the pen seems to disappear., 9:16"
+    },
+    {
+      "hook": "**Close your eyes and imagine this\u2026**",
+      "setup": "Your brain loves to fill in missing lines, and it will glitch when you trick it.",
+      "action": "Close your eyes. Now, **count** from 1 to 7 in your head, holding each number for a full second.",
+      "reveal": "When you open your eyes, a faint, never\u2011seen line appears on the spot where you imagined the digits.",
+      "explanation": "The brain\u2019s imagination paints a \u201cghost\u201d line that the retina finally captures.",
+      "prompt": "**Your mind just drew an invisible stroke!**",
+      "image_style": "A transparent, glowing line traced across a white background, as if written by breath., 9:16"
+    }
+  ],
+  "used": [
+    "pinch the skin between your thumb and index finger hard"
+  ],
+  "min_before_refill": 5,
+  "refill_target": 40
+}
