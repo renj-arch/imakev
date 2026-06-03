@@ -1,11 +1,12 @@
-"""AI Animation video — multi-scene storyboard animator (no API key needed)."""
+"""AI Animation video — Seedance API for realistic AI video, storyboard fallback."""
 
-import sys, subprocess, time, random
+import sys, subprocess, time, random, os
 from pathlib import Path
 import numpy as np
 from moviepy import (
     VideoClip,
     AudioFileClip,
+    VideoFileClip,
     concatenate_videoclips,
     CompositeAudioClip,
     CompositeVideoClip,
@@ -19,7 +20,7 @@ from src.engagement import (
     branding_overlays,
     get_audio_duration,
 )
-from src.storyboard_anim import generate_storyboard_frames
+from src.video_api import generate_video as gen_video_api
 
 W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
 FPS = config.VIDEO_FPS
@@ -74,29 +75,39 @@ def main():
     total_dur = get_audio_duration(str(tts_path))
     print(f"  {total_dur:.1f}s")
 
-    print(f"\n[2/4] Generating storyboard frames...")
-    frame_arrays = generate_storyboard_frames(
-        prompt=user_prompt, w=W, h=H, fps=FPS,
-    )
+    print(f"\n[2/4] Generating video...")
+    video_path = temp_dir / "ai_video.mp4"
+    video_prompt = f"{user_prompt}, cinematic quality, realistic, 9:16 vertical, smooth motion, detailed"
+    seedance_ok = gen_video_api(video_prompt, video_path, duration=min(5, int(total_dur)))
 
-    total_frames = len(frame_arrays)
-    print(f"  {total_frames} frames = {total_frames / FPS:.1f}s @ {FPS}fps")
+    total_frames = 0
+    if seedance_ok:
+        print("  Using Seedance AI video (realistic)")
+        vid = VideoFileClip(str(video_path))
+        total_frames = int(vid.fps * vid.duration)
+        if vid.duration < total_dur:
+            clips = [vid] * (int(total_dur // vid.duration) + 1)
+            vid = concatenate_videoclips(clips, method="compose").with_duration(total_dur)
+        else:
+            vid = vid.with_duration(total_dur)
+        bg = vid
+    else:
+        print("  Seedance unavailable — using storyboard fallback")
+        from src.storyboard_anim import generate_storyboard_frames
+        frame_arrays = generate_storyboard_frames(prompt=user_prompt, w=W, h=H, fps=FPS)
+        total_frames = len(frame_arrays)
+        print(f"  {total_frames} frames = {total_frames / FPS:.1f}s @ {FPS}fps")
 
-    if total_dur > total_frames / FPS:
-        pad_needed = int((total_dur - total_frames / FPS) * FPS)
-        if pad_needed > 0 and total_frames > 0:
-            pad = [frame_arrays[-1]] * min(pad_needed, FPS * 3)
-            frame_arrays.extend(pad)
-            total_frames = len(frame_arrays)
+        if total_dur > total_frames / FPS:
+            pad_needed = int((total_dur - total_frames / FPS) * FPS)
+            if pad_needed > 0 and total_frames > 0:
+                frame_arrays.extend([frame_arrays[-1]] * min(pad_needed, FPS * 3))
+                total_frames = len(frame_arrays)
 
-    print(f"\n[3/4] Composing video...")
-    frame_dur = total_dur / max(total_frames, 1)
-
-    def make_frame(t):
-        idx = min(int(t / frame_dur), total_frames - 1)
-        return frame_arrays[idx]
-
-    anim_clip = VideoClip(make_frame, duration=total_dur)
+        frame_dur = total_dur / max(total_frames, 1)
+        def make_frame(t):
+            return frame_arrays[min(int(t / frame_dur), total_frames - 1)]
+        bg = VideoClip(make_frame, duration=total_dur)
 
     overlays = hook_overlays(1.8)
     overlays += comment_prompt_overlay(start_time=max(total_dur * 0.4, 0.5), duration=2.0)
@@ -104,7 +115,7 @@ def main():
 
     end_clip = subscribe_end_card(np.zeros((H, W, 3), dtype=np.uint8), 1.2)
 
-    bg = concatenate_videoclips([anim_clip, end_clip], method="compose")
+    bg = concatenate_videoclips([bg, end_clip], method="compose")
     final = CompositeVideoClip([bg] + overlays, size=config.SHORTS_SIZE)
 
     audio_clip = AudioFileClip(str(tts_path))
