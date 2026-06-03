@@ -115,6 +115,46 @@ def _extract_video_url(result) -> str | None:
     return None
 
 
+def generate_via_svd_img2vid(prompt: str, output_path: str | Path, duration: int = 4) -> bool:
+    """Generate SD image → animate via SVD Space img2vid."""
+    output_path = Path(output_path)
+    try:
+        print(f"    Generating SD image for SVD animation...")
+        img = _gradio_image(prompt)
+        if img is None:
+            print(f"    No SD image generated")
+            return False
+        img_path = output_path.with_suffix(".png")
+        img.save(img_path)
+        print(f"    Image saved ({img.size})")
+
+        from gradio_client import Client
+        print(f"    Loading SVD Space...")
+        client = Client("multimodalart/stable-video-diffusion", verbose=False)
+        print(f"    Submitting image to /video...")
+        job = client.submit(str(img_path), 2706751006454312937, True, 127, 6, api_name="/video")
+        result = job.result(timeout=300)
+        if result and len(result) >= 1:
+            video_part = result[0]
+            if isinstance(video_part, dict) and "video" in video_part:
+                vid_src = video_part["video"]
+                if isinstance(vid_src, str) and Path(vid_src).exists():
+                    import shutil
+                    shutil.copy2(vid_src, str(output_path))
+                    print(f"  SVD video saved ({Path(vid_src).stat().st_size} bytes)")
+                    return True
+                if isinstance(vid_src, str) and vid_src.startswith("http"):
+                    resp = req.get(vid_src, timeout=120)
+                    if resp.status_code == 200 and len(resp.content) > 5000:
+                        output_path.write_bytes(resp.content)
+                        print(f"  SVD video downloaded ({len(resp.content)} bytes)")
+                        return True
+        return False
+    except Exception as e:
+        print(f"    SVD img2vid error: {e}")
+        return False
+
+
 def _hf_inference_api(prompt: str) -> Image.Image | None:
     from huggingface_hub import InferenceClient
     client = InferenceClient(token=HF_TOKEN or None)

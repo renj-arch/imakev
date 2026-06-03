@@ -21,7 +21,7 @@ from src.engagement import (
     get_audio_duration,
 )
 from src.video_api import generate_video as gen_video_api
-from src.photo_video import generate_photorealistic_frames, generate_via_space_video
+from src.photo_video import generate_photorealistic_frames, generate_via_space_video, generate_via_svd_img2vid, _gradio_image
 
 W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
 FPS = config.VIDEO_FPS
@@ -110,7 +110,24 @@ def main():
             except Exception:
                 bg = None
 
-    # Try 3: Photorealistic frames via HF Inference (realistic images + motion)
+    # Try 3: SVD Image-to-Video (generate SD image + animate via Stable Video Diffusion)
+    if bg is None:
+        print("  Trying SVD image-to-video...")
+        if generate_via_svd_img2vid(user_prompt, video_path, duration=min(4, int(total_dur))):
+            try:
+                vid = VideoFileClip(str(video_path))
+                total_frames = int(vid.fps * vid.duration)
+                if vid.duration < total_dur:
+                    clips = [vid] * (int(total_dur // vid.duration) + 1)
+                    vid = concatenate_videoclips(clips, method="compose").with_duration(total_dur)
+                else:
+                    vid = vid.with_duration(total_dur)
+                bg = vid
+                print("  Using SVD image-to-video")
+            except Exception:
+                bg = None
+
+    # Try 4: Photorealistic frames via HF Inference (realistic images + motion)
     if bg is None:
         print("  Trying photorealistic frames...")
         num_frames_needed = int(total_dur * FPS)
