@@ -139,25 +139,35 @@ def _gradio_image(prompt: str) -> Image.Image | None:
 
 def generate_photorealistic_frames(prompt: str, w: int = 720, h: int = 1280,
                                     num_frames: int = 30, fps: int = 6) -> list[np.ndarray] | None:
-    """Generate frames that look like realistic AI video.
+    base_prompt = prompt.split(",")[0].strip()
 
-    Strategy:
-    1. Generate one photorealistic keyframe from the prompt
-    2. Generate variations with weather/lighting keywords
-    3. Interpolate between them with smooth camera motion
-    """
-    # If we have keyframes, interpolate to create smooth video
+    scenes = [
+        (f"{base_prompt}, cinematic lighting, 4K, photorealistic, sharp focus", 1.0),
+    ]
+
+    all_keyframes = []
+    for sp, scale in scenes:
+        img = _hf_inference_api(sp)
+        if img is None:
+            img = _gradio_image(sp)
+        if img:
+            img = img.resize((w, h), Image.LANCZOS)
+            all_keyframes.append(np.array(img))
+        else:
+            print(f"  Could not generate image for: {sp[:50]}")
+
+    if not all_keyframes:
+        print("  No photorealistic images generated")
+        return None
+
     frames_per_scene = num_frames // max(len(all_keyframes), 1)
-
     result = []
     for i, kf in enumerate(all_keyframes):
         for j in range(frames_per_scene):
-            # Apply Ken Burns zoom/pan for camera motion
             progress = j / max(frames_per_scene - 1, 1)
             frame = apply_ken_burns(kf, progress, zoom_in=(i % 2 == 0))
             result.append(frame)
 
-    # Pad to exact frame count
     while len(result) < num_frames:
         result.append(result[-1])
 
