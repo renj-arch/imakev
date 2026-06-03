@@ -34,55 +34,53 @@ IMAGE_SPACES = [
 VIDEO_SPACES = [
     {
         "name": "ozilion/text2video",
-        "api_name": "/predict",
+        "api_name": "/generate_video",
         "data_fn": lambda p, d: [p, "", 40, float(d), 512, 512, 25, 7.5, -1],
     },
     {
-        "name": "markury/wan-2-1-t2v-1-3b-lycoris",
+        "name": "null002/genmo-mochi-1-preview",
         "api_name": "/predict",
-        "data_fn": lambda p, d: [p, 5.0, 33, 512, 512, 7.0, 25, -1],
+        "data_fn": lambda p, d: [p],
     },
 ]
 
 
-def _call_gradio_space(space_info, payload_data, timeout=180):
-    subdomain = space_info["subdomain"] if "subdomain" in space_info else space_info["name"].replace("/", "-")
-    base = f"https://{subdomain}.hf.space"
-    api_name = space_info.get("api_name", "/predict")
-
-    # First request to wake up Space
+def _gc_generate(space_name: str, api_name: str, data: list, timeout: int = 300) -> dict | None:
     try:
-        req.get(base, timeout=15)
-    except Exception:
-        pass
-
-    # Submit via queue API
-    submit_url = f"{base}/gradio_api/call{api_name}"
-    resp = req.post(submit_url, json={"data": payload_data, "fn_index": space_info.get("fn_index", 0)},
-                    timeout=timeout)
-    if resp.status_code != 200:
+        from gradio_client import Client
+        client = Client(space_name)
+        job = client.submit(*data, api_name=api_name)
+        result = job.result(timeout=timeout)
+        if result and len(result) >= 2:
+            video_part = result[0]
+            if isinstance(video_part, dict) and "video" in video_part:
+                return {"video": video_part["video"]}
+        return None
+    except Exception as e:
+        print(f"    gradio_client error: {e}")
         return None
 
-    result = resp.json()
-    event_id = result.get("event_id")
-    if not event_id:
-        return None
 
-    # Poll
-    for _ in range(timeout // 2):
-        time.sleep(2)
-        poll = req.get(f"{submit_url}/{event_id}", timeout=30)
-        if poll.status_code != 200:
-            continue
-        data = poll.json()
-        ev = data.get("event", "")
-        if ev == "complete":
-            return data.get("output", {}).get("data", [])
-        if ev == "error":
-            print(f"    Space error: {data.get('output', {}).get('text', 'unknown')[:150]}")
-            return None
-    return None
-
+def generate_via_space_video(prompt: str, output_path: str | Path, duration: int = 5) -> bool:
+    """Generate real AI video via Gradio Spaces (uses gradio_client)."""
+    output_path = Path(output_path)
+    for space in VIDEO_SPACES:
+        try:
+            data = space["data_fn"](prompt, duration)
+            result = _gc_generate(space["name"], space["api_name"], data)
+            if not result:
+                continue
+            url = result.get("video", "")
+            if not url:
+                continue
+            resp = req.get(url, timeout=120)
+            if resp.status_code == 200 and len(resp.content) > 5000:
+                output_path.write_bytes(resp.content)
+                print(f"  Video from {space['name']} ({len(resp.content)} bytes)")
+                return True
+        except Exception as e:
+            print(f"    {space['name']} error: {e}")
+    return False
 
 def _hf_inference_api(prompt: str) -> Image.Image | None:
     """Generate photorealistic image via Hugging Face Inference API (free, no key needed)."""
