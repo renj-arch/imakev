@@ -28,17 +28,22 @@ def _space_url(repo_id: str) -> str:
 
 
 def _download_stock_photo(prompt: str, output_path: str | Path) -> Image.Image | None:
-    """Download a free stock photo matching the prompt (no API key needed).
-    Uses Unsplash source for random matching images."""
+    """Download a free photo matching the prompt (no API key needed).
+    Uses loremflickr for searchable Flickr CC images."""
     import urllib.parse
-    keywords = urllib.parse.quote(prompt.split(",")[0].strip().lower().replace(" ", "-"))
+    # Extract key subject words from prompt for Flickr search
+    words = prompt.lower().split(",")[0].strip().split()
+    # Keep nouns/adjectives, remove generic words
+    stop = {"a", "an", "the", "tiny", "small", "big", "large", "beside", "with", "in", "on", "at", "for", "and"}
+    keywords = ",".join(w for w in words if w not in stop)[:80]
     urls = [
-        f"https://source.unsplash.com/featured/?{keywords}",
-        f"https://source.unsplash.com/800x600/?{keywords}",
+        f"https://loremflickr.com/1024/576/{keywords}",
+        f"https://loremflickr.com/1024/576/{keywords.split(',')[0]}",
+        f"https://picsum.photos/1024/576",
     ]
     for url in urls:
         try:
-            resp = req.get(url, timeout=15, allow_redirects=True)
+            resp = req.get(url, timeout=15)
             if resp.status_code == 200 and len(resp.content) > 10000:
                 img = Image.open(io.BytesIO(resp.content)).convert("RGB")
                 img.save(output_path)
