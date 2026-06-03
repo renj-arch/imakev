@@ -1,35 +1,19 @@
 """Would You Rather Shorts — image + baked text + TTS + music."""
 
-import sys, subprocess, time, io, random
+import sys, subprocess, time, random
 from pathlib import Path
-from PIL import Image, ImageEnhance, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont
 import numpy as np
-import requests as req
 from moviepy import VideoClip, AudioFileClip, concatenate_videoclips, CompositeAudioClip, concatenate_audioclips, CompositeVideoClip
 import config
 from src.would_you_rather import generate_wyr_script
 from src.engagement import hook_overlays, fast_motion, comment_prompt_overlay, subscribe_end_card, branding_overlays, get_audio_duration
+from src.image_gen import gen_img
 
 FONT_PATH = config.get_font()
 W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
 
 
-def gen_img(prompt):
-    url = f"https://image.pollinations.ai/prompt/{req.utils.quote(prompt)}?width={W}&height={H}&nofeed=true&seed={random.randint(0,999999)}&model=flux"
-    try:
-        r = req.get(url, timeout=120)
-        if r.status_code == 200 and len(r.content) > 500:
-            return Image.open(io.BytesIO(r.content)).convert("RGB")
-    except:
-        pass
-    return None
-
-
-def upscale(img):
-    img = img.resize((W, H), Image.LANCZOS)
-    img = ImageEnhance.Contrast(img).enhance(1.2)
-    img = ImageEnhance.Color(img).enhance(1.2)
-    return img
 
 
 def draw_text(img, text, font_size, y, color=(255,255,255), stroke_color=(0,0,0), stroke_width=2, center=False, x=30):
@@ -143,7 +127,6 @@ def main():
         prompt = f"vibrant colorful abstract background, two paths diverging, decision concept, bright cheerful, 9:16 vertical, {random.choice(['warm tones', 'cool tones', 'neon colors', 'pastel gradient'])}"
         img = gen_img(prompt)
         if img:
-            img = upscale(img)
             img.save(cached)
             print("OK")
         else:

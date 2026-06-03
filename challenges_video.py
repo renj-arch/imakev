@@ -1,10 +1,9 @@
 """Fast-paced challenges & stunts video — countdown timers, high-energy text, dynamic pacing."""
 
-import sys, subprocess, time, io, random
+import sys, subprocess, time, random
 from pathlib import Path
-from PIL import Image, ImageEnhance, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont
 import numpy as np
-import requests as req
 from moviepy import (
     VideoClip, AudioFileClip, ImageClip,
     concatenate_videoclips, CompositeAudioClip, concatenate_audioclips,
@@ -12,27 +11,12 @@ from moviepy import (
 )
 import config
 from src.engagement import hook_overlays, fast_motion, comment_prompt_overlay, subscribe_end_card, branding_overlays, get_audio_duration, retention_prompt, countdown_overlay
+from src.image_gen import gen_img
 
 FONT_PATH = config.get_font()
 W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
 
 
-def gen_img(prompt: str) -> Image.Image | None:
-    url = f"https://image.pollinations.ai/prompt/{req.utils.quote(prompt)}?width={config.VIDEO_WIDTH}&height={config.VIDEO_HEIGHT}&nofeed=true&seed={random.randint(0,999999)}&model=flux"
-    try:
-        r = req.get(url, timeout=120)
-        if r.status_code == 200 and len(r.content) > 500:
-            return Image.open(io.BytesIO(r.content)).convert("RGB")
-    except:
-        pass
-    return None
-
-
-def upscale(img: Image.Image) -> Image.Image:
-    img = img.resize((W, H), Image.LANCZOS)
-    img = ImageEnhance.Contrast(img).enhance(1.2)
-    img = ImageEnhance.Color(img).enhance(1.2)
-    return img
 
 
 def draw_text(img: Image.Image, text: str, font_size: int, y: int, color=(255, 255, 255), stroke_color=(0, 0, 0), stroke_width: int = 2, center: bool = False, x: int = 30):
@@ -139,7 +123,6 @@ def main():
             print(f"  Image {i+1}/{len(PROMPTS)}...", end=" ", flush=True)
             img = gen_img(prompt)
             if img:
-                img = upscale(img)
                 img.save(cached)
                 print("OK")
             else:

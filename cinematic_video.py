@@ -2,9 +2,8 @@
 
 import sys, subprocess, time, io, random
 from pathlib import Path
-from PIL import Image, ImageEnhance
+from PIL import Image
 import numpy as np
-import requests as req
 from moviepy import (
     VideoClip, AudioFileClip, TextClip,
     CompositeVideoClip, concatenate_videoclips, ColorClip,
@@ -12,6 +11,7 @@ from moviepy import (
 )
 import config
 from src.engagement import hook_overlays, fast_motion, comment_prompt_overlay, subscribe_end_card, branding_overlays
+from src.image_gen import gen_img
 
 FONT = config.get_font()
 W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
@@ -44,40 +44,6 @@ SCRIPT = (
 )
 
 
-def gen_img(prompt: str) -> Image.Image | None:
-    """Generate image via Pollinations.ai (free)."""
-    url = f"https://image.pollinations.ai/prompt/{req.utils.quote(prompt)}?width={config.VIDEO_WIDTH}&height={config.VIDEO_HEIGHT}&nofeed=true&seed={random.randint(0,999999)}&model=flux"
-    try:
-        r = req.get(url, timeout=120)
-        if r.status_code == 200 and len(r.content) > 500:
-            return Image.open(io.BytesIO(r.content)).convert("RGB")
-    except Exception as e:
-        print(f"    Error: {e}")
-    return None
-
-
-def upscale(img: Image.Image) -> Image.Image:
-    """Upscale + cinematic color grade."""
-    img = img.resize((W, H), Image.LANCZOS)
-    img = ImageEnhance.Contrast(img).enhance(1.3)
-    img = ImageEnhance.Color(img).enhance(1.4)
-    img = ImageEnhance.Sharpness(img).enhance(1.2)
-    arr = np.array(img).astype(np.float32)
-    # Vignette
-    vx, vy = np.meshgrid(np.linspace(-1, 1, W), np.linspace(-1, 1, H))
-    vig = np.clip(1 - (vx**2 + vy**2) * 0.35, 0.15, 1)
-    for c in range(3):
-        arr[:, :, c] *= vig
-    # Chromatic aberration
-    ca = 2
-    r, b = arr[:, :, 0].copy(), arr[:, :, 2].copy()
-    arr[ca:, :, 0] = r[:-ca, :]
-    arr[:, ca:, 2] = b[:, :-ca]
-    arr = np.clip(arr + np.random.normal(0, 3, arr.shape).astype(np.float32), 0, 255).astype(np.uint8)
-    return Image.fromarray(arr)
-
-
-motion_clip = fast_motion
 
 
 def main():
@@ -110,7 +76,6 @@ def main():
             print(f"  [{i+1}/{len(SCENES)}] {sid}...", end=" ", flush=True)
             img = gen_img(prompt)
             if img:
-                img = upscale(img)
                 img.save(cached)
                 images[sid] = img
                 print(f"OK")
