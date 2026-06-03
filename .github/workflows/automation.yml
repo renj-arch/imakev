@@ -36,7 +36,11 @@ on:
             - negative_hooks
             - try_this
             - animation
-
+      prompt:
+        description: 'Custom prompt (animation mode only)'
+        required: false
+        default: ''
+        type: string
 
 
 concurrency:
@@ -101,7 +105,14 @@ jobs:
           echo "Running: $MODE"
 
       - name: Run pipeline
-        run: python run_pipeline.py ${{ steps.mode.outputs.mode }}
+        run: |
+          MODE=${{ steps.mode.outputs.mode }}
+          PROMPT="${{ inputs.prompt }}"
+          if [ "$MODE" = "animation" ] && [ -n "$PROMPT" ]; then
+            python run_pipeline.py "$MODE" "$PROMPT"
+          else
+            python run_pipeline.py "$MODE"
+          fi
 
       - name: Commit and push bank updates
         run: |

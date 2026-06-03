@@ -345,6 +345,11 @@ def run_animation():
     print("=" * 55)
 
     import animation_video
+    import sys as _sys
+
+    prompt = " ".join(_sys.argv[2:]) if len(_sys.argv) > 2 else ""
+    if prompt:
+        _sys.argv = [_sys.argv[0], *prompt.split()]
 
     out_path, data = animation_video.main()
     print("\nUploading...")
