@@ -82,34 +82,22 @@ def generate_via_space_video(prompt: str, output_path: str | Path, duration: int
     return False
 
 def _hf_inference_api(prompt: str) -> Image.Image | None:
-    """Generate photorealistic image via Hugging Face Inference API (free, no key needed)."""
-    model = "stabilityai/stable-diffusion-3.5-large"
-    url = f"https://api-inference.huggingface.co/models/{model}"
-
-    headers = {"Content-Type": "application/json"}
-    if HF_TOKEN:
-        headers["Authorization"] = f"Bearer {HF_TOKEN}"
-
-    payload = {
-        "inputs": prompt,
-        "parameters": {
-            "negative_prompt": "cartoon, drawing, illustration, anime",
-            "width": 720,
-            "height": 1280,
-            "guidance_scale": 7.5,
-            "num_inference_steps": 25,
-        }
-    }
-
+    """Generate photorealistic image via Hugging Face InferenceClient."""
+    from huggingface_hub import InferenceClient
+    client = InferenceClient(token=HF_TOKEN or None)
     try:
-        resp = req.post(url, headers=headers, json=payload, timeout=120)
-        if resp.status_code == 200:
-            img = Image.open(io.BytesIO(resp.content))
-            if img and img.size[0] > 100:
-                return img.convert("RGB")
-        print(f"    HF Inference: {resp.status_code} {resp.text[:100]}")
+        img = client.text_to_image(
+            prompt,
+            model="stabilityai/stable-diffusion-3.5-large",
+            height=1280,
+            width=720,
+            guidance_scale=7.5,
+            num_inference_steps=25,
+        )
+        if img and img.size[0] > 100:
+            return img.convert("RGB")
     except Exception as e:
-        print(f"    HF Inference exception: {e}")
+        print(f"    HF InferenceClient: {e}")
     return None
 
 
