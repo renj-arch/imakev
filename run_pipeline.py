@@ -339,6 +339,20 @@ def run_try_this():
     bank_manager.ensure_refilled("try_this")
 
 
+def run_animation():
+    print("=" * 55)
+    print("  MODE: AI ANIMATION")
+    print("=" * 55)
+
+    import animation_video
+
+    out_path, data = animation_video.main()
+    print("\nUploading...")
+    from upload_youtube import upload
+    upload(str(out_path), mode="animation", playlist_key="animation", script_data=data)
+    print("Animation video done!")
+
+
 def run_loop():
     import time, random
     interval = int(sys.argv[2]) if len(sys.argv) > 2 else 3600
@@ -349,6 +363,7 @@ def run_loop():
         "unsolved_mysteries", "movie_trivia", "animal_kingdom",
         "space_wonders", "box_office", "things_they_dont_teach",
         "challenges", "satisfying", "negative_hooks", "try_this",
+        "animation",
     ]
     print(f"\n{'='*55}")
     print(f"  LOOP MODE — generating every {interval}s")
@@ -368,6 +383,7 @@ def run_loop():
             "challenges": run_challenges,             "satisfying": run_satisfying,
             "negative_hooks": run_negative_hooks,
             "try_this": run_try_this,
+            "animation": run_animation,
         }[mode]
         try:
             runner()
@@ -427,8 +443,10 @@ def main():
         run_negative_hooks()
     elif mode == "try_this":
         run_try_this()
+    elif mode == "animation":
+        run_animation()
     else:
-        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', 'movie_trivia', 'animal_kingdom', 'space_wonders', 'box_office', 'things_they_dont_teach', 'challenges', 'satisfying', or 'negative_hooks' or 'try_this'")
+        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', 'movie_trivia', 'animal_kingdom', 'space_wonders', 'box_office', 'things_they_dont_teach', 'challenges', 'satisfying', 'negative_hooks', 'try_this', or 'animation'")
 
 
 if __name__ == "__main__":
