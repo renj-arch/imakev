@@ -27,25 +27,37 @@ def _space_url(repo_id: str) -> str:
     return f"https://{s}.hf.space"
 
 
+def _download_stock_photo(prompt: str, output_path: str | Path) -> Image.Image | None:
+    """Download a free stock photo matching the prompt (no API key needed).
+    Uses Unsplash source for random matching images."""
+    import urllib.parse
+    keywords = urllib.parse.quote(prompt.split(",")[0].strip().lower().replace(" ", "-"))
+    urls = [
+        f"https://source.unsplash.com/featured/?{keywords}",
+        f"https://source.unsplash.com/800x600/?{keywords}",
+    ]
+    for url in urls:
+        try:
+            resp = req.get(url, timeout=15, allow_redirects=True)
+            if resp.status_code == 200 and len(resp.content) > 10000:
+                img = Image.open(io.BytesIO(resp.content)).convert("RGB")
+                img.save(output_path)
+                print(f"    Stock photo downloaded ({img.size})")
+                return img
+        except Exception as e:
+            print(f"    Stock photo error: {e}")
+    return None
+
+
 IMAGE_SPACES = [
-    {
-        "name": _space_url("stabilityai/stable-diffusion-3.5-large"),
-        "api_name": "/infer",
-        "data_fn": lambda p: [p, "", 0, True, 1024, 1024, 7.5, 28],
-    },
+    {"name": _space_url("stabilityai/stable-diffusion-3.5-large"), "api_name": "/infer", "data_fn": lambda p: [p, "", 0, True, 1024, 1024, 7.5, 28]},
+    {"name": _space_url("stabilityai/stable-diffusion-xl-base-1.0"), "api_name": "/infer", "data_fn": lambda p: [p, "", 0, True, 1024, 1024, 7.5, 28]},
+    {"name": _space_url("black-forest-labs/FLUX.1-dev"), "api_name": "/infer", "data_fn": lambda p: [p, "", 0, True, 1024, 1024, 7.5, 28]},
 ]
 
 VIDEO_SPACES = [
-    {
-        "name": _space_url("ozilion/text2video"),
-        "api_name": "/generate_video",
-        "data_fn": lambda p, d: [p, "", 40, float(d), 512, 512, 25, 7.5, -1],
-    },
-    {
-        "name": _space_url("null002/genmo-mochi-1-preview"),
-        "api_name": "/predict",
-        "data_fn": lambda p, d: [p],
-    },
+    {"name": _space_url("ozilion/text2video"), "api_name": "/generate_video", "data_fn": lambda p, d: [p, "", 40, float(d), 512, 512, 25, 7.5, -1]},
+    {"name": _space_url("null002/genmo-mochi-1-preview"), "api_name": "/predict", "data_fn": lambda p, d: [p]},
 ]
 
 SVD_SPACES = [
@@ -198,24 +210,29 @@ def _extract_video_url(result) -> str | None:
 
 
 def generate_via_svd_img2vid(prompt: str, output_path: str | Path, duration: int = 4) -> bool:
-    """Generate SD image then animate via SVD Space img2vid."""
+    """Generate SD image then animate via SVD Space img2vid.
+    Falls back to a real stock photo if AI image generation fails (ZeroGPU quota exhausted)."""
     output_path = Path(output_path)
     try:
-        print(f"    Generating SD image for SVD...")
+        svd_img_path = str(output_path.with_suffix(".svd_input.png"))
+
+        print(f"    Trying SD image generation...")
         img = _gradio_image(prompt)
         if img is None or img.size[0] < 100:
-            print(f"    No SD image generated")
-            return False
+            print(f"    SD image failed, downloading real stock photo...")
+            img = _download_stock_photo(prompt, svd_img_path)
+            if img is None:
+                print(f"    No image source works, aborting SVD")
+                return False
         img = img.resize((1024, 576), Image.LANCZOS)
         print(f"    Image resized to 1024x576")
-        img_path = str(output_path.with_suffix(".svd_input.png"))
-        img.save(img_path)
-        print(f"    Saved to {img_path}")
+        img.save(svd_img_path)
+        print(f"    Saved to {svd_img_path}")
 
         for space_name in SVD_SPACES:
             try:
                 print(f"    Calling {space_name} /video...")
-                result = _gc_call(space_name, "/video", [img_path, 42, True, 127, 6], timeout=180)
+                result = _gc_call(space_name, "/video", [svd_img_path, 42, True, 127, 6], timeout=180)
                 if result and len(result) >= 1:
                     video_part = result[0]
                     if isinstance(video_part, str):
