@@ -21,6 +21,7 @@ from src.engagement import (
     get_audio_duration,
 )
 from src.video_api import generate_video as gen_video_api
+from src.photo_video import generate_photorealistic_frames, generate_via_space_video
 
 W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
 FPS = config.VIDEO_FPS
@@ -76,13 +77,12 @@ def main():
     print(f"  {total_dur:.1f}s")
 
     print(f"\n[2/4] Generating video...")
-    video_path = temp_dir / "ai_video.mp4"
-    video_prompt = f"{user_prompt}, cinematic quality, realistic, 9:16 vertical, smooth motion, detailed"
-    seedance_ok = gen_video_api(video_prompt, video_path, duration=min(5, int(total_dur)))
-
     total_frames = 0
-    if seedance_ok:
-        print("  Using Seedance AI video (realistic)")
+    bg = None
+
+    # Try 1: Video API (Seedance with key)
+    video_path = temp_dir / "ai_video.mp4"
+    if gen_video_api(user_prompt, video_path, duration=min(5, int(total_dur))):
         vid = VideoFileClip(str(video_path))
         total_frames = int(vid.fps * vid.duration)
         if vid.duration < total_dur:
@@ -91,12 +91,48 @@ def main():
         else:
             vid = vid.with_duration(total_dur)
         bg = vid
-    else:
-        print("  Seedance unavailable — using storyboard fallback")
+        print("  Using Seedance AI video")
+
+    # Try 2: Gradio Space text-to-video (free, no key)
+    if bg is None:
+        print("  Trying Gradio Space T2V...")
+        if generate_via_space_video(user_prompt, video_path, duration=min(5, int(total_dur))):
+            try:
+                vid = VideoFileClip(str(video_path))
+                total_frames = int(vid.fps * vid.duration)
+                if vid.duration < total_dur:
+                    clips = [vid] * (int(total_dur // vid.duration) + 1)
+                    vid = concatenate_videoclips(clips, method="compose").with_duration(total_dur)
+                else:
+                    vid = vid.with_duration(total_dur)
+                bg = vid
+                print("  Using Gradio Space AI video")
+            except Exception:
+                bg = None
+
+    # Try 3: Photorealistic frames via HF Inference (realistic images + motion)
+    if bg is None:
+        print("  Trying photorealistic frames...")
+        num_frames_needed = int(total_dur * FPS)
+        frames = generate_photorealistic_frames(
+            user_prompt, w=W, h=H, num_frames=num_frames_needed, fps=FPS,
+        )
+        if frames:
+            total_frames = len(frames)
+            print(f"  {total_frames} photorealistic frames")
+            frame_dur = total_dur / max(total_frames, 1)
+            def make_photo_frame(t):
+                return frames[min(int(t / frame_dur), total_frames - 1)]
+            bg = VideoClip(make_photo_frame, duration=total_dur)
+            print("  Using photorealistic frames")
+
+    # Fallback: Storyboard animator
+    if bg is None:
+        print("  Using storyboard fallback")
         from src.storyboard_anim import generate_storyboard_frames
         frame_arrays = generate_storyboard_frames(prompt=user_prompt, w=W, h=H, fps=FPS)
         total_frames = len(frame_arrays)
-        print(f"  {total_frames} frames = {total_frames / FPS:.1f}s @ {FPS}fps")
+        print(f"  {total_frames} storyboard frames = {total_frames / FPS:.1f}s @ {FPS}fps")
 
         if total_dur > total_frames / FPS:
             pad_needed = int((total_dur - total_frames / FPS) * FPS)
