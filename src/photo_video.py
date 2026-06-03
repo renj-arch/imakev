@@ -21,6 +21,12 @@ def apply_ken_burns(frame: np.ndarray, progress: float, zoom_in: bool = True) ->
     return np.array(img.crop((x, y, x + w, y + h)))
 
 
+def _space_url(repo_id: str) -> str:
+    """Convert repo_id to Gradio Space direct URL (bypasses HF API entirely)."""
+    s = repo_id.replace("/", "-").lower().replace(".", "-")
+    return f"https://{s}.hf.space"
+
+
 IMAGE_SPACES = [
     {
         "name": _space_url("stabilityai/stable-diffusion-3.5-large"),
@@ -89,12 +95,6 @@ def _gc_call(space_name: str, api_name: str, data: list, timeout: int = 300):
             print(f"    Non-retryable error: {e}")
     print(f"    All retries exhausted, trying raw HTTP fallback...")
     return _gc_raw_http(space_name, api_name, data, timeout)
-
-
-def _space_url(repo_id: str) -> str:
-    """Convert repo_id to Gradio Space direct URL (bypasses HF API entirely)."""
-    s = repo_id.replace("/", "-").lower().replace(".", "-")
-    return f"https://{s}.hf.space"
 
 
 def _gc_raw_http(space_name: str, api_name: str, data: list, timeout: int = 300) -> tuple:
