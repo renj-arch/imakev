@@ -1,6 +1,6 @@
 """Generate photorealistic video frames via free image APIs + motion compositing."""
 
-import os, time, io, json, base64, random
+import os, time, io, json, base64, random, threading, queue, shutil
 from pathlib import Path
 import requests as req
 from PIL import Image
@@ -115,25 +115,28 @@ def _extract_video_url(result) -> str | None:
     return None
 
 
+SVD_SPACES = [
+    "multimodalart/stable-video-diffusion",
+    "seawolf2357/img2vid",
+    "Kvikontent/Stable-Video-Diffusion-Img2Vid",
+]
+
 def generate_via_svd_img2vid(prompt: str, output_path: str | Path, duration: int = 4) -> bool:
     """Generate SD image then animate via SVD Space img2vid."""
     output_path = Path(output_path)
     try:
         print(f"    Generating SD image for SVD...")
         img = _gradio_image(prompt)
-        if img is None:
+        if img is None or img.size[0] < 100:
             print(f"    No SD image generated")
             return False
-        img_path = output_path.with_suffix(".png")
-        img.save(img_path)
-        print(f"    Image saved ({img.size})")
+        img = img.resize((1024, 576), Image.LANCZOS)
+        print(f"    Image resized to 1024x576")
 
-        for space_name in ["multimodalart/stable-video-diffusion",
-                            "jeffreyhsu/stable-video-diffusion-img2vid"]:
+        for space_name in SVD_SPACES:
             try:
                 print(f"    Loading {space_name}...")
-                import threading, queue
-                result_q = queue.Queue()
+                result_q: queue.Queue = queue.Queue()
                 def load_space(q, name):
                     try:
                         from gradio_client import Client
@@ -143,27 +146,45 @@ def generate_via_svd_img2vid(prompt: str, output_path: str | Path, duration: int
                         q.put(e)
                 t = threading.Thread(target=load_space, args=(result_q, space_name), daemon=True)
                 t.start()
-                client = result_q.get(timeout=20)
+                client = result_q.get(timeout=30)
                 if isinstance(client, Exception):
                     print(f"    {space_name} load error: {client}")
                     continue
                 print(f"    Calling /video...")
-                job = client.submit(str(img_path), 2706751006454312937, True, 127, 6, api_name="/video")
-                result = job.result(timeout=120)
+                job = client.submit(
+                    img,        # PIL Image directly (already 1024x576)
+                    42,         # seed
+                    True,       # randomize_seed
+                    127,        # motion_bucket_id
+                    6,          # fps_id
+                    api_name="/video"
+                )
+                result = job.result(timeout=180)
                 if result and len(result) >= 1:
                     video_part = result[0]
-                    if isinstance(video_part, dict) and "video" in video_part:
-                        vid_src = video_part["video"]
-                        if isinstance(vid_src, str) and Path(vid_src).exists():
-                            import shutil
-                            shutil.copy2(vid_src, str(output_path))
-                            print(f"  SVD video saved")
+                    if isinstance(video_part, str):
+                        vid_path = Path(video_part)
+                        if vid_path.exists():
+                            shutil.copy2(str(vid_path), str(output_path))
+                            print(f"  SVD video saved ({vid_path.stat().st_size} bytes)")
                             return True
-                        if isinstance(vid_src, str) and vid_src.startswith("http"):
-                            resp = req.get(vid_src, timeout=60)
+                        if video_part.startswith("http"):
+                            resp = req.get(video_part, timeout=60)
                             if resp.status_code == 200 and len(resp.content) > 5000:
                                 output_path.write_bytes(resp.content)
                                 print(f"  SVD downloaded ({len(resp.content)} bytes)")
+                                return True
+                    if isinstance(video_part, dict):
+                        for v in video_part.values():
+                            if isinstance(v, str) and v.startswith("http"):
+                                resp = req.get(v, timeout=60)
+                                if resp.status_code == 200 and len(resp.content) > 5000:
+                                    output_path.write_bytes(resp.content)
+                                    print(f"  SVD downloaded dict ({len(resp.content)} bytes)")
+                                    return True
+                            if isinstance(v, str) and Path(v).exists():
+                                shutil.copy2(v, str(output_path))
+                                print(f"  SVD video saved dict ({Path(v).stat().st_size} bytes)")
                                 return True
             except Exception as e:
                 print(f"    {space_name} error: {e}")
