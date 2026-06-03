@@ -116,10 +116,10 @@ def _extract_video_url(result) -> str | None:
 
 
 def generate_via_svd_img2vid(prompt: str, output_path: str | Path, duration: int = 4) -> bool:
-    """Generate SD image → animate via SVD Space img2vid."""
+    """Generate SD image then animate via SVD Space img2vid."""
     output_path = Path(output_path)
     try:
-        print(f"    Generating SD image for SVD animation...")
+        print(f"    Generating SD image for SVD...")
         img = _gradio_image(prompt)
         if img is None:
             print(f"    No SD image generated")
@@ -128,27 +128,45 @@ def generate_via_svd_img2vid(prompt: str, output_path: str | Path, duration: int
         img.save(img_path)
         print(f"    Image saved ({img.size})")
 
-        from gradio_client import Client
-        print(f"    Loading SVD Space...")
-        client = Client("multimodalart/stable-video-diffusion", verbose=False)
-        print(f"    Submitting image to /video...")
-        job = client.submit(str(img_path), 2706751006454312937, True, 127, 6, api_name="/video")
-        result = job.result(timeout=300)
-        if result and len(result) >= 1:
-            video_part = result[0]
-            if isinstance(video_part, dict) and "video" in video_part:
-                vid_src = video_part["video"]
-                if isinstance(vid_src, str) and Path(vid_src).exists():
-                    import shutil
-                    shutil.copy2(vid_src, str(output_path))
-                    print(f"  SVD video saved ({Path(vid_src).stat().st_size} bytes)")
-                    return True
-                if isinstance(vid_src, str) and vid_src.startswith("http"):
-                    resp = req.get(vid_src, timeout=120)
-                    if resp.status_code == 200 and len(resp.content) > 5000:
-                        output_path.write_bytes(resp.content)
-                        print(f"  SVD video downloaded ({len(resp.content)} bytes)")
-                        return True
+        for space_name in ["multimodalart/stable-video-diffusion",
+                            "jeffreyhsu/stable-video-diffusion-img2vid"]:
+            try:
+                print(f"    Loading {space_name}...")
+                import threading, queue
+                result_q = queue.Queue()
+                def load_space(q, name):
+                    try:
+                        from gradio_client import Client
+                        c = Client(name, verbose=False)
+                        q.put(c)
+                    except Exception as e:
+                        q.put(e)
+                t = threading.Thread(target=load_space, args=(result_q, space_name), daemon=True)
+                t.start()
+                client = result_q.get(timeout=20)
+                if isinstance(client, Exception):
+                    print(f"    {space_name} load error: {client}")
+                    continue
+                print(f"    Calling /video...")
+                job = client.submit(str(img_path), 2706751006454312937, True, 127, 6, api_name="/video")
+                result = job.result(timeout=120)
+                if result and len(result) >= 1:
+                    video_part = result[0]
+                    if isinstance(video_part, dict) and "video" in video_part:
+                        vid_src = video_part["video"]
+                        if isinstance(vid_src, str) and Path(vid_src).exists():
+                            import shutil
+                            shutil.copy2(vid_src, str(output_path))
+                            print(f"  SVD video saved")
+                            return True
+                        if isinstance(vid_src, str) and vid_src.startswith("http"):
+                            resp = req.get(vid_src, timeout=60)
+                            if resp.status_code == 200 and len(resp.content) > 5000:
+                                output_path.write_bytes(resp.content)
+                                print(f"  SVD downloaded ({len(resp.content)} bytes)")
+                                return True
+            except Exception as e:
+                print(f"    {space_name} error: {e}")
         return False
     except Exception as e:
         print(f"    SVD img2vid error: {e}")
