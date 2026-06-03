@@ -8,6 +8,18 @@ import numpy as np
 
 HF_TOKEN = os.getenv("HF_TOKEN", "")
 
+
+def apply_ken_burns(frame: np.ndarray, progress: float, zoom_in: bool = True) -> np.ndarray:
+    h, w = frame.shape[:2]
+    max_zoom = 1.12
+    scale = 1.0 + (max_zoom - 1.0) * (progress if zoom_in else 1.0 - progress)
+    new_w, new_h = int(w * scale), int(h * scale)
+    img = Image.fromarray(frame).resize((new_w, new_h), Image.LANCZOS)
+    x = (new_w - w) // 2
+    y = int((new_h - h) * (progress if not zoom_in else 0.0))
+    y = max(0, min(y, new_h - h))
+    return np.array(img.crop((x, y, x + w, y + h)))
+
 # Free Gradio Spaces for photorealistic image generation (no signup)
 IMAGE_SPACES = [
     {
@@ -134,30 +146,6 @@ def generate_photorealistic_frames(prompt: str, w: int = 720, h: int = 1280,
     2. Generate variations with weather/lighting keywords
     3. Interpolate between them with smooth camera motion
     """
-    from src.storyboard_anim import apply_ken_burns
-
-    base_prompt = prompt.split(",")[0].strip()
-
-    scenes = [
-        (f"{base_prompt}, cinematic lighting, 4K, photorealistic, sharp focus", 1.0),
-    ]
-
-    # Try generating multiple keyframe variations
-    all_keyframes = []
-    for sp, scale in scenes:
-        img = _hf_inference_api(sp)
-        if img is None:
-            img = _gradio_image(sp)
-        if img:
-            img = img.resize((w, h), Image.LANCZOS)
-            all_keyframes.append(np.array(img))
-        else:
-            print(f"  Could not generate image for: {sp[:50]}")
-
-    if not all_keyframes:
-        print("  No photorealistic images generated — falling through")
-        return None
-
     # If we have keyframes, interpolate to create smooth video
     frames_per_scene = num_frames // max(len(all_keyframes), 1)
 
