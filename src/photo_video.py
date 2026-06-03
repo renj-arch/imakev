@@ -44,8 +44,6 @@ VIDEO_SPACES = [
 
 SVD_SPACES = [
     "multimodalart/stable-video-diffusion",
-    "seawolf2357/img2vid",
-    "Kvikontent/Stable-Video-Diffusion-Img2Vid",
 ]
 
 
@@ -78,8 +76,13 @@ def _gc_call(space_name: str, api_name: str, data: list, timeout: int = 300):
                 print(f"    429 hit, waiting {wait}s then retry...")
                 time.sleep(wait)
                 continue
+            if "ZeroGPU" in estr or "quota" in estr:
+                wait = min(20 * (attempt + 1), 60)
+                print(f"    ZeroGPU quota, waiting {wait}s...")
+                time.sleep(wait)
+                continue
             if "409" in estr or "space is loading" in estr.lower():
-                wait = 10
+                wait = 15
                 print(f"    Space loading/warmup, waiting {wait}s...")
                 time.sleep(wait)
                 continue
@@ -89,7 +92,11 @@ def _gc_call(space_name: str, api_name: str, data: list, timeout: int = 300):
 
 
 def _space_url(repo_id: str) -> str:
-    return f"https://{repo_id.replace('/', '-').lower().replace('.', '-')}.hf.space"
+    """Convert repo_id to Gradio Space direct URL."""
+    s = repo_id.replace("/", "-").lower()
+    # HF removes dots in subdomains (3.5 → 35), not replaces with hyphen
+    s = s.replace(".", "")
+    return f"https://{s}.hf.space"
 
 
 def _gc_raw_http(space_name: str, api_name: str, data: list, timeout: int = 300) -> tuple:
@@ -203,11 +210,14 @@ def generate_via_svd_img2vid(prompt: str, output_path: str | Path, duration: int
             return False
         img = img.resize((1024, 576), Image.LANCZOS)
         print(f"    Image resized to 1024x576")
+        img_path = str(output_path.with_suffix(".svd_input.png"))
+        img.save(img_path)
+        print(f"    Saved to {img_path}")
 
         for space_name in SVD_SPACES:
             try:
                 print(f"    Calling {space_name} /video...")
-                result = _gc_call(space_name, "/video", [img, 42, True, 127, 6], timeout=180)
+                result = _gc_call(space_name, "/video", [img_path, 42, True, 127, 6], timeout=180)
                 if result and len(result) >= 1:
                     video_part = result[0]
                     if isinstance(video_part, str):
