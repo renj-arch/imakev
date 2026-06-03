@@ -24,8 +24,8 @@ def apply_ken_burns(frame: np.ndarray, progress: float, zoom_in: bool = True) ->
 IMAGE_SPACES = [
     {
         "name": "stabilityai/stable-diffusion-3.5-large",
-        "api_name": "/predict",
-        "data_fn": lambda p: [p, "", 0, 1, 1024, 1024, 7.5, 28],
+        "api_name": "/infer",
+        "data_fn": lambda p: [p, "", 0, True, 1024, 1024, 7.5, 28],
     },
 ]
 
@@ -106,17 +106,28 @@ def _gradio_image(prompt: str) -> Image.Image | None:
     for space in IMAGE_SPACES:
         try:
             data = space["data_fn"](prompt)
-            result = _gc_generate(space["name"], space["api_name"], data)
-            if not result:
-                continue
-            url = result.get("video", "")
-            if url:
-                resp = req.get(url, timeout=60)
-                if resp.status_code == 200:
-                    return Image.open(io.BytesIO(resp.content)).convert("RGB")
+            result = _gc_generate_image(space["name"], space["api_name"], data)
+            if result:
+                return result
         except Exception as e:
             print(f"    Gradio image error: {e}")
     return None
+
+
+def _gc_generate_image(space_name: str, api_name: str, data: list, timeout: int = 120) -> Image.Image | None:
+    try:
+        from gradio_client import Client
+        client = Client(space_name)
+        job = client.submit(*data, api_name=api_name)
+        result = job.result(timeout=timeout)
+        if result and len(result) >= 1:
+            img_path = result[0]
+            if isinstance(img_path, str) and Path(img_path).exists():
+                return Image.open(img_path).convert("RGB")
+        return None
+    except Exception as e:
+        print(f"    gradio_client error: {e}")
+        return None
 
 
 def generate_photorealistic_frames(prompt: str, w: int = 720, h: int = 1280,
