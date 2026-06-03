@@ -221,12 +221,12 @@ def generate_via_svd_img2vid(prompt: str, output_path: str | Path, duration: int
     try:
         svd_img_path = str(output_path.with_suffix(".svd_input.png"))
 
-        print(f"    Trying SD image generation...")
-        img = _gradio_image(prompt)
+        print(f"    Downloading stock photo (fast, no GPU needed)...")
+        img = _download_stock_photo(prompt, svd_img_path)
         if img is None or img.size[0] < 100:
-            print(f"    SD image failed, downloading real stock photo...")
-            img = _download_stock_photo(prompt, svd_img_path)
-            if img is None:
+            print(f"    Stock photo failed, trying SD Space...")
+            img = _gradio_image(prompt)
+            if img is None or img.size[0] < 100:
                 print(f"    No image source works, aborting SVD")
                 return False
         img = img.resize((1024, 576), Image.LANCZOS)
