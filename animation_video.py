@@ -1,13 +1,11 @@
-"""AI Animation video — uses Seedance API for real AI video, falls back to frame-based."""
+"""AI Animation video — procedural frame-by-frame animation (no API key needed)."""
 
 import sys, subprocess, time, random
 from pathlib import Path
-from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 from moviepy import (
     VideoClip,
     AudioFileClip,
-    VideoFileClip,
     concatenate_videoclips,
     CompositeAudioClip,
     CompositeVideoClip,
@@ -16,95 +14,14 @@ import config
 from src.animation_gen import generate_animation_script
 from src.engagement import (
     hook_overlays,
-    fast_motion,
     comment_prompt_overlay,
     subscribe_end_card,
     branding_overlays,
     get_audio_duration,
 )
-from src.image_gen import gen_img
-from src.video_api import generate_video as gen_video_api
+from src.procedural_anim import animate_scene
 
-FONT_PATH = config.get_font()
 W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
-
-
-def draw_text(
-    img,
-    text,
-    font_size,
-    y,
-    color=(255, 255, 255),
-    stroke_color=(0, 0, 0),
-    stroke_width=2,
-    center=False,
-    x=30,
-):
-    draw = ImageDraw.Draw(img)
-    try:
-        font = ImageFont.truetype(FONT_PATH, font_size)
-    except Exception:
-        font = ImageFont.load_default()
-    lines = []
-    for line in text.split("\n"):
-        words = line.split()
-        current = ""
-        for w in words:
-            test = f"{current} {w}".strip()
-            bb = draw.textbbox((0, 0), test, font=font)
-            if bb[2] - bb[0] > W - 60:
-                lines.append(current)
-                current = w
-            else:
-                current = test
-        lines.append(current)
-    for i, line in enumerate(lines):
-        ly = y + i * (font_size + 8)
-        if center:
-            bb = draw.textbbox((0, 0), line, font=font)
-            lx = (W - (bb[2] - bb[0])) // 2
-        else:
-            lx = x
-        if stroke_width > 0:
-            for dx in range(-stroke_width, stroke_width + 1):
-                for dy in range(-stroke_width, stroke_width + 1):
-                    if dx != 0 or dy != 0:
-                        draw.text((lx + dx, ly + dy), line, font=font, fill=stroke_color)
-        draw.text((lx, ly), line, font=font, fill=color)
-    return img
-
-
-def make_frame_card(img, caption, i, total):
-    img = img.copy()
-    bottom_bar = Image.new("RGBA", (W, int(H * 0.25)), (0, 0, 0, 160))
-    img.paste(bottom_bar, (0, H - int(H * 0.25)), bottom_bar)
-
-    top_bar = Image.new("RGBA", (W, int(H * 0.12)), (0, 0, 0, 100))
-    img.paste(top_bar, (0, 0), top_bar)
-
-    draw_text(img, f"AI ANIMATION", 26, 18, center=True, color=(0, 200, 255))
-    draw_text(img, caption, 32, H - 260, stroke_width=2)
-    prog = f"{'#' * (i + 1)}{'-' * (total - i - 1)}"
-    draw_text(img, prog, 18, H - 60, center=True, color=(100, 200, 255), stroke_width=1)
-    return img
-
-
-def make_title_card(img, text):
-    img = img.copy()
-    overlay = Image.new("RGBA", (W, int(H * 0.35)), (0, 0, 0, 180))
-    img.paste(overlay, (0, H - int(H * 0.35)), overlay)
-    draw_text(img, text.upper(), 40, H - 260, center=True)
-    draw_text(img, "AI GENERATED ANIMATION", 24, H - 120, center=True, color=(0, 200, 255))
-    return img
-
-
-def make_end_card(img):
-    img = img.copy()
-    overlay = Image.new("RGBA", (W, H), (0, 0, 0, 120))
-    img.paste(overlay, (0, 0), overlay)
-    draw_text(img, "SUBSCRIBE", 60, H // 2 - 60, center=True, color=(0, 200, 255))
-    draw_text(img, "FOR MORE AI ANIMATIONS", 32, H // 2 + 20, center=True)
-    return img
 
 
 def main():
@@ -139,9 +56,7 @@ def main():
         print(f"  Auto-generated prompt: {user_prompt}")
 
     data = generate_animation_script(user_prompt)
-    TITLE = data["title"]
     SUBJECT = data["subject"]
-    PROMPTS = data["frame_prompts"]
     narration = data["narration"]
 
     temp_dir = config.TEMP_DIR / "animation"
@@ -151,76 +66,34 @@ def main():
     tts_path = temp_dir / "narration.mp3"
     subprocess.run(
         [sys.executable, "-m", "edge_tts", "--text", narration, "--voice", "en-US-GuyNeural", "--write-media", str(tts_path)],
-        capture_output=True,
-        text=True,
-        timeout=120,
-        check=True,
+        capture_output=True, text=True, timeout=120, check=True,
     )
     total_dur = get_audio_duration(str(tts_path))
     print(f"  {total_dur:.1f}s")
 
-    video_path = temp_dir / "ai_video.mp4"
-    video_prompt = f"{SUBJECT}, {data.get('style', 'cinematic')}, 9:16 vertical, high quality, smooth motion"
+    print(f"\n[2/4] Generating {int(total_dur * 12)} animation frames...")
+    frame_arrays = animate_scene(
+        prompt=user_prompt, w=W, h=H,
+        num_frames=int(total_dur * 12), fps=12,
+    )
 
-    seedance_ok = gen_video_api(video_prompt, video_path, duration=min(5, int(total_dur)))
+    print(f"\n[3/4] Composing video...")
+    frame_dur = total_dur / max(len(frame_arrays), 1)
 
-    print(f"\n[2/4] {'Seedance video ready' if seedance_ok else 'Generating frames (Seedance unavailable)...'}")
+    def make_frame(t):
+        idx = min(int(t / frame_dur), len(frame_arrays) - 1)
+        return frame_arrays[idx]
 
-    if not seedance_ok:
-        print(f"  Generating {len(PROMPTS)} animation frames...")
-        images = {}
-        for i, prompt in enumerate(PROMPTS):
-            cached = temp_dir / f"anim_{i}.png"
-            if cached.exists() and cached.stat().st_size > 50000:
-                img = Image.open(cached)
-                print(f"  Frame {i+1}/{len(PROMPTS)}... cached")
-            else:
-                print(f"  Frame {i+1}/{len(PROMPTS)}...", end=" ", flush=True)
-                img = gen_img(prompt)
-                if img:
-                    img.save(cached)
-                    print("OK")
-                else:
-                    print("fallback")
-                    arr = np.zeros((H, W, 3), dtype=np.uint8)
-                    for y in range(H):
-                        t = y / H
-                        arr[y, :] = [int(80 + 120 * (1 - abs(t - 0.5) * 2)), int(40 + 80 * (1 - abs(t - 0.5) * 2)), int(160 + 80 * (1 - abs(t - 0.5) * 2))]
-                    img = Image.fromarray(arr)
-            images[i] = img
+    anim_clip = VideoClip(make_frame, duration=total_dur)
 
-    print("\n[3/4] Composing video...")
+    overlays = hook_overlays(1.8)
+    overlays += comment_prompt_overlay(start_time=max(total_dur * 0.4, 0.5), duration=2.0)
+    overlays += branding_overlays(total_dur)
 
-    if seedance_ok:
-        bg = VideoFileClip(str(video_path)).with_duration(total_dur)
-        overlays = hook_overlays(1.8)
-        overlays += comment_prompt_overlay(start_time=max(total_dur * 0.4, 0.5), duration=2.0)
-        overlays += branding_overlays(bg.duration)
-        final = CompositeVideoClip([bg] + overlays, size=config.SHORTS_SIZE)
-    else:
-        dur_per = total_dur / len(PROMPTS)
-        title_img = make_title_card(images[0], TITLE)
-        clips = [fast_motion(title_img, 0.8, shake=False, intensity=0.4)]
+    end_clip = subscribe_end_card(np.zeros((H, W, 3), dtype=np.uint8), 1.2)
 
-        captions = [
-            f"Witness {SUBJECT}...", f"Amazing details of {SUBJECT}", f"The beauty of {SUBJECT}",
-            f"{SUBJECT} in motion", f"Capturing {SUBJECT}", f"Mesmerizing {SUBJECT}",
-            f"Nature's wonder: {SUBJECT}", f"{SUBJECT} revealed",
-        ]
-        for i in range(len(PROMPTS)):
-            img = images.get(i, images[0])
-            caption = captions[i % len(captions)]
-            card = make_frame_card(img, caption, i, len(PROMPTS))
-            clips.append(fast_motion(card, dur_per, shake=i == len(PROMPTS) - 1, intensity=0.6))
-
-        end_img = images.get(len(PROMPTS) - 1, images[0])
-        clips.append(subscribe_end_card(end_img, 1.2))
-
-        overlays = hook_overlays(1.8)
-        overlays += comment_prompt_overlay(start_time=max(total_dur * 0.4, 0.5), duration=2.0)
-        bg = concatenate_videoclips(clips, method="compose")
-        overlays += branding_overlays(bg.duration)
-        final = CompositeVideoClip([bg] + overlays, size=config.SHORTS_SIZE)
+    bg = concatenate_videoclips([anim_clip, end_clip], method="compose")
+    final = CompositeVideoClip([bg] + overlays, size=config.SHORTS_SIZE)
 
     audio_clip = AudioFileClip(str(tts_path))
     music_paths = list(config.MUSIC_DIR.glob("*.mp3"))
