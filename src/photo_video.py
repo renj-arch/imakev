@@ -23,7 +23,7 @@ def apply_ken_burns(frame: np.ndarray, progress: float, zoom_in: bool = True) ->
 
 IMAGE_SPACES = [
     {
-        "name": "stabilityai/stable-diffusion-3.5-large",  # repo_id, resolved to URL with retry
+        "name": _space_url("stabilityai/stable-diffusion-3.5-large"),
         "api_name": "/infer",
         "data_fn": lambda p: [p, "", 0, True, 1024, 1024, 7.5, 28],
     },
@@ -31,19 +31,19 @@ IMAGE_SPACES = [
 
 VIDEO_SPACES = [
     {
-        "name": "ozilion/text2video",
+        "name": _space_url("ozilion/text2video"),
         "api_name": "/generate_video",
         "data_fn": lambda p, d: [p, "", 40, float(d), 512, 512, 25, 7.5, -1],
     },
     {
-        "name": "null002/genmo-mochi-1-preview",
+        "name": _space_url("null002/genmo-mochi-1-preview"),
         "api_name": "/predict",
         "data_fn": lambda p, d: [p],
     },
 ]
 
 SVD_SPACES = [
-    "multimodalart/stable-video-diffusion",
+    _space_url("multimodalart/stable-video-diffusion"),
 ]
 
 
@@ -92,10 +92,8 @@ def _gc_call(space_name: str, api_name: str, data: list, timeout: int = 300):
 
 
 def _space_url(repo_id: str) -> str:
-    """Convert repo_id to Gradio Space direct URL."""
-    s = repo_id.replace("/", "-").lower()
-    # HF removes dots in subdomains (3.5 → 35), not replaces with hyphen
-    s = s.replace(".", "")
+    """Convert repo_id to Gradio Space direct URL (bypasses HF API entirely)."""
+    s = repo_id.replace("/", "-").lower().replace(".", "-")
     return f"https://{s}.hf.space"
 
 
