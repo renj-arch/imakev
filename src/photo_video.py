@@ -24,8 +24,7 @@ def apply_ken_burns(frame: np.ndarray, progress: float, zoom_in: bool = True) ->
 IMAGE_SPACES = [
     {
         "name": "stabilityai/stable-diffusion-3.5-large",
-        "subdomain": "stabilityai-stable-diffusion-3-5-large",
-        "fn_index": 0,
+        "api_name": "/predict",
         "data_fn": lambda p: [p, "", 0, 1, 1024, 1024, 7.5, 28],
     },
 ]
@@ -115,21 +114,18 @@ def _hf_inference_api(prompt: str) -> Image.Image | None:
 
 
 def _gradio_image(prompt: str) -> Image.Image | None:
-    """Generate photorealistic image via Gradio Space."""
+    """Generate photorealistic image via Gradio Space (uses gradio_client)."""
     for space in IMAGE_SPACES:
         try:
             data = space["data_fn"](prompt)
-            out = _call_gradio_space(space, data, timeout=120)
-            if out and len(out) > 0:
-                val = out[0]
-                if isinstance(val, dict) and "url" in val:
-                    resp = req.get(val["url"], timeout=60)
-                    if resp.status_code == 200:
-                        return Image.open(io.BytesIO(resp.content)).convert("RGB")
-                elif isinstance(val, str) and val.startswith("http"):
-                    resp = req.get(val, timeout=60)
-                    if resp.status_code == 200:
-                        return Image.open(io.BytesIO(resp.content)).convert("RGB")
+            result = _gc_generate(space["name"], space["api_name"], data)
+            if not result:
+                continue
+            url = result.get("video", "")
+            if url:
+                resp = req.get(url, timeout=60)
+                if resp.status_code == 200:
+                    return Image.open(io.BytesIO(resp.content)).convert("RGB")
         except Exception as e:
             print(f"    Gradio image error: {e}")
     return None
