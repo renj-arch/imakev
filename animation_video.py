@@ -113,15 +113,27 @@ def main():
     user_prompt = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else ""
     if not user_prompt:
         print("  No prompt provided — auto-generating one...")
-        from src.script_generator import _generate
-        raw = _generate(
-            "Suggest a single visually interesting subject for an AI animation video. "
-            "Examples: 'a cat exploring a neon city', 'a dragon flying over mountains', "
-            "'a jellyfish glowing in the deep ocean'. Return ONLY the subject, 3-10 words.",
-            temperature=0.9, max_tokens=30,
-            system="You suggest creative subjects for AI animation.",
-        )
-        user_prompt = raw.strip().strip('"').strip("'") if raw else "a duck swimming in a pond"
+        try:
+            from src.script_generator import _generate
+            raw = _generate(
+                "Suggest a single visually interesting subject for an AI animation video. "
+                "Examples: 'a cat exploring a neon city', 'a dragon flying over mountains', "
+                "'a jellyfish glowing in the deep ocean'. Return ONLY the subject, 3-10 words.",
+                temperature=0.9, max_tokens=30,
+                system="You suggest creative subjects for AI animation.",
+            )
+            user_prompt = raw.strip().strip('"').strip("'") if raw else ""
+        except Exception:
+            user_prompt = ""
+        if not user_prompt:
+            user_prompt = random.choice([
+                "a duck swimming in a pond",
+                "a cat exploring a neon city",
+                "a dragon flying over mountains",
+                "a jellyfish glowing in the deep ocean",
+                "a fox in an enchanted forest",
+                "a hummingbird drinking nectar",
+            ])
         print(f"  Auto-generated prompt: {user_prompt}")
 
     data = generate_animation_script(user_prompt)

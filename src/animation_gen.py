@@ -16,11 +16,35 @@ FRAME_TEMPLATES = [
     "{subject}, {style}, bird's eye view, landscape setting, expansive",
 ]
 
+NARRATION_FALLBACKS = [
+    "Watch in awe as nature reveals its most incredible creation. Every detail tells a story of beauty and wonder.",
+    "This is absolutely mesmerizing. The way light dances across the scene creates a truly magical atmosphere.",
+    "Prepare to be amazed by this stunning display. Every moment is more breathtaking than the last.",
+    "Nature at its finest. The beauty you're about to witness is truly one of a kind and unforgettable.",
+    "Get ready for an incredible sight. This is something you have to see to believe — absolutely stunning.",
+]
+
+STYLE_FALLBACKS = [
+    "digital art, vibrant colors, cinematic lighting",
+    "oil painting, rich textures, warm tones",
+    "watercolor, soft pastels, dreamy atmosphere",
+    "cinematic, photorealistic, dramatic lighting",
+    "fantasy art, glowing effects, magical mood",
+]
+
+
+def _try_generate(prompt, temperature=0.8, max_tokens=200, system=""):
+    try:
+        return _generate(prompt, temperature=temperature, max_tokens=max_tokens, system=system)
+    except Exception as e:
+        print(f"  LLM unavailable ({e}), using fallback")
+        return ""
+
 
 def generate_animation_script(user_prompt: str, num_frames: int = 6) -> dict:
     print(f"  Generating animation script for: {user_prompt}")
 
-    raw = _generate(
+    raw = _try_generate(
         f"Write a short, engaging 20-25 second narration script about: {user_prompt}. "
         "The script should describe what's happening in the scene in a fun, vivid way. "
         "Make it feel like a nature documentary narrator. 30-50 words max. "
@@ -28,9 +52,9 @@ def generate_animation_script(user_prompt: str, num_frames: int = 6) -> dict:
         temperature=0.8, max_tokens=200,
         system="You write short, vivid documentary-style narration scripts.",
     )
-    narration = raw.strip() if raw else f"Watch this amazing {user_prompt}. Isn't it incredible?"
+    narration = raw.strip() if raw else random.choice(NARRATION_FALLBACKS)
 
-    style = _generate(
+    style = _try_generate(
         f"Describe an art style for a beautiful AI animation of: {user_prompt}. "
         "Examples: 'digital art, vibrant colors, pixar style', 'oil painting, rich textures, classic art', "
         "'cyberpunk neon, futuristic, glowing', 'watercolor, soft pastels, dreamy', 'cinematic, photorealistic, dramatic lighting'. "
@@ -39,7 +63,7 @@ def generate_animation_script(user_prompt: str, num_frames: int = 6) -> dict:
         system="You suggest visual art styles for AI image generation.",
     )
     if not style:
-        style = "digital art, vibrant colors, cinematic lighting"
+        style = random.choice(STYLE_FALLBACKS)
     style = style.strip().strip('"').strip("'")
 
     frame_prompts = []
