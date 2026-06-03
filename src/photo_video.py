@@ -23,7 +23,7 @@ def apply_ken_burns(frame: np.ndarray, progress: float, zoom_in: bool = True) ->
 
 IMAGE_SPACES = [
     {
-        "name": "stabilityai/stable-diffusion-3.5-large",
+        "name": "stabilityai/stable-diffusion-3.5-large",  # repo_id, resolved to URL with retry
         "api_name": "/infer",
         "data_fn": lambda p: [p, "", 0, True, 1024, 1024, 7.5, 28],
     },
@@ -42,21 +42,98 @@ VIDEO_SPACES = [
     },
 ]
 
+SVD_SPACES = [
+    "multimodalart/stable-video-diffusion",
+    "seawolf2357/img2vid",
+    "Kvikontent/Stable-Video-Diffusion-Img2Vid",
+]
+
 
 def _gc_call(space_name: str, api_name: str, data: list, timeout: int = 300):
-    """Call a Gradio Space and return the raw result tuple."""
+    """Call a Gradio Space and return the raw result tuple.
+    Retries with backoff on 429 (HF API rate limit).
+    Falls back to raw HTTP POST if gradio_client repeatedly fails.
+    """
     from gradio_client import Client
-    print(f"    Loading Space {space_name}...")
+    deadline = time.time() + timeout
+    last_err = None
+    for attempt in range(3):
+        try:
+            print(f"    Loading Space {space_name} (attempt {attempt+1})...")
+            t0 = time.time()
+            client = Client(space_name, verbose=False)
+            print(f"    Space loaded in {time.time()-t0:.1f}s")
+            print(f"    Calling api_name={api_name}...")
+            t0 = time.time()
+            job = client.submit(*data, api_name=api_name)
+            print(f"    Job submitted, waiting for result...")
+            result = job.result(timeout=max(30, int(deadline - time.time())))
+            print(f"    Result received in {time.time()-t0:.1f}s")
+            return result
+        except Exception as e:
+            last_err = e
+            estr = str(e)
+            if "429" in estr or "Too Many Requests" in estr or "Rate limit" in estr:
+                wait = min(15 * (attempt + 1), 30)
+                print(f"    429 hit, waiting {wait}s then retry...")
+                time.sleep(wait)
+                continue
+            if "409" in estr or "space is loading" in estr.lower():
+                wait = 10
+                print(f"    Space loading/warmup, waiting {wait}s...")
+                time.sleep(wait)
+                continue
+            print(f"    Non-retryable error: {e}")
+    print(f"    All retries exhausted, trying raw HTTP fallback...")
+    return _gc_raw_http(space_name, api_name, data, timeout)
+
+
+def _space_url(repo_id: str) -> str:
+    return f"https://{repo_id.replace('/', '-').lower().replace('.', '-')}.hf.space"
+
+
+def _gc_raw_http(space_name: str, api_name: str, data: list, timeout: int = 300) -> tuple:
+    """Call Gradio Space API directly via HTTP, bypassing gradio_client entirely."""
+    space_url = space_name if space_name.startswith("http") else _space_url(space_name)
+    api_url = space_url.rstrip("/") + f"/call/{api_name.lstrip('/')}"
+    print(f"    Raw HTTP to {api_url}...")
+    payload: list = []
+    for d in data:
+        if isinstance(d, Image.Image):
+            buf = io.BytesIO()
+            d.save(buf, format="PNG")
+            buf.seek(0)
+            upload_url = space_url.rstrip("/") + "/upload"
+            r = req.post(upload_url, files={"files": ("img.png", buf, "image/png")}, timeout=30)
+            if r.status_code != 200:
+                raise Exception(f"Upload failed: {r.status_code}")
+            uploaded = r.json()
+            payload.append({"path": uploaded[0] if isinstance(uploaded, list) else uploaded})
+        else:
+            payload.append(d)
     t0 = time.time()
-    client = Client(space_name, verbose=False)
-    print(f"    Space loaded in {time.time()-t0:.1f}s")
-    print(f"    Calling api_name={api_name}...")
-    t0 = time.time()
-    job = client.submit(*data, api_name=api_name)
-    print(f"    Job submitted, waiting for result...")
-    result = job.result(timeout=timeout)
-    print(f"    Result received in {time.time()-t0:.1f}s")
-    return result
+    r = req.post(api_url, json={"data": payload}, timeout=timeout)
+    if r.status_code != 200:
+        raise Exception(f"API call failed: {r.status_code} {r.text[:200]}")
+    event_id = r.json().get("event_id")
+    if not event_id:
+        raise Exception(f"No event_id: {r.text[:200]}")
+    poll_url = api_url + f"/{event_id}/data"
+    deadline = time.time() + timeout
+    while time.time() < deadline:
+        r = req.get(poll_url, timeout=30)
+        if r.status_code == 200:
+            for line in r.text.strip().split("\n"):
+                if line.startswith("data:"):
+                    try:
+                        parsed = json.loads(line[5:].strip())
+                        if isinstance(parsed, list) and len(parsed) > 0 and parsed[0] is not None:
+                            print(f"    Raw HTTP result in {time.time()-t0:.1f}s")
+                            return tuple(parsed)
+                    except json.JSONDecodeError:
+                        continue
+        time.sleep(0.5)
+    raise TimeoutError(f"Raw HTTP Gradio timed out ({timeout}s)")
 
 
 def generate_via_space_video(prompt: str, output_path: str | Path, duration: int = 5) -> bool:
@@ -115,12 +192,6 @@ def _extract_video_url(result) -> str | None:
     return None
 
 
-SVD_SPACES = [
-    "multimodalart/stable-video-diffusion",
-    "seawolf2357/img2vid",
-    "Kvikontent/Stable-Video-Diffusion-Img2Vid",
-]
-
 def generate_via_svd_img2vid(prompt: str, output_path: str | Path, duration: int = 4) -> bool:
     """Generate SD image then animate via SVD Space img2vid."""
     output_path = Path(output_path)
@@ -135,31 +206,8 @@ def generate_via_svd_img2vid(prompt: str, output_path: str | Path, duration: int
 
         for space_name in SVD_SPACES:
             try:
-                print(f"    Loading {space_name}...")
-                result_q: queue.Queue = queue.Queue()
-                def load_space(q, name):
-                    try:
-                        from gradio_client import Client
-                        c = Client(name, verbose=False)
-                        q.put(c)
-                    except Exception as e:
-                        q.put(e)
-                t = threading.Thread(target=load_space, args=(result_q, space_name), daemon=True)
-                t.start()
-                client = result_q.get(timeout=30)
-                if isinstance(client, Exception):
-                    print(f"    {space_name} load error: {client}")
-                    continue
-                print(f"    Calling /video...")
-                job = client.submit(
-                    img,        # PIL Image directly (already 1024x576)
-                    42,         # seed
-                    True,       # randomize_seed
-                    127,        # motion_bucket_id
-                    6,          # fps_id
-                    api_name="/video"
-                )
-                result = job.result(timeout=180)
+                print(f"    Calling {space_name} /video...")
+                result = _gc_call(space_name, "/video", [img, 42, True, 127, 6], timeout=180)
                 if result and len(result) >= 1:
                     video_part = result[0]
                     if isinstance(video_part, str):
