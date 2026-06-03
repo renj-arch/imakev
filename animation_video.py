@@ -1,4 +1,4 @@
-"""AI Animation video — generates animated video from any prompt using Pollinations.ai frames."""
+"""AI Animation video — uses Seedance API for real AI video, falls back to frame-based."""
 
 import sys, subprocess, time, random
 from pathlib import Path
@@ -7,6 +7,7 @@ import numpy as np
 from moviepy import (
     VideoClip,
     AudioFileClip,
+    VideoFileClip,
     concatenate_videoclips,
     CompositeAudioClip,
     CompositeVideoClip,
@@ -22,6 +23,7 @@ from src.engagement import (
     get_audio_duration,
 )
 from src.image_gen import gen_img
+from src.video_api import generate_video as gen_video_api
 
 FONT_PATH = config.get_font()
 W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
@@ -140,116 +142,101 @@ def main():
     TITLE = data["title"]
     SUBJECT = data["subject"]
     PROMPTS = data["frame_prompts"]
+    narration = data["narration"]
 
     temp_dir = config.TEMP_DIR / "animation"
     temp_dir.mkdir(exist_ok=True)
 
     print(f"\n[1/4] Voiceover: {SUBJECT}")
-    tts_script = data["tts_script"]
     tts_path = temp_dir / "narration.mp3"
     subprocess.run(
-        [sys.executable, "-m", "edge_tts", "--text", tts_script, "--voice", "en-US-GuyNeural", "--write-media", str(tts_path)],
+        [sys.executable, "-m", "edge_tts", "--text", narration, "--voice", "en-US-GuyNeural", "--write-media", str(tts_path)],
         capture_output=True,
         text=True,
         timeout=120,
         check=True,
     )
     total_dur = get_audio_duration(str(tts_path))
-    print(f"  {total_dur:.1f}s | {len(PROMPTS)} frames")
+    print(f"  {total_dur:.1f}s")
 
-    print(f"\n[2/4] Generating {len(PROMPTS)} animation frames...")
-    images = {}
-    for i, prompt in enumerate(PROMPTS):
-        cached = temp_dir / f"anim_{i}.png"
-        if cached.exists() and cached.stat().st_size > 50000:
-            img = Image.open(cached)
-            print(f"  Frame {i+1}/{len(PROMPTS)}... cached")
-        else:
-            print(f"  Frame {i+1}/{len(PROMPTS)}...", end=" ", flush=True)
-            img = gen_img(prompt)
-            if img:
-                img.save(cached)
-                print("OK")
+    video_path = temp_dir / "ai_video.mp4"
+    video_prompt = f"{SUBJECT}, {data.get('style', 'cinematic')}, 9:16 vertical, high quality, smooth motion"
+
+    seedance_ok = gen_video_api(video_prompt, video_path, duration=min(5, int(total_dur)))
+
+    print(f"\n[2/4] {'Seedance video ready' if seedance_ok else 'Generating frames (Seedance unavailable)...'}")
+
+    if not seedance_ok:
+        print(f"  Generating {len(PROMPTS)} animation frames...")
+        images = {}
+        for i, prompt in enumerate(PROMPTS):
+            cached = temp_dir / f"anim_{i}.png"
+            if cached.exists() and cached.stat().st_size > 50000:
+                img = Image.open(cached)
+                print(f"  Frame {i+1}/{len(PROMPTS)}... cached")
             else:
-                print("fallback")
-                arr = np.zeros((H, W, 3), dtype=np.uint8)
-                for y in range(H):
-                    t = y / H
-                    arr[y, :] = [
-                        int(80 + 120 * (1 - abs(t - 0.5) * 2)),
-                        int(40 + 80 * (1 - abs(t - 0.5) * 2)),
-                        int(160 + 80 * (1 - abs(t - 0.5) * 2)),
-                    ]
-                img = Image.fromarray(arr)
-        images[i] = img
+                print(f"  Frame {i+1}/{len(PROMPTS)}...", end=" ", flush=True)
+                img = gen_img(prompt)
+                if img:
+                    img.save(cached)
+                    print("OK")
+                else:
+                    print("fallback")
+                    arr = np.zeros((H, W, 3), dtype=np.uint8)
+                    for y in range(H):
+                        t = y / H
+                        arr[y, :] = [int(80 + 120 * (1 - abs(t - 0.5) * 2)), int(40 + 80 * (1 - abs(t - 0.5) * 2)), int(160 + 80 * (1 - abs(t - 0.5) * 2))]
+                    img = Image.fromarray(arr)
+            images[i] = img
 
-    print("\n[3/4] Composing animation...")
-    dur_per = total_dur / len(PROMPTS)
+    print("\n[3/4] Composing video...")
 
-    title_img = make_title_card(images[0], TITLE)
-    clips = [fast_motion(title_img, 0.8, shake=False, intensity=0.4)]
+    if seedance_ok:
+        bg = VideoFileClip(str(video_path)).with_duration(total_dur)
+        overlays = hook_overlays(1.8)
+        overlays += comment_prompt_overlay(start_time=max(total_dur * 0.4, 0.5), duration=2.0)
+        overlays += branding_overlays(bg.duration)
+        final = CompositeVideoClip([bg] + overlays, size=config.SHORTS_SIZE)
+    else:
+        dur_per = total_dur / len(PROMPTS)
+        title_img = make_title_card(images[0], TITLE)
+        clips = [fast_motion(title_img, 0.8, shake=False, intensity=0.4)]
 
-    captions = [
-        f"Witness {SUBJECT}...",
-        f"Amazing details of {SUBJECT}",
-        f"The beauty of {SUBJECT}",
-        f"{SUBJECT} in motion",
-        f"Capturing {SUBJECT}",
-        f"Mesmerizing {SUBJECT}",
-        f"Nature's wonder: {SUBJECT}",
-        f"{SUBJECT} revealed",
-    ]
+        captions = [
+            f"Witness {SUBJECT}...", f"Amazing details of {SUBJECT}", f"The beauty of {SUBJECT}",
+            f"{SUBJECT} in motion", f"Capturing {SUBJECT}", f"Mesmerizing {SUBJECT}",
+            f"Nature's wonder: {SUBJECT}", f"{SUBJECT} revealed",
+        ]
+        for i in range(len(PROMPTS)):
+            img = images.get(i, images[0])
+            caption = captions[i % len(captions)]
+            card = make_frame_card(img, caption, i, len(PROMPTS))
+            clips.append(fast_motion(card, dur_per, shake=i == len(PROMPTS) - 1, intensity=0.6))
 
-    for i in range(len(PROMPTS)):
-        img = images.get(i, images[0])
-        caption = captions[i % len(captions)]
-        card = make_frame_card(img, caption, i, len(PROMPTS))
-        shake = i == len(PROMPTS) - 1
-        clips.append(fast_motion(card, dur_per, shake=shake, intensity=0.6))
+        end_img = images.get(len(PROMPTS) - 1, images[0])
+        clips.append(subscribe_end_card(end_img, 1.2))
 
-    end_img = images.get(len(PROMPTS) - 1, images[0])
-    clips.append(subscribe_end_card(end_img, 1.2))
-
-    overlays = hook_overlays(1.8)
-    overlays += comment_prompt_overlay(start_time=max(total_dur * 0.4, 0.5), duration=2.0)
-
-    bg = concatenate_videoclips(clips, method="compose")
-    overlays += branding_overlays(bg.duration)
-    final = CompositeVideoClip([bg] + overlays, size=config.SHORTS_SIZE)
+        overlays = hook_overlays(1.8)
+        overlays += comment_prompt_overlay(start_time=max(total_dur * 0.4, 0.5), duration=2.0)
+        bg = concatenate_videoclips(clips, method="compose")
+        overlays += branding_overlays(bg.duration)
+        final = CompositeVideoClip([bg] + overlays, size=config.SHORTS_SIZE)
 
     audio_clip = AudioFileClip(str(tts_path))
     music_paths = list(config.MUSIC_DIR.glob("*.mp3"))
     if music_paths:
-        music = AudioFileClip(str(random.choice(music_paths))).with_duration(total_dur + 0.8).with_volume_scaled(0.08)
+        music = AudioFileClip(str(random.choice(music_paths))).with_duration(total_dur).with_volume_scaled(0.08)
         final = final.with_audio(CompositeAudioClip([audio_clip, music]))
     else:
         final = final.with_audio(audio_clip)
 
     print("\n[4/4] Rendering...")
-    safe_title = (
-        SUBJECT.lower()
-        .replace(" ", "_")
-        .replace("?", "")
-        .replace("!", "")
-        .replace("'", "")
-        .replace(".", "")
-        .replace(",", "")
-        .replace(":", "")
-    )[:50]
+    safe_title = SUBJECT.lower().replace(" ", "_").replace("?", "").replace("!", "").replace("'", "").replace(".","").replace(",","").replace(":","")[:50]
     out = config.OUTPUT_DIR / f"animation_{safe_title}.mp4"
     out.unlink(missing_ok=True)
-    print(f"  {total_dur + 0.8:.1f}s | {W}x{H}")
+    print(f"  {total_dur:.1f}s | {W}x{H}")
     t0 = time.time()
-    final.write_videofile(
-        str(out),
-        fps=config.VIDEO_FPS,
-        codec="libx264",
-        audio_codec="aac",
-        threads=4,
-        preset="ultrafast",
-        ffmpeg_params=["-movflags", "+faststart"],
-        logger=None,
-    )
+    final.write_videofile(str(out), fps=config.VIDEO_FPS, codec="libx264", audio_codec="aac", threads=4, preset="ultrafast", ffmpeg_params=["-movflags", "+faststart"], logger=None)
     final.close()
     t1 = time.time()
     print(f"\n  DONE in {t1 - t0:.0f}s: {out}")
