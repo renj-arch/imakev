@@ -1,9 +1,9 @@
 """Generate photorealistic video frames via free image APIs + motion compositing."""
 
-import os, time, io, json, base64, random, threading, queue, shutil
+import os, time, io, json, base64, random, threading, queue, shutil, hashlib
 from pathlib import Path
 import requests as req
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 
 HF_TOKEN = os.getenv("HF_TOKEN", "")
@@ -55,22 +55,24 @@ def _download_stock_photo(prompt: str, output_path: str | Path) -> Image.Image |
 
 
 IMAGE_SPACES = [
-    {"name": _space_url("stabilityai/stable-diffusion-3.5-large"), "api_name": "/infer", "data_fn": lambda p: [p, "", 0, True, 1024, 1024, 7.5, 28]},
-    {"name": _space_url("stabilityai/stable-diffusion-xl-base-1.0"), "api_name": "/infer", "data_fn": lambda p: [p, "", 0, True, 1024, 1024, 7.5, 28]},
-    {"name": _space_url("black-forest-labs/FLUX.1-dev"), "api_name": "/infer", "data_fn": lambda p: [p, "", 0, True, 1024, 1024, 7.5, 28]},
+    {"name": _space_url("stabilityai/stable-diffusion-3.5-large"), "api_name": "/infer", "data_fn": lambda p: [p, "", 0, True, 1024, 1024, 7.5, 28], "timeout": 45},
+    {"name": _space_url("stabilityai/stable-diffusion-xl-base-1.0"), "api_name": "/infer", "data_fn": lambda p: [p, "", 0, True, 1024, 1024, 7.5, 28], "timeout": 45},
+    {"name": _space_url("black-forest-labs/FLUX.1-dev"), "api_name": "/infer", "data_fn": lambda p: [p, "", 0, True, 1024, 1024, 7.5, 28], "timeout": 45},
 ]
 
 VIDEO_SPACES = [
-    {"name": _space_url("ozilion/text2video"), "api_name": "/generate_video", "data_fn": lambda p, d: [p, "", 40, float(d), 512, 512, 25, 7.5, -1]},
-    {"name": _space_url("null002/genmo-mochi-1-preview"), "api_name": "/predict", "data_fn": lambda p, d: [p]},
+    {"name": _space_url("ozilion/text2video"), "api_name": "/generate_video", "data_fn": lambda p, d: [p, "", 40, float(d), 512, 512, 25, 7.5, -1], "timeout": 60},
+    {"name": _space_url("null002/genmo-mochi-1-preview"), "api_name": "/predict", "data_fn": lambda p, d: [p], "timeout": 60},
 ]
+
+WAN_I2V_SPACE = "https://r3gm-wan2-2-fp8da-aoti-preview-2.hf.space"
 
 SVD_SPACES = [
     _space_url("multimodalart/stable-video-diffusion"),
 ]
 
 
-def _gc_call(space_name: str, api_name: str, data: list, timeout: int = 300):
+def _gc_call(space_name: str, api_name: str, data: list, timeout: int = 60):
     """Call a Gradio Space and return the raw result tuple.
     Retries with backoff on 429 (HF API rate limit).
     Falls back to raw HTTP POST if gradio_client repeatedly fails.
@@ -114,7 +116,7 @@ def _gc_call(space_name: str, api_name: str, data: list, timeout: int = 300):
     return _gc_raw_http(space_name, api_name, data, timeout)
 
 
-def _gc_raw_http(space_name: str, api_name: str, data: list, timeout: int = 300) -> tuple:
+def _gc_raw_http(space_name: str, api_name: str, data: list, timeout: int = 60) -> tuple:
     """Call Gradio Space API directly via HTTP, bypassing gradio_client entirely."""
     space_url = space_name if space_name.startswith("http") else _space_url(space_name)
     api_url = space_url.rstrip("/") + f"/call/{api_name.lstrip('/')}"
@@ -156,6 +158,98 @@ def _gc_raw_http(space_name: str, api_name: str, data: list, timeout: int = 300)
                         continue
         time.sleep(0.5)
     raise TimeoutError(f"Raw HTTP Gradio timed out ({timeout}s)")
+
+
+def _generate_placeholder_image(prompt: str, w: int = 1024, h: int = 576) -> str:
+    """Create a simple colored image from prompt keywords as seed for I2V."""
+    import hashlib
+    seed = int(hashlib.md5(prompt.encode()).hexdigest()[:8], 16)
+    rnd = random.Random(seed)
+    bg_color = (rnd.randint(20, 60), rnd.randint(30, 80), rnd.randint(50, 120))
+    img = Image.new('RGB', (w, h), color=bg_color)
+    draw = ImageDraw.Draw(img)
+    for _ in range(rnd.randint(8, 16)):
+        x1 = rnd.randint(0, w)
+        y1 = rnd.randint(0, h)
+        x2 = rnd.randint(0, w)
+        y2 = rnd.randint(0, h)
+        color = (rnd.randint(60, 200), rnd.randint(60, 200), rnd.randint(60, 200))
+        draw.ellipse([min(x1, x2), min(y1, y2), max(x1, x2), max(y1, y2)], fill=color, outline=None)
+    try:
+        font = ImageFont.truetype("arial.ttf", 36)
+    except Exception:
+        font = ImageFont.load_default()
+    words = [w for w in prompt.split() if len(w) > 3][:4]
+    label = " ".join(words) if words else "AI"
+    bbox = draw.textbbox((0, 0), label, font=font)
+    tw = bbox[2] - bbox[0]
+    th = bbox[3] - bbox[1]
+    draw.text(((w - tw) // 2, (h - th) // 2), label, fill=(255, 255, 255), font=font)
+    path = Path("_wan_seed.png")
+    img.save(path)
+    return str(path)
+
+
+def generate_wan_i2v(prompt: str, output_path: str | Path, duration: int = 5) -> bool:
+    """Generate realistic AI video via Wan 2.2 I2V Space (free, no API key).
+    Creates a placeholder seed image from prompt, then animates it via the Space.
+    """
+    output_path = Path(output_path)
+    try:
+        from gradio_client import Client, handle_file
+        img_path = _generate_placeholder_image(prompt)
+        print(f"    Seed image created: {img_path}")
+        client = Client(WAN_I2V_SPACE, verbose=False)
+        print(f"    Calling Wan 2.2 I2V...")
+        t0 = time.time()
+        result = client.predict(
+            handle_file(img_path),
+            None,
+            prompt + ", cinematic, realistic, high quality motion",
+            6,                          # slider
+            "",                         # negative prompt
+            3.5,                        # guidance
+            1.0, 1.0, 42, True, 6,     # sliders
+            'UniPCMultistep',           # scheduler
+            3.0,                        # slider
+            16,                         # steps
+            True, True,
+            api_name='/generate_video'
+        )
+        elapsed = time.time() - t0
+        print(f"    Wan result in {elapsed:.1f}s")
+        if isinstance(result, (list, tuple)):
+            for item in result:
+                if isinstance(item, str) and item.startswith("http"):
+                    resp = req.get(item, timeout=120)
+                    if resp.status_code == 200 and len(resp.content) > 5000:
+                        output_path.write_bytes(resp.content)
+                        print(f"  Wan 2.2 video saved ({len(resp.content)} bytes)")
+                        return True
+                if isinstance(item, str):
+                    p = Path(item)
+                    if p.exists():
+                        import shutil
+                        shutil.copy2(str(p), str(output_path))
+                        print(f"  Wan 2.2 video saved ({p.stat().st_size} bytes)")
+                        return True
+                if isinstance(item, dict):
+                    for v in item.values():
+                        if isinstance(v, str) and v.startswith("http"):
+                            resp = req.get(v, timeout=120)
+                            if resp.status_code == 200 and len(resp.content) > 5000:
+                                output_path.write_bytes(resp.content)
+                                print(f"  Wan 2.2 video saved ({len(resp.content)} bytes)")
+                                return True
+        print(f"    Could not extract video from Wan result")
+        return False
+    except Exception as e:
+        estr = str(e)
+        if "ZeroGPU" in estr or "quota" in estr:
+            print(f"    Wan 2.2 ZeroGPU quota exhausted: {estr[:100]}")
+        else:
+            print(f"    Wan 2.2 error: {estr[:200]}")
+        return False
 
 
 def generate_via_space_video(prompt: str, output_path: str | Path, duration: int = 5) -> bool:
@@ -237,7 +331,7 @@ def generate_via_svd_img2vid(prompt: str, output_path: str | Path, duration: int
         for space_name in SVD_SPACES:
             try:
                 print(f"    Calling {space_name} /video...")
-                result = _gc_call(space_name, "/video", [svd_img_path, 42, True, 127, 6], timeout=180)
+                result = _gc_call(space_name, "/video", [svd_img_path, 42, True, 127, 6], timeout=45)
                 if result and len(result) >= 1:
                     video_part = result[0]
                     if isinstance(video_part, str):
@@ -293,7 +387,7 @@ def _gradio_image(prompt: str) -> Image.Image | None:
     for space in IMAGE_SPACES:
         try:
             data = space["data_fn"](prompt)
-            result = _gc_call(space["name"], space["api_name"], data, timeout=120)
+            result = _gc_call(space["name"], space["api_name"], data, timeout=space.get("timeout", 45))
             if result and len(result) >= 1:
                 img_path = result[0]
                 if isinstance(img_path, str) and Path(img_path).exists():
@@ -301,6 +395,231 @@ def _gradio_image(prompt: str) -> Image.Image | None:
         except Exception as e:
             print(f"    Gradio image error: {e}")
     return None
+
+
+def _extract_keywords(prompt: str, max_words: int = 3) -> str:
+    stop = {"a", "an", "the", "in", "on", "at", "for", "and", "of", "to", "is", "it", "with", "this", "that",
+            "tiny", "small", "big", "large", "beside", "under", "over", "above", "below", "beside", "behind"}
+    words = prompt.lower().split(",")[0].strip().split()
+    keywords = [w for w in words if w not in stop and len(w) > 2][:max_words]
+    return ",".join(keywords) if keywords else "nature,landscape"
+
+
+def _download_multiple_photos(prompt: str, count: int = 5, w: int = 720, h: int = 1280) -> list[Image.Image]:
+    keywords = _extract_keywords(prompt)
+    results = []
+    seen = set()
+    sources = [
+        f"https://loremflickr.com/{w*2}/{h*2}/{keywords}",
+        f"https://loremflickr.com/{w*2}/{h*2}/{keywords.split(',')[0]}",
+        f"https://picsum.photos/{w*2}/{h*2}",
+    ]
+    for attempt in range(3):
+        for url in sources:
+            try:
+                resp = req.get(url, timeout=20)
+                if resp.status_code == 200 and len(resp.content) > 10000:
+                    key = hashlib.md5(resp.content[:500]).hexdigest()
+                    if key in seen:
+                        continue
+                    seen.add(key)
+                    img = Image.open(io.BytesIO(resp.content)).convert("RGB")
+                    img = img.resize((w, h), Image.LANCZOS)
+                    results.append(img)
+                    if len(results) >= count:
+                        return results
+            except Exception:
+                continue
+    return results
+
+
+def generate_stock_photo_video(prompt: str, w: int = 720, h: int = 1280,
+                                num_frames: int = 60, fps: int = 12) -> list[np.ndarray] | None:
+    """Download free stock photos matching prompt and create a Ken Burns video."""
+    print(f"    Downloading stock photos for: {prompt[:60]}...")
+    photos = _download_multiple_photos(prompt, count=min(6, max(2, num_frames // 10)), w=w, h=h)
+    if not photos:
+        print("    No stock photos downloaded")
+        return None
+    print(f"    {len(photos)} stock photos downloaded")
+    frames_per_photo = num_frames // len(photos)
+    result = []
+    for i, photo in enumerate(photos):
+        arr = np.array(photo)
+        for j in range(frames_per_photo):
+            progress = j / max(frames_per_photo - 1, 1)
+            zoom_in = (i % 2 == 0)
+            frame = apply_ken_burns(arr, progress, zoom_in=zoom_in)
+            result.append(frame)
+    while len(result) < num_frames:
+        result.append(result[-1])
+    print(f"    Generated {len(result)} Ken Burns frames")
+    return result[:num_frames]
+
+
+def generate_ai_image_video(prompt: str, w: int = 720, h: int = 1280,
+                             num_frames: int = 60, fps: int = 12) -> list[np.ndarray] | None:
+    """Generate realistic AI video frames via Pollinations.ai (free, no API key).
+    Creates varied cinematic images matching the prompt, then applies smooth
+    Ken Burns zoom + crossfade for a realistic video feel."""
+    keywords = _extract_keywords(prompt, max_words=4) or "nature,landscape"
+    variants = [
+        f"{prompt}, cinematic lighting, 4K, photorealistic, wide shot, dramatic",
+        f"{prompt}, cinematic lighting, detailed, sharp focus, close-up view",
+        f"{prompt}, golden hour, warm tones, cinematic, highly detailed",
+        f"{prompt}, dynamic composition, dramatic shadows, cinematic mood",
+        f"{prompt}, epic cinematic, vibrant colors, stunning visuals, 4K",
+        f"{prompt}, cinematic wide angle, atmospheric, breathtaking scenery",
+    ]
+    all_keyframes = []
+    images_needed = max(3, min(6, num_frames // 8))
+    from src.image_gen import _try_pollinations
+    for i in range(images_needed):
+        vp = variants[i % len(variants)]
+        img = _try_pollinations(vp, w, h, "flux")
+        if img is None:
+            img = _try_pollinations(vp, w, h, "sana")
+        if img:
+            all_keyframes.append(np.array(img))
+            print(f"    AI image {i+1}/{images_needed} generated")
+        else:
+            print(f"    AI image {i+1}/{images_needed} failed, trying stock photo...")
+            img = _download_stock_photo(vp, str(Path("_temp_ai_video_img.png")))
+            if img:
+                img = img.resize((w, h), Image.LANCZOS)
+                all_keyframes.append(np.array(img))
+    if not all_keyframes:
+        print("  No AI images generated")
+        return None
+    print(f"  {len(all_keyframes)} keyframes generated")
+    frames_per_scene = num_frames // max(len(all_keyframes), 1)
+    result = []
+    for i, kf in enumerate(all_keyframes):
+        for j in range(frames_per_scene):
+            progress = j / max(frames_per_scene - 1, 1)
+            zoom_in = (i % 2 == 0)
+            frame = apply_ken_burns(kf, progress, zoom_in=zoom_in)
+            result.append(frame)
+    while len(result) < num_frames:
+        result.append(result[-1])
+    print(f"  Generated {len(result)} AI video frames")
+    return result[:num_frames]
+
+
+def generate_hf_text_to_video(prompt: str, output_path: str | Path,
+                               duration: int = 5, hf_token: str = "") -> bool:
+    """Generate real AI video via HuggingFace text-to-video inference.
+    Uses a small T2V model from serverless inference. Requires a HF token for reliable access.
+    Without a token, may fall back to free tier with rate limiting."""
+    output_path = Path(output_path)
+    models_to_try = [
+        "genmo/mochi-1-preview",
+        "Lightricks/LTX-Video-0.9.8-13B-distilled",
+    ]
+    last_err = None
+    base_urls = [
+        "https://api-inference.huggingface.co/models/{model}",
+        "https://router.huggingface.co/hf-inference/models/{model}",
+    ]
+    for base_url_template in base_urls:
+        for model_id in models_to_try:
+            try:
+                url = base_url_template.format(model=model_id)
+                print(f"    HF T2V {url}...")
+                headers = {"Content-Type": "application/json"}
+                token = hf_token or os.getenv("HF_TOKEN", "")
+                if token:
+                    headers["Authorization"] = f"Bearer {token}"
+                payload = {"inputs": prompt, "parameters": {"num_frames": min(25, int(duration * 8))}}
+                t0 = time.time()
+                r = req.post(url, headers=headers, json=payload, timeout=120)
+                elapsed = time.time() - t0
+                print(f"    Status {r.status_code} ({elapsed:.0f}s, {len(r.content)} bytes)")
+                if r.status_code == 200 and len(r.content) > 5000:
+                    output_path.write_bytes(r.content)
+                    print(f"  HF T2V video saved ({len(r.content)} bytes)")
+                    return True
+                if r.status_code in (401, 403):
+                    if not token:
+                        print(f"    Auth required — set HF_TOKEN in .env")
+                        break
+                    continue
+                if r.status_code == 503:
+                    wait = int(r.headers.get("x-wait-for-model", 30))
+                    print(f"    Model loading, waiting {wait}s...")
+                    time.sleep(min(wait, 30))
+                    r = req.post(url, headers=headers, json=payload, timeout=120)
+                    if r.status_code == 200 and len(r.content) > 5000:
+                        output_path.write_bytes(r.content)
+                        print(f"  HF T2V video saved ({len(r.content)} bytes)")
+                        return True
+            except Exception as e:
+                last_err = e
+                estr = str(e)
+                if "getaddrinfo" in estr or "resolve" in estr.lower():
+                    print(f"    DNS failed for {url}")
+                    continue
+                print(f"    {model_id} error: {e}")
+        if "getaddrinfo" in str(last_err or ""):
+            break
+    print(f"  HF T2V failed, last error: {last_err}")
+    return False
+
+
+def generate_coverr_video(prompt: str, output_path: str | Path) -> bool:
+    """Download free stock video clip from Coverr (no API key needed).
+    Searches by prompt keywords, falls back to individual keywords then broad nature.
+    Returns True if video written successfully."""
+    output_path = Path(output_path)
+    base_keywords = _extract_keywords(prompt, max_words=3)
+    queries = []
+    if base_keywords:
+        queries.append(base_keywords)
+        for kw in base_keywords.split(","):
+            queries.append(kw)
+    queries.append("nature,landscape,scenery")
+    seen_titles = set()
+    for q in queries:
+        if not q:
+            continue
+        print(f"    Searching Coverr for: {q}...")
+        try:
+            r = req.get(f"https://coverr.co/api/videos?query={q}&per_page=5", timeout=10)
+            if r.status_code != 200:
+                continue
+            hits = r.json().get("hits", [])
+            if not hits:
+                print(f"    No Coverr videos found for '{q}'")
+                continue
+            print(f"    {len(hits)} Coverr videos found for '{q}'")
+
+            for hit in hits[:3]:
+                title = hit.get("title", "")
+                if title in seen_titles:
+                    continue
+                seen_titles.add(title)
+                vid_id = hit.get("video_id", "")
+                if not vid_id:
+                    continue
+                rd = req.get(f"https://coverr.co/api/videos/{vid_id}", timeout=10)
+                if rd.status_code != 200:
+                    continue
+                details = rd.json()
+                dl_url = (details.get("urls") or {}).get("mp4", "")
+                if not dl_url:
+                    continue
+                print(f"    Downloading {title}...")
+                t0 = time.time()
+                rv = req.get(dl_url, timeout=60)
+                if rv.status_code == 200 and len(rv.content) > 50000:
+                    output_path.write_bytes(rv.content)
+                    print(f"    Downloaded ({len(rv.content)} bytes) in {time.time()-t0:.1f}s")
+                    print(f"  Coverr video saved: {output_path.name}")
+                    return True
+        except Exception:
+            continue
+    print(f"    No Coverr videos available")
+    return False
 
 
 def generate_photorealistic_frames(prompt: str, w: int = 720, h: int = 1280,
@@ -333,3 +652,65 @@ def generate_photorealistic_frames(prompt: str, w: int = 720, h: int = 1280,
     while len(result) < num_frames:
         result.append(result[-1])
     return result[:num_frames]
+
+
+def generate_hf_space_video(prompt: str, output_path: str | Path,
+                            num_frames: int = 16, num_inference_steps: int = 20,
+                            guidance_scale: float = 7.5, timeout: int = 600) -> bool:
+    """Generate AI video via HuggingFace Gradio Space API (free, no token needed).
+    Uses the gradio_client library to call public T2V Spaces."""
+    output_path = Path(output_path)
+    try:
+        from gradio_client import Client
+    except ImportError:
+        print("    gradio_client not installed, skipping")
+        return False
+
+    hf_token = os.getenv("HF_TOKEN", "")
+
+    # Spaces to try in order
+    spaces = [
+        ("HITMAN6178/text-to-video-gradio-demo", "/generate_video",
+         lambda c: c.predict(prompt, num_frames, num_inference_steps, guidance_scale,
+                            api_name="/generate_video")),
+    ]
+
+    for space_id, api_name, predict_fn in spaces:
+        print(f"    Trying HF Space: {space_id}")
+        try:
+            if hf_token:
+                print(f"    Duplicating Space (dedicated GPU)...")
+                client = Client.duplicate(space_id, hf_token=hf_token)
+            else:
+                client = Client(space_id)
+            job = client.submit(prompt, num_frames, num_inference_steps, guidance_scale,
+                               api_name=api_name)
+            print(f"    Job submitted, waiting up to {timeout}s...")
+            waited = 0
+            while not job.done() and waited < timeout:
+                import time as _time
+                _time.sleep(10)
+                waited += 10
+                s = job.status()
+                status_str = s.code.name
+                if s.rank is not None:
+                    status_str += f" (queue: {s.rank})"
+                if s.eta:
+                    status_str += f" eta: {s.eta:.0f}s"
+                print(f"      [{waited}s] {status_str}")
+            if job.done():
+                result = job.result()
+                print(f"    Result: {result}")
+                if result:
+                    import shutil
+                    shutil.copy2(result, str(output_path))
+                    size = output_path.stat().st_size
+                    print(f"    Saved: {output_path} ({size} bytes)")
+                    return True if size > 1000 else False
+            else:
+                print(f"    Space timed out after {timeout}s")
+        except Exception as e:
+            print(f"    Space {space_id} error: {e}")
+            continue
+    print("    All HF Spaces failed")
+    return False

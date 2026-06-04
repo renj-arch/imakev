@@ -1,0 +1,110 @@
+name: AI Video Generation
+
+on:
+  workflow_dispatch:
+    inputs:
+      prompt:
+        description: 'Video prompt'
+        required: true
+        default: 'A tiger walking through tall grass, cinematic, 4K'
+      num_frames:
+        description: 'Frames (4-32)'
+        default: '16'
+      steps:
+        description: 'Inference steps (5-40)'
+        default: '25'
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install
+        run: pip install gradio_client huggingface-hub requests
+
+      - name: Generate video
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          python << 'PYEOF'
+import os, sys, time, json, shutil
+from gradio_client import Client
+
+prompt = """${{ inputs.prompt }}"""
+nf = int("${{ inputs.num_frames }}")
+ns = int("${{ inputs.steps }}")
+token = os.environ.get("HF_TOKEN", "")
+
+# Try strategies in order
+strategies = []
+
+# Strategy 1: Duplicate the Space (dedicated GPU, no queue)
+if token:
+    strategies.append(("duplicate HITMAN6178", lambda: Client.duplicate("HITMAN6178/text-to-video-gradio-demo", hf_token=token)))
+
+# Strategy 2: Call public Space directly (may have queue)
+strategies.append(("public HITMAN6178", lambda: Client("HITMAN6178/text-to-video-gradio-demo")))
+
+# Strategy 3: Try other T2V Spaces
+other_spaces = [
+    "camenduru/text-to-video",
+]
+for sid in other_spaces:
+    strategies.append((f"public {sid}", lambda sid=sid: Client(sid)))
+
+video_out = None
+for name, fn in strategies:
+    print(f"\n=== Strategy: {name} ===")
+    try:
+        client = fn()
+        print(f"  Connected: {client}")
+
+        job = client.submit(prompt, nf, ns, 7.5, api_name="/generate_video")
+        print(f"  Job: {job}")
+
+        for i in range(180):
+            time.sleep(10)
+            s = job.status()
+            print(f"  [{i*10}s] {s.code.name}", end="")
+            if s.rank is not None: print(f" queue={s.rank}", end="")
+            if s.eta: print(f" eta={s.eta:.0f}s", end="")
+            print()
+            if job.done():
+                break
+
+        if job.done():
+            result = job.result()
+            print(f"  Result: {result}")
+            if result:
+                video_out = result
+                break
+    except Exception as e:
+        print(f"  Failed: {e}")
+        continue
+
+if not video_out:
+    print("\nAll strategies failed!")
+    sys.exit(1)
+
+# Copy to known location
+print(f"\nVideo: {video_out}")
+if os.path.exists(video_out):
+    dst = "/tmp/generated_video.mp4"
+    shutil.copy2(video_out, dst)
+    print(f"Copied to {dst} ({os.path.getsize(dst)} bytes)")
+else:
+    print(f"File not found: {video_out}")
+    sys.exit(1)
+PYEOF
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-video
+          path: /tmp/generated_video.mp4
+          if-no-files-found: error
