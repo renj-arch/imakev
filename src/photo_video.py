@@ -657,8 +657,8 @@ def generate_photorealistic_frames(prompt: str, w: int = 720, h: int = 1280,
 def generate_hf_space_video(prompt: str, output_path: str | Path,
                             num_frames: int = 16, num_inference_steps: int = 20,
                             guidance_scale: float = 7.5, timeout: int = 600) -> bool:
-    """Generate AI video via HuggingFace Gradio Space API (free, no token needed).
-    Uses the gradio_client library to call public T2V Spaces."""
+    """Generate AI video via Gradio Space API.
+    Tries T2V_API_URL env var first (your Colab notebook), then public HF Spaces."""
     output_path = Path(output_path)
     try:
         from gradio_client import Client
@@ -667,8 +667,33 @@ def generate_hf_space_video(prompt: str, output_path: str | Path,
         return False
 
     hf_token = os.getenv("HF_TOKEN", "")
+    custom_url = os.getenv("T2V_API_URL", "")
 
-    # Spaces to try in order
+    # Priority 1: Custom Colab API
+    if custom_url:
+        print(f"    Using custom T2V API: {custom_url}")
+        try:
+            client = Client(custom_url)
+            job = client.submit(prompt, num_inference_steps, guidance_scale, -1, api_name="/predict")
+            waited = 0
+            while not job.done() and waited < timeout:
+                time.sleep(10)
+                waited += 10
+                s = job.status()
+                print(f"      [{waited}s] {s.code.name}")
+            if job.done():
+                result = job.result()
+                if result:
+                    import shutil
+                    fp = result[0] if isinstance(result, (list, tuple)) else result
+                    shutil.copy2(str(fp), str(output_path))
+                    sz = output_path.stat().st_size
+                    print(f"    Colab video saved ({sz} bytes)")
+                    return sz > 1000
+        except Exception as e:
+            print(f"    Custom API failed: {e}")
+
+    # Priority 2: Public HF Spaces
     spaces = [
         ("HITMAN6178/text-to-video-gradio-demo", "/generate_video",
          lambda c: c.predict(prompt, num_frames, num_inference_steps, guidance_scale,
@@ -688,8 +713,7 @@ def generate_hf_space_video(prompt: str, output_path: str | Path,
             print(f"    Job submitted, waiting up to {timeout}s...")
             waited = 0
             while not job.done() and waited < timeout:
-                import time as _time
-                _time.sleep(10)
+                time.sleep(10)
                 waited += 10
                 s = job.status()
                 status_str = s.code.name
@@ -712,5 +736,5 @@ def generate_hf_space_video(prompt: str, output_path: str | Path,
         except Exception as e:
             print(f"    Space {space_id} error: {e}")
             continue
-    print("    All HF Spaces failed")
+    print("    All T2V sources failed")
     return False
