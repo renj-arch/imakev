@@ -9,6 +9,7 @@ on:
         default: 'textsync'
         type: choice
         options:
+          - storyboard
           - textsync
           - sketch
           - facts
@@ -32,8 +33,13 @@ on:
           - satisfying
           - negative_hooks
           - try_this
+      topic:
+        description: 'Story topic (for storyboard mode, e.g. how dogs were domesticated)'
+        required: false
+        type: string
+        default: ''
       niche:
-        description: 'Topic niche (optional, e.g. space, animals, brain)'
+        description: 'Topic niche (for facts mode, e.g. space, animals, brain)'
         required: false
         type: string
         default: ''
@@ -96,6 +102,9 @@ jobs:
                 ;;
               textsync)
                 python textsync_video.py
+                ;;
+              storyboard)
+                python storyboard_video.py ${{ inputs.topic }}
                 ;;
               *)
                 python run_pipeline.py "$MODE"
