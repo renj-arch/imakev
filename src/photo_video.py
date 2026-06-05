@@ -625,6 +625,56 @@ def generate_coverr_video(prompt: str, output_path: str | Path) -> bool:
     return False
 
 
+def generate_pexels_video(prompt: str, output_path: str | Path) -> bool:
+    """Download free stock video from Pexels API (free key, email only, 200 req/h)."""
+    api_key = os.getenv("PEXELS_API_KEY")
+    if not api_key:
+        return False
+    output_path = Path(output_path)
+    keywords = _extract_keywords(prompt, max_words=3)
+    if not keywords:
+        return False
+    try:
+        resp = req.get(
+            f"https://api.pexels.com/videos/search?query={keywords}&per_page=5&orientation=portrait",
+            headers={"Authorization": api_key},
+            timeout=15,
+        )
+        if resp.status_code != 200:
+            return False
+        data = resp.json()
+        videos = data.get("videos", [])
+        if not videos:
+            return False
+        for video in videos:
+            video_files = video.get("video_files", [])
+            best = None
+            for vf in video_files:
+                q = vf.get("quality", "")
+                w = vf.get("width", 0)
+                if q == "hd" and w >= 720:
+                    best = vf
+                    break
+                elif q == "sd" and not best:
+                    best = vf
+            if not best:
+                best = video_files[0] if video_files else None
+            if not best:
+                continue
+            dl_url = best.get("link")
+            if not dl_url:
+                continue
+            print(f"    Downloading Pexels video...")
+            rv = req.get(dl_url, timeout=60)
+            if rv.status_code == 200 and len(rv.content) > 50000:
+                output_path.write_bytes(rv.content)
+                print(f"    Pexels video saved ({len(rv.content)} bytes)")
+                return True
+    except Exception:
+        pass
+    return False
+
+
 def generate_lorem_video(output_path: str | Path, w: int = 720, h: int = 1280) -> bool:
     """Download free stock video from lorem.media (no API key, no auth, free for commercial use).
     Returns True if video written successfully."""
@@ -1057,6 +1107,21 @@ def generate_mode_video_background(prompt: str, duration: float, w: int = 720, h
             return vid, False
     except Exception:
         pass
+
+    # Fallback: Pexels stock video (needs free API key)
+    if os.getenv("PEXELS_API_KEY"):
+        print("    Trying Pexels stock video...")
+        try:
+            if generate_pexels_video(prompt, video_path):
+                vid = VideoFileClip(str(video_path))
+                if vid.duration < duration:
+                    clips = [vid] * (int(duration // vid.duration) + 1)
+                    vid = concatenate_videoclips(clips, method="compose").with_duration(duration)
+                else:
+                    vid = vid.with_duration(duration)
+                return vid, False
+        except Exception:
+            pass
 
     # Fallback: AI image Ken Burns
     print("    Trying AI image Ken Burns fallback...")

@@ -31,6 +31,7 @@ VIDEO_FPS = int(os.getenv("VIDEO_FPS", 24))
 SHORTS_SIZE = (VIDEO_WIDTH, VIDEO_HEIGHT)
 
 BRAND_NAME = os.getenv("BRAND_NAME", "")
+PEXELS_API_KEY = os.getenv("PEXELS_API_KEY", "")
 
 
 def get_font() -> str:

@@ -52,6 +52,37 @@ def _try_stock_photo(prompt: str, w: int, h: int) -> Image.Image | None:
     return None
 
 
+def _try_pexels_photo(prompt: str, w: int, h: int) -> Image.Image | None:
+    """Download photo from Pexels API (free key, pexels.com, email only, 200 req/h)."""
+    api_key = os.getenv("PEXELS_API_KEY")
+    if not api_key:
+        return None
+    keywords = _extract_keywords(prompt, max_words=3)
+    if not keywords:
+        return None
+    try:
+        resp = req.get(
+            f"https://api.pexels.com/v1/search?query={keywords}&per_page=5&orientation=portrait",
+            headers={"Authorization": api_key},
+            timeout=15,
+        )
+        if resp.status_code == 200:
+            data = resp.json()
+            photos = data.get("photos", [])
+            if photos:
+                photo_url = photos[0]["src"].get("large2x") or photos[0]["src"].get("large") or photos[0]["src"].get("original")
+                if photo_url:
+                    img_resp = req.get(photo_url, timeout=15)
+                    if img_resp.status_code == 200 and len(img_resp.content) > 10000:
+                        img = Image.open(io.BytesIO(img_resp.content)).convert("RGB")
+                        img = img.resize((w, h), Image.LANCZOS)
+                        print("    >> Got photo from Pexels")
+                        return img
+    except Exception:
+        pass
+    return None
+
+
 def _try_hf_space_image(prompt: str, w: int, h: int) -> Image.Image | None:
     """Generate image via free HF Gradio Space (no API key needed)."""
     try:
@@ -161,7 +192,13 @@ def gen_img(prompt: str, width: int = None, height: int = None) -> Image.Image:
             return img
         time.sleep(ANON_RATE_LIMIT_S)  # respect anonymous tier rate limit
 
-    # Try 2: HF Gradio Space (free SDXL/FLUX, no key, queued)
+    # Try 2: Pexels stock photo (needs free API key from pexels.com, email only)
+    if os.getenv("PEXELS_API_KEY"):
+        img = _try_pexels_photo(prompt, w, h)
+        if img is not None:
+            return img
+
+    # Try 3: HF Gradio Space (free SDXL/FLUX, no key, queued)
     img = _try_hf_space_image(enhanced, w, h)
     if img is not None:
         return img
