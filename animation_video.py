@@ -107,31 +107,76 @@ def main():
     bg = None
     video_path = temp_dir / "ai_video.mp4"
 
-    # --- Priority: REAL AI VIDEO (needs API key or GPU) ---
+    # --- Priority: REAL AI VIDEO (free/no-key methods first) ---
 
-    # Try 1: OpenRouter video API (uses your existing LLM_API_KEY)
-    print("  Try 1: OpenRouter video API (real AI video)...")
-    result, err = _run_with_timeout(
-        generate_openrouter_video,
-        args=(user_prompt, video_path),
-        timeout=330,
-    )
-    if result:
-        try:
-            vid = VideoFileClip(str(video_path))
-            if vid.duration < total_dur:
-                clips = [vid] * (int(total_dur // vid.duration) + 1)
-                vid = concatenate_videoclips(clips, method="compose").with_duration(total_dur)
-            else:
-                vid = vid.with_duration(total_dur)
-            bg = vid
-            print("  >> Using OpenRouter AI video")
-        except Exception as e:
-            print(f"  OpenRouter video load failed: {e}")
-
-    # Try 2: Free.ai video API (free tier, Wan 2.2 / CogVideoX, no GPU)
+    # Try 1: HF Space T2V (free, no key, Gradio Spaces)
     if bg is None:
-        print("  Try 2: Free.ai video API (free AI video)...")
+        print("  Try 1: HF Space / Kaggle T2V (free AI video)...")
+        result, err = _run_with_timeout(
+            generate_hf_space_video,
+            args=(user_prompt, video_path),
+            kwargs={"num_frames": min(32, max(4, int(total_dur * 8))), "num_inference_steps": 25, "timeout": 600},
+            timeout=660,
+        )
+        if result:
+            try:
+                vid = VideoFileClip(str(video_path))
+                if vid.duration < total_dur:
+                    clips = [vid] * (int(total_dur // vid.duration) + 1)
+                    vid = concatenate_videoclips(clips, method="compose").with_duration(total_dur)
+                else:
+                    vid = vid.with_duration(total_dur)
+                bg = vid
+                print("  >> Using HF Space / Kaggle AI video")
+            except Exception as e:
+                print(f"  HF Space video load failed: {e}")
+
+    # Try 2: HF text-to-video (free inference API, no key needed)
+    if bg is None:
+        print("  Try 2: HF text-to-video (free API)...")
+        result, err = _run_with_timeout(
+            generate_hf_text_to_video,
+            args=(user_prompt, video_path),
+            kwargs={"duration": min(5, int(total_dur))},
+            timeout=300,
+        )
+        if result:
+            try:
+                vid = VideoFileClip(str(video_path))
+                if vid.duration < total_dur:
+                    clips = [vid] * (int(total_dur // vid.duration) + 1)
+                    vid = concatenate_videoclips(clips, method="compose").with_duration(total_dur)
+                else:
+                    vid = vid.with_duration(total_dur)
+                bg = vid
+                print("  >> Using HF T2V AI video")
+            except Exception as e:
+                print(f"  HF video load failed: {e}")
+
+    # Try 3: OpenRouter video API (uses your existing LLM_API_KEY)
+    if bg is None:
+        print("  Try 3: OpenRouter video API...")
+        result, err = _run_with_timeout(
+            generate_openrouter_video,
+            args=(user_prompt, video_path),
+            timeout=330,
+        )
+        if result:
+            try:
+                vid = VideoFileClip(str(video_path))
+                if vid.duration < total_dur:
+                    clips = [vid] * (int(total_dur // vid.duration) + 1)
+                    vid = concatenate_videoclips(clips, method="compose").with_duration(total_dur)
+                else:
+                    vid = vid.with_duration(total_dur)
+                bg = vid
+                print("  >> Using OpenRouter AI video")
+            except Exception as e:
+                print(f"  OpenRouter video load failed: {e}")
+
+    # Try 4: Free.ai video API (free tier, Wan 2.2 / CogVideoX)
+    if bg is None:
+        print("  Try 4: Free.ai video API...")
         result, err = _run_with_timeout(
             generate_freeai_video,
             args=(user_prompt, video_path),
@@ -150,9 +195,9 @@ def main():
             except Exception as e:
                 print(f"  Free.ai video load failed: {e}")
 
-    # Try 3: Pollinations.AI video (free API, has your key)
+    # Try 5: Pollinations.AI video
     if bg is None:
-        print("  Try 3: Pollinations.AI video API (real AI video)...")
+        print("  Try 5: Pollinations.AI video API...")
         result, err = _run_with_timeout(
             generate_pollinations_video,
             args=(user_prompt, video_path),
@@ -167,36 +212,13 @@ def main():
                 else:
                     vid = vid.with_duration(total_dur)
                 bg = vid
-                print("  >> Using Pollinations.AI video")
+                print("  >> Using Pollinations AI video")
             except Exception as e:
                 print(f"  Pollinations video load failed: {e}")
 
-    # Try 4: HF Space T2V (or your Kaggle/Colab notebook via T2V_API_URL)
+    # Try 6: CogVideoX-2B (local open-source model, needs GPU)
     if bg is None:
-        print("  Try 4: HF Space / Kaggle T2V (real AI video)...")
-        result, err = _run_with_timeout(
-            generate_hf_space_video,
-            args=(user_prompt, video_path),
-            kwargs={"num_frames": min(32, max(4, int(total_dur * 8))), "num_inference_steps": 25, "timeout": 600},
-            timeout=660,
-        )
-        if result:
-            try:
-                vid = VideoFileClip(str(video_path))
-                total_frames = int(vid.fps * vid.duration)
-                if vid.duration < total_dur:
-                    clips = [vid] * (int(total_dur // vid.duration) + 1)
-                    vid = concatenate_videoclips(clips, method="compose").with_duration(total_dur)
-                else:
-                    vid = vid.with_duration(total_dur)
-                bg = vid
-                print("  >> Using HF Space / Kaggle AI video")
-            except Exception as e:
-                print(f"  AI video load failed: {e}")
-
-    # Try 5: CogVideoX-2B (local open-source model, needs GPU)
-    if bg is None:
-        print("  Try 5: CogVideoX-2B (local GPU)...")
+        print("  Try 6: CogVideoX-2B (local GPU)...")
         result, err = _run_with_timeout(
             generate_cogvideo,
             args=(user_prompt, video_path),
@@ -215,29 +237,6 @@ def main():
                 print("  >> Using CogVideoX video")
             except Exception as e:
                 print(f"  CogVideoX load failed: {e}")
-
-    # Try 6: HF text-to-video (free inference API)
-    if bg is None:
-        print("  Try 6: HF text-to-video (free API)...")
-        result, err = _run_with_timeout(
-            generate_hf_text_to_video,
-            args=(user_prompt, video_path),
-            kwargs={"duration": min(5, int(total_dur))},
-            timeout=120,
-        )
-        if result:
-            try:
-                vid = VideoFileClip(str(video_path))
-                total_frames = int(vid.fps * vid.duration)
-                if vid.duration < total_dur:
-                    clips = [vid] * (int(total_dur // vid.duration) + 1)
-                    vid = concatenate_videoclips(clips, method="compose").with_duration(total_dur)
-                else:
-                    vid = vid.with_duration(total_dur)
-                bg = vid
-                print("  >> Using HF T2V AI video")
-            except Exception as e:
-                print(f"  HF video load failed: {e}")
 
     # --- FALLBACK: No-API sources ---
 

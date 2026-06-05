@@ -509,12 +509,14 @@ def generate_ai_image_video(prompt: str, w: int = 720, h: int = 1280,
 def generate_hf_text_to_video(prompt: str, output_path: str | Path,
                                duration: int = 5, hf_token: str = "") -> bool:
     """Generate real AI video via HuggingFace text-to-video inference.
-    Uses a small T2V model from serverless inference. Requires a HF token for reliable access.
-    Without a token, may fall back to free tier with rate limiting."""
+    Tries multiple models, both serverless and Spaces. No API key needed (but HF_TOKEN helps)."""
     output_path = Path(output_path)
     models_to_try = [
         "genmo/mochi-1-preview",
         "Lightricks/LTX-Video-0.9.8-13B-distilled",
+        "Wan-AI/Wan2.2-T2V-14B",
+        "Wan-AI/Wan2.2-T2V-1.3B",
+        "dataautogpt3/Text-To-Video",
     ]
     last_err = None
     base_urls = [
@@ -525,14 +527,14 @@ def generate_hf_text_to_video(prompt: str, output_path: str | Path,
         for model_id in models_to_try:
             try:
                 url = base_url_template.format(model=model_id)
-                print(f"    HF T2V {url}...")
+                print(f"    HF T2V {model_id}...")
                 headers = {"Content-Type": "application/json"}
                 token = hf_token or os.getenv("HF_TOKEN", "")
                 if token:
                     headers["Authorization"] = f"Bearer {token}"
-                payload = {"inputs": prompt, "parameters": {"num_frames": min(25, int(duration * 8))}}
+                payload = {"inputs": prompt, "parameters": {"num_frames": min(49, int(duration * 8))}}
                 t0 = time.time()
-                r = req.post(url, headers=headers, json=payload, timeout=120)
+                r = req.post(url, headers=headers, json=payload, timeout=180)
                 elapsed = time.time() - t0
                 print(f"    Status {r.status_code} ({elapsed:.0f}s, {len(r.content)} bytes)")
                 if r.status_code == 200 and len(r.content) > 5000:
@@ -541,14 +543,16 @@ def generate_hf_text_to_video(prompt: str, output_path: str | Path,
                     return True
                 if r.status_code in (401, 403):
                     if not token:
-                        print(f"    Auth required — set HF_TOKEN in .env")
-                        break
+                        continue
                     continue
                 if r.status_code == 503:
-                    wait = int(r.headers.get("x-wait-for-model", 30))
+                    try:
+                        wait = min(int(r.headers.get("x-wait-for-model", 60)), 60)
+                    except:
+                        wait = 30
                     print(f"    Model loading, waiting {wait}s...")
-                    time.sleep(min(wait, 30))
-                    r = req.post(url, headers=headers, json=payload, timeout=120)
+                    time.sleep(wait)
+                    r = req.post(url, headers=headers, json=payload, timeout=180)
                     if r.status_code == 200 and len(r.content) > 5000:
                         output_path.write_bytes(r.content)
                         print(f"  HF T2V video saved ({len(r.content)} bytes)")
@@ -557,7 +561,6 @@ def generate_hf_text_to_video(prompt: str, output_path: str | Path,
                 last_err = e
                 estr = str(e)
                 if "getaddrinfo" in estr or "resolve" in estr.lower():
-                    print(f"    DNS failed for {url}")
                     continue
                 print(f"    {model_id} error: {e}")
         if "getaddrinfo" in str(last_err or ""):
@@ -870,9 +873,15 @@ def generate_hf_space_video(prompt: str, output_path: str | Path,
 
     # Priority 2: Public HF Spaces
     spaces = [
-        ("HITMAN6178/text-to-video-gradio-demo", "/generate_video",
+        ("HITMAN6178/text-to-video-gradio-demo", None,
          lambda c: c.predict(prompt, num_frames, num_inference_steps, guidance_scale,
                             api_name="/generate_video")),
+        ("Nymbo/CogVideoX-5B-Space", None,
+         lambda c: c.predict(prompt, api_name="/generate_video")),
+        ("akhaliq/Text-To-Video", None,
+         lambda c: c.predict(prompt, 25, 7.0, api_name="/run")),
+        ("fffiloni/zeroscope-text-to-video", None,
+         lambda c: c.predict(prompt, api_name="/run")),
     ]
 
     for space_id, api_name, predict_fn in spaces:
@@ -883,8 +892,7 @@ def generate_hf_space_video(prompt: str, output_path: str | Path,
                 client = Client.duplicate(space_id, hf_token=hf_token)
             else:
                 client = Client(space_id)
-            job = client.submit(prompt, num_frames, num_inference_steps, guidance_scale,
-                               api_name=api_name)
+            job = predict_fn(client)
             print(f"    Job submitted, waiting up to {timeout}s...")
             waited = 0
             while not job.done() and waited < timeout:
@@ -971,14 +979,14 @@ def generate_mode_video_background(prompt: str, duration: float, w: int = 720, h
     temp_dir.mkdir(parents=True, exist_ok=True)
     video_path = temp_dir / "ai_video.mp4"
 
-    # Try real AI video generation methods
+    # Try real AI video generation methods (free/no-key methods first)
     generators = [
+        ("HF Space T2V", lambda: generate_hf_space_video(prompt, video_path, num_frames=min(32, max(4, int(duration * 8))), num_inference_steps=25, timeout=600), 660),
+        ("HF T2V", lambda: generate_hf_text_to_video(prompt, video_path, duration=min(5, int(duration))), 300),
         ("OpenRouter", lambda: generate_openrouter_video(prompt, video_path), 330),
         ("Free.ai", lambda: generate_freeai_video(prompt, video_path), 180),
         ("Pollinations AI", lambda: generate_pollinations_video(prompt, video_path), 90),
-        ("HF Space T2V", lambda: generate_hf_space_video(prompt, video_path, num_frames=min(32, max(4, int(duration * 8))), num_inference_steps=25, timeout=600), 660),
         ("CogVideoX", lambda: generate_cogvideo(prompt, video_path), 600),
-        ("HF T2V", lambda: generate_hf_text_to_video(prompt, video_path, duration=min(5, int(duration))), 120),
     ]
 
     for name, gen_fn, timeout in generators:
