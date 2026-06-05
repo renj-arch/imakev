@@ -34,6 +34,7 @@ on:
             - try_this
             - animation
             - explainer
+            - cartoon
       prompt:
         description: 'Custom prompt (animation mode only)'
         required: false
@@ -98,7 +99,7 @@ jobs:
               DAY=$(date -u +%-j)
               HOUR=$(date -u +%-H)
               MIN=$(date -u +%-M)
-              MODES=("how_it_works" "facts" "what_if" "riddles" "history_minute" "psychology" "life_hacks" "urban_legends" "coincidences" "unsolved_mysteries" "movie_trivia" "animal_kingdom" "space_wonders" "box_office" "things_they_dont_teach" "challenges" "satisfying" "negative_hooks" "try_this" "animation" "explainer")
+              MODES=("how_it_works" "facts" "what_if" "riddles" "history_minute" "psychology" "life_hacks" "urban_legends" "coincidences" "unsolved_mysteries" "movie_trivia" "animal_kingdom" "space_wonders" "box_office" "things_they_dont_teach" "challenges" "satisfying" "negative_hooks" "try_this" "animation" "explainer" "cartoon")
               SLOT=$(( DAY * 48 + HOUR * 2 + MIN / 30 ))
               MODE="${MODES[$((SLOT % ${#MODES[@]}))]}"
           fi

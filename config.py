@@ -26,9 +26,11 @@ TTS_PROVIDER = os.getenv("TTS_PROVIDER", "edge")
 
 VIDEO_WIDTH = int(os.getenv("VIDEO_WIDTH", 720))
 VIDEO_HEIGHT = int(os.getenv("VIDEO_HEIGHT", 1280))
-VIDEO_FPS = int(os.getenv("VIDEO_FPS", 12))
+VIDEO_FPS = int(os.getenv("VIDEO_FPS", 24))
 
 SHORTS_SIZE = (VIDEO_WIDTH, VIDEO_HEIGHT)
+
+BRAND_NAME = os.getenv("BRAND_NAME", "")
 
 
 def get_font() -> str:

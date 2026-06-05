@@ -51,6 +51,8 @@ python seed_banks.py
 | Mode | Description |
 |------|-------------|
 | `animation` | AI animation from text prompt |
+| `cartoon` | Tom & Jerry style slapstick cartoon (just describe the story!) |
+| `explainer` | Free, local explainer video (Piper TTS, no APIs) |
 | `facts` | Surprising facts short |
 | `what_if` | "What if?" scenarios |
 | `how_it_works` | How things work |
@@ -113,7 +115,7 @@ Enable automatic uploads by:
 
 The included workflow (`.github/workflows/automation.yml`) runs on free GitHub Action minutes:
 - Manual trigger with mode selection
-- Auto mode cycles through all 20 modes
+- Auto mode cycles through all 22+ modes
 - Commits bank updates automatically
 
 ## Project Structure

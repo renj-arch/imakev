@@ -582,7 +582,69 @@ def _draw_duck(draw, x, y, s, fi, action, facing):
 
 
 def _draw_cat(draw, x, y, s, fi, action, facing):
-    c = (180, 140, 100)
+    if action in ("chasing", "squished", "bonked", "flattened"):
+        if action == "squished":
+            c = (220, 160, 80)
+            draw.ellipse([x - 20 * s, y - 4 * s, x + 20 * s, y + 4 * s], fill=c)
+            draw.ellipse([x - 12 * s, y - 8 * s, x + 12 * s, y + 2 * s], fill=c)
+            draw.arc([x - 6 * s, y - 5 * s, x + 6 * s, y - 1 * s], 0, 180, fill=(80, 60, 40), width=2)
+            eye_r = 3 * s
+            draw.ellipse([x - 6 * s - eye_r, y - 6 * s - eye_r, x - 6 * s + eye_r, y - 6 * s + eye_r], fill=(255, 255, 200))
+            draw.ellipse([x + 4 * s - eye_r, y - 6 * s - eye_r, x + 4 * s + eye_r, y - 6 * s + eye_r], fill=(255, 255, 200))
+            draw.ellipse([x - 6 * s - eye_r * 0.4, y - 6 * s - eye_r * 0.4, x - 6 * s + eye_r * 0.4, y - 6 * s + eye_r * 0.4], fill=(10, 10, 10))
+            draw.ellipse([x + 4 * s - eye_r * 0.4, y - 6 * s - eye_r * 0.4, x + 4 * s + eye_r * 0.4, y - 6 * s + eye_r * 0.4], fill=(10, 10, 10))
+            draw.line([(x - 20 * s, y - 4 * s), (x - 28 * s + int(6 * math.sin(fi * 0.2)), y - 12 * s)], fill=c, width=3)
+            return
+        elif action == "bonked":
+            c = (220, 160, 80)
+            draw.ellipse([x - 14 * s, y - 6 * s, x + 14 * s, y + 6 * s], fill=c)
+            draw.ellipse([x - 8 * s, y - 18 * s, x + 8 * s, y - 4 * s], fill=c)
+            draw.polygon([(x - 8 * s, y - 18 * s), (x - 12 * s, y - 26 * s), (x - 4 * s, y - 20 * s)], fill=c)
+            draw.polygon([(x + 8 * s, y - 18 * s), (x + 12 * s, y - 26 * s), (x + 4 * s, y - 20 * s)], fill=c)
+            draw.ellipse([x - 5 * s - 6 * s, y - 18 * s - 6 * s, x - 5 * s + 6 * s, y - 18 * s + 6 * s], fill=(255, 255, 200))
+            draw.ellipse([x + 3 * s - 6 * s, y - 18 * s - 6 * s, x + 3 * s + 6 * s, y - 18 * s + 6 * s], fill=(255, 255, 200))
+            draw.ellipse([x - 5 * s - 2 * s, y - 18 * s - 1 * s, x - 5 * s + 2 * s, y - 18 * s + 1 * s], fill=(10, 10, 10))
+            draw.ellipse([x + 3 * s - 2 * s, y - 18 * s - 1 * s, x + 3 * s + 2 * s, y - 18 * s + 1 * s], fill=(10, 10, 10))
+            stars = [(x - 2 * s, y - 28 * s), (x + 6 * s, y - 30 * s), (x - 8 * s, y - 32 * s)]
+            for sx, sy in stars:
+                draw.polygon([(sx, sy - 3 * s), (sx + 2 * s, sy), (sx, sy + 3 * s), (sx - 2 * s, sy)], fill=(255, 200, 50))
+            draw.line([(x - 14 * s, y - 2 * s), (x - 22 * s, y - 12 * s)], fill=c, width=3)
+            draw.line([(x + 14 * s, y - 2 * s), (x + 22 * s, y - 12 * s)], fill=c, width=3)
+            return
+        elif action == "flattened":
+            c = (220, 160, 80)
+            draw.ellipse([x - 22 * s, y - 2 * s, x + 22 * s, y + 2 * s], fill=c)
+            draw.ellipse([x - 10 * s, y - 5 * s, x + 10 * s, y - 1 * s], fill=c)
+            ear_l = 6 * s
+            draw.polygon([(x - 8 * s, y - 5 * s), (x - 4 * s, y - 2 * s), (x - 2 * s, y - 5 * s)], fill=c)
+            draw.polygon([(x + 8 * s, y - 5 * s), (x + 4 * s, y - 2 * s), (x + 2 * s, y - 5 * s)], fill=c)
+            draw.ellipse([x - 4 * s - 3 * s, y - 4 * s, x - 4 * s + 1 * s, y - 2 * s], fill=(255, 255, 200))
+            draw.ellipse([x + 4 * s - 1 * s, y - 4 * s, x + 4 * s + 3 * s, y - 2 * s], fill=(255, 255, 200))
+            draw.line([(x - 22 * s, y - 2 * s), (x - 30 * s, y - 6 * s)], fill=c, width=2)
+            draw.line([(x + 22 * s, y - 2 * s), (x + 30 * s, y - 6 * s)], fill=c, width=2)
+            return
+        elif action == "chasing":
+            c = (220, 160, 80)
+            draw.ellipse([x - 16 * s, y - 6 * s, x + 16 * s, y + 6 * s], fill=c)
+            draw.ellipse([x - 8 * s, y - 20 * s, x + 8 * s, y - 4 * s], fill=c)
+            draw.polygon([(x - 8 * s, y - 20 * s), (x - 14 * s, y - 30 * s), (x - 4 * s, y - 22 * s)], fill=c)
+            draw.polygon([(x + 8 * s, y - 20 * s), (x + 14 * s, y - 30 * s), (x + 4 * s, y - 22 * s)], fill=c)
+            eye_r = 4 * s
+            draw.ellipse([x - 6 * s - eye_r, y - 16 * s - eye_r, x - 6 * s + eye_r, y - 16 * s + eye_r], fill=(255, 255, 200))
+            draw.ellipse([x + 4 * s - eye_r, y - 16 * s - eye_r, x + 4 * s + eye_r, y - 16 * s + eye_r], fill=(255, 255, 200))
+            pupil = 1.5 * s
+            draw.ellipse([x - 6 * s - pupil, y - 16 * s, x - 6 * s + pupil, y - 16 * s + 2 * s], fill=(10, 10, 10))
+            draw.ellipse([x + 4 * s - pupil, y - 16 * s, x + 4 * s + pupil, y - 16 * s + 2 * s], fill=(10, 10, 10))
+            leg_m = 6 * math.sin(fi * 0.4)
+            draw.line([(x - 10 * s, y + 4 * s), (x - 12 * s + leg_m, y + 14 * s)], fill=c, width=3)
+            draw.line([(x + 10 * s, y + 4 * s), (x + 14 * s - leg_m, y + 14 * s)], fill=c, width=3)
+            draw.line([(x - 4 * s, y + 4 * s), (x - 2 * s + leg_m, y + 14 * s)], fill=c, width=3)
+            draw.line([(x + 4 * s, y + 4 * s), (x + 6 * s - leg_m, y + 14 * s)], fill=c, width=3)
+            tail_x = x + 16 * s + int(14 * math.sin(fi * 0.3))
+            tail_y = y - 2 * s + int(10 * math.cos(fi * 0.2))
+            draw.line([(x + 14 * s, y - 2 * s), (tail_x + 10 * s, tail_y - 8 * s)], fill=c, width=3)
+            return
+    c = (220, 160, 80)
     draw.ellipse([x - 14 * s, y - 6 * s, x + 14 * s, y + 6 * s], fill=c)
     draw.ellipse([x - 8 * s, y - 18 * s, x + 8 * s, y - 4 * s], fill=c)
     ear_h = 8 * s
@@ -596,6 +658,61 @@ def _draw_cat(draw, x, y, s, fi, action, facing):
     tail_x = x + 14 * s + int(8 * math.sin(fi * 0.15))
     tail_y = y - 2 * s + int(6 * math.cos(fi * 0.12))
     draw.line([(x + 12 * s, y - 2 * s), (tail_x + 8 * s, tail_y - 6 * s)], fill=c, width=3)
+
+
+def _draw_mouse(draw, x, y, s, fi, action, facing):
+    body_c = (180, 160, 140)
+    ear_c = (220, 180, 180)
+    if action == "squished":
+        draw.ellipse([x - 10 * s, y - 3 * s, x + 10 * s, y + 3 * s], fill=body_c)
+        draw.ellipse([x - 4 * s, y - 7 * s, x + 4 * s, y - 2 * s], fill=body_c)
+        draw.ellipse([x - 8 * s - 4 * s, y - 7 * s, x - 8 * s + 4 * s, y - 2 * s], fill=ear_c)
+        draw.ellipse([x + 8 * s - 4 * s, y - 7 * s, x + 8 * s + 4 * s, y - 2 * s], fill=ear_c)
+        draw.ellipse([x - 2 * s - 2 * s, y - 6 * s - 1 * s, x - 2 * s + 2 * s, y - 6 * s + 1 * s], fill=(10, 10, 10))
+        draw.ellipse([x + 3 * s - 2 * s, y - 6 * s - 1 * s, x + 3 * s + 2 * s, y - 6 * s + 1 * s], fill=(10, 10, 10))
+        draw.ellipse([x - 1 * s, y - 3 * s, x + 1 * s, y - 1 * s], fill=(255, 150, 180))
+        draw.line([(x - 10 * s, y - 2 * s), (x - 14 * s, y - 6 * s)], fill=body_c, width=2)
+        return
+    elif action == "bonked":
+        draw.ellipse([x - 8 * s, y - 5 * s, x + 8 * s, y + 5 * s], fill=body_c)
+        draw.ellipse([x - 4 * s, y - 12 * s, x + 4 * s, y - 3 * s], fill=body_c)
+        draw.ellipse([x - 8 * s - 5 * s, y - 10 * s, x - 8 * s + 5 * s, y - 3 * s], fill=ear_c)
+        draw.ellipse([x + 8 * s - 5 * s, y - 10 * s, x + 8 * s + 5 * s, y - 3 * s], fill=ear_c)
+        draw.ellipse([x - 3 * s - 3 * s, y - 10 * s - 2 * s, x - 3 * s + 3 * s, y - 10 * s + 2 * s], fill=(255, 255, 255))
+        draw.ellipse([x + 3 * s - 3 * s, y - 10 * s - 2 * s, x + 3 * s + 3 * s, y - 10 * s + 2 * s], fill=(255, 255, 255))
+        draw.ellipse([x - 3 * s - 1 * s, y - 10 * s, x - 3 * s + 1 * s, y - 10 * s + 1 * s], fill=(10, 10, 10))
+        draw.ellipse([x + 3 * s - 1 * s, y - 10 * s, x + 3 * s + 1 * s, y - 10 * s + 1 * s], fill=(10, 10, 10))
+        draw.ellipse([x - 1 * s, y - 6 * s, x + 1 * s, y - 5 * s], fill=(255, 150, 180))
+        stars = [(x - 2 * s, y - 18 * s), (x + 4 * s, y - 20 * s), (x - 6 * s, y - 22 * s)]
+        for sx, sy in stars:
+            draw.polygon([(sx, sy - 2 * s), (sx + 1 * s, sy), (sx, sy + 2 * s), (sx - 1 * s, sy)], fill=(255, 200, 50))
+        return
+    elif action == "chased":
+        draw.ellipse([x - 8 * s, y - 5 * s, x + 8 * s, y + 5 * s], fill=body_c)
+        draw.ellipse([x - 4 * s, y - 12 * s, x + 4 * s, y - 3 * s], fill=body_c)
+        draw.ellipse([x - 8 * s - 5 * s, y - 10 * s, x - 8 * s + 5 * s, y - 3 * s], fill=ear_c)
+        draw.ellipse([x + 8 * s - 5 * s, y - 10 * s, x + 8 * s + 5 * s, y - 3 * s], fill=ear_c)
+        eye_r = 3 * s
+        draw.ellipse([x - 3 * s - eye_r, y - 10 * s - eye_r, x - 3 * s + eye_r, y - 10 * s + eye_r], fill=(255, 255, 255))
+        draw.ellipse([x + 3 * s - eye_r, y - 10 * s - eye_r, x + 3 * s + eye_r, y - 10 * s + eye_r], fill=(255, 255, 255))
+        draw.ellipse([x - 3 * s - 1 * s, y - 10 * s, x - 3 * s + 1 * s, y - 10 * s + 1 * s], fill=(10, 10, 10))
+        draw.ellipse([x + 3 * s - 1 * s, y - 10 * s, x + 3 * s + 1 * s, y - 10 * s + 1 * s], fill=(10, 10, 10))
+        tail_fr = 6 * math.sin(fi * 0.3)
+        draw.line([(x + 6 * s * facing, y + 2 * s), (x + 14 * s * facing + tail_fr, y - 4 * s + tail_fr)], fill=body_c, width=2)
+        leg_f = 4 * math.sin(fi * 0.4)
+        draw.line([(x - 3 * s, y + 4 * s), (x - 4 * s + leg_f, y + 10 * s)], fill=body_c, width=2)
+        draw.line([(x + 3 * s, y + 4 * s), (x + 5 * s - leg_f, y + 10 * s)], fill=body_c, width=2)
+        return
+    draw.ellipse([x - 8 * s, y - 5 * s, x + 8 * s, y + 5 * s], fill=body_c)
+    draw.ellipse([x - 4 * s, y - 12 * s, x + 4 * s, y - 3 * s], fill=body_c)
+    draw.ellipse([x - 8 * s - 5 * s, y - 10 * s, x - 8 * s + 5 * s, y - 3 * s], fill=ear_c)
+    draw.ellipse([x + 8 * s - 5 * s, y - 10 * s, x + 8 * s + 5 * s, y - 3 * s], fill=ear_c)
+    draw.ellipse([x - 3 * s - 2 * s, y - 10 * s - 2 * s, x - 3 * s + 2 * s, y - 10 * s + 2 * s], fill=(10, 10, 10))
+    draw.ellipse([x + 3 * s - 2 * s, y - 10 * s - 2 * s, x + 3 * s + 2 * s, y - 10 * s + 2 * s], fill=(10, 10, 10))
+    draw.ellipse([x - 1 * s, y - 6 * s, x + 1 * s, y - 5 * s], fill=(255, 150, 180))
+    draw.line([(x + 6 * s * facing, y + 2 * s), (x + 12 * s * facing + int(4 * math.sin(fi * 0.2)), y - 2 * s)], fill=body_c, width=2)
+    draw.line([(x - 3 * s, y + 4 * s), (x - 4 * s, y + 10 * s)], fill=body_c, width=2)
+    draw.line([(x + 3 * s, y + 4 * s), (x + 4 * s, y + 10 * s)], fill=body_c, width=2)
 
 
 def _draw_dragon(draw, x, y, s, fi, action, facing):
@@ -779,6 +896,7 @@ _CHAR_DRAWERS: dict[str, Callable] = {
     "owl": _draw_owl,
     "turtle": _draw_turtle,
     "penguin": _draw_penguin,
+    "mouse": _draw_mouse,
 }
 
 
@@ -799,7 +917,8 @@ CHAR_KEYWORDS = {
     "crocodile": "crocodile", "gator": "crocodile", "croc": "crocodile",
     "elephant": "elephant",
     "duck": "duck", "swan": "duck", "goose": "duck",
-    "cat": "cat", "kitten": "cat",
+    "cat": "cat", "kitten": "cat", "tom": "cat",
+    "mouse": "mouse", "mice": "mouse", "rat": "mouse", "jerry": "mouse",
     "dragon": "dragon",
     "fish": "fish", "jellyfish": "fish",
     "fox": "fox",
@@ -821,6 +940,8 @@ BG_KEYWORDS: dict[str, str] = {
     "snow": "snow", "ice": "snow", "winter": "snow",
     "sunset": "sunset", "sunrise": "sunset", "dusk": "sunset", "dawn": "sunset",
     "space": "space", "star": "space", "galaxy": "space", "planet": "space",
+    "kitchen": "city", "house": "city", "home": "city", "room": "city",
+    "indoors": "city", "indoor": "city", "floor": "city",
     "sky": "sky", "cloud": "sky",
     "underwater": "underwater", "coral": "underwater", "reef": "underwater",
     "volcano": "volcano", "lava": "volcano", "eruption": "volcano",
@@ -854,6 +975,25 @@ ACTION_KEYWORDS: dict[str, str] = {
     "shrug": "shrug", "shrugging": "shrug", "shrugs": "shrug",
     "snap": "snapping", "snapping": "snapping", "snaps": "snapping",
     "bite": "snapping", "chomp": "snapping",
+    "chase": "chasing", "chasing": "chasing", "chases": "chasing",
+    "chased": "chasing", "pursue": "chasing", "pursues": "chasing",
+    "pursued": "chasing", "run after": "chasing",
+    "squish": "squished", "squished": "squished", "squishes": "squished",
+    "squashing": "squished", "squashed": "squished",
+    "flatten": "flattened", "flattened": "flattened", "flattens": "flattened",
+    "squash": "squished", "flat": "flattened",
+    "bonk": "bonked", "bonked": "bonked", "bonks": "bonked",
+    "bop": "bonked", "bopped": "bonked",
+    "hit": "bonked", "hits": "bonked", "whack": "bonked",
+    "whacks": "bonked", "whacked": "bonked",
+    "smash": "bonked", "smashes": "bonked", "smashed": "bonked",
+    "trick": "shrug", "tricks": "shrug", "tricked": "shrug",
+    "tricking": "shrug",
+    "outsmart": "shrug", "outsmarts": "shrug", "outwits": "shrug",
+    "hide": "sitting", "hides": "sitting", "hiding": "sitting",
+    "flee": "chased", "flees": "chased", "fled": "chased",
+    "escape": "chased", "escapes": "chased", "escaped": "chased",
+    "run away": "chased", "runs away": "chased", "ran away": "chased",
 }
 
 RIDING_ADDITIONS = {
@@ -923,6 +1063,7 @@ def parse_prompt_to_scenes(prompt: str, max_scenes: int = 6) -> list[Scene]:
             return result
 
         action_priority = [
+            "chasing", "chased", "squished", "bonked", "flattened",
             "riding", "flying", "spinning", "slipping", "snapping",
             "sleeping", "eating", "jumping", "dancing", "shrug",
             "shocked", "walking", "sitting",
@@ -968,7 +1109,7 @@ def parse_prompt_to_scenes(prompt: str, max_scenes: int = 6) -> list[Scene]:
                 y_base = 0.25 + 0.12 * (i % 2)
             elif action in ("swimming", "snapping"):
                 y_base = 0.65
-            elif action in ("shocked", "shrug", "slipping", "spinning", "riding", "sleeping", "sitting"):
+            elif action in ("shocked", "shrug", "slipping", "spinning", "riding", "sleeping", "sitting", "squished", "bonked", "flattened"):
                 y_base = 0.55
 
             chars.append(Char(name=ch_name, x=x_pos, y=y_base, action=action, facing=facing))

@@ -193,7 +193,7 @@ def main():
     t0 = time.time()
     final.write_videofile(
         str(out), fps=config.VIDEO_FPS, codec="libx264", audio_codec="aac",
-        threads=4, preset="ultrafast", ffmpeg_params=["-movflags", "+faststart"],
+        threads=4, preset="medium", ffmpeg_params=["-crf", "18", "-movflags", "+faststart"],
         logger=None,
     )
     final.close()

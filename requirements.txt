@@ -10,6 +10,7 @@ requests>=2.0
 gradio-client>=1.0
 piper-tts>=1.4.0
 opencv-python>=4.8.0
+free-dot-ai>=0.2.0
 
 # Optional: local AI video generation (needs GPU)
 # pip install imakev[local]

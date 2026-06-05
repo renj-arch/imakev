@@ -161,7 +161,7 @@ def main():
     out.unlink(missing_ok=True)
     print(f"  {total_dur + 0.8:.1f}s | {W}x{H}")
     t0 = time.time()
-    final.write_videofile(str(out), fps=config.VIDEO_FPS, codec="libx264", audio_codec="aac", threads=4, preset="ultrafast", ffmpeg_params=["-movflags", "+faststart"], logger=None)
+    final.write_videofile(str(out), fps=config.VIDEO_FPS, codec="libx264", audio_codec="aac", threads=4, preset="medium", ffmpeg_params=["-crf", "18", "-movflags", "+faststart"], logger=None)
     final.close()
     t1 = time.time()
     print(f"\n  DONE in {t1-t0:.0f}s: {out}")

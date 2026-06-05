@@ -683,6 +683,150 @@ def generate_pollinations_video(prompt: str, output_path: str | Path,
         return False
 
 
+def generate_freeai_video(prompt: str, output_path: str | Path,
+                          timeout: int = 120,
+                          model: str = "") -> bool:
+    """Generate AI video via Free.ai API (free tier, no GPU needed).
+    First tries Free.ai SDK anonymous mode (no API key needed, daily free limits).
+    Falls back to key-based HTTP if SDK unavailable or anonymous fails.
+    Free models: cogvideox (default, self-hosted), wan22-ti2v-5b (Wan 2.2), hunyuan-video.
+    Free account: 30K tokens/day, ~6 videos/day. No credit card needed."""
+    output_path = Path(output_path)
+    key = os.getenv("FREEAI_API_KEY", "")
+    model = model or os.getenv("FREEAI_VIDEO_MODEL", "cogvideox")
+
+    # Try 1: Free.ai SDK anonymous mode (no key needed)
+    try:
+        from freeai import FreeAI
+        print(f"    Free.ai SDK (anonymous): {prompt[:60]}...")
+        t0 = time.time()
+        ai = FreeAI()
+        video = ai.video(prompt, model=model)
+        video.save(str(output_path))
+        sz = output_path.stat().st_size
+        elapsed = time.time() - t0
+        print(f"    Free.ai SDK saved ({sz} bytes) in {elapsed:.0f}s")
+        return True
+    except ImportError:
+        print(f"    free-dot-ai SDK not installed")
+    except Exception as e:
+        estr = str(e)
+        if "402" in estr or "InsufficientCredits" in estr:
+            print(f"    Free.ai SDK: daily token pool exhausted")
+        elif "401" in estr or "Authentication" in estr:
+            print(f"    Free.ai SDK: anonymous not allowed for video")
+        else:
+            print(f"    Free.ai SDK error: {estr[:200]}")
+
+    # Try 2: Raw HTTP with API key (if configured)
+    if not key:
+        print("    FREEAI_API_KEY not set, skipping key-based fallback")
+        return False
+    try:
+        url = "https://api.free.ai/v1/video/generate/"
+        headers = {"Authorization": f"Bearer {key}", "Content-Type": "application/json"}
+        payload = {
+            "prompt": prompt,
+            "duration": 5,
+            "model": model,
+        }
+        print(f"    Free.ai HTTP ({model}): {prompt[:60]}...")
+        t0 = time.time()
+        r = req.post(url, headers=headers, json=payload, timeout=timeout)
+        elapsed = time.time() - t0
+        print(f"    Status {r.status_code} ({elapsed:.0f}s)")
+        if r.status_code != 200:
+            print(f"    Free.ai error: {r.status_code} {r.text[:200]}")
+            return False
+        data = r.json()
+        video_url = data.get("video_url", "")
+        if not video_url:
+            print(f"    No video_url in response")
+            return False
+        print(f"    Downloading video...")
+        rv = req.get(video_url, timeout=120)
+        if rv.status_code == 200 and len(rv.content) > 5000:
+            output_path.write_bytes(rv.content)
+            sz = output_path.stat().st_size
+            print(f"    Free.ai video saved ({sz} bytes)")
+            return True
+        print(f"    Download failed: {rv.status_code} ({len(rv.content)} bytes)")
+        return False
+    except Exception as e:
+        print(f"    Free.ai HTTP error: {e}")
+        return False
+
+
+def generate_openrouter_video(prompt: str, output_path: str | Path,
+                              timeout: int = 300,
+                              model: str = "") -> bool:
+    """Generate AI video via OpenRouter API (uses your existing LLM_API_KEY).
+    Model defaults to OPENROUTER_VIDEO_MODEL env var or 'google/veo-3.1-lite'.
+    Polls async job until completion, then downloads the video."""
+    output_path = Path(output_path)
+    api_key = os.getenv("LLM_API_KEY", "")
+    if not api_key:
+        print("    LLM_API_KEY not set, skipping OpenRouter video")
+        return False
+    model = model or os.getenv("OPENROUTER_VIDEO_MODEL", "kwaivgi/kling-v3.0-std")
+    base = "https://openrouter.ai/api/v1"
+    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
+    try:
+        quality_prompt = f"{prompt}, cinematic, highly detailed, smooth motion, 4K, sharp focus, professional"
+        payload = {
+            "model": model,
+            "prompt": quality_prompt,
+            "duration": 5,
+            "resolution": "1080p",
+            "aspect_ratio": "9:16",
+            "generate_audio": False,
+        }
+        print(f"    OpenRouter video: model={model}")
+        r = req.post(f"{base}/videos", headers=headers, json=payload, timeout=30)
+        if r.status_code not in (200, 202):
+            print(f"    OpenRouter submit failed: {r.status_code} {r.text[:200]}")
+            return False
+        job = r.json()
+        job_id = job.get("id", "")
+        polling_url = job.get("polling_url", f"{base}/videos/{job_id}")
+        print(f"    Job submitted: {job_id}")
+        deadline = time.time() + timeout
+        while time.time() < deadline:
+            r2 = req.get(polling_url, headers=headers, timeout=30)
+            if r2.status_code != 200:
+                print(f"    Poll failed: {r2.status_code}")
+                time.sleep(5)
+                continue
+            status = r2.json()
+            s = status.get("status", "")
+            print(f"      Status: {s}")
+            if s == "completed":
+                unsigned_urls = status.get("unsigned_urls", [])
+                if unsigned_urls:
+                    dl_url = unsigned_urls[0]
+                else:
+                    dl_url = f"{base}/videos/{job_id}/content?index=0"
+                dl_headers = dict(headers) if "openrouter.ai" in dl_url else {}
+                r3 = req.get(dl_url, headers=dl_headers, timeout=120)
+                if r3.status_code == 200 and len(r3.content) > 5000:
+                    output_path.write_bytes(r3.content)
+                    sz = output_path.stat().st_size
+                    print(f"    OpenRouter video saved ({sz} bytes)")
+                    return True
+                print(f"    Download failed: {r3.status_code} ({len(r3.content)} bytes)")
+                return False
+            if s in ("failed", "error", "cancelled"):
+                err_msg = status.get("error", status.get("message", "unknown"))
+                print(f"    OpenRouter job failed: {err_msg}")
+                return False
+            time.sleep(5)
+        print(f"    OpenRouter job timed out ({timeout}s)")
+        return False
+    except Exception as e:
+        print(f"    OpenRouter error: {e}")
+        return False
+
+
 def generate_hf_space_video(prompt: str, output_path: str | Path,
                             num_frames: int = 16, num_inference_steps: int = 20,
                             guidance_scale: float = 7.5, timeout: int = 600) -> bool:
@@ -806,10 +950,90 @@ def generate_cogvideo(prompt: str, output_path: str | Path,
         elapsed = time.time() - t0
         print(f"    Generated in {elapsed:.1f}s, exporting...")
         from diffusers.utils import export_to_video
-        export_to_video(result, str(output_path), fps=8)
+        export_to_video(result, str(output_path), fps=24)
         sz = output_path.stat().st_size
         print(f"    CogVideoX video saved ({sz} bytes)")
         return sz > 1000
     except Exception as e:
         print(f"    CogVideoX error: {e}")
         return False
+
+
+def generate_mode_video_background(prompt: str, duration: float, w: int = 720, h: int = 1280,
+                                    fps: int = 24) -> tuple:
+    """Try to generate a real AI video background for any mode.
+    Returns (VideoClip, bool) — bool indicates if real AI video was used.
+    Falls back through all available methods, ending at image-based Ken Burns."""
+    import numpy as np
+    from moviepy import VideoFileClip, VideoClip, concatenate_videoclips
+
+    temp_dir = Path("temp") / "mode_video"
+    temp_dir.mkdir(parents=True, exist_ok=True)
+    video_path = temp_dir / "ai_video.mp4"
+
+    # Try real AI video generation methods
+    generators = [
+        ("OpenRouter", lambda: generate_openrouter_video(prompt, video_path), 330),
+        ("Free.ai", lambda: generate_freeai_video(prompt, video_path), 180),
+        ("Pollinations AI", lambda: generate_pollinations_video(prompt, video_path), 90),
+        ("HF Space T2V", lambda: generate_hf_space_video(prompt, video_path, num_frames=min(32, max(4, int(duration * 8))), num_inference_steps=25, timeout=600), 660),
+        ("CogVideoX", lambda: generate_cogvideo(prompt, video_path), 600),
+        ("HF T2V", lambda: generate_hf_text_to_video(prompt, video_path, duration=min(5, int(duration))), 120),
+    ]
+
+    for name, gen_fn, timeout in generators:
+        print(f"    [{name}] real AI video...")
+        try:
+            import threading
+            result = [False]
+            error = [None]
+            done = threading.Event()
+            def worker():
+                try:
+                    result[0] = gen_fn()
+                except Exception as e:
+                    error[0] = e
+                finally:
+                    done.set()
+            t = threading.Thread(target=worker, daemon=True)
+            t.start()
+            if done.wait(timeout=timeout):
+                if result[0]:
+                    try:
+                        vid = VideoFileClip(str(video_path))
+                        if vid.duration < duration:
+                            clips = [vid] * (int(duration // vid.duration) + 1)
+                            vid = concatenate_videoclips(clips, method="compose").with_duration(duration)
+                        else:
+                            vid = vid.with_duration(duration)
+                        print(f"    >> Using {name} AI video")
+                        return vid, True
+                    except Exception as e:
+                        print(f"    {name} load failed: {e}")
+            else:
+                print(f"    {name} timed out ({timeout}s)")
+        except Exception as e:
+            print(f"    {name} error: {e}")
+
+    # Fallback: AI image Ken Burns
+    print("    Trying AI image Ken Burns fallback...")
+    frames = generate_ai_image_video(prompt, w, h, int(duration * fps), fps)
+    if frames:
+        total_frames = len(frames)
+        frame_dur = duration / max(total_frames, 1)
+        def make_frame(t):
+            return frames[min(int(t / frame_dur), total_frames - 1)]
+        return VideoClip(make_frame, duration=duration), False
+
+    # Fallback: Stock photo Ken Burns
+    print("    Trying stock photo Ken Burns fallback...")
+    frames = generate_stock_photo_video(prompt, w, h, int(duration * fps), fps)
+    if frames:
+        total_frames = len(frames)
+        frame_dur = duration / max(total_frames, 1)
+        def make_frame2(t):
+            return frames[min(int(t / frame_dur), total_frames - 1)]
+        return VideoClip(make_frame2, duration=duration), False
+
+    print("    All video generation methods exhausted")
+    return None, False

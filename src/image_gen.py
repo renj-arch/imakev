@@ -10,30 +10,53 @@ MAX_RETRIES = 1
 RETRY_DELAY = 2
 
 
+_prompt_enhancers = [
+    ", cinematic lighting, dramatic shadows, 4K, photorealistic, highly detailed",
+    ", golden hour, warm tones, volumetric lighting, sharp focus, 8K",
+    ", moody atmosphere, rim lighting, deep colors, professional photography",
+    ", soft natural light, film grain, cinematic composition, depth of field",
+    ", dramatic side lighting, rich textures, ultra detailed, cinematic mood",
+]
+
+
+def _enhance_prompt(prompt: str, seed: int) -> str:
+    enhancer = _prompt_enhancers[seed % len(_prompt_enhancers)]
+    return f"{prompt}{enhancer}"
+
+
 def gen_img(prompt: str, width: int = None, height: int = None) -> Image.Image:
     w = width or config.VIDEO_WIDTH
     h = height or config.VIDEO_HEIGHT
+    seed = random.randint(0, 999999)
+    enhanced = _enhance_prompt(prompt, seed)
     for model in ("flux", "sana"):
-        img = _try_pollinations(prompt, w, h, model)
+        img = _try_pollinations(enhanced, w, h, model, seed)
         if img is not None:
             return img
-    return _generate_scene(w, h, prompt)
+    enhanced2 = _enhance_prompt(prompt, seed + 1)
+    for model in ("flux", "sana"):
+        img = _try_pollinations(enhanced2, w, h, model, seed + 1)
+        if img is not None:
+            return img
+    return _generate_scene(w, h, enhanced)
 
 
-def _try_pollinations(prompt: str, w: int, h: int, model: str, timeout: int = 30) -> Image.Image | None:
-    for attempt in range(MAX_RETRIES):
-        seed = random.randint(0, 999999)
-        url = POLLINATIONS_URL.format(prompt=req.utils.quote(prompt), w=w, h=h, model=model, seed=seed)
+def _try_pollinations(prompt: str, w: int, h: int, model: str, seed: int = 0, timeout: int = 45) -> Image.Image | None:
+    for attempt in range(MAX_RETRIES + 1):
+        s = seed + attempt
+        url = POLLINATIONS_URL.format(prompt=req.utils.quote(prompt), w=w, h=h, model=model, seed=s)
         try:
             r = req.get(url, timeout=timeout)
             if r.status_code == 200 and len(r.content) > 500:
                 img = Image.open(io.BytesIO(r.content)).convert("RGB")
+                img = img.resize((w * 2, h * 2), Image.LANCZOS)
                 img = img.resize((w, h), Image.LANCZOS)
-                img = ImageEnhance.Contrast(img).enhance(1.3)
+                img = ImageEnhance.Contrast(img).enhance(1.1)
+                img = ImageEnhance.Sharpness(img).enhance(1.15)
                 return img
         except Exception:
             pass
-        if attempt < MAX_RETRIES - 1:
+        if attempt < MAX_RETRIES:
             time.sleep(RETRY_DELAY)
     return None
 

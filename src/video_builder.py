@@ -164,6 +164,7 @@ def build_shorts_video(
         audio_codec="aac",
         threads=4,
         preset="medium",
+        ffmpeg_params=["-crf", "18", "-movflags", "+faststart"],
         logger=None,
     )
 

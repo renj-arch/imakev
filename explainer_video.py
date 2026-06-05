@@ -123,7 +123,7 @@ def main():
     out = config.OUTPUT_DIR / f"explainer_{safe}.mp4"
     out.unlink(missing_ok=True)
     t0 = time.time()
-    final.write_videofile(str(out), fps=FPS, codec="libx264", audio_codec="aac", threads=4, preset="ultrafast", logger=None)
+    final.write_videofile(str(out), fps=FPS, codec="libx264", audio_codec="aac", threads=4, preset="medium", ffmpeg_params=["-crf", "18", "-movflags", "+faststart"], logger=None)
     final.close()
     print(f"\n  DONE in {time.time()-t0:.0f}s: {out}")
     return out

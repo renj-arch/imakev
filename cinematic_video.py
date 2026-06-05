@@ -150,7 +150,7 @@ def main():
     safe_title = TITLE.lower().replace(" ", "_").replace("&", "and").replace("'", "")[:50]
     out = config.OUTPUT_DIR / f"{safe_title}.mp4"
     print(f"  {total_dur:.1f}s | {W}x{H}")
-    final.write_videofile(str(out), fps=config.VIDEO_FPS, codec="libx264", audio_codec="aac", threads=4, preset="ultrafast", ffmpeg_params=["-movflags", "+faststart"], logger=None)
+    final.write_videofile(str(out), fps=config.VIDEO_FPS, codec="libx264", audio_codec="aac", threads=4, preset="medium", ffmpeg_params=["-movflags", "+faststart", "-crf", "18"], logger=None)
     final.close()
     print(f"\n  DONE: {out}")
 

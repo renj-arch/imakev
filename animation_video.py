@@ -20,11 +20,13 @@ from src.engagement import (
     branding_overlays,
     get_audio_duration,
 )
-from src.photo_video import generate_hf_text_to_video, generate_ai_image_video, generate_stock_photo_video, generate_photorealistic_frames, generate_coverr_video, generate_hf_space_video, generate_pollinations_video, generate_cogvideo
+from src.photo_video import generate_hf_text_to_video, generate_ai_image_video, generate_stock_photo_video, generate_photorealistic_frames, generate_coverr_video, generate_hf_space_video, generate_pollinations_video, generate_cogvideo, generate_openrouter_video, generate_freeai_video
 from src.motion_video import generate_motion_video
+from src.cinematic import enhance_frame, render_brand_overlay
 
 W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
 FPS = config.VIDEO_FPS
+BRAND = config.BRAND_NAME
 
 
 def _run_with_timeout(fn, args=(), kwargs=None, timeout=60):
@@ -107,12 +109,12 @@ def main():
 
     # --- Priority: REAL AI VIDEO (needs API key or GPU) ---
 
-    # Try 1: Pollinations.AI video (free API, has your key, real AI-generated video)
-    print("  Try 1: Pollinations.AI video API (real AI video)...")
+    # Try 1: OpenRouter video API (uses your existing LLM_API_KEY)
+    print("  Try 1: OpenRouter video API (real AI video)...")
     result, err = _run_with_timeout(
-        generate_pollinations_video,
+        generate_openrouter_video,
         args=(user_prompt, video_path),
-        timeout=90,
+        timeout=330,
     )
     if result:
         try:
@@ -123,13 +125,55 @@ def main():
             else:
                 vid = vid.with_duration(total_dur)
             bg = vid
-            print("  >> Using Pollinations.AI video")
+            print("  >> Using OpenRouter AI video")
         except Exception as e:
-            print(f"  Pollinations video load failed: {e}")
+            print(f"  OpenRouter video load failed: {e}")
 
-    # Try 2: HF Space T2V (or your Kaggle/Colab notebook via T2V_API_URL)
+    # Try 2: Free.ai video API (free tier, Wan 2.2 / CogVideoX, no GPU)
     if bg is None:
-        print("  Try 2: HF Space / Kaggle T2V (real AI video)...")
+        print("  Try 2: Free.ai video API (free AI video)...")
+        result, err = _run_with_timeout(
+            generate_freeai_video,
+            args=(user_prompt, video_path),
+            timeout=180,
+        )
+        if result:
+            try:
+                vid = VideoFileClip(str(video_path))
+                if vid.duration < total_dur:
+                    clips = [vid] * (int(total_dur // vid.duration) + 1)
+                    vid = concatenate_videoclips(clips, method="compose").with_duration(total_dur)
+                else:
+                    vid = vid.with_duration(total_dur)
+                bg = vid
+                print("  >> Using Free.ai AI video")
+            except Exception as e:
+                print(f"  Free.ai video load failed: {e}")
+
+    # Try 3: Pollinations.AI video (free API, has your key)
+    if bg is None:
+        print("  Try 3: Pollinations.AI video API (real AI video)...")
+        result, err = _run_with_timeout(
+            generate_pollinations_video,
+            args=(user_prompt, video_path),
+            timeout=90,
+        )
+        if result:
+            try:
+                vid = VideoFileClip(str(video_path))
+                if vid.duration < total_dur:
+                    clips = [vid] * (int(total_dur // vid.duration) + 1)
+                    vid = concatenate_videoclips(clips, method="compose").with_duration(total_dur)
+                else:
+                    vid = vid.with_duration(total_dur)
+                bg = vid
+                print("  >> Using Pollinations.AI video")
+            except Exception as e:
+                print(f"  Pollinations video load failed: {e}")
+
+    # Try 4: HF Space T2V (or your Kaggle/Colab notebook via T2V_API_URL)
+    if bg is None:
+        print("  Try 4: HF Space / Kaggle T2V (real AI video)...")
         result, err = _run_with_timeout(
             generate_hf_space_video,
             args=(user_prompt, video_path),
@@ -150,9 +194,9 @@ def main():
             except Exception as e:
                 print(f"  AI video load failed: {e}")
 
-    # Try 3: CogVideoX-2B (local open-source model, needs GPU)
+    # Try 5: CogVideoX-2B (local open-source model, needs GPU)
     if bg is None:
-        print("  Try 3: CogVideoX-2B (local GPU)...")
+        print("  Try 5: CogVideoX-2B (local GPU)...")
         result, err = _run_with_timeout(
             generate_cogvideo,
             args=(user_prompt, video_path),
@@ -172,9 +216,9 @@ def main():
             except Exception as e:
                 print(f"  CogVideoX load failed: {e}")
 
-    # Try 4: HF text-to-video (free inference API)
+    # Try 6: HF text-to-video (free inference API)
     if bg is None:
-        print("  Try 4: HF text-to-video (free API)...")
+        print("  Try 6: HF text-to-video (free API)...")
         result, err = _run_with_timeout(
             generate_hf_text_to_video,
             args=(user_prompt, video_path),
@@ -197,9 +241,9 @@ def main():
 
     # --- FALLBACK: No-API sources ---
 
-    # Try 5: Procedural motion (no APIs, no GPU, always works)
+    # Try 7: Procedural motion (no APIs, no GPU, always works)
     if bg is None:
-        print("  Try 5: Procedural motion (no APIs)...")
+        print("  Try 7: Procedural motion (no APIs)...")
         num_frames_needed = int(total_dur * FPS)
         result, err = _run_with_timeout(
             generate_motion_video,
@@ -211,13 +255,18 @@ def main():
             total_frames = len(frames)
             frame_dur = total_dur / max(total_frames, 1)
             def make_motion_frame(t):
-                return frames[min(int(t / frame_dur), total_frames - 1)]
+                idx = min(int(t / frame_dur), total_frames - 1)
+                f = frames[idx]
+                f = enhance_frame(f, color_grade="dramatic", vignette=True)
+                if BRAND:
+                    f = render_brand_overlay(f, BRAND)
+                return f
             bg = VideoClip(make_motion_frame, duration=total_dur)
             print("  >> Using procedural motion video")
 
-    # Try 6: Coverr stock video (free stock footage)
+    # Try 8: Coverr stock video (free stock footage)
     if bg is None:
-        print("  Try 6: Coverr stock video...")
+        print("  Try 8: Coverr stock video...")
         result, err = _run_with_timeout(generate_coverr_video, args=(user_prompt, video_path), timeout=30)
         if result:
             try:
@@ -232,9 +281,9 @@ def main():
             except Exception:
                 pass
 
-    # Try 7: AI image Ken Burns (Pollinations images + zoom)
+    # Try 9: AI image Ken Burns (Pollinations images + zoom)
     if bg is None:
-        print("  Try 7: AI image Ken Burns...")
+        print("  Try 9: AI image Ken Burns...")
         num_frames_needed = int(total_dur * FPS)
         result, err = _run_with_timeout(
             generate_ai_image_video, args=(user_prompt, W, H, num_frames_needed, FPS), timeout=90,
@@ -244,13 +293,18 @@ def main():
             total_frames = len(frames)
             frame_dur = total_dur / max(total_frames, 1)
             def make_ai_frame(t):
-                return frames[min(int(t / frame_dur), total_frames - 1)]
+                idx = min(int(t / frame_dur), total_frames - 1)
+                f = frames[idx]
+                f = enhance_frame(f, color_grade="dramatic", vignette=True)
+                if BRAND:
+                    f = render_brand_overlay(f, BRAND)
+                return f
             bg = VideoClip(make_ai_frame, duration=total_dur)
             print("  >> Using AI image slideshow")
 
-    # Try 8: Stock photo Ken Burns (always works)
+    # Try 10: Stock photo Ken Burns (always works)
     if bg is None:
-        print("  Try 8: Stock photo Ken Burns...")
+        print("  Try 10: Stock photo Ken Burns...")
         num_frames_needed = int(total_dur * FPS)
         result, err = _run_with_timeout(
             generate_stock_photo_video, args=(user_prompt, W, H, num_frames_needed, FPS), timeout=30,
@@ -260,7 +314,12 @@ def main():
             total_frames = len(frames)
             frame_dur = total_dur / max(total_frames, 1)
             def make_stock_frame(t):
-                return frames[min(int(t / frame_dur), total_frames - 1)]
+                idx = min(int(t / frame_dur), total_frames - 1)
+                f = frames[idx]
+                f = enhance_frame(f, color_grade="dramatic", vignette=True)
+                if BRAND:
+                    f = render_brand_overlay(f, BRAND)
+                return f
             bg = VideoClip(make_stock_frame, duration=total_dur)
             print("  >> Using stock photo slideshow")
 
@@ -280,7 +339,12 @@ def main():
 
         frame_dur = total_dur / max(total_frames, 1)
         def make_frame(t):
-            return frame_arrays[min(int(t / frame_dur), total_frames - 1)]
+            idx = min(int(t / frame_dur), total_frames - 1)
+            f = frame_arrays[idx]
+            f = enhance_frame(f, color_grade="dramatic", vignette=True)
+            if BRAND:
+                f = render_brand_overlay(f, BRAND)
+            return f
         bg = VideoClip(make_frame, duration=total_dur)
 
     overlays = hook_overlays(1.8)
@@ -306,7 +370,7 @@ def main():
     out.unlink(missing_ok=True)
     print(f"  {total_dur:.1f}s | {W}x{H} | {total_frames} frames")
     t0 = time.time()
-    final.write_videofile(str(out), fps=FPS, codec="libx264", audio_codec="aac", threads=4, preset="ultrafast", ffmpeg_params=["-movflags", "+faststart"], logger=None)
+    final.write_videofile(str(out), fps=FPS, codec="libx264", audio_codec="aac", threads=4, preset="medium", ffmpeg_params=["-movflags", "+faststart", "-crf", "18"], logger=None)
     final.close()
     t1 = time.time()
     print(f"\n  DONE in {t1 - t0:.0f}s: {out}")

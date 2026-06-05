@@ -339,6 +339,26 @@ def run_try_this():
     bank_manager.ensure_refilled("try_this")
 
 
+def run_cartoon():
+    print("=" * 55)
+    print("  MODE: CARTOON — Tom & Jerry Style")
+    print("=" * 55)
+
+    import cartoon_video
+    import sys as _sys
+
+    prompt = " ".join(_sys.argv[2:]) if len(_sys.argv) > 2 else ""
+    if prompt:
+        _sys.argv = [_sys.argv[0], *prompt.split()]
+
+    out_path, data = cartoon_video.main()
+    if out_path:
+        print("\nUploading...")
+        from upload_youtube import upload
+        upload(str(out_path), mode="cartoon", playlist_key="cartoon", script_data=data)
+        print("Cartoon video done!")
+
+
 def run_animation():
     print("=" * 55)
     print("  MODE: AI ANIMATION")
@@ -385,7 +405,7 @@ def run_loop():
         "unsolved_mysteries", "movie_trivia", "animal_kingdom",
         "space_wonders", "box_office", "things_they_dont_teach",
         "challenges", "satisfying", "negative_hooks", "try_this",
-        "animation",
+        "animation", "cartoon",
     ]
     print(f"\n{'='*55}")
     print(f"  LOOP MODE — generating every {interval}s")
@@ -407,6 +427,7 @@ def run_loop():
             "try_this": run_try_this,
             "animation": run_animation,
             "explainer": run_explainer,
+            "cartoon": run_cartoon,
         }[mode]
         try:
             runner()
@@ -470,8 +491,10 @@ def main():
         run_animation()
     elif mode == "explainer":
         run_explainer()
+    elif mode == "cartoon":
+        run_cartoon()
     else:
-        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', 'movie_trivia', 'animal_kingdom', 'space_wonders', 'box_office', 'things_they_dont_teach', 'challenges', 'satisfying', 'negative_hooks', 'try_this', 'animation', or 'explainer'")
+        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', 'movie_trivia', 'animal_kingdom', 'space_wonders', 'box_office', 'things_they_dont_teach', 'challenges', 'satisfying', 'negative_hooks', 'try_this', 'animation', 'cartoon', or 'explainer'")
 
 
 if __name__ == "__main__":
