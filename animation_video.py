@@ -105,165 +105,31 @@ def main():
     bg = None
     video_path = temp_dir / "ai_video.mp4"
 
-    # The fallback chain is ordered: most reliable/free first, AI-enhanced later.
-    # ALL sources are free — no paid APIs anywhere.
+    # --- Priority: REAL AI VIDEO (needs API key or GPU) ---
 
-    # Try 1: Procedural motion video (works for ANY prompt, no APIs, no GPU)
-    print("  Trying procedural motion video (no APIs needed)...")
-    num_frames_needed = int(total_dur * FPS)
+    # Try 1: Pollinations.AI video (free API, has your key, real AI-generated video)
+    print("  Try 1: Pollinations.AI video API (real AI video)...")
     result, err = _run_with_timeout(
-        generate_motion_video,
-        args=(user_prompt, W, H, num_frames_needed, FPS),
+        generate_pollinations_video,
+        args=(user_prompt, video_path),
         timeout=90,
     )
-    frames = result if err is None else None
-    if frames:
-        total_frames = len(frames)
-        print(f"  {total_frames} motion frames")
-        frame_dur = total_dur / max(total_frames, 1)
-        def make_motion_frame(t):
-            return frames[min(int(t / frame_dur), total_frames - 1)]
-        bg = VideoClip(make_motion_frame, duration=total_dur)
-        print("  Using procedural motion video")
-    else:
-        print(f"  Motion video unavailable ({err or 'no result'})")
+    if result:
+        try:
+            vid = VideoFileClip(str(video_path))
+            if vid.duration < total_dur:
+                clips = [vid] * (int(total_dur // vid.duration) + 1)
+                vid = concatenate_videoclips(clips, method="compose").with_duration(total_dur)
+            else:
+                vid = vid.with_duration(total_dur)
+            bg = vid
+            print("  >> Using Pollinations.AI video")
+        except Exception as e:
+            print(f"  Pollinations video load failed: {e}")
 
-    # Try 2: CogVideoX-2B (local, open-source, free, no API — needs GPU with ~6GB+ VRAM)
+    # Try 2: HF Space T2V (or your Kaggle/Colab notebook via T2V_API_URL)
     if bg is None:
-        print("  Trying CogVideoX-2B (local open-source model)...")
-        result, err = _run_with_timeout(
-            generate_cogvideo,
-            args=(user_prompt, video_path),
-            kwargs={"num_frames": 49, "num_inference_steps": 25, "guidance_scale": 6.0},
-            timeout=600,
-        )
-        if result:
-            try:
-                vid = VideoFileClip(str(video_path))
-                if vid.duration < total_dur:
-                    clips = [vid] * (int(total_dur // vid.duration) + 1)
-                    vid = concatenate_videoclips(clips, method="compose").with_duration(total_dur)
-                else:
-                    vid = vid.with_duration(total_dur)
-                bg = vid
-                print("  Using CogVideoX video")
-            except Exception as e:
-                print(f"  CogVideoX video load failed: {e}")
-                bg = None
-
-    # Try 3: Coverr stock video (free, no API key, real video)
-    if bg is None:
-        print("  Trying Coverr stock video...")
-        result, err = _run_with_timeout(
-            generate_coverr_video,
-            args=(user_prompt, video_path),
-            timeout=30,
-        )
-        if result:
-            try:
-                vid = VideoFileClip(str(video_path))
-                if vid.duration < total_dur:
-                    clips = [vid] * (int(total_dur // vid.duration) + 1)
-                    vid = concatenate_videoclips(clips, method="compose").with_duration(total_dur)
-                else:
-                    vid = vid.with_duration(total_dur)
-                bg = vid
-                print("  Using Coverr stock video")
-            except Exception as e:
-                print(f"  Coverr video load failed: {e}")
-                bg = None
-        else:
-            print(f"  Coverr unavailable ({err or 'no result'})")
-
-    # Try 4: HF text-to-video (free tier, may need HF_TOKEN)
-    if bg is None:
-        print("  Trying HF text-to-video...")
-        result, err = _run_with_timeout(
-            generate_hf_text_to_video,
-            args=(user_prompt, video_path),
-            kwargs={"duration": min(5, int(total_dur))},
-            timeout=120,
-        )
-        if result:
-            try:
-                vid = VideoFileClip(str(video_path))
-                total_frames = int(vid.fps * vid.duration)
-                if vid.duration < total_dur:
-                    clips = [vid] * (int(total_dur // vid.duration) + 1)
-                    vid = concatenate_videoclips(clips, method="compose").with_duration(total_dur)
-                else:
-                    vid = vid.with_duration(total_dur)
-                bg = vid
-                print("  Using HF T2V AI video")
-            except Exception as e:
-                print(f"  HF video load failed: {e}")
-                bg = None
-        else:
-            print(f"  HF T2V unavailable ({err or 'no result'})")
-
-    # Try 5: Pollinations.ai image Ken Burns (free, no API key)
-    if bg is None:
-        print("  Trying AI image Ken Burns...")
-        num_frames_needed = int(total_dur * FPS)
-        result, err = _run_with_timeout(
-            generate_ai_image_video,
-            args=(user_prompt, W, H, num_frames_needed, FPS),
-            timeout=90,
-        )
-        frames = result if err is None else None
-        if frames:
-            total_frames = len(frames)
-            print(f"  {total_frames} AI image frames")
-            frame_dur = total_dur / max(total_frames, 1)
-            def make_ai_frame(t):
-                return frames[min(int(t / frame_dur), total_frames - 1)]
-            bg = VideoClip(make_ai_frame, duration=total_dur)
-            print("  Using AI image slideshow")
-
-    # Try 6: Stock photo Ken Burns (free, no keys, reliable)
-    if bg is None:
-        print("  Trying stock photo Ken Burns...")
-        num_frames_needed = int(total_dur * FPS)
-        result, err = _run_with_timeout(
-            generate_stock_photo_video,
-            args=(user_prompt, W, H, num_frames_needed, FPS),
-            timeout=30,
-        )
-        frames = result if err is None else None
-        if frames:
-            total_frames = len(frames)
-            print(f"  {total_frames} stock photo frames")
-            frame_dur = total_dur / max(total_frames, 1)
-            def make_stock_frame(t):
-                return frames[min(int(t / frame_dur), total_frames - 1)]
-            bg = VideoClip(make_stock_frame, duration=total_dur)
-            print("  Using stock photo slideshow")
-
-    # Try 7: Pollinations.AI video (free API, no GPU needed — requires POLLINATIONS_KEY)
-    if bg is None:
-        print("  Trying Pollinations.AI video API...")
-        result, err = _run_with_timeout(
-            generate_pollinations_video,
-            args=(user_prompt, video_path),
-            timeout=90,
-        )
-        if result:
-            try:
-                vid = VideoFileClip(str(video_path))
-                if vid.duration < total_dur:
-                    clips = [vid] * (int(total_dur // vid.duration) + 1)
-                    vid = concatenate_videoclips(clips, method="compose").with_duration(total_dur)
-                else:
-                    vid = vid.with_duration(total_dur)
-                bg = vid
-                print("  Using Pollinations.AI video")
-            except Exception as e:
-                print(f"  Pollinations video load failed: {e}")
-                bg = None
-
-    # Try 8: HF Space T2V (free, real AI video via Gradio Spaces — rate-limited)
-    if bg is None:
-        print("  Trying HF Space T2V (Gradio Space API)...")
+        print("  Try 2: HF Space / Kaggle T2V (real AI video)...")
         result, err = _run_with_timeout(
             generate_hf_space_video,
             args=(user_prompt, video_path),
@@ -280,12 +146,125 @@ def main():
                 else:
                     vid = vid.with_duration(total_dur)
                 bg = vid
-                print("  Using HF Space AI video")
+                print("  >> Using HF Space / Kaggle AI video")
             except Exception as e:
-                print(f"  HF Space video load failed: {e}")
-                bg = None
+                print(f"  AI video load failed: {e}")
 
-    # Ultimate fallback: Storyboard animator (always works, no APIs)
+    # Try 3: CogVideoX-2B (local open-source model, needs GPU)
+    if bg is None:
+        print("  Try 3: CogVideoX-2B (local GPU)...")
+        result, err = _run_with_timeout(
+            generate_cogvideo,
+            args=(user_prompt, video_path),
+            kwargs={"num_frames": 49, "num_inference_steps": 25, "guidance_scale": 6.0},
+            timeout=600,
+        )
+        if result:
+            try:
+                vid = VideoFileClip(str(video_path))
+                if vid.duration < total_dur:
+                    clips = [vid] * (int(total_dur // vid.duration) + 1)
+                    vid = concatenate_videoclips(clips, method="compose").with_duration(total_dur)
+                else:
+                    vid = vid.with_duration(total_dur)
+                bg = vid
+                print("  >> Using CogVideoX video")
+            except Exception as e:
+                print(f"  CogVideoX load failed: {e}")
+
+    # Try 4: HF text-to-video (free inference API)
+    if bg is None:
+        print("  Try 4: HF text-to-video (free API)...")
+        result, err = _run_with_timeout(
+            generate_hf_text_to_video,
+            args=(user_prompt, video_path),
+            kwargs={"duration": min(5, int(total_dur))},
+            timeout=120,
+        )
+        if result:
+            try:
+                vid = VideoFileClip(str(video_path))
+                total_frames = int(vid.fps * vid.duration)
+                if vid.duration < total_dur:
+                    clips = [vid] * (int(total_dur // vid.duration) + 1)
+                    vid = concatenate_videoclips(clips, method="compose").with_duration(total_dur)
+                else:
+                    vid = vid.with_duration(total_dur)
+                bg = vid
+                print("  >> Using HF T2V AI video")
+            except Exception as e:
+                print(f"  HF video load failed: {e}")
+
+    # --- FALLBACK: No-API sources ---
+
+    # Try 5: Procedural motion (no APIs, no GPU, always works)
+    if bg is None:
+        print("  Try 5: Procedural motion (no APIs)...")
+        num_frames_needed = int(total_dur * FPS)
+        result, err = _run_with_timeout(
+            generate_motion_video,
+            args=(user_prompt, W, H, num_frames_needed, FPS),
+            timeout=90,
+        )
+        frames = result if err is None else None
+        if frames:
+            total_frames = len(frames)
+            frame_dur = total_dur / max(total_frames, 1)
+            def make_motion_frame(t):
+                return frames[min(int(t / frame_dur), total_frames - 1)]
+            bg = VideoClip(make_motion_frame, duration=total_dur)
+            print("  >> Using procedural motion video")
+
+    # Try 6: Coverr stock video (free stock footage)
+    if bg is None:
+        print("  Try 6: Coverr stock video...")
+        result, err = _run_with_timeout(generate_coverr_video, args=(user_prompt, video_path), timeout=30)
+        if result:
+            try:
+                vid = VideoFileClip(str(video_path))
+                if vid.duration < total_dur:
+                    clips = [vid] * (int(total_dur // vid.duration) + 1)
+                    vid = concatenate_videoclips(clips, method="compose").with_duration(total_dur)
+                else:
+                    vid = vid.with_duration(total_dur)
+                bg = vid
+                print("  >> Using Coverr stock video")
+            except Exception:
+                pass
+
+    # Try 7: AI image Ken Burns (Pollinations images + zoom)
+    if bg is None:
+        print("  Try 7: AI image Ken Burns...")
+        num_frames_needed = int(total_dur * FPS)
+        result, err = _run_with_timeout(
+            generate_ai_image_video, args=(user_prompt, W, H, num_frames_needed, FPS), timeout=90,
+        )
+        frames = result if err is None else None
+        if frames:
+            total_frames = len(frames)
+            frame_dur = total_dur / max(total_frames, 1)
+            def make_ai_frame(t):
+                return frames[min(int(t / frame_dur), total_frames - 1)]
+            bg = VideoClip(make_ai_frame, duration=total_dur)
+            print("  >> Using AI image slideshow")
+
+    # Try 8: Stock photo Ken Burns (always works)
+    if bg is None:
+        print("  Try 8: Stock photo Ken Burns...")
+        num_frames_needed = int(total_dur * FPS)
+        result, err = _run_with_timeout(
+            generate_stock_photo_video, args=(user_prompt, W, H, num_frames_needed, FPS), timeout=30,
+        )
+        frames = result if err is None else None
+        if frames:
+            total_frames = len(frames)
+            frame_dur = total_dur / max(total_frames, 1)
+            def make_stock_frame(t):
+                return frames[min(int(t / frame_dur), total_frames - 1)]
+            bg = VideoClip(make_stock_frame, duration=total_dur)
+            print("  >> Using stock photo slideshow")
+
+    # Ultimate fallback: Storyboard animator (always works)
     if bg is None:
         print("  Using storyboard fallback")
         from src.storyboard_anim import generate_storyboard_frames
