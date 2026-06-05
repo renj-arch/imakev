@@ -145,21 +145,13 @@ def _fallback_script(topic: str) -> dict:
 
 
 def _generate_scene_image(prompt: str, w: int, h: int, cache_path: Path) -> Image.Image | None:
-    """Generate a 2D illustration scene using Pollinations AI."""
+    """Generate a 2D illustration scene using full fallback chain."""
     if cache_path.exists() and cache_path.stat().st_size > 5000:
         return Image.open(cache_path)
 
+    from src.image_gen import gen_img
     style_prompt = f"simple 2D flat vector illustration, children's book style, colorful, clean: {prompt}"
-
-    from src.image_gen import _try_pollinations
-    img = _try_pollinations(style_prompt, w, h, "flux")
-    if img is None:
-        img = _try_pollinations(style_prompt, w, h, "turbo")
-    if img is None:
-        img = _try_pollinations(style_prompt, w, h, "sana")
-    if img is None:
-        img = _try_pollinations(style_prompt, w, h, "gptimage")
-
+    img = gen_img(style_prompt, w, h)
     if img:
         img.save(cache_path)
         return img
