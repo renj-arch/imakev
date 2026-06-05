@@ -98,8 +98,19 @@ jobs:
           echo "LLM_PROVIDER=${{ inputs.llm_provider || 'huggingface' }}" >> .env
           echo "HF_API_KEY=${{ secrets.HF_API_KEY }}" >> .env
           echo "BRAND_NAME=${{ vars.BRAND_NAME || 'Imakev' }}" >> .env
+          echo "=== .env contents ==="
+          cat .env
 
+      - name: Debug environment
+        run: python -c "
+import os
+print('LLM_PROVIDER=' + os.environ.get('LLM_PROVIDER', '(not set)'))
+print('HF_API_KEY set=' + ('yes' if os.environ.get('HF_API_KEY') else 'no'))
+print('LLM_API_KEY set=' + ('yes' if os.environ.get('LLM_API_KEY') else 'no'))
+"
       - name: Generate video(s)
+        env:
+          LLM_PROVIDER: ${{ inputs.llm_provider || 'huggingface' }}
         run: |
           MODE="${{ inputs.mode || 'sketch' }}"
           REPEAT="${{ inputs.repeat || 1 }}"
