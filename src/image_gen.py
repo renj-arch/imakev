@@ -5,7 +5,7 @@ import requests as req
 import config
 
 POLLINATIONS_URL = "https://image.pollinations.ai/prompt/{prompt}?width={w}&height={h}&model={model}&seed={seed}&enhance=true"
-ANON_RATE_LIMIT_S = 16  # anonymous tier: 1 request per 15s, use 16 to be safe
+ANON_RATE_LIMIT_S = 10  # anonymous tier: 1 request per 15s, use 10 to be safe
 _last_pollinations_call = 0.0
 
 _prompt_enhancers = [
@@ -184,13 +184,11 @@ def gen_img(prompt: str, width: int = None, height: int = None) -> Image.Image:
     seed = random.randint(0, 999999)
     enhanced = _enhance_prompt(prompt, seed)
 
-    # Try 1: AI-generated image via Pollinations (free, no key, rate-limited 1/15s)
-    pollinations_models = ("flux", "turbo", "gptimage", "kontext", "seedream", "nanobanana")
-    for model in pollinations_models:
+    # Try 1: AI-generated image via Pollinations (free, no key, rate-limited)
+    for model in ("flux", "turbo"):
         img = _try_pollinations(enhanced, w, h, model, seed)
         if img is not None:
             return img
-        time.sleep(ANON_RATE_LIMIT_S)  # respect anonymous tier rate limit
 
     # Try 2: Pexels stock photo (needs free API key from pexels.com, email only)
     if os.getenv("PEXELS_API_KEY"):
@@ -217,30 +215,24 @@ def gen_img(prompt: str, width: int = None, height: int = None) -> Image.Image:
     return _generate_scene(w, h, prompt)
 
 
-def _try_pollinations(prompt: str, w: int, h: int, model: str, seed: int = 0, timeout: int = 45) -> Image.Image | None:
+def _try_pollinations(prompt: str, w: int, h: int, model: str, seed: int = 0, timeout: int = 30) -> Image.Image | None:
     global _last_pollinations_call
     elapsed = time.time() - _last_pollinations_call
     if elapsed < ANON_RATE_LIMIT_S:
         wait = ANON_RATE_LIMIT_S - elapsed
         time.sleep(wait)
-    for attempt in range(2):
-        s = seed + attempt
-        url = POLLINATIONS_URL.format(prompt=req.utils.quote(prompt), w=w, h=h, model=model, seed=s)
-        try:
-            r = req.get(url, timeout=timeout)
-            if r.status_code == 429:
-                time.sleep(ANON_RATE_LIMIT_S)
-                continue
-            if r.status_code == 200 and len(r.content) > 500:
-                _last_pollinations_call = time.time()
-                img = Image.open(io.BytesIO(r.content)).convert("RGB")
-                img = img.resize((w, h), Image.LANCZOS)
-                img = ImageEnhance.Sharpness(img).enhance(1.1)
-                return img
-        except Exception:
-            pass
-        if attempt == 0:
-            time.sleep(ANON_RATE_LIMIT_S)
+    url = POLLINATIONS_URL.format(prompt=req.utils.quote(prompt), w=w, h=h, model=model, seed=seed)
+    try:
+        r = req.get(url, timeout=timeout)
+        if r.status_code == 200 and len(r.content) > 500:
+            _last_pollinations_call = time.time()
+            img = Image.open(io.BytesIO(r.content)).convert("RGB")
+            img = img.resize((w, h), Image.LANCZOS)
+            img = ImageEnhance.Sharpness(img).enhance(1.1)
+            return img
+        print(f"    Pollinations {model} status={r.status_code}")
+    except Exception as e:
+        print(f"    Pollinations {model} error: {e}")
     _last_pollinations_call = time.time()
     return None
 
