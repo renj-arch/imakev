@@ -381,4 +381,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    out, script_data = main()
+    if out:
+        print("\nUploading to YouTube...")
+        from upload_youtube import upload
+        upload(str(out), mode="storyboard", playlist_key="storyboard", script_data=script_data)

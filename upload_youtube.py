@@ -38,6 +38,7 @@ PLAYLISTS = {
     "satisfying": {"name": "Oddly Satisfying & DIY", "desc": "Oddly satisfying visuals, satisfying restorations, cleaning transformations, and DIY projects."},
     "negative_hooks": {"name": "Dark Truths", "desc": "Dark, uncomfortable truths about life, society, and human nature. Reality check incoming."},
     "try_this": {"name": "Try This — Brain Hacks", "desc": "Interactive brain hacks and visual illusions. Try them yourself and feel your brain break."},
+    "storyboard": {"name": "Storyboard Explainers", "desc": "Narrative-driven storyboard videos with illustrated scenes."},
 }
 
 
