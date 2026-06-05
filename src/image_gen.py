@@ -1,5 +1,5 @@
-"""Centralized image generation — tries Pollinations.ai, falls back to procedural scene drawing."""
-import io, time, random, math
+"""Centralized image generation — tries Pollinations.ai, free stock photos, then procedural scene drawing."""
+import io, time, random, math, hashlib
 from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageFilter
 import numpy as np
 import requests as req
@@ -24,15 +24,52 @@ def _enhance_prompt(prompt: str, seed: int) -> str:
     return f"{prompt}{enhancer}"
 
 
+def _extract_keywords(prompt: str, max_words: int = 3) -> str:
+    stop = {"a", "an", "the", "in", "on", "at", "for", "and", "of", "to", "is", "it", "with", "this", "that",
+            "tiny", "small", "big", "large", "beside", "under", "over", "above", "below", "behind"}
+    words = prompt.lower().split(",")[0].strip().split()
+    keywords = [w for w in words if w not in stop and len(w) > 2][:max_words]
+    return ",".join(keywords) if keywords else "nature,landscape"
+
+
+def _try_stock_photo(prompt: str, w: int, h: int) -> Image.Image | None:
+    """Download free stock photo matching the prompt (no API key needed)."""
+    keywords = _extract_keywords(prompt, max_words=3)
+    urls = [
+        f"https://loremflickr.com/{w*2}/{h*2}/{keywords}",
+        f"https://loremflickr.com/{w*2}/{h*2}/{keywords.split(',')[0]}",
+        f"https://picsum.photos/{w*2}/{h*2}",
+    ]
+    for url in urls:
+        try:
+            resp = req.get(url, timeout=15)
+            if resp.status_code == 200 and len(resp.content) > 10000:
+                img = Image.open(io.BytesIO(resp.content)).convert("RGB")
+                img = img.resize((w, h), Image.LANCZOS)
+                return img
+        except Exception:
+            continue
+    return None
+
+
 def gen_img(prompt: str, width: int = None, height: int = None) -> Image.Image:
     w = width or config.VIDEO_WIDTH
     h = height or config.VIDEO_HEIGHT
     seed = random.randint(0, 999999)
     enhanced = _enhance_prompt(prompt, seed)
+
+    # Try 1: AI-generated image (Pollinations, free, no key)
     for model in ("flux", "sana"):
         img = _try_pollinations(enhanced, w, h, model, seed)
         if img is not None:
             return img
+
+    # Try 2: Free stock photo matching the prompt
+    stock = _try_stock_photo(prompt, w, h)
+    if stock is not None:
+        return stock
+
+    # Fallback: Procedural scene drawing (always works)
     return _generate_scene(w, h, prompt)
 
 
