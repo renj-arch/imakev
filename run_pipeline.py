@@ -395,11 +395,28 @@ def run_explainer():
     print("Explainer video done!")
 
 
+def run_sketch():
+    print("=" * 55)
+    print("  MODE: SKETCH — Whiteboard explainer style")
+    print("=" * 55)
+
+    import sketch_video
+    from upload_youtube import upload
+
+    out_path, fact_data = sketch_video.main()
+
+    print("\nUploading with viral SEO...")
+    upload(str(out_path), mode="sketch", playlist_key="sketch", script_data=fact_data)
+    print("Sketch video done!")
+    import bank_manager
+    bank_manager.ensure_refilled("facts")
+
+
 def run_loop():
     import time, random
     interval = int(sys.argv[2]) if len(sys.argv) > 2 else 3600
     modes = [
-        "facts", "what_if", "how_it_works", "riddles",
+        "facts", "sketch", "what_if", "how_it_works", "riddles",
         "would_you_rather", "history_minute", "psychology",
         "life_hacks", "urban_legends", "coincidences",
         "unsolved_mysteries", "movie_trivia", "animal_kingdom",
@@ -428,6 +445,7 @@ def run_loop():
             "animation": run_animation,
             "explainer": run_explainer,
             "cartoon": run_cartoon,
+            "sketch": run_sketch,
         }[mode]
         try:
             runner()
@@ -493,8 +511,10 @@ def main():
         run_explainer()
     elif mode == "cartoon":
         run_cartoon()
+    elif mode == "sketch":
+        run_sketch()
     else:
-        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', 'movie_trivia', 'animal_kingdom', 'space_wonders', 'box_office', 'things_they_dont_teach', 'challenges', 'satisfying', 'negative_hooks', 'try_this', 'animation', 'cartoon', or 'explainer'")
+        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'sketch', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', 'movie_trivia', 'animal_kingdom', 'space_wonders', 'box_office', 'things_they_dont_teach', 'challenges', 'satisfying', 'negative_hooks', 'try_this', 'animation', 'cartoon', or 'explainer'")
 
 
 if __name__ == "__main__":

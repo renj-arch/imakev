@@ -1,0 +1,105 @@
+name: Generate Video
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Video mode'
+        required: true
+        default: 'sketch'
+        type: choice
+        options:
+          - sketch
+          - facts
+          - story
+          - what_if
+          - how_it_works
+          - riddles
+          - would_you_rather
+          - history_minute
+          - psychology
+          - life_hacks
+          - urban_legends
+          - coincidences
+          - unsolved_mysteries
+          - movie_trivia
+          - animal_kingdom
+          - space_wonders
+          - box_office
+          - things_they_dont_teach
+          - challenges
+          - satisfying
+          - negative_hooks
+          - try_this
+      niche:
+        description: 'Topic niche (optional, e.g. space, animals, brain)'
+        required: false
+        type: string
+        default: ''
+      repeat:
+        description: 'Number of videos to generate'
+        required: false
+        type: number
+        default: 1
+  schedule:
+    - cron: '0 */6 * * *'
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq \
+            fonts-dejavu-core fonts-liberation fonts-noto \
+            ffmpeg
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Set up environment
+        run: |
+          echo "PEXELS_API_KEY=${{ secrets.PEXELS_API_KEY }}" >> .env
+          echo "LLM_API_KEY=${{ secrets.LLM_API_KEY }}" >> .env
+          echo "LLM_PROVIDER=openrouter" >> .env
+          echo "BRAND_NAME=${{ vars.BRAND_NAME || 'Imakev' }}" >> .env
+
+      - name: Generate video(s)
+        run: |
+          MODE="${{ inputs.mode || 'sketch' }}"
+          REPEAT="${{ inputs.repeat || 1 }}"
+
+          for i in $(seq 1 $REPEAT); do
+            echo "=== Generating video $i of $REPEAT (mode: $MODE) ==="
+            if [ "$MODE" = "sketch" ]; then
+              python sketch_video.py
+            else
+              python run_pipeline.py "$MODE"
+            fi
+          done
+
+      - name: Upload video artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-videos-${{ github.run_id }}
+          path: output/*.mp4
+          retention-days: 30
+          if-no-files-found: error

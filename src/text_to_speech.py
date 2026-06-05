@@ -1,4 +1,4 @@
-import subprocess, sys
+import subprocess, sys, asyncio
 from pathlib import Path
 import config
 
@@ -18,6 +18,44 @@ def generate_tts(text: str, output_path: Path, voice: str = "en-us-male") -> Pat
     elif config.TTS_PROVIDER == "elevenlabs":
         return _generate_elevenlabs(text, output_path, voice)
     raise ValueError(f"Unknown TTS provider: {config.TTS_PROVIDER}")
+
+
+def generate_tts_with_timestamps(text: str, output_path: Path, voice: str = "en-us-male") -> list[dict]:
+    """Generate TTS audio and return word-level timestamps.
+    
+    Returns list of {text, start, end} dicts with times in seconds.
+    Audio is saved to output_path."""
+    voice_name = VOICES.get(voice, VOICES["en-us-male"])
+    words = []
+
+    async def _run():
+        import edge_tts
+        communicate = edge_tts.Communicate(
+            text, voice_name,
+            rate="+0%", volume="+0%", pitch="+0Hz",
+            boundary="WordBoundary",
+        )
+        t0 = None
+        with open(output_path, "wb") as f:
+            async for chunk in communicate.stream():
+                if chunk["type"] == "WordBoundary":
+                    offset_s = chunk["offset"] / 1_000_0000
+                    dur_s = chunk["duration"] / 1_000_0000
+                    if t0 is None:
+                        t0 = offset_s
+                    words.append({
+                        "text": chunk["text"],
+                        "start": offset_s,
+                        "end": offset_s + dur_s,
+                    })
+                elif chunk["type"] == "audio":
+                    f.write(chunk["data"])
+
+    asyncio.run(_run())
+
+    if not output_path.exists() or output_path.stat().st_size == 0:
+        raise RuntimeError("edge-tts produced empty file")
+    return words
 
 
 def _generate_edge_cli(text: str, output_path: Path, voice: str = "en-us-male") -> Path:
