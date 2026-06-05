@@ -68,7 +68,11 @@ Make the illustrations:
 - Warm, friendly color palette"""
 
     system = "You write short educational narratives with matching visual scene descriptions for simple 2D illustrations."
-    raw = _generate(prompt, temperature=0.8, max_tokens=2000, system=system)
+    try:
+        raw = _generate(prompt, temperature=0.8, max_tokens=2000, system=system)
+    except Exception as e:
+        print(f"  LLM error: {e}")
+        raw = None
 
     if not raw:
         return _fallback_script(topic)

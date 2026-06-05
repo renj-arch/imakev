@@ -43,9 +43,14 @@ def _generate_openai(prompt: str, temperature: float = 0.8, max_tokens: int = 30
 
 
 def _generate(prompt: str, temperature: float = 0.8, max_tokens: int = 300, system: str = SYSTEM_PROMPT) -> str:
-    if config.LLM_PROVIDER == "google":
-        return _generate_gemini(prompt, temperature, max_tokens, system)
-    return _generate_openai(prompt, temperature, max_tokens, system)
+    try:
+        if config.LLM_PROVIDER == "google":
+            return _generate_gemini(prompt, temperature, max_tokens, system)
+        return _generate_openai(prompt, temperature, max_tokens, system)
+    except Exception as e:
+        if hasattr(e, 'status_code') and e.status_code in (429, 402):
+            pass
+        return ""
 
 
 def generate_script(topic: str = "", niche: str = "general knowledge") -> str:
