@@ -131,7 +131,7 @@ jobs:
                 python textsync_video.py
                 ;;
               storyboard)
-                python storyboard_video.py ${{ inputs.topic }}
+                python storyboard_video.py "${{ inputs.topic }}"
                 ;;
               *)
                 python run_pipeline.py "$MODE"

@@ -118,21 +118,60 @@ def _fallback_script(topic: str) -> dict:
     """Fallback when LLM is unavailable."""
     fallbacks = {
         "dogs": [
-            {"narration": "Nobody sat around a fire 150,000 years ago and thought about turning wolves into pets.",
-             "illustration": "Simple 2D illustration of a caveman sitting on a rock beside a campfire under a starry night sky with moon and stars. The caveman has a dream bubble showing a wolf with a red X mark over it."},
-            {"narration": "There was no plan, no selective breeding program, no intention at all.",
-             "illustration": "A simple notepad or scroll with text scribbled on it and a big red X mark across everything, floating on a warm beige background."},
-            {"narration": "But today there are over 900 million dogs on Earth in hundreds of varieties.",
-             "illustration": "Simple globe showing continents with many tiny dog sketches in different shapes and sizes floating around it, colorful and playful style."},
-            {"narration": "It happened because wolves that were less afraid of humans stuck around for food scraps.",
-             "illustration": "A simple drawing of a wolf standing at the edge of a human settlement, with a small pile of bones near it, moonlight illuminating the scene."},
-            {"narration": "Gentler wolves bred with gentler wolves, and over thousands of years, wolves became dogs.",
-             "illustration": "A timeline showing a wolf transforming into a dog through several stages, with a heart symbol connecting them, simple evolution style."},
-        ]
+            "Nobody sat around a fire 150,000 years ago and thought about turning wolves into pets.",
+            "There was no plan, no selective breeding program, no intention at all.",
+            "But today there are over 900 million dogs on Earth in hundreds of varieties.",
+            "It happened because wolves that were less afraid of humans stuck around for food scraps.",
+            "Gentler wolves bred with gentler wolves, and over thousands of years, wolves became dogs.",
+        ],
+        "moon": [
+            "The Moon formed about 4.5 billion years ago after a Mars-sized object smashed into Earth.",
+            "The debris from that impact Orbited Earth and gradually clumped together into the Moon.",
+            "At first the Moon was just 14,000 miles away and Earth spun much faster.",
+            "Over millions of years tidal forces pushed the Moon farther away to where it is today.",
+            "Without the Moon Earth would wobble wildly and life might never have evolved as we know it.",
+        ],
+        "fire": [
+            "Early humans didn't know how to start fire they just collected it from wildfires.",
+            "They kept embers burning for months carrying them from camp to camp.",
+            "Fire changed everything it kept predators away and made food easier to digest.",
+            "Cooked food gave early humans more energy which allowed their brains to grow larger.",
+            "Without fire human civilization as we know it would never have existed.",
+        ],
+        "wheel": [
+            "The wheel wasn't invented for transportation it was first used for pottery.",
+            "The oldest known wheel was found in Slovenia and dates back over 5,000 years.",
+            "Early wheels were solid wooden disks not the spoked wheels we know today.",
+            "Spoked wheels appeared around 2000 BCE making chariots lighter and faster.",
+            "The wheel is so fundamental that we still use its basic design in machinery today.",
+        ],
     }
-    key = topic.lower().split()[0] if topic else "dogs"
-    scenes = fallbacks.get(key, fallbacks["dogs"])
-    title = f"The Story of How {topic.capitalize()} Happened"
+
+    words = topic.lower().split()
+    matched = None
+    for key in fallbacks:
+        if any(key == w or key in w or w in key for w in words):
+            matched = key
+            break
+
+    if matched:
+        lines = fallbacks[matched]
+        title = f"The Story of {topic.title()}"
+    else:
+        title_words = topic.split() if topic else "something amazing".split()
+        obj = title_words[-1] if title_words else "it"
+        lines = [
+            f"Have you ever stopped to think about {topic}?",
+            f"The truth about {topic} is more fascinating than most people realize.",
+            f"Scientists have discovered surprising details about how {obj} came to be.",
+            f"Every part of the story of {topic} reveals something unexpected.",
+            f"So the next time you think about {obj} remember there is always more to the story.",
+        ]
+        title = f"The Story of {topic.title()}"
+
+    scenes = [
+        {"narration": l, "illustration": l} for l in lines
+    ]
     return {
         "title": title[:70],
         "niche": topic,
