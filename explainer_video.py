@@ -16,29 +16,14 @@ from src.engagement import get_audio_duration, subscribe_end_card, hook_overlays
 W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
 FPS = config.VIDEO_FPS
 
-FALLBACK_TOPICS = [
-    ("How your memory works", [
-        "Your brain has about 86 billion neurons",
-        "Memories are stored as connections between neurons",
-        "Short-term memory can hold about 7 items at once",
-        "Sleep helps transfer memories to long-term storage",
-        "Emotions make memories stronger and easier to recall",
-    ]),
-    ("Why the sky is blue", [
-        "Sunlight looks white but contains all colors",
-        "Blue light waves are shorter and scatter more",
-        "The atmosphere scatters blue light in all directions",
-        "At sunset, light travels through more atmosphere",
-        "That's why sunsets look red and orange",
-    ]),
-    ("How keyboards work", [
-        "Every key is a simple electrical switch",
-        "Pressing a key completes a circuit",
-        "A matrix of rows and columns detects which key",
-        "The keyboard controller sends a scan code",
-        "Your computer translates it into a character",
-    ]),
-]
+FALLBACK_TOPICS = {
+    "how": ["Here is how it works", "This is the basic idea", "Let me explain the details", "Here is something interesting", "Now you understand better"],
+    "what": ["Here is what you need to know", "This is the key point", "Here is another important fact", "This might surprise you", "Now you know the truth"],
+    "why": ["Here is why this happens", "The reason is simple", "Here is another reason", "This explains a lot", "Now it all makes sense"],
+    "default": ["Here is an interesting fact", "This is how it works", "Here is another detail", "This is worth knowing", "Now you understand"],
+}
+
+GENERIC_DESCRIPTORS = ["interesting", "fascinating", "amazing", "incredible", "cool", "surprising", "fun", "clever"]
 
 def main():
     print("=" * 50)
@@ -47,11 +32,9 @@ def main():
     print("=" * 50)
 
     user_topic = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else ""
-    if not user_topic:
-        topic, points = random.choice(FALLBACK_TOPICS)
-    else:
-        topic = user_topic
-        points = None
+    topic = user_topic or random.choice(list(FALLBACK_TOPICS.keys())).capitalize() + " things work"
+    points = None
+    if user_topic:
         try:
             from src.script_generator import _generate
             raw = _generate(
@@ -65,8 +48,17 @@ def main():
                 points = [l for l in lines if len(l) > 10][:5]
         except Exception:
             pass
-        if not points:
-            topic, points = random.choice(FALLBACK_TOPICS)
+    if not points:
+        words = topic.lower().split()
+        key = "default"
+        for w in words:
+            if w in FALLBACK_TOPICS:
+                key = w
+                break
+        templates = FALLBACK_TOPICS[key]
+        adj = random.choice(GENERIC_DESCRIPTORS)
+        points = [f"{topic} is {adj}"]
+        points += [f"{t} about {topic}" for t in templates[1:]]
 
     print(f"\n[Script] {topic}")
     narration = f"{topic}. " + " ".join(points)
