@@ -654,11 +654,42 @@ def generate_photorealistic_frames(prompt: str, w: int = 720, h: int = 1280,
     return result[:num_frames]
 
 
+def generate_pollinations_video(prompt: str, output_path: str | Path,
+                                timeout: int = 60) -> bool:
+    """Generate AI video via Pollinations.AI free API (no GPU needed)."""
+    output_path = Path(output_path)
+    key = os.getenv("POLLINATIONS_KEY", "")
+    if not key:
+        print("    POLLINATIONS_KEY not set, skipping")
+        return False
+    try:
+        import urllib.parse
+        enc = urllib.parse.quote(prompt)
+        url = f"https://gen.pollinations.ai/video/{enc}?key={key}"
+        print(f"    Pollinations API: {url[:80]}...")
+        resp = req.get(url, stream=True, timeout=timeout)
+        if resp.status_code != 200:
+            print(f"    Pollinations returned {resp.status_code}")
+            return False
+        with open(str(output_path), "wb") as f:
+            for chunk in resp.iter_content(chunk_size=8192):
+                if chunk:
+                    f.write(chunk)
+        sz = output_path.stat().st_size
+        print(f"    Pollinations video saved ({sz} bytes)")
+        return sz > 1000
+    except Exception as e:
+        print(f"    Pollinations error: {e}")
+        return False
+
+
 def generate_hf_space_video(prompt: str, output_path: str | Path,
                             num_frames: int = 16, num_inference_steps: int = 20,
                             guidance_scale: float = 7.5, timeout: int = 600) -> bool:
     """Generate AI video via Gradio Space API.
-    Tries T2V_API_URL env var first (your Colab notebook), then public HF Spaces."""
+    Tries T2V_API_URL env var first (Kaggle/Colab notebook), then public HF Spaces.
+    Works with: kaggle_cogvideo_api.ipynb (CogVideoX on free T4/P100, 30 hrs/week)
+                colab_t2v_api.ipynb (Wan2.1 on free T4)"""
     output_path = Path(output_path)
     try:
         from gradio_client import Client
@@ -738,3 +769,47 @@ def generate_hf_space_video(prompt: str, output_path: str | Path,
             continue
     print("    All T2V sources failed")
     return False
+
+
+_COGVIDEO_PIPE = None
+
+def generate_cogvideo(prompt: str, output_path: str | Path,
+                      num_frames: int = 49, num_inference_steps: int = 25,
+                      guidance_scale: float = 6.0) -> bool:
+    """Generate AI video via CogVideoX-2B (local, open-source, free, no API).
+    Model is loaded on first call (lazy) — requires torch + diffusers.
+    Runs on any GPU with ~6GB+ VRAM (fp16) or CPU (very slow)."""
+    output_path = Path(output_path)
+    global _COGVIDEO_PIPE
+    try:
+        if _COGVIDEO_PIPE is None:
+            print("    Loading CogVideoX-2B (first call only)...")
+            import torch
+            from diffusers import CogVideoXPipeline
+            dtype = torch.float16 if torch.cuda.is_available() else torch.float32
+            _COGVIDEO_PIPE = CogVideoXPipeline.from_pretrained(
+                "THUDM/CogVideoX-2b",
+                torch_dtype=dtype,
+            )
+            if torch.cuda.is_available():
+                _COGVIDEO_PIPE.to("cuda")
+                _COGVIDEO_PIPE.enable_model_cpu_offload()
+            print("    CogVideoX loaded")
+        print(f"    Generating CogVideoX video ({num_frames} frames, {num_inference_steps} steps)...")
+        t0 = time.time()
+        result = _COGVIDEO_PIPE(
+            prompt=prompt,
+            num_frames=num_frames,
+            num_inference_steps=num_inference_steps,
+            guidance_scale=guidance_scale,
+        ).frames[0]
+        elapsed = time.time() - t0
+        print(f"    Generated in {elapsed:.1f}s, exporting...")
+        from diffusers.utils import export_to_video
+        export_to_video(result, str(output_path), fps=8)
+        sz = output_path.stat().st_size
+        print(f"    CogVideoX video saved ({sz} bytes)")
+        return sz > 1000
+    except Exception as e:
+        print(f"    CogVideoX error: {e}")
+        return False

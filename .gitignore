@@ -10,3 +10,9 @@ assets/music/*
 client_secret.json
 token.pickle
 *.mp4
+_temp_ai_video_img.png
+_wan_seed.png
+*.svd_input.png
+assets/piper_voices/*
+!assets/piper_voices/.gitkeep
+test_*.py

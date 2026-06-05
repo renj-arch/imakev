@@ -358,6 +358,23 @@ def run_animation():
     print("Animation video done!")
 
 
+def run_explainer():
+    print("=" * 55)
+    print("  MODE: EXPLAINER - Script > Piper TTS > Animation > FFmpeg")
+    print("  Completely free, local, no APIs")
+    print("=" * 55)
+    import explainer_video
+    import sys as _sys
+    prompt = " ".join(_sys.argv[2:]) if len(_sys.argv) > 2 else ""
+    if prompt:
+        _sys.argv = [_sys.argv[0], *prompt.split()]
+    out_path = explainer_video.main()
+    print("\nUploading...")
+    from upload_youtube import upload
+    upload(str(out_path), mode="explainer", playlist_key="explainer", script_data={"title": out_path.stem})
+    print("Explainer video done!")
+
+
 def run_loop():
     import time, random
     interval = int(sys.argv[2]) if len(sys.argv) > 2 else 3600
@@ -389,6 +406,7 @@ def run_loop():
             "negative_hooks": run_negative_hooks,
             "try_this": run_try_this,
             "animation": run_animation,
+            "explainer": run_explainer,
         }[mode]
         try:
             runner()
@@ -450,8 +468,10 @@ def main():
         run_try_this()
     elif mode == "animation":
         run_animation()
+    elif mode == "explainer":
+        run_explainer()
     else:
-        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', 'movie_trivia', 'animal_kingdom', 'space_wonders', 'box_office', 'things_they_dont_teach', 'challenges', 'satisfying', 'negative_hooks', 'try_this', or 'animation'")
+        print(f"Unknown mode: {mode}. Use 'story', 'facts', 'what_if', 'how_it_works', 'riddles', 'would_you_rather', 'history_minute', 'psychology', 'life_hacks', 'urban_legends', 'coincidences', 'unsolved_mysteries', 'movie_trivia', 'animal_kingdom', 'space_wonders', 'box_office', 'things_they_dont_teach', 'challenges', 'satisfying', 'negative_hooks', 'try_this', 'animation', or 'explainer'")
 
 
 if __name__ == "__main__":

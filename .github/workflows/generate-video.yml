@@ -30,14 +30,17 @@ jobs:
       - name: Generate video
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          PROMPT: '${{ inputs.prompt }}'
+          NUM_FRAMES: ${{ inputs.num_frames }}
+          STEPS: ${{ inputs.steps }}
         run: |
           python << 'PYEOF'
 import os, sys, time, json, shutil
 from gradio_client import Client
 
-prompt = """${{ inputs.prompt }}"""
-nf = int("${{ inputs.num_frames }}")
-ns = int("${{ inputs.steps }}")
+prompt = os.environ["PROMPT"]
+nf = int(os.environ.get("NUM_FRAMES", "16"))
+ns = int(os.environ.get("STEPS", "25"))
 token = os.environ.get("HF_TOKEN", "")
 
 # Try strategies in order

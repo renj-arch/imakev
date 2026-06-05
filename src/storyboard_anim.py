@@ -251,6 +251,100 @@ def _bg_space(draw, w, h, t, extra=None):
     draw.ellipse([px - 12, py - 12, px + 12, py + 12], fill=(255, 200, 100, 60))
 
 
+def _bg_underwater(draw, w, h, t, extra=None):
+    _draw_gradient(draw, 0, h, (10, 40, 100), (30, 80, 160), w)
+    for y in range(h):
+        ratio = y / h
+        wave = int(math.sin(y * 0.08 + t * 0.5) * 8)
+        r = max(0, min(255, 10 + int(20 * ratio) + wave))
+        g = max(0, min(255, 40 + int(40 * ratio) + wave))
+        b = max(0, min(255, 100 + int(60 * ratio) + wave * 2))
+        draw.line([(0, y), (w, y)], fill=(r, g, b))
+    for si in range(15):
+        sx = int((math.sin(si * 13.7 + t * 1.2) * 0.5 + 0.5) * w)
+        sy = int((math.cos(si * 9.3 + t * 0.8) * 0.5 + 0.5) * h)
+        sr = 2 + int(4 * math.sin(t + si))
+        sa = 80 + int(50 * math.sin(t * 2 + si * 3))
+        draw.ellipse([sx - sr, sy - sr, sx + sr, sy + sr], fill=(180, 220, 255, sa))
+    for bi in range(3):
+        bx = int(w * (0.15 + 0.35 * bi) + int(5 * math.sin(t * 0.2 + bi)))
+        by = int(h * (0.7 + 0.1 * bi))
+        draw.rectangle([bx - 2, by, bx + 2, h], fill=(40, 80, 50))
+        draw.polygon([(bx - 12, by), (bx, by - 15), (bx + 12, by)], fill=(30, 100, 40))
+        draw.polygon([(bx - 8, by - 8), (bx, by - 20), (bx + 8, by - 8)], fill=(20, 80, 30))
+
+
+def _bg_volcano(draw, w, h, t, extra=None):
+    _draw_gradient(draw, 0, int(h * 0.4), (40, 20, 10), (80, 40, 20), w)
+    for s in range(15):
+        sx = int((math.sin(s * 11.3 + t * 1.5) * 0.5 + 0.5) * w)
+        sy = int((math.cos(s * 7.1 + t * 1.2) * 0.5 + 0.5) * h * 0.35)
+        draw.ellipse([sx - 1, sy - 1, sx + 1, sy + 1], fill=(200, 100, 50))
+    mw = int(w * 0.35)
+    mx = w // 2
+    my = int(h * 0.3)
+    draw.polygon([(mx - mw, h), (mx - mw // 3, my), (mx + mw // 3, my), (mx + mw, h)], fill=(60, 30, 15))
+    draw.polygon([(mx - mw // 4, my), (mx, my - 30), (mx + mw // 4, my)], fill=(80, 35, 15))
+    glow = int(40 * math.sin(t * 2) + 50)
+    draw.ellipse([mx - 12, my - 35, mx + 12, my + 5], fill=(255, glow, 20, 180))
+    for li in range(8):
+        lx = mx + int(20 * math.sin(t * 3 + li * 2))
+        ly = my - 30 - int(20 * li * math.sin(t * 1.5 + li))
+        draw.ellipse([lx - 3, ly - 3, lx + 3, ly + 3], fill=(255, 150 + int(50 * math.sin(t + li)), 20))
+    _draw_gradient(draw, int(h * 0.4), h, (30, 15, 10), (15, 8, 5), w)
+
+
+def _bg_aurora(draw, w, h, t, extra=None):
+    _draw_gradient(draw, 0, int(h * 0.5), (5, 5, 20), (15, 10, 40), w)
+    for s in range(50):
+        sx = int((math.sin(s * 7.3 + t * 3) * 0.5 + 0.5) * w)
+        sy = int((math.cos(s * 5.1 + t * 2) * 0.5 + 0.5) * h * 0.4)
+        sz = (s % 2) + 1
+        bright = 180 + int(math.sin(t * 2 + s) * 70)
+        draw.ellipse([sx - sz, sy - sz, sx + sz, sy + sz], fill=(bright, bright, bright))
+    for ai in range(3):
+        offset = ai * 0.4
+        for y in range(int(h * 0.05), int(h * 0.35)):
+            x_shift = int(80 * math.sin(y * 0.02 + t * 0.8 + offset))
+            alpha = int(60 * (1 - abs(y - h * 0.2) / (h * 0.15)))
+            g = int(100 + 100 * math.sin(y * 0.03 + t + offset))
+            r = int(50 * math.sin(y * 0.02 + t * 0.5 + offset))
+            b = int(200 + 50 * math.sin(y * 0.02 + t * 0.7 + offset))
+            cx = w // 2 + x_shift
+            draw.line([(cx - 40, y), (cx + 40, y)], fill=(max(0, min(255, r)), max(0, min(255, g)), max(0, min(255, b)), max(0, min(255, alpha))))
+    _draw_gradient(draw, int(h * 0.5), h, (30, 40, 50), (10, 15, 25), w)
+
+
+def _bg_magical_forest(draw, w, h, t, extra=None):
+    sky_h = int(h * 0.40)
+    _draw_gradient(draw, 0, sky_h, (30, 15, 50), (60, 30, 80), w)
+    for s in range(30):
+        sx = int((math.sin(s * 9.3 + t * 2) * 0.5 + 0.5) * w)
+        sy = int((math.cos(s * 7.1 + t * 1.5) * 0.5 + 0.5) * sky_h)
+        draw.ellipse([sx - 1, sy - 1, sx + 1, sy + 1], fill=(200, 180, 255))
+    for ti in range(6):
+        tx = int(w * (0.08 + 0.16 * ti) + int(4 * math.sin(t * 0.2 + ti)))
+        ty = sky_h + 5
+        th = 80 + ti * 6
+        tw = 4 + ti % 3
+        draw.rectangle([tx - tw, ty - th, tx + tw, ty], fill=(30, 20, 15))
+        cr = 30 + ti * 6
+        glow = int(30 * math.sin(t * 0.5 + ti) + 40)
+        draw.ellipse([tx - cr, ty - th - cr + 10, tx + cr, ty - th + 10], fill=(glow, 50 + glow, 80))
+    for gi in range(12):
+        gx = int(w * (0.05 + 0.08 * gi) + int(3 * math.sin(t * 0.3 + gi)))
+        gy = sky_h + int(5 * math.sin(t * 0.2 + gi))
+        draw.line([(gx, gy), (gx + int(2 * math.sin(t + gi)), gy + 15 + int(5 * math.sin(t * 0.4 + gi)))], fill=(40, 120, 30), width=1)
+    _draw_gradient(draw, sky_h, h, (20, 60, 30), (10, 30, 15), w)
+    for pi in range(8):
+        px = int(w * ((pi * 0.15 + t * 0.02) % 1.0))
+        py = sky_h + int(math.sin(pi * 2 + t * 1.5) * 20) + 30
+        size = 2 + int(3 * math.sin(t * 0.7 + pi))
+        colors = [(255, 200, 50), (200, 100, 255), (100, 200, 255), (255, 100, 100)]
+        c = colors[pi % len(colors)]
+        draw.ellipse([px - size, py - size, px + size, py + size], fill=c + (180,))
+
+
 _BACKGROUNDS: dict[str, Callable] = {
     "sky": _bg_sky,
     "jungle": _bg_jungle,
@@ -262,6 +356,10 @@ _BACKGROUNDS: dict[str, Callable] = {
     "snow": _bg_snow,
     "sunset": _bg_sunset,
     "space": _bg_space,
+    "underwater": _bg_underwater,
+    "volcano": _bg_volcano,
+    "aurora": _bg_aurora,
+    "magical_forest": _bg_magical_forest,
 }
 
 
@@ -546,6 +644,125 @@ def _draw_fox(draw, x, y, s, fi, action, facing):
     draw.ellipse([tail_x + 2 * s, tail_y - 5 * s, tail_x + 12 * s, tail_y + 3 * s], fill=(255, 200, 180))
 
 
+def _draw_rabbit(draw, x, y, s, fi, action, facing):
+    body_c = (220, 210, 200)
+    dark = (180, 160, 140)
+    ear_h = 14 * s
+    draw.ellipse([x - 10 * s, y - 5 * s, x + 10 * s, y + 5 * s], fill=body_c)
+    draw.ellipse([x - 6 * s, y - 14 * s, x + 6 * s, y - 3 * s], fill=body_c)
+    ear_sway = 3 * math.sin(fi * 0.2)
+    draw.ellipse([x - 3 * s - 4 * s, y - 32 * s + ear_sway, x - 3 * s + 4 * s, y - 14 * s + ear_sway], fill=body_c)
+    draw.ellipse([x + 3 * s - 4 * s, y - 30 * s - ear_sway, x + 3 * s + 4 * s, y - 14 * s - ear_sway], fill=body_c)
+    draw.ellipse([x - 3 * s - 2 * s, y - 30 * s + ear_sway, x - 3 * s + 2 * s, y - 16 * s + ear_sway], fill=(255, 200, 220))
+    draw.ellipse([x + 3 * s - 2 * s, y - 28 * s - ear_sway, x + 3 * s + 2 * s, y - 16 * s - ear_sway], fill=(255, 200, 220))
+    eye_r = 2 * s
+    draw.ellipse([x - 4 * s - eye_r, y - 12 * s - eye_r, x - 4 * s + eye_r, y - 12 * s + eye_r], fill=(50, 50, 50))
+    draw.ellipse([x + 4 * s - eye_r, y - 12 * s - eye_r, x + 4 * s + eye_r, y - 12 * s + eye_r], fill=(50, 50, 50))
+    draw.ellipse([x - 4 * s - eye_r * 0.3, y - 12 * s - eye_r * 0.3, x - 4 * s + eye_r * 0.3, y - 12 * s + eye_r * 0.3], fill=(255, 255, 255))
+    draw.ellipse([x + 4 * s - eye_r * 0.3, y - 12 * s - eye_r * 0.3, x + 4 * s + eye_r * 0.3, y - 12 * s + eye_r * 0.3], fill=(255, 255, 255))
+    nose_r = 1.5 * s
+    draw.ellipse([x - nose_r, y - 9 * s, x + nose_r, y - 7 * s], fill=(255, 150, 180))
+    hop = 4 * math.sin(fi * 0.3)
+    draw.line([(x - 3 * s, y + 5 * s), (x - 4 * s, y + 12 * s + hop)], fill=body_c, width=max(2, int(2 * s)))
+    draw.line([(x + 3 * s, y + 5 * s), (x + 4 * s, y + 12 * s - hop)], fill=body_c, width=max(2, int(2 * s)))
+    tail_r = 4 * s
+    draw.ellipse([x - 12 * s * facing - tail_r, y - 2 * s - tail_r, x - 12 * s * facing + tail_r, y - 2 * s + tail_r], fill=(255, 255, 255))
+
+
+def _draw_bear(draw, x, y, s, fi, action, facing):
+    body_c = (140, 100, 60)
+    dark = (100, 70, 40)
+    draw.ellipse([x - 18 * s, y - 10 * s, x + 18 * s, y + 10 * s], fill=body_c)
+    draw.ellipse([x - 10 * s, y - 22 * s, x + 10 * s, y - 4 * s], fill=body_c)
+    ear_r = 7 * s
+    draw.ellipse([x - 12 * s - ear_r, y - 20 * s - ear_r, x - 12 * s + ear_r, y - 20 * s + ear_r], fill=body_c)
+    draw.ellipse([x + 12 * s - ear_r, y - 20 * s - ear_r, x + 12 * s + ear_r, y - 20 * s + ear_r], fill=body_c)
+    draw.ellipse([x - 12 * s - ear_r * 0.5, y - 20 * s - ear_r * 0.5, x - 12 * s + ear_r * 0.5, y - 20 * s + ear_r * 0.5], fill=dark)
+    draw.ellipse([x + 12 * s - ear_r * 0.5, y - 20 * s - ear_r * 0.5, x + 12 * s + ear_r * 0.5, y - 20 * s + ear_r * 0.5], fill=dark)
+    eye_r = 2.5 * s
+    draw.ellipse([x - 5 * s - eye_r, y - 14 * s - eye_r, x - 5 * s + eye_r, y - 14 * s + eye_r], fill=(30, 30, 30))
+    draw.ellipse([x + 5 * s - eye_r, y - 14 * s - eye_r, x + 5 * s + eye_r, y - 14 * s + eye_r], fill=(30, 30, 30))
+    draw.ellipse([x - 5 * s - eye_r * 0.3, y - 14 * s - eye_r * 0.3, x - 5 * s + eye_r * 0.3, y - 14 * s + eye_r * 0.3], fill=(255, 255, 255))
+    draw.ellipse([x + 5 * s - eye_r * 0.3, y - 14 * s - eye_r * 0.3, x + 5 * s + eye_r * 0.3, y - 14 * s + eye_r * 0.3], fill=(255, 255, 255))
+    nose_r = 3 * s
+    draw.ellipse([x - nose_r, y - 9 * s, x + nose_r, y - 6 * s], fill=dark)
+    arm_sway = 3 * math.sin(fi * 0.15)
+    draw.line([(x - 14 * s * facing, y - 2 * s), (x - 18 * s * facing + arm_sway, y - 8 * s + arm_sway)], fill=body_c, width=max(2, int(3 * s)))
+    draw.line([(x + 14 * s * facing, y - 2 * s), (x + 18 * s * facing + arm_sway, y - 8 * s - arm_sway)], fill=body_c, width=max(2, int(3 * s)))
+    draw.line([(x - 8 * s, y + 8 * s), (x - 8 * s, y + 16 * s)], fill=body_c, width=max(2, int(3 * s)))
+    draw.line([(x + 8 * s, y + 8 * s), (x + 8 * s, y + 16 * s)], fill=body_c, width=max(2, int(3 * s)))
+    ear_r = 4 * s
+    draw.ellipse([x - 16 * s * facing - ear_r, y - 4 * s - ear_r, x - 16 * s * facing + ear_r, y - 4 * s + ear_r], fill=(100, 70, 40))
+
+
+def _draw_owl(draw, x, y, s, fi, action, facing):
+    body_c = (160, 130, 100)
+    belly_c = (220, 210, 190)
+    draw.ellipse([x - 12 * s, y - 8 * s, x + 12 * s, y + 8 * s], fill=body_c)
+    draw.ellipse([x - 8 * s, y - 18 * s, x + 8 * s, y - 4 * s], fill=body_c)
+    draw.ellipse([x - 5 * s, y - 6 * s, x + 5 * s, y + 4 * s], fill=belly_c)
+    draw.polygon([(x - 8 * s, y - 18 * s), (x - 12 * s, y - 24 * s), (x - 4 * s, y - 14 * s)], fill=body_c)
+    draw.polygon([(x + 8 * s, y - 18 * s), (x + 12 * s, y - 24 * s), (x + 4 * s, y - 14 * s)], fill=body_c)
+    eye_r = 5 * s
+    draw.ellipse([x - 6 * s - eye_r, y - 14 * s - eye_r, x - 6 * s + eye_r, y - 14 * s + eye_r], fill=(255, 255, 255))
+    draw.ellipse([x + 6 * s - eye_r, y - 14 * s - eye_r, x + 6 * s + eye_r, y - 14 * s + eye_r], fill=(255, 255, 255))
+    draw.ellipse([x - 6 * s - eye_r * 0.4, y - 14 * s - eye_r * 0.4, x - 6 * s + eye_r * 0.4, y - 14 * s + eye_r * 0.4], fill=(200, 150, 50))
+    draw.ellipse([x + 6 * s - eye_r * 0.4, y - 14 * s - eye_r * 0.4, x + 6 * s + eye_r * 0.4, y - 14 * s + eye_r * 0.4], fill=(200, 150, 50))
+    draw.ellipse([x - 6 * s - eye_r * 0.15, y - 14 * s - eye_r * 0.15, x - 6 * s + eye_r * 0.15, y - 14 * s + eye_r * 0.15], fill=(10, 10, 10))
+    draw.ellipse([x + 6 * s - eye_r * 0.15, y - 14 * s - eye_r * 0.15, x + 6 * s + eye_r * 0.15, y - 14 * s + eye_r * 0.15], fill=(10, 10, 10))
+    beak = 3 * s
+    draw.polygon([(x - beak, y - 8 * s), (x, y - 5 * s), (x + beak, y - 8 * s)], fill=(255, 180, 50))
+    wing_flap = 4 * math.sin(fi * 0.25)
+    if action == "flying":
+        draw.polygon([(x - 6 * s, y - 4 * s), (x - 14 * s, y - 12 * s - wing_flap), (x - 4 * s, y)], fill=body_c)
+        draw.polygon([(x + 6 * s, y - 4 * s), (x + 14 * s, y - 12 * s - wing_flap), (x + 4 * s, y)], fill=body_c)
+    draw.line([(x - 4 * s, y + 8 * s), (x - 5 * s, y + 14 * s)], fill=body_c, width=max(2, int(2 * s)))
+    draw.line([(x + 4 * s, y + 8 * s), (x + 5 * s, y + 14 * s)], fill=body_c, width=max(2, int(2 * s)))
+
+
+def _draw_turtle(draw, x, y, s, fi, action, facing):
+    shell_c = (60, 140, 60)
+    shell_p = (80, 170, 80)
+    skin_c = (100, 160, 100)
+    draw.ellipse([x - 16 * s, y - 6 * s, x + 16 * s, y + 8 * s], fill=shell_c)
+    draw.ellipse([x - 14 * s, y - 4 * s, x + 14 * s, y + 6 * s], fill=shell_p)
+    for pi in range(6):
+        px = x + int(10 * s * math.cos(pi * 1.05 + 0.3))
+        py = y + int(5 * s * math.sin(pi * 1.05))
+        draw.ellipse([px - 2 * s, py - 1.5 * s, px + 2 * s, py + 1.5 * s], fill=(50, 120, 50))
+    head_bob = 2 * math.sin(fi * 0.2)
+    draw.ellipse([x + 14 * s * facing - 6 * s, y - 10 * s + head_bob, x + 14 * s * facing + 6 * s, y + 2 * s + head_bob], fill=skin_c)
+    eye_r = 1.5 * s
+    draw.ellipse([x + 16 * s * facing - eye_r, y - 8 * s + head_bob - eye_r, x + 16 * s * facing + eye_r, y - 8 * s + head_bob + eye_r], fill=(20, 20, 20))
+    draw.line([(x - 10 * s, y + 8 * s), (x - 12 * s, y + 14 * s)], fill=skin_c, width=max(2, int(2 * s)))
+    draw.line([(x + 10 * s, y + 8 * s), (x + 12 * s, y + 14 * s)], fill=skin_c, width=max(2, int(2 * s)))
+    draw.line([(x - 14 * s, y + 6 * s), (x - 18 * s, y + 10 * s)], fill=skin_c, width=max(2, int(2 * s)))
+    draw.line([(x + 14 * s, y + 6 * s), (x + 18 * s, y + 10 * s)], fill=skin_c, width=max(2, int(2 * s)))
+    tail_wag = 3 * math.sin(fi * 0.15)
+    draw.polygon([(x - 18 * s * facing, y), (x - 24 * s * facing + tail_wag, y + 2 * s), (x - 18 * s * facing, y + 4 * s)], fill=skin_c)
+
+
+def _draw_penguin(draw, x, y, s, fi, action, facing):
+    body_c = (40, 40, 55)
+    belly_c = (240, 240, 240)
+    draw.ellipse([x - 10 * s, y - 6 * s, x + 10 * s, y + 8 * s], fill=body_c)
+    draw.ellipse([x - 6 * s, y - 2 * s, x + 6 * s, y + 6 * s], fill=belly_c)
+    draw.ellipse([x - 7 * s, y - 16 * s, x + 7 * s, y - 4 * s], fill=body_c)
+    eye_r = 2 * s
+    draw.ellipse([x - 4 * s - eye_r, y - 12 * s - eye_r, x - 4 * s + eye_r, y - 12 * s + eye_r], fill=(255, 255, 255))
+    draw.ellipse([x + 4 * s - eye_r, y - 12 * s - eye_r, x + 4 * s + eye_r, y - 12 * s + eye_r], fill=(255, 255, 255))
+    draw.ellipse([x - 4 * s - eye_r * 0.5, y - 12 * s - eye_r * 0.5, x - 4 * s + eye_r * 0.5, y - 12 * s + eye_r * 0.5], fill=(10, 10, 10))
+    draw.ellipse([x + 4 * s - eye_r * 0.5, y - 12 * s - eye_r * 0.5, x + 4 * s + eye_r * 0.5, y - 12 * s + eye_r * 0.5], fill=(10, 10, 10))
+    beak = 2.5 * s
+    draw.polygon([(x - beak, y - 7 * s), (x, y - 4 * s), (x + beak, y - 7 * s)], fill=(255, 180, 50))
+    wing_sway = 4 * math.sin(fi * 0.2)
+    draw.line([(x - 8 * s * facing, y - 4 * s), (x - 12 * s * facing + wing_sway, y + 2 * s + wing_sway)], fill=body_c, width=max(2, int(3 * s)))
+    draw.line([(x + 8 * s * facing, y - 4 * s), (x + 12 * s * facing - wing_sway, y + 2 * s - wing_sway)], fill=body_c, width=max(2, int(3 * s)))
+    wobble = 2 * math.sin(fi * 0.15)
+    draw.line([(x - 3 * s, y + 6 * s), (x - 4 * s + wobble, y + 12 * s)], fill=(255, 180, 50), width=max(2, int(2 * s)))
+    draw.line([(x + 3 * s, y + 6 * s), (x + 4 * s + wobble, y + 12 * s)], fill=(255, 180, 50), width=max(2, int(2 * s)))
+
+
 _CHAR_DRAWERS: dict[str, Callable] = {
     "monkey": _draw_monkey,
     "bicycle": _draw_bicycle,
@@ -557,6 +774,11 @@ _CHAR_DRAWERS: dict[str, Callable] = {
     "dragon": _draw_dragon,
     "fish": _draw_fish,
     "fox": _draw_fox,
+    "rabbit": _draw_rabbit,
+    "bear": _draw_bear,
+    "owl": _draw_owl,
+    "turtle": _draw_turtle,
+    "penguin": _draw_penguin,
 }
 
 
@@ -581,6 +803,11 @@ CHAR_KEYWORDS = {
     "dragon": "dragon",
     "fish": "fish", "jellyfish": "fish",
     "fox": "fox",
+    "rabbit": "rabbit", "bunny": "rabbit", "hare": "rabbit",
+    "bear": "bear", "grizzly": "bear", "polar": "bear",
+    "owl": "owl",
+    "turtle": "turtle", "tortoise": "turtle",
+    "penguin": "penguin",
     "bicycle": "bicycle", "bike": "bicycle", "cycle": "bicycle",
 }
 
@@ -595,6 +822,10 @@ BG_KEYWORDS: dict[str, str] = {
     "sunset": "sunset", "sunrise": "sunset", "dusk": "sunset", "dawn": "sunset",
     "space": "space", "star": "space", "galaxy": "space", "planet": "space",
     "sky": "sky", "cloud": "sky",
+    "underwater": "underwater", "coral": "underwater", "reef": "underwater",
+    "volcano": "volcano", "lava": "volcano", "eruption": "volcano",
+    "aurora": "aurora", "northern": "aurora", "polar": "aurora",
+    "magical_forest": "magical_forest", "fairy": "magical_forest", "enchanted": "magical_forest", "glowing": "magical_forest", "mushroom": "magical_forest",
 }
 
 ACTION_KEYWORDS: dict[str, str] = {

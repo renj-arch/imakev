@@ -8,3 +8,6 @@ google-api-python-client>=2.0
 python-dotenv>=1.0
 requests>=2.0
 gradio-client>=1.0
+diffusers>=0.30.0
+torch>=2.0.0
+piper-tts>=1.4.0

@@ -592,7 +592,15 @@ def _is_duplicate(mode: str, items: list[str], data: dict) -> bool:
 
 
 def pick(mode: str) -> dict | None:
-    return None
+    data = _read_bank(mode)
+    entries = data.get("entries", [])
+    if not entries:
+        return None
+    entry = entries.pop(0)
+    data["entries"] = entries
+    _mark_used(mode, entry)
+    _write_bank(mode, data)
+    return entry
 
 
 def count(mode: str) -> int:

@@ -20,7 +20,7 @@ from src.engagement import (
     branding_overlays,
     get_audio_duration,
 )
-from src.photo_video import generate_hf_text_to_video, generate_ai_image_video, generate_stock_photo_video, generate_photorealistic_frames, generate_coverr_video, generate_hf_space_video
+from src.photo_video import generate_hf_text_to_video, generate_ai_image_video, generate_stock_photo_video, generate_photorealistic_frames, generate_coverr_video, generate_hf_space_video, generate_pollinations_video, generate_cogvideo
 from src.motion_video import generate_motion_video
 
 W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
@@ -92,7 +92,7 @@ def main():
     temp_dir = config.TEMP_DIR / "animation"
     temp_dir.mkdir(exist_ok=True)
 
-    print(f"\n[1/4] Voiceover: {SUBJECT}")
+    print(f"\n[Voiceover] {SUBJECT}")
     tts_path = temp_dir / "narration.mp3"
     subprocess.run(
         [sys.executable, "-m", "edge_tts", "--text", narration, "--voice", "en-US-GuyNeural", "--write-media", str(tts_path)],
@@ -101,37 +101,15 @@ def main():
     total_dur = get_audio_duration(str(tts_path))
     print(f"  {total_dur:.1f}s")
 
-    print(f"\n[2/4] Generating video...")
+    print(f"\n[Generating video] ...")
     bg = None
     video_path = temp_dir / "ai_video.mp4"
 
-    # Try 0: HF Space T2V (free, real AI video via Gradio Spaces)
-    print("  Trying HF Space T2V (Gradio Space API)...")
-    result, err = _run_with_timeout(
-        generate_hf_space_video,
-        args=(user_prompt, video_path),
-        kwargs={"num_frames": min(32, max(4, int(total_dur * 8))), "num_inference_steps": 25, "timeout": 600},
-        timeout=660,
-    )
-    if result:
-        try:
-            vid = VideoFileClip(str(video_path))
-            total_frames = int(vid.fps * vid.duration)
-            if vid.duration < total_dur:
-                clips = [vid] * (int(total_dur // vid.duration) + 1)
-                vid = concatenate_videoclips(clips, method="compose").with_duration(total_dur)
-            else:
-                vid = vid.with_duration(total_dur)
-            bg = vid
-            print("  Using HF Space AI video")
-        except Exception as e:
-            print(f"  HF Space video load failed: {e}")
-            bg = None
-    else:
-        print(f"  HF Space T2V unavailable ({err or 'no result'})")
+    # The fallback chain is ordered: most reliable/free first, AI-enhanced later.
+    # ALL sources are free — no paid APIs anywhere.
 
-    # Try 1: Procedural motion video (works for ANY prompt, no APIs)
-    print("  Trying procedural motion video...")
+    # Try 1: Procedural motion video (works for ANY prompt, no APIs, no GPU)
+    print("  Trying procedural motion video (no APIs needed)...")
     num_frames_needed = int(total_dur * FPS)
     result, err = _run_with_timeout(
         generate_motion_video,
@@ -150,7 +128,30 @@ def main():
     else:
         print(f"  Motion video unavailable ({err or 'no result'})")
 
-    # Try 2: Coverr stock video (free, no API key, real video clips)
+    # Try 2: CogVideoX-2B (local, open-source, free, no API — needs GPU with ~6GB+ VRAM)
+    if bg is None:
+        print("  Trying CogVideoX-2B (local open-source model)...")
+        result, err = _run_with_timeout(
+            generate_cogvideo,
+            args=(user_prompt, video_path),
+            kwargs={"num_frames": 49, "num_inference_steps": 25, "guidance_scale": 6.0},
+            timeout=600,
+        )
+        if result:
+            try:
+                vid = VideoFileClip(str(video_path))
+                if vid.duration < total_dur:
+                    clips = [vid] * (int(total_dur // vid.duration) + 1)
+                    vid = concatenate_videoclips(clips, method="compose").with_duration(total_dur)
+                else:
+                    vid = vid.with_duration(total_dur)
+                bg = vid
+                print("  Using CogVideoX video")
+            except Exception as e:
+                print(f"  CogVideoX video load failed: {e}")
+                bg = None
+
+    # Try 3: Coverr stock video (free, no API key, real video)
     if bg is None:
         print("  Trying Coverr stock video...")
         result, err = _run_with_timeout(
@@ -174,7 +175,7 @@ def main():
         else:
             print(f"  Coverr unavailable ({err or 'no result'})")
 
-    # Try 3: HF text-to-video (requires HF_TOKEN or free tier)
+    # Try 4: HF text-to-video (free tier, may need HF_TOKEN)
     if bg is None:
         print("  Trying HF text-to-video...")
         result, err = _run_with_timeout(
@@ -200,7 +201,7 @@ def main():
         else:
             print(f"  HF T2V unavailable ({err or 'no result'})")
 
-    # Try 3: Pollinations.ai image Ken Burns (free, no API key)
+    # Try 5: Pollinations.ai image Ken Burns (free, no API key)
     if bg is None:
         print("  Trying AI image Ken Burns...")
         num_frames_needed = int(total_dur * FPS)
@@ -219,7 +220,7 @@ def main():
             bg = VideoClip(make_ai_frame, duration=total_dur)
             print("  Using AI image slideshow")
 
-    # Try 4: Stock photo Ken Burns (free, no keys, reliable)
+    # Try 6: Stock photo Ken Burns (free, no keys, reliable)
     if bg is None:
         print("  Trying stock photo Ken Burns...")
         num_frames_needed = int(total_dur * FPS)
@@ -238,7 +239,53 @@ def main():
             bg = VideoClip(make_stock_frame, duration=total_dur)
             print("  Using stock photo slideshow")
 
-    # Fallback: Storyboard animator (always works)
+    # Try 7: Pollinations.AI video (free API, no GPU needed — requires POLLINATIONS_KEY)
+    if bg is None:
+        print("  Trying Pollinations.AI video API...")
+        result, err = _run_with_timeout(
+            generate_pollinations_video,
+            args=(user_prompt, video_path),
+            timeout=90,
+        )
+        if result:
+            try:
+                vid = VideoFileClip(str(video_path))
+                if vid.duration < total_dur:
+                    clips = [vid] * (int(total_dur // vid.duration) + 1)
+                    vid = concatenate_videoclips(clips, method="compose").with_duration(total_dur)
+                else:
+                    vid = vid.with_duration(total_dur)
+                bg = vid
+                print("  Using Pollinations.AI video")
+            except Exception as e:
+                print(f"  Pollinations video load failed: {e}")
+                bg = None
+
+    # Try 8: HF Space T2V (free, real AI video via Gradio Spaces — rate-limited)
+    if bg is None:
+        print("  Trying HF Space T2V (Gradio Space API)...")
+        result, err = _run_with_timeout(
+            generate_hf_space_video,
+            args=(user_prompt, video_path),
+            kwargs={"num_frames": min(32, max(4, int(total_dur * 8))), "num_inference_steps": 25, "timeout": 600},
+            timeout=660,
+        )
+        if result:
+            try:
+                vid = VideoFileClip(str(video_path))
+                total_frames = int(vid.fps * vid.duration)
+                if vid.duration < total_dur:
+                    clips = [vid] * (int(total_dur // vid.duration) + 1)
+                    vid = concatenate_videoclips(clips, method="compose").with_duration(total_dur)
+                else:
+                    vid = vid.with_duration(total_dur)
+                bg = vid
+                print("  Using HF Space AI video")
+            except Exception as e:
+                print(f"  HF Space video load failed: {e}")
+                bg = None
+
+    # Ultimate fallback: Storyboard animator (always works, no APIs)
     if bg is None:
         print("  Using storyboard fallback")
         from src.storyboard_anim import generate_storyboard_frames
@@ -274,7 +321,7 @@ def main():
     else:
         final = final.with_audio(audio_clip)
 
-    print("\n[4/4] Rendering...")
+    print("\n[Rendering] Composing final video...")
     safe_title = SUBJECT.lower().replace(" ", "_").replace("?", "").replace("!", "").replace("'", "").replace(".","").replace(",","").replace(":","")[:50]
     out = config.OUTPUT_DIR / f"storyboard_{safe_title}.mp4"
     out.unlink(missing_ok=True)

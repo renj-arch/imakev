@@ -30,7 +30,7 @@ def _generate_gemini(prompt: str, temperature: float = 0.8, max_tokens: int = 30
 def _generate_openai(prompt: str, temperature: float = 0.8, max_tokens: int = 300, system: str = "") -> str:
     from openai import OpenAI
     base = config.OPENROUTER_BASE if config.LLM_PROVIDER == "openrouter" else None
-    client = OpenAI(api_key=config.LLM_API_KEY, base_url=base)
+    client = OpenAI(api_key=config.LLM_API_KEY, base_url=base, timeout=15)
     messages = []
     if system:
         messages.append({"role": "system", "content": system})
