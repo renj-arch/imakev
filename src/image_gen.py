@@ -1,13 +1,12 @@
 """Centralized image generation — AI, stock photos, HF Spaces, then procedural scene drawing."""
-import io, time, random, math, hashlib, os, sys, threading
-from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageFilter, ImageChops, ImageOps
-import numpy as np
+import io, time, random, math, hashlib, os
+from PIL import Image, ImageDraw, ImageFont, ImageEnhance, ImageFilter
 import requests as req
 import config
 
-POLLINATIONS_URL = "https://image.pollinations.ai/prompt/{prompt}?width={w}&height={h}&model={model}&seed={seed}"
-MAX_RETRIES = 3
-RETRY_DELAY = 3
+POLLINATIONS_URL = "https://image.pollinations.ai/prompt/{prompt}?width={w}&height={h}&model={model}&seed={seed}&enhance=true"
+ANON_RATE_LIMIT_S = 16  # anonymous tier: 1 request per 15s, use 16 to be safe
+_last_pollinations_call = 0.0
 
 _prompt_enhancers = [
     ", cinematic lighting, dramatic shadows, 4K, photorealistic, highly detailed",
@@ -35,10 +34,11 @@ def _try_stock_photo(prompt: str, w: int, h: int) -> Image.Image | None:
     keywords = _extract_keywords(prompt, max_words=3)
     first_keyword = keywords.split(",")[0]
     urls = [
+        f"https://lorem.media/photo/{w}/{h}",
         f"https://loremflickr.com/{w*2}/{h*2}/{keywords}",
         f"https://loremflickr.com/{w*2}/{h*2}/{first_keyword}",
-        f"https://picsum.photos/seed/{hash(prompt) & 0xFFFF}/{w*2}/{h*2}",
-        f"https://picsum.photos/{w*2}/{h*2}",
+        f"https://picsum.photos/seed/{hash(prompt) & 0xFFFF}/{w}/{h}",
+        f"https://picsum.photos/{w}/{h}",
     ]
     for url in urls:
         try:
@@ -153,23 +153,25 @@ def gen_img(prompt: str, width: int = None, height: int = None) -> Image.Image:
     seed = random.randint(0, 999999)
     enhanced = _enhance_prompt(prompt, seed)
 
-    # Try 1: AI-generated image (Pollinations, free, no key)
-    for model in ("flux", "sana"):
+    # Try 1: AI-generated image via Pollinations (free, no key, rate-limited 1/15s)
+    pollinations_models = ("flux", "turbo", "gptimage", "kontext", "seedream", "nanobanana")
+    for model in pollinations_models:
         img = _try_pollinations(enhanced, w, h, model, seed)
         if img is not None:
             return img
+        time.sleep(ANON_RATE_LIMIT_S)  # respect anonymous tier rate limit
 
-    # Try 2: HF Gradio Space (free SDXL/FLUX)
+    # Try 2: HF Gradio Space (free SDXL/FLUX, no key, queued)
     img = _try_hf_space_image(enhanced, w, h)
     if img is not None:
         return img
 
-    # Try 3: HF Inference API (free, no key, rate-limited)
+    # Try 3: HF Inference API (free, rate-limited)
     img = _try_hf_inference_api(enhanced, w, h)
     if img is not None:
         return img
 
-    # Try 4: Free stock photo matching the prompt
+    # Try 4: Free stock photo matching the prompt (no key, always available)
     stock = _try_stock_photo(prompt, w, h)
     if stock is not None:
         return stock
@@ -178,21 +180,31 @@ def gen_img(prompt: str, width: int = None, height: int = None) -> Image.Image:
     return _generate_scene(w, h, prompt)
 
 
-def _try_pollinations(prompt: str, w: int, h: int, model: str, seed: int = 0, timeout: int = 30) -> Image.Image | None:
-    for attempt in range(MAX_RETRIES + 1):
+def _try_pollinations(prompt: str, w: int, h: int, model: str, seed: int = 0, timeout: int = 45) -> Image.Image | None:
+    global _last_pollinations_call
+    elapsed = time.time() - _last_pollinations_call
+    if elapsed < ANON_RATE_LIMIT_S:
+        wait = ANON_RATE_LIMIT_S - elapsed
+        time.sleep(wait)
+    for attempt in range(2):
         s = seed + attempt
         url = POLLINATIONS_URL.format(prompt=req.utils.quote(prompt), w=w, h=h, model=model, seed=s)
         try:
             r = req.get(url, timeout=timeout)
+            if r.status_code == 429:
+                time.sleep(ANON_RATE_LIMIT_S)
+                continue
             if r.status_code == 200 and len(r.content) > 500:
+                _last_pollinations_call = time.time()
                 img = Image.open(io.BytesIO(r.content)).convert("RGB")
                 img = img.resize((w, h), Image.LANCZOS)
                 img = ImageEnhance.Sharpness(img).enhance(1.1)
                 return img
         except Exception:
             pass
-        if attempt < MAX_RETRIES:
-            time.sleep(RETRY_DELAY)
+        if attempt == 0:
+            time.sleep(ANON_RATE_LIMIT_S)
+    _last_pollinations_call = time.time()
     return None
 
 

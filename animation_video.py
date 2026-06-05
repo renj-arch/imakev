@@ -20,7 +20,7 @@ from src.engagement import (
     branding_overlays,
     get_audio_duration,
 )
-from src.photo_video import generate_hf_text_to_video, generate_ai_image_video, generate_stock_photo_video, generate_photorealistic_frames, generate_coverr_video, generate_hf_space_video, generate_pollinations_video, generate_cogvideo, generate_openrouter_video, generate_freeai_video
+from src.photo_video import generate_hf_text_to_video, generate_ai_image_video, generate_stock_photo_video, generate_photorealistic_frames, generate_coverr_video, generate_lorem_video, generate_hf_space_video, generate_pollinations_video, generate_cogvideo, generate_openrouter_video, generate_freeai_video
 from src.motion_video import generate_motion_video
 from src.cinematic import enhance_frame, render_brand_overlay
 
@@ -280,9 +280,26 @@ def main():
             except Exception:
                 pass
 
-    # Try 9: AI image Ken Burns (Pollinations images + zoom)
+    # Try 9: lorem.media stock video (free, no key, no auth)
     if bg is None:
-        print("  Try 9: AI image Ken Burns...")
+        print("  Try 9: lorem.media stock video...")
+        result, err = _run_with_timeout(generate_lorem_video, args=(video_path, W, H), timeout=30)
+        if result:
+            try:
+                vid = VideoFileClip(str(video_path))
+                if vid.duration < total_dur:
+                    clips = [vid] * (int(total_dur // vid.duration) + 1)
+                    vid = concatenate_videoclips(clips, method="compose").with_duration(total_dur)
+                else:
+                    vid = vid.with_duration(total_dur)
+                bg = vid
+                print("  >> Using lorem.media stock video")
+            except Exception:
+                pass
+
+    # Try 10: AI image Ken Burns (Pollinations images + zoom)
+    if bg is None:
+        print("  Try 10: AI image Ken Burns...")
         num_frames_needed = int(total_dur * FPS)
         result, err = _run_with_timeout(
             generate_ai_image_video, args=(user_prompt, W, H, num_frames_needed, FPS), timeout=90,
@@ -301,9 +318,9 @@ def main():
             bg = VideoClip(make_ai_frame, duration=total_dur)
             print("  >> Using AI image slideshow")
 
-    # Try 10: Stock photo Ken Burns (always works)
+    # Try 11: Stock photo Ken Burns (always works)
     if bg is None:
-        print("  Try 10: Stock photo Ken Burns...")
+        print("  Try 11: Stock photo Ken Burns...")
         num_frames_needed = int(total_dur * FPS)
         result, err = _run_with_timeout(
             generate_stock_photo_video, args=(user_prompt, W, H, num_frames_needed, FPS), timeout=30,

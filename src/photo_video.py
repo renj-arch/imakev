@@ -625,6 +625,27 @@ def generate_coverr_video(prompt: str, output_path: str | Path) -> bool:
     return False
 
 
+def generate_lorem_video(output_path: str | Path, w: int = 720, h: int = 1280) -> bool:
+    """Download free stock video from lorem.media (no API key, no auth, free for commercial use).
+    Returns True if video written successfully."""
+    output_path = Path(output_path)
+    urls = [
+        f"https://lorem.media/video/{h}/{w}",
+        f"https://lorem.media/video",
+    ]
+    for url in urls:
+        try:
+            print(f"    Downloading lorem.media video...")
+            resp = req.get(url, timeout=30, allow_redirects=True)
+            if resp.status_code == 200 and len(resp.content) > 50000:
+                output_path.write_bytes(resp.content)
+                print(f"    lorem.media video saved ({len(resp.content)} bytes)")
+                return True
+        except Exception:
+            continue
+    return False
+
+
 def generate_photorealistic_frames(prompt: str, w: int = 720, h: int = 1280,
                                     num_frames: int = 30, fps: int = 6) -> list[np.ndarray] | None:
     base_prompt = prompt.split(",")[0].strip()
@@ -1022,6 +1043,20 @@ def generate_mode_video_background(prompt: str, duration: float, w: int = 720, h
                 print(f"    {name} timed out ({timeout}s)")
         except Exception as e:
             print(f"    {name} error: {e}")
+
+    # Fallback: lorem.media stock video
+    print("    Trying lorem.media stock video...")
+    try:
+        if generate_lorem_video(video_path, w, h):
+            vid = VideoFileClip(str(video_path))
+            if vid.duration < duration:
+                clips = [vid] * (int(duration // vid.duration) + 1)
+                vid = concatenate_videoclips(clips, method="compose").with_duration(duration)
+            else:
+                vid = vid.with_duration(duration)
+            return vid, False
+    except Exception:
+        pass
 
     # Fallback: AI image Ken Burns
     print("    Trying AI image Ken Burns fallback...")
