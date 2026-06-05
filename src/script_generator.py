@@ -29,14 +29,19 @@ def _generate_gemini(prompt: str, temperature: float = 0.8, max_tokens: int = 30
 
 def _generate_openai(prompt: str, temperature: float = 0.8, max_tokens: int = 300, system: str = "") -> str:
     from openai import OpenAI
-    base = config.OPENROUTER_BASE if config.LLM_PROVIDER == "openrouter" else None
-    client = OpenAI(api_key=config.LLM_API_KEY, base_url=base, timeout=15)
+    if config.LLM_PROVIDER == "openrouter":
+        base, key, model = config.OPENROUTER_BASE, config.LLM_API_KEY, config.LLM_MODEL
+    elif config.LLM_PROVIDER == "huggingface":
+        base, key, model = config.HF_BASE, config.HF_API_KEY, config.HF_MODEL
+    else:
+        base, key, model = None, config.LLM_API_KEY, config.LLM_MODEL
+    client = OpenAI(api_key=key, base_url=base, timeout=30)
     messages = []
     if system:
         messages.append({"role": "system", "content": system})
     messages.append({"role": "user", "content": prompt})
     response = client.chat.completions.create(
-        model=config.LLM_MODEL, messages=messages, max_tokens=max_tokens, temperature=temperature,
+        model=model, messages=messages, max_tokens=max_tokens, temperature=temperature,
     )
     text = response.choices[0].message.content
     return text.strip() if text else ""

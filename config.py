@@ -21,6 +21,9 @@ LLM_API_KEY = os.getenv("LLM_API_KEY", "")
 
 OPENROUTER_BASE = "https://openrouter.ai/api/v1"
 GOOGLE_BASE = "https://generativelanguage.googleapis.com/v1beta/openai/"
+HF_BASE = "https://api-inference.huggingface.co/v1/"
+HF_MODEL = os.getenv("HF_MODEL", "mistralai/Mistral-7B-Instruct-v0.3")
+HF_API_KEY = os.getenv("HF_API_KEY", "")
 
 TTS_PROVIDER = os.getenv("TTS_PROVIDER", "edge")
 

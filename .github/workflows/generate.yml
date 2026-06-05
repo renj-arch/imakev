@@ -3,10 +3,19 @@ name: Generate Video
 on:
   workflow_dispatch:
     inputs:
+      llm_provider:
+        description: 'LLM provider (huggingface, openrouter, google)'
+        required: false
+        default: 'huggingface'
+        type: choice
+        options:
+          - huggingface
+          - openrouter
+          - google
       mode:
         description: 'Video mode'
         required: true
-        default: 'textsync'
+        default: 'storyboard'
         type: choice
         options:
           - storyboard
@@ -86,7 +95,8 @@ jobs:
         run: |
           echo "PEXELS_API_KEY=${{ secrets.PEXELS_API_KEY }}" >> .env
           echo "LLM_API_KEY=${{ secrets.LLM_API_KEY }}" >> .env
-          echo "LLM_PROVIDER=openrouter" >> .env
+          echo "LLM_PROVIDER=${{ inputs.llm_provider || 'huggingface' }}" >> .env
+          echo "HF_API_KEY=${{ secrets.HF_API_KEY }}" >> .env
           echo "BRAND_NAME=${{ vars.BRAND_NAME || 'Imakev' }}" >> .env
 
       - name: Generate video(s)
