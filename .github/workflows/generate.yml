@@ -102,12 +102,13 @@ jobs:
           cat .env
 
       - name: Debug environment
-        run: python -c "
-import os
-print('LLM_PROVIDER=' + os.environ.get('LLM_PROVIDER', '(not set)'))
-print('HF_API_KEY set=' + ('yes' if os.environ.get('HF_API_KEY') else 'no'))
-print('LLM_API_KEY set=' + ('yes' if os.environ.get('LLM_API_KEY') else 'no'))
-"
+        run: |
+          python -c "
+          import os
+          print('LLM_PROVIDER=' + os.environ.get('LLM_PROVIDER', '(not set)'))
+          print('HF_API_KEY set=' + ('yes' if os.environ.get('HF_API_KEY') else 'no'))
+          print('LLM_API_KEY set=' + ('yes' if os.environ.get('LLM_API_KEY') else 'no'))
+          "
       - name: Generate video(s)
         env:
           LLM_PROVIDER: ${{ inputs.llm_provider || 'huggingface' }}
