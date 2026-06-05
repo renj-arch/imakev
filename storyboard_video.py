@@ -184,86 +184,28 @@ def _fallback_script(topic: str) -> dict:
 
 
 def _generate_scene_image(prompt: str, w: int, h: int, cache_path: Path) -> Image.Image | None:
-    """Generate a 2D illustration scene using full fallback chain."""
+    """Generate a scene image — tries AI APIs, then hand-drawn sketch engine."""
     if cache_path.exists() and cache_path.stat().st_size > 5000:
         return Image.open(cache_path)
 
     from src.image_gen import gen_img
     style_prompt = f"simple 2D flat vector illustration, children's book style, colorful, clean: {prompt}"
     img = gen_img(style_prompt, w, h)
-    if img:
+    if img and img.size[0] > 10:
         img.save(cache_path)
         return img
-    return None
+
+    print(f"    Using sketch engine for: {prompt[:60]}...")
+    from src.sketch_engine import generate_sketch_scene
+    img = generate_sketch_scene(prompt, w, h)
+    img.save(cache_path)
+    return img
 
 
 def _get_fallback_canvas(w: int, h: int, prompt: str, scene_num: int = 0, total_scenes: int = 5) -> Image.Image:
-    """Storyboard scene card with theme colors, scene number, and narration text."""
-    p = prompt.lower()
-    is_night = any(w in p for w in ("night", "dark", "moon", "space", "midnight"))
-    is_warm = any(w in p for w in ("fire", "campfire", "sunset", "sun", "warm", "golden", "caveman"))
-    is_nature = any(w in p for w in ("forest", "tree", "mountain", "river", "ocean", "wolf", "wolf"))
-    is_urban = any(w in p for w in ("city", "building", "globe", "map", "world"))
-
-    if is_night:
-        colors = [(10, 8, 30), (20, 15, 50), (40, 30, 70), (60, 45, 90)]
-        accent = (255, 220, 100)
-    elif is_warm:
-        colors = [(180, 60, 20), (200, 80, 30), (220, 110, 40), (180, 80, 30)]
-        accent = (255, 200, 80)
-    elif is_nature:
-        colors = [(20, 50, 30), (30, 70, 40), (40, 90, 50), (30, 70, 40)]
-        accent = (100, 200, 120)
-    elif is_urban:
-        colors = [(30, 30, 60), (45, 45, 80), (60, 60, 90), (40, 40, 70)]
-        accent = (150, 180, 255)
-    else:
-        colors = [(50, 40, 60), (70, 55, 80), (90, 70, 100), (65, 50, 75)]
-        accent = (200, 180, 255)
-
-    img = Image.new("RGB", (w, h), colors[0])
-    draw = ImageDraw.Draw(img)
-    seg_h = h / len(colors)
-    for i, c in enumerate(colors):
-        y0 = int(seg_h * i)
-        y1 = int(seg_h * (i + 1)) if i < len(colors) - 1 else h
-        for y in range(y0, y1):
-            t = (y - y0) / (y1 - y0)
-            r = int(c[0] + (colors[min(i + 1, len(colors) - 1)][0] - c[0]) * t)
-            g = int(c[1] + (colors[min(i + 1, len(colors) - 1)][1] - c[1]) * t)
-            b = int(c[2] + (colors[min(i + 1, len(colors) - 1)][2] - c[2]) * t)
-            draw.line([(0, y), (w, y)], fill=(r, g, b))
-
-    draw.rectangle([20, 20, 100, 50], fill=accent + (80,))
-    font_sm = _get_font(18)
-    draw.text((28, 26), f"{scene_num}/{total_scenes}", font=font_sm, fill=accent)
-
-    font = _get_font(28)
-    lines = []
-    words = prompt.split()
-    for ww in words:
-        if not lines:
-            lines.append(ww)
-        elif len(lines[-1]) + len(ww) < 25:
-            lines[-1] += " " + ww
-        else:
-            lines.append(ww)
-    lines = lines[:6]
-
-    y = h // 2 - len(lines) * 20
-    for line in lines:
-        bb = draw.textbbox((0, 0), line, font=font)
-        x = (w - (bb[2] - bb[0])) // 2
-        draw.text((x + 2, y + 2), line, font=font, fill=(0, 0, 0, 100))
-        draw.text((x, y), line, font=font, fill=(255, 255, 255))
-        y += 45
-
-    for i in range(3):
-        cx = w // 2 + (i - 1) * 40
-        cy = h - 80
-        draw.ellipse([cx - 8, cy - 8, cx + 8, cy + 8], fill=accent)
-
-    return img
+    """Hand-drawn sketch illustration generated from scene description text."""
+    from src.sketch_engine import generate_sketch_scene
+    return generate_sketch_scene(prompt, w, h)
 
 
 def render_caption(frame: np.ndarray, words_in_fact: list[str], spoken_idx: int) -> np.ndarray:
