@@ -33,15 +33,10 @@ def gen_img(prompt: str, width: int = None, height: int = None) -> Image.Image:
         img = _try_pollinations(enhanced, w, h, model, seed)
         if img is not None:
             return img
-    enhanced2 = _enhance_prompt(prompt, seed + 1)
-    for model in ("flux", "sana"):
-        img = _try_pollinations(enhanced2, w, h, model, seed + 1)
-        if img is not None:
-            return img
-    return _generate_scene(w, h, enhanced)
+    return _generate_scene(w, h, prompt)
 
 
-def _try_pollinations(prompt: str, w: int, h: int, model: str, seed: int = 0, timeout: int = 45) -> Image.Image | None:
+def _try_pollinations(prompt: str, w: int, h: int, model: str, seed: int = 0, timeout: int = 20) -> Image.Image | None:
     for attempt in range(MAX_RETRIES + 1):
         s = seed + attempt
         url = POLLINATIONS_URL.format(prompt=req.utils.quote(prompt), w=w, h=h, model=model, seed=s)
@@ -49,10 +44,8 @@ def _try_pollinations(prompt: str, w: int, h: int, model: str, seed: int = 0, ti
             r = req.get(url, timeout=timeout)
             if r.status_code == 200 and len(r.content) > 500:
                 img = Image.open(io.BytesIO(r.content)).convert("RGB")
-                img = img.resize((w * 2, h * 2), Image.LANCZOS)
                 img = img.resize((w, h), Image.LANCZOS)
-                img = ImageEnhance.Contrast(img).enhance(1.1)
-                img = ImageEnhance.Sharpness(img).enhance(1.15)
+                img = ImageEnhance.Sharpness(img).enhance(1.1)
                 return img
         except Exception:
             pass
