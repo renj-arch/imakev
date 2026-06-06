@@ -137,81 +137,191 @@ def _draw_sun(draw, cx, cy, s=1.0):
         _stroke(draw, [(cx+math.cos(math.radians(a))*30*s, cy+math.sin(math.radians(a))*30*s),
                        (cx+math.cos(math.radians(a))*40*s, cy+math.sin(math.radians(a))*40*s)], w=2, color=(255,200,50,100), amp=0.5)
 
-# ─── Scene builder from keywords ──────────────────────────────
+# ─── LLM-driven scene renderer ────────────────────────────────
 
-KEYWORD_ACTIONS = {
-    "sky": lambda d, c, s: _sky_grad(d, W, H, s),
-    "night": lambda d, c, s: _sky_grad(d, W, H, "night"),
-    "sunset": lambda d, c, s: _sky_grad(d, W, H, "sunset"),
-    "sunrise": lambda d, c, s: _sky_grad(d, W, H, "sunset"),
-    "ocean": lambda d, c, s: (_sky_grad(d, W, H, "day"), _draw_water(d, W//2, int(H*0.6))),
-    "sea": lambda d, c, s: (_sky_grad(d, W, H, "day"), _draw_water(d, W//2, int(H*0.6))),
-    "water": lambda d, c, s: _draw_water(d, c[0], c[1], s),
-    "tree": lambda d, c, s: _draw_tree(d, c[0], c[1], s),
-    "mountain": lambda d, c, s: _draw_mountain(d, c[0], c[1], s),
-    "house": lambda d, c, s: _draw_house(d, c[0], c[1], s),
-    "cabin": lambda d, c, s: _draw_house(d, c[0], c[1], s),
-    "ship": lambda d, c, s: _draw_ship(d, c[0], c[1], s),
-    "boat": lambda d, c, s: _draw_ship(d, c[0], c[1], s, "merchant"),
-    "pirate": lambda d, c, s: _draw_ship(d, c[0], c[1], s, "pirate"),
-    "human": lambda d, c, s: _draw_human(d, c[0], c[1], s),
-    "person": lambda d, c, s: _draw_human(d, c[0], c[1], s),
-    "man": lambda d, c, s: _draw_human(d, c[0], c[1], s),
-    "woman": lambda d, c, s: _draw_human(d, c[0], c[1], s),
-    "people": lambda d, c, s: _draw_human(d, c[0], c[1], s),
-    "sailor": lambda d, c, s: _draw_human(d, c[0], c[1], s),
-    "star": lambda d, c, s: _circle(d, c[0], c[1], 2, fill_c=(255,255,200,150), line_c=None),
-    "moon": lambda d, c, s: _circle(d, c[0], c[1], 20*s, fill_c=(240,235,210,80), line_c=(220,215,190)),
-    "sun": lambda d, c, s: _draw_sun(d, c[0], c[1], s),
-    "cloud": lambda d, c, s: _draw_cloud(d, c[0], c[1], s),
-    "grass": lambda d, c, s: _draw_grass_blade(d, c[0], c[1]),
-    "field": lambda d, c, s: None,
-    "forest": lambda d, c, s: None,
-    "desert": lambda d, c, s: _ground_grad(d, 0, int(H*0.6), W, int(H*0.4), (190,170,120)),
-}
-
-def keywords_from_text(text: str) -> list[str]:
-    p = text.lower()
-    found = []
-    for kw in KEYWORD_ACTIONS:
-        if kw in p: found.append(kw)
-    return found
-
-def render_scene_from_keywords(keywords: list[str], w=W, h=H) -> Image.Image:
+def render_scene_from_commands(commands: str, w=W, h=H) -> Image.Image:
+    """Execute LLM-generated drawing commands with hand-drawn wobble style."""
     img = Image.new("RGBA", (w, h), (252, 250, 245, 255))
     draw = ImageDraw.Draw(img, "RGBA")
     _paper_bg(draw, w, h)
 
-    has_sky = any(k in keywords for k in ["sky", "night", "sunset", "sunrise", "ocean", "sea"])
-    has_ground = any(k in keywords for k in ["grass", "field", "desert", "ground"])
+    rng_local = random.Random(len(commands))
 
-    if "night" in keywords:
-        _sky_grad(draw, w, h, "night")
-        _draw_stars(draw, w, h)
-    elif "sunset" in keywords or "sunrise" in keywords:
-        _sky_grad(draw, w, h, "sunset")
-    elif has_sky or not has_ground:
-        _sky_grad(draw, w, h, "day")
+    for line in commands.strip().split("\n"):
+        line = line.strip()
+        if not line or line.startswith("#") or line.startswith("//"):
+            continue
 
-    if "desert" in keywords:
-        _ground_grad(draw, 0, int(h*0.6), w, int(h*0.4), (190,170,120))
-    elif has_ground or not has_sky:
-        _ground_grad(draw, 0, int(h*0.6), w, int(h*0.4))
+        parts = line.split()
+        if not parts:
+            continue
+        cmd = parts[0].upper()
 
-    if "ocean" in keywords or "sea" in keywords:
-        _draw_water(draw, w//2, int(h*0.6))
+        try:
+            if cmd == "SKY":
+                sky_type = parts[1] if len(parts) > 1 else "day"
+                _sky_grad(draw, w, h, sky_type)
+                if sky_type == "night":
+                    for _ in range(50):
+                        sx = rng_local.randint(0, w)
+                        sy = rng_local.randint(0, int(h*0.4))
+                        _circle(draw, sx, sy, rng_local.uniform(0.5,2), fill_c=(255,255,200,rng_local.randint(30,120)), line_c=None)
 
-    # Place elements
-    elements = [k for k in keywords if k not in ("sky", "night", "sunset", "sunrise", "day", "grass", "field", "desert", "ground", "ocean", "sea", "water", "star", "forest")]
-    for i, elem in enumerate(elements):
-        ox = int(w * (0.2 + 0.6 * (i+1) / (len(elements)+1)))
-        oy = int(h * (0.3 + (i%3)*0.15))
-        sz = 1.0
-        if elem in KEYWORD_ACTIONS:
-            res = KEYWORD_ACTIONS[elem](draw, (ox, oy), sz)
+            elif cmd == "GROUND":
+                gy = int(parts[1]) if len(parts) > 1 else int(h*0.65)
+                c = (int(parts[2]), int(parts[3]), int(parts[4])) if len(parts) > 4 else (40,100,40)
+                _ground_grad(draw, 0, gy, w, h-gy, c)
+                # Grass blades
+                if len(parts) < 5 or "grass" in line.lower():
+                    for _ in range(40):
+                        gx = rng_local.randint(20, w-20)
+                        _draw_grass_blade(draw, gx, gy+rng_local.randint(0, int(h*0.15)))
+
+            elif cmd == "STROKE":
+                coords = [float(x) for x in parts[1:-4]] if len(parts) > 5 else []
+                if coords and len(coords) >= 4:
+                    pts = [(coords[i], coords[i+1]) for i in range(0, len(coords)-1, 2)]
+                    lw = int(parts[-4]) if len(parts) > 4 else 2
+                    cr, cg, cb = int(parts[-3]), int(parts[-2]), int(parts[-1])
+                    _stroke(draw, pts, w=lw, color=(cr,cg,cb), amp=1.2)
+
+            elif cmd == "FILL":
+                coords = [float(x) for x in parts[1:-4]] if len(parts) > 5 else []
+                if coords and len(coords) >= 6:
+                    pts = [(coords[i], coords[i+1]) for i in range(0, len(coords)-1, 2)]
+                    cr, cg, cb = int(parts[-3]), int(parts[-2]), int(parts[-1])
+                    _fill(draw, pts, (cr,cg,cb,180), amp=2)
+                    _stroke(draw, pts, w=2, color=(cr,cg,cb), amp=1)
+
+            elif cmd == "CIRCLE":
+                cx = float(parts[1]); cy = float(parts[2]); r = float(parts[3])
+                lcr = int(parts[4]); lcg = int(parts[5]); lcb = int(parts[6])
+                fill_c = None
+                if len(parts) > 9:
+                    fill_c = (int(parts[7]), int(parts[8]), int(parts[9]), 150)
+                _circle(draw, cx, cy, r, fill_c=fill_c, line_c=(lcr,lcg,lcb))
+
+            elif cmd == "RECT":
+                rx = float(parts[1]); ry = float(parts[2]); rw = float(parts[3]); rh = float(parts[4])
+                lcr, lcg, lcb = int(parts[5]), int(parts[6]), int(parts[7])
+                fill_c = None
+                if len(parts) > 10:
+                    fill_c = (int(parts[8]), int(parts[9]), int(parts[10]), 150)
+                _rect(draw, rx, ry, rw, rh, fill_c=fill_c, line_c=(lcr,lcg,lcb))
+
+            elif cmd == "HATCH":
+                cx = float(parts[1]); cy = float(parts[2]); r = float(parts[3])
+                cr, cg, cb = int(parts[4]), int(parts[5]), int(parts[6])
+                for _ in range(int(parts[7]) if len(parts) > 7 else 25):
+                    a = rng_local.random()*math.pi*2
+                    d = rng_local.random()*r
+                    x1 = cx+math.cos(a)*d; y1 = cy+math.sin(a)*d
+                    x2 = x1+math.cos(a+math.pi/4)*rng_local.uniform(3,8)
+                    y2 = y1+math.sin(a+math.pi/4)*rng_local.uniform(3,8)
+                    draw.line([(x1,y1),(x2,y2)], fill=(cr,cg,cb,60), width=1)
+
+            elif cmd == "CLOUD":
+                cx = float(parts[1]); cy = float(parts[2]); s = float(parts[3]) if len(parts) > 3 else 1.0
+                _draw_cloud(draw, cx, cy, s)
+
+            elif cmd == "MOUNTAIN":
+                cx = float(parts[1]); cy = float(parts[2]); s = float(parts[3]) if len(parts) > 3 else 1.0
+                _draw_mountain(draw, cx, cy, s)
+
+            elif cmd == "TREE":
+                cx = float(parts[1]); cy = float(parts[2]); s = float(parts[3]) if len(parts) > 3 else 1.0
+                _draw_tree(draw, cx, cy, s)
+
+            elif cmd == "HUMAN":
+                cx = float(parts[1]); cy = float(parts[2]); s = float(parts[3]) if len(parts) > 3 else 1.0
+                _draw_human(draw, cx, cy, s)
+
+            elif cmd == "SHIP":
+                cx = float(parts[1]); cy = float(parts[2]); s = float(parts[3]) if len(parts) > 3 else 1.0
+                st = parts[4] if len(parts) > 4 else "merchant"
+                _draw_ship(draw, cx, cy, s, st)
+
+            elif cmd == "SUN":
+                cx = float(parts[1]); cy = float(parts[2]); s = float(parts[3]) if len(parts) > 3 else 1.0
+                _draw_sun(draw, cx, cy, s)
+
+            elif cmd == "MOON":
+                cx = float(parts[1]); cy = float(parts[2]); s = float(parts[3]) if len(parts) > 3 else 1.0
+                _circle(draw, cx, cy, 20*s, fill_c=(240,235,210,80), line_c=(220,215,190))
+
+            elif cmd == "HOUSE":
+                cx = float(parts[1]); cy = float(parts[2]); s = float(parts[3]) if len(parts) > 3 else 1.0
+                _draw_house(draw, cx, cy, s)
+
+        except Exception as e:
+            print(f"    Cmd error '{cmd}': {e}")
+            continue
 
     img = img.filter(ImageFilter.SMOOTH)
     return img.convert("RGB")
+
+
+def llm_generate_drawing_commands(scene_title: str, scene_narration: str, visuals_hint: str) -> str:
+    """Use LLM to generate drawing commands for a scene."""
+    from src.script_generator import _generate
+
+    prompt = f"""Generate drawing commands for a hand-drawn sketch scene.
+
+Scene title: {scene_title}
+Narration: {scene_narration}
+Visual hints: {visuals_hint}
+
+Available commands:
+- SKY [day|night|sunset] — fills the sky with gradient
+- GROUND y_pos R G B — fills ground from y_pos down
+- STROKE x1 y1 x2 y2 ... w R G B — draws a wobble line through points
+- FILL x1 y1 x2 y2 ... R G B — draws a filled polygon
+- CIRCLE cx cy r outlineR outlineG outlineB [fillR fillG fillB]
+- RECT x y w h outlineR outlineG outlineB [fillR fillG fillB]
+- HATCH cx cy radius R G B [density]
+- CLOUD cx cy [scale]
+- MOUNTAIN cx cy [scale]
+- TREE cx cy [scale]
+- HUMAN cx cy [scale]
+- SHIP cx cy [scale] [merchant|pirate]
+- SUN cx cy [scale]
+- MOON cx cy [scale]
+- HOUSE cx cy [scale]
+
+Rules:
+- Canvas is 720x1280 (portrait)
+- Use HAND-DRAWN style: organic curves, imperfect placement, varied line widths
+- Place main subject at center, supporting elements around it
+- Add mood-appropriate sky and ground
+- Use 6-15 commands per scene
+- For crowds or multiple objects, use STROKE/FILL with multiple points
+- Coordinates: x from 0-720, y from 0-1280
+- Colors: R G B values 0-255
+
+Output ONLY the drawing commands, one per line. No explanations."""
+
+    system = "You are a sketch artist who generates drawing commands for hand-drawn illustrations."
+    try:
+        commands = _generate(prompt, temperature=0.6, max_tokens=2000, system=system)
+        if commands:
+            # Validate — at least get some commands
+            cmd_lines = [l.strip() for l in commands.strip().split("\n") if l.strip() and not l.startswith("#") and not l.startswith("//")]
+            if cmd_lines:
+                return commands.strip()
+    except Exception as e:
+        print(f"  LLM draw error: {e}")
+
+    # Fallback: simple scene
+    from src.script_generator import _generate as _g2
+    fallback = f"SKY day\nGROUND 800 40 100 40\nMOUNTAIN 200 750 1.0\nMOUNTAIN 500 780 0.8\nTREE 360 700 1.0"
+    return fallback
+
+
+def render_scene_from_llm(scene_title: str, scene_narration: str, visuals_hint: str, w=W, h=H) -> Image.Image:
+    """Full pipeline: LLM generates drawing commands → renderer executes them."""
+    commands = llm_generate_drawing_commands(scene_title, scene_narration, visuals_hint)
+    print(f"    LLM commands: {len(commands.split(chr(10)))} lines")
+    return render_scene_from_commands(commands, w, h)
 
 # ─── LLM script generation ────────────────────────────────────
 
@@ -319,16 +429,13 @@ def build_video(script_data: dict, output_path: str):
     temp_dir = config.TEMP_DIR / "auto_story"
     temp_dir.mkdir(exist_ok=True)
 
-    # Step 1: Generate scene images
-    print(f"\n[1/4] Drawing {len(scenes)} hand-drawn scenes...")
+    # Step 1: Generate scene images via LLM drawing commands
+    print(f"\n[1/4] Drawing {len(scenes)} hand-drawn scenes via LLM...")
     scene_images = []
     for i, scene in enumerate(scenes):
         visuals = scene.get("visuals", scene.get("narration", ""))
-        kws = keywords_from_text(visuals + " " + scene.get("narration", ""))
-        if not kws:
-            kws = ["sky", "tree"]
-        print(f"  Scene {i+1}: {scene['title'][:30]} [{', '.join(kws[:4])}]")
-        img = render_scene_from_keywords(kws, W, H)
+        print(f"  Scene {i+1}: {scene['title'][:30]}...")
+        img = render_scene_from_llm(scene["title"], scene["narration"], visuals, W, H)
         # Overlay title text on image
         img_rgba = img.convert("RGBA")
         draw = ImageDraw.Draw(img_rgba)
