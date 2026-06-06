@@ -17,7 +17,6 @@ import config
 from src.text_to_speech import generate_tts_with_timestamps
 from src.engagement import subscribe_end_card
 from src.sketch_generator import SketchGenerator
-from src.image_gen import _generate_scene
 
 W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
 FPS = config.VIDEO_FPS
@@ -467,71 +466,29 @@ def _fallback_script(topic: str) -> dict:
 RENDER_FPS = 3  # Low fps for progressive reveal — each frame holds for ~8 video frames at 24fps
 
 def render_scene_frames(scene: dict, scene_duration: float, fps=RENDER_FPS):
-    """Render a scene as progressive frames — rich landscape bg + overlay elements."""
+    """Render a scene as progressive frames. Elements appear one by one on a rich landscape."""
     visual = scene.get("visual", {})
     mood = scene.get("mood", "peaceful")
     camera = scene.get("camera", None)
-    narration = scene.get("narration", "")
     generator = SketchGenerator(W, H, seed=rng.randint(0, 99999))
-
-    # Build a prompt for the rich procedural landscape generator
-    bg = visual.get("bg", {})
-    bg_type = bg.get("type", "gradient")
-    mood_words = {"peaceful": "calm serene", "mysterious": "mysterious moody", "dramatic": "dramatic epic",
-                  "hopeful": "warm hopeful", "somber": "somber melancholy", "epic": "majestic grand"}
-    mood_desc = mood_words.get(mood, "natural")
-    atms = visual.get("atmosphere", {})
-
-    # Extract keywords from narration for the landscape prompt
-    kw = narration.lower().split()[:8]
-    kw_text = " ".join(kw)
-
-    # Add atmosphere to prompt
-    atms_parts = []
-    if atms.get("fog"): atms_parts.append("foggy misty")
-    if atms.get("particles") == "snow": atms_parts.append("snowy winter")
-    if atms.get("particles") == "rain": atms_parts.append("rainy")
-    if atms.get("star_count", 0) > 10: atms_parts.append("starry night")
-    if "night" in bg_type: atms_parts.append("night")
-
-    prompt = f"{mood_desc} landscape {kw_text} {' '.join(atms_parts)} {bg_type}"
-    if "desert" in kw_text or "egypt" in kw_text or "pyramid" in kw_text:
-        prompt += " desert sand dunes"
-    if "snow" in kw_text or "frozen" in kw_text or "ice" in kw_text:
-        prompt += " snow covered winter"
-    if "water" in kw_text or "ocean" in kw_text or "sea" in kw_text or "river" in kw_text:
-        prompt += " ocean water waves"
-    if "forest" in kw_text or "tree" in kw_text or "jungle" in kw_text:
-        prompt += " dense forest"
-    if "mountain" in kw_text or "hill" in kw_text:
-        prompt += " majestic mountains"
-    if "sun" in kw_text or "sunrise" in kw_text or "dawn" in kw_text:
-        prompt += " sunrise golden"
-    if "city" in kw_text or "village" in kw_text or "civilization" in kw_text:
-        prompt += " ancient village huts"
-
-    # Generate rich landscape background
-    scene_img = _generate_scene(W, H, prompt)
 
     elements = visual.get("elements", [])
     if not elements:
-        frames = [np.array(scene_img)] * max(int(fps * scene_duration), 1)
+        img = generator.render_scene(visual)
+        frames = [np.array(img)] * max(int(fps * scene_duration), 1)
         return frames
 
-    # Progressive reveal: overlay elements one by one on the landscape bg
     n_steps = len(elements)
     time_per_step = scene_duration / n_steps
     frames_per_step = max(1, int(time_per_step * fps))
 
     all_frames = []
     for step in range(1, n_steps + 1):
-        base = scene_img.copy()
-        draw = ImageDraw.Draw(base)
+        partial_visual = dict(visual)
+        partial_visual["elements"] = elements[:step]
 
-        for el in elements[:step]:
-            generator._render_element(draw, el)
-
-        frame_arr = np.array(base)
+        img = generator.render_scene(partial_visual)
+        frame_arr = np.array(img)
 
         if camera:
             from src.cinematic import apply_camera_move

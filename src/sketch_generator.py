@@ -1513,6 +1513,10 @@ class SketchGenerator:
         if atmos.get("particles") == "stars" or bg_type == "night":
             self.draw_stars(draw, count=atmos.get("star_count", 60))
 
+        # ── Landscape features (mountains, ground, trees, clouds) ──
+        if isinstance(bg, dict):
+            self._render_landscape(draw, bg)
+
         # ── Elements ──
         for elem in desc.get("elements", []):
             self._render_element(draw, elem)
@@ -1619,6 +1623,93 @@ class SketchGenerator:
                       (0.4, (160, 80, 100)), (0.6, (80, 50, 80)),
                       (1, self._tc(bg.get("ground_color"), (40, 50, 30)))]
             self.bg_gradient(draw, colors)
+
+    def _render_landscape(self, draw, bg: dict):
+        """Draw landscape features (mountains, ground detail, vegetation) on top of background."""
+        bg_type = bg.get("type", "gradient")
+        colors = bg.get("colors", [])
+        horizon = bg.get("horizon", 0.55)
+        horizon_y = int(self.h * horizon)
+
+        if bg_type in ("indoor", "solid", "ocean"):
+            return
+
+        if len(colors) >= 2:
+            sky_base = self._tc(colors[0], (100, 120, 180))
+            ground_base = self._tc(colors[-1], (60, 80, 60))
+        else:
+            sky_base = (100, 120, 180)
+            ground_base = (60, 80, 60)
+
+        is_night = bg_type == "night"
+        is_warm = bg_type == "sunset"
+
+        # ── Mountains silhouette at horizon ──
+        mtn_count = self.rng.randint(3, 5)
+        far_color = (max(0, sky_base[0] - 20), max(0, sky_base[1] - 15), max(0, sky_base[2] - 10))
+        for _ in range(mtn_count):
+            mx = self.rng.randint(-50, self.w + 50)
+            mh = self.rng.randint(40, 120)
+            mw = self.rng.randint(80, 200)
+            pts = [(mx - mw, horizon_y), (mx, horizon_y - mh), (mx + mw, horizon_y)]
+            self.draw_polygon(draw, pts, fill=far_color + (180,),
+                            stroke=self._darken(far_color, 10) + (120,), stroke_width=1)
+
+        mtn_count2 = self.rng.randint(2, 4)
+        near_color = self._darken(sky_base, 30)
+        for _ in range(mtn_count2):
+            mx = self.rng.randint(-30, self.w + 30)
+            mh = self.rng.randint(60, 160)
+            mw = self.rng.randint(100, 250)
+            pts = [(mx - mw, horizon_y + 5), (mx, horizon_y - mh), (mx + mw, horizon_y + 5)]
+            self.draw_polygon(draw, pts, fill=near_color + (200,),
+                            stroke=self._darken(near_color, 15) + (140,), stroke_width=1)
+            if not is_night and mh > 100 and self.rng.random() < 0.5:
+                snow_h = mh * 0.2
+                snow_pts = [(mx - mw * 0.15, horizon_y - mh + snow_h),
+                           (mx, horizon_y - mh),
+                           (mx + mw * 0.15, horizon_y - mh + snow_h)]
+                self.draw_polygon(draw, snow_pts, fill=(230, 235, 245, 200),
+                                stroke=(200, 210, 230, 150), stroke_width=1)
+
+        # ── Ground texture (grass tufts) ──
+        ground_h = self.h - horizon_y
+        grass_color = self._lighten(ground_base, 10)
+        for _ in range(self.rng.randint(10, 30)):
+            gx = self.rng.randint(5, self.w - 5)
+            gy = horizon_y + self.rng.randint(5, ground_h - 5)
+            gh = self.rng.randint(4, 12)
+            self.draw_line(draw, gx, gy, gx + self.rng.randint(-2, 2), gy - gh,
+                         color=grass_color + (self.rng.randint(100, 180),), width=1)
+
+        # ── Trees at horizon ──
+        if bg_type in ("gradient", "forest", "sunset") and not is_night:
+            tree_count = self.rng.randint(2, 4)
+            for _ in range(tree_count):
+                tx = self.rng.randint(30, self.w - 30)
+                ty = horizon_y - self.rng.randint(5, 15)
+                trunk_h = self.rng.randint(20, 35)
+                trunk_w = self.rng.randint(3, 6)
+                draw.rectangle([tx - trunk_w, ty - trunk_h, tx + trunk_w, ty],
+                              fill=(50, 35, 20, 200))
+                crown_r = self.rng.randint(15, 25)
+                for i in range(2):
+                    cy = ty - trunk_h - i * crown_r // 2
+                    cr = crown_r - i * 5
+                    if cr > 5:
+                        draw.ellipse([tx - cr, cy - cr, tx + cr, cy + cr // 2],
+                                    fill=(30 + self.rng.randint(0, 20), 60 + self.rng.randint(0, 30), 20 + self.rng.randint(0, 15), 200))
+
+        # ── Clouds for daytime ──
+        if not is_night and bg_type != "indoor":
+            for _ in range(self.rng.randint(1, 3)):
+                cx = self.rng.randint(0, self.w)
+                cy = self.rng.randint(5, int(self.h * 0.25))
+                cr = self.rng.randint(20, 40)
+                cb = 200 + self.rng.randint(0, 40)
+                for dx, dy in [(0, 0), (cr//2, cr//4), (-cr//3, cr//3), (cr//3, cr//3)]:
+                    draw.ellipse([cx + dx - cr, cy + dy - cr//2, cx + dx + cr, cy + dy + cr//2],
+                                fill=(cb, cb, cb, self.rng.randint(120, 200)))
 
     def _render_element(self, draw, elem: dict):
         """Render a single element from its description."""
