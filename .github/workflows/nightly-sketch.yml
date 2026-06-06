@@ -3,14 +3,22 @@ name: 🎬 Sketch-Story Video
 on:
   workflow_dispatch:
     inputs:
-      script:
-        description: 'Story script (leave blank for built-in pirate story)'
+      mode:
+        description: 'Mode'
+        required: true
+        default: 'story'
+        type: choice
+        options:
+          - story
+          - sketch
+      prompt:
+        description: 'Custom prompt (sketch mode only)'
         required: false
         type: string
         default: ''
 
 jobs:
-  story:
+  generate:
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -35,25 +43,20 @@ jobs:
           echo "LLM_API_KEY=${{ secrets.LLM_API_KEY }}" >> .env
           echo "LLM_MODEL=${{ vars.LLM_MODEL || 'moonshotai/kimi-k2.6:free' }}" >> .env
 
-      - name: Write custom script if provided
-        if: inputs.script != ''
-        run: |
-          cat > custom_script.txt << 'SCRIPTEOF'
-          ${{ inputs.script }}
-          SCRIPTEOF
+      - name: Run story mode (12-scene pirate video)
+        if: inputs.mode == 'story'
+        run: python storyboard_anim.py
 
-      - name: Generate story video
-        run: |
-          if [ -f custom_script.txt ]; then
-            python story_video.py custom_script.txt
-          else
-            python story_video.py
-          fi
+      - name: Run sketch mode
+        if: inputs.mode == 'sketch'
+        run: python sketch_pipeline.py "${{ inputs.prompt || 'a peaceful landscape' }}"
 
-      - name: Upload video
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: sketch-story-video
-          path: output/story_*.mp4
+          name: output
+          path: |
+            output/*.mp4
+            sketch_*.png
           retention-days: 30
           if-no-files-found: error
