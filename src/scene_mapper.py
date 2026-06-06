@@ -83,12 +83,72 @@ ELEMENT_MAP = {
     "cloud": [{"type": "cloud", "x": 0.5, "y": 0.2, "scale": 0.7}],
     "rain": [{"type": "cloud", "x": 0.5, "y": 0.2, "scale": 0.7}, {"type": "line", "x": 0.4, "y": 0.3, "x2": 0.4, "y2": 0.4, "stroke": [150, 180, 220], "stroke_width": 1}],
     "wind": [{"type": "line", "x": 0.3, "y": 0.35, "x2": 0.7, "y2": 0.35, "stroke": [180, 190, 200, 100], "stroke_width": 2}],
-    "animal": [{"type": "animal", "x": 0.5, "y": 0.55, "scale": 1.0}],
-    "bird": [{"type": "bird", "x": 0.5, "y": 0.3, "scale": 1.0}],
-    "fish": [{"type": "fish", "x": 0.5, "y": 0.5, "scale": 1.0}],
-    "horse": [{"type": "animal", "x": 0.5, "y": 0.55, "scale": 1.2, "fill": [120, 80, 60]}],
-    "camel": [{"type": "animal", "x": 0.5, "y": 0.55, "scale": 1.2, "fill": [180, 160, 120]}],
-    "monster": [{"type": "animal", "x": 0.5, "y": 0.5, "scale": 1.5, "fill": [60, 100, 60]}],
+    "animal": [{"type": "elephant", "x": 0.5, "y": 0.55, "scale": 1.0}],
+    "bird": [{"type": "eagle", "x": 0.5, "y": 0.3, "scale": 1.0}],
+    "fish": [{"type": "dolphin", "x": 0.5, "y": 0.5, "scale": 1.0}],
+    "horse": [{"type": "horse", "x": 0.5, "y": 0.55, "scale": 1.2, "fill": [120, 80, 60]}],
+    "camel": [{"type": "camel", "x": 0.5, "y": 0.55, "scale": 1.2, "fill": [180, 160, 120]}],
+    "monster": [{"type": "dragon", "x": 0.5, "y": 0.5, "scale": 1.5, "fill": [60, 100, 60]}],
+    "elephant": [{"type": "elephant", "x": 0.5, "y": 0.55, "scale": 1.2}],
+    "lion": [{"type": "lion", "x": 0.5, "y": 0.55, "scale": 1.2}],
+    "tiger": [{"type": "tiger", "x": 0.5, "y": 0.55, "scale": 1.2}],
+    "giraffe": [{"type": "giraffe", "x": 0.5, "y": 0.55, "scale": 1.2}],
+    "zebra": [{"type": "zebra", "x": 0.5, "y": 0.55, "scale": 1.2}],
+    "dog": [{"type": "dog", "x": 0.5, "y": 0.55, "scale": 1.2}],
+    "cat": [{"type": "cat", "x": 0.5, "y": 0.55, "scale": 1.2}],
+    "bear": [{"type": "bear", "x": 0.5, "y": 0.55, "scale": 1.2}],
+    "wolf": [{"type": "wolf", "x": 0.5, "y": 0.55, "scale": 1.2}],
+    "fox": [{"type": "fox", "x": 0.5, "y": 0.55, "scale": 1.2}],
+    "rabbit": [{"type": "rabbit", "x": 0.5, "y": 0.55, "scale": 1.2}],
+    "deer": [{"type": "deer", "x": 0.5, "y": 0.55, "scale": 1.2}],
+    "shark": [{"type": "shark", "x": 0.5, "y": 0.5, "scale": 1.2}],
+    "whale": [{"type": "whale", "x": 0.5, "y": 0.5, "scale": 1.2}],
+    "dolphin": [{"type": "dolphin", "x": 0.5, "y": 0.5, "scale": 1.2}],
+    "turtle": [{"type": "turtle", "x": 0.5, "y": 0.5, "scale": 1.2}],
+    "eagle": [{"type": "eagle", "x": 0.5, "y": 0.3, "scale": 1.2}],
+    "owl": [{"type": "owl", "x": 0.5, "y": 0.3, "scale": 1.2}],
+    "parrot": [{"type": "parrot", "x": 0.5, "y": 0.3, "scale": 1.2}],
+    "snake": [{"type": "snake", "x": 0.5, "y": 0.5, "scale": 1.2}],
+    "butterfly": [{"type": "butterfly", "x": 0.5, "y": 0.4, "scale": 1.5}],
+    "penguin": [{"type": "penguin", "x": 0.5, "y": 0.55, "scale": 1.2}],
+    "panda": [{"type": "panda", "x": 0.5, "y": 0.55, "scale": 1.2}],
+    "bat": [{"type": "bat", "x": 0.5, "y": 0.35, "scale": 1.2}],
+    "dragon": [{"type": "dragon", "x": 0.5, "y": 0.5, "scale": 1.2}],
+    "unicorn": [{"type": "unicorn", "x": 0.5, "y": 0.55, "scale": 1.2}],
+    "phoenix": [{"type": "phoenix", "x": 0.5, "y": 0.4, "scale": 1.2}],
+    "wizard": [{"type": "wizard", "x": 0.5, "y": 0.5, "scale": 1.2}],
+    "fairy": [{"type": "fairy", "x": 0.5, "y": 0.4, "scale": 1.5}],
+    "angel": [{"type": "angel", "x": 0.5, "y": 0.4, "scale": 1.5}],
+    "ghost": [{"type": "ghost", "x": 0.5, "y": 0.4, "scale": 1.5}],
+    "robot": [{"type": "robot", "x": 0.5, "y": 0.5, "scale": 1.5}],
+    "astronaut": [{"type": "astronaut", "x": 0.5, "y": 0.5, "scale": 1.5}],
+    "ufo": [{"type": "ufo", "x": 0.5, "y": 0.3, "scale": 1.5}],
+    "heart": [{"type": "heart", "x": 0.5, "y": 0.4, "scale": 1.5}],
+    "atom": [{"type": "atom", "x": 0.5, "y": 0.4, "scale": 1.5}],
+    "dna": [{"type": "dna", "x": 0.5, "y": 0.4, "scale": 1.5}],
+    "castle": [{"type": "castle", "x": 0.5, "y": 0.45, "scale": 1.2}],
+    "lighthouse": [{"type": "lighthouse", "x": 0.5, "y": 0.5, "scale": 1.2}],
+    "windmill": [{"type": "windmill", "x": 0.5, "y": 0.5, "scale": 1.2}],
+    "train": [{"type": "train", "x": 0.5, "y": 0.5, "scale": 1.2}],
+    "car": [{"type": "car", "x": 0.5, "y": 0.5, "scale": 1.2}],
+    "airplane": [{"type": "airplane", "x": 0.5, "y": 0.35, "scale": 1.2}],
+    "rocket": [{"type": "rocket", "x": 0.5, "y": 0.4, "scale": 1.2}],
+    "cactus": [{"type": "cactus", "x": 0.5, "y": 0.5, "scale": 1.2}],
+    "palm tree": [{"type": "palm_tree", "x": 0.5, "y": 0.5, "scale": 1.2}],
+    "mushroom": [{"type": "mushroom", "x": 0.5, "y": 0.5, "scale": 1.2}],
+    "apple": [{"type": "apple", "x": 0.5, "y": 0.45, "scale": 1.5}],
+    "grapes": [{"type": "grapes", "x": 0.5, "y": 0.45, "scale": 1.5}],
+    "candle": [{"type": "candle", "x": 0.5, "y": 0.4, "scale": 1.5}],
+    "lantern": [{"type": "lantern", "x": 0.5, "y": 0.4, "scale": 1.5}],
+    "bell": [{"type": "bell", "x": 0.5, "y": 0.4, "scale": 1.5}],
+    "mirror": [{"type": "mirror", "x": 0.5, "y": 0.4, "scale": 1.5}],
+    "ring": [{"type": "ring", "x": 0.5, "y": 0.4, "scale": 1.5}],
+    "sword": [{"type": "sword", "x": 0.5, "y": 0.45, "scale": 1.2}],
+    "shield": [{"type": "shield", "x": 0.5, "y": 0.45, "scale": 1.2}],
+    "anchor": [{"type": "anchor", "x": 0.5, "y": 0.45, "scale": 1.2}],
+    "throne": [{"type": "throne", "x": 0.5, "y": 0.5, "scale": 1.2}],
+    "treasure chest": [{"type": "treasure_chest", "x": 0.5, "y": 0.5, "scale": 1.2}],
+    "hourglass": [{"type": "hourglass", "x": 0.5, "y": 0.4, "scale": 1.5}],
 
     # Time / history
     "century": [{"type": "clock", "x": 0.5, "y": 0.4, "scale": 1.5}],
@@ -301,16 +361,36 @@ def map_narration(narration: str):
     if not matched:
         for w in words:
             w_clean = w.strip(".,!?;:'\"")
+            if len(w_clean) < 4:
+                continue
+            # Check ELEMENT_MAP
+            found = False
             for key in ELEMENT_MAP:
-                if w_clean in key or key in w_clean:
+                if len(key) >= 4 and (w_clean in key or key in w_clean):
                     if key not in matched:
                         matched.append(key)
+                    found = True
                     break
+            if not found:
+                # Check procedural engine species
+                from src.procedural_engine import ProceduralEngine
+                for s in ProceduralEngine.all_species():
+                    if s not in matched and (w_clean == s or (len(w_clean) > 3 and w_clean in s)):
+                        matched.append(s)
+                        break
 
     # Pick elements (deduplicate, limit to 3)
     chosen = []
     seen_types = set()
     for key in matched:
+        if key not in ELEMENT_MAP:
+            # Try as direct procedural engine type
+            from src.procedural_engine import ProceduralEngine
+            if key in ProceduralEngine.all_species():
+                chosen.append({"type": key, "x": round(rng.uniform(0.2, 0.8), 2),
+                              "y": round(rng.uniform(0.3, 0.7), 2), "scale": round(rng.uniform(0.8, 1.5), 2)})
+                seen_types.add(key)
+            continue
         for cand in ELEMENT_MAP[key]:
             if cand["type"] not in seen_types or len(chosen) < 2:
                 chosen.append(dict(cand))
@@ -321,10 +401,26 @@ def map_narration(narration: str):
             break
 
     if not chosen:
-        # Fallback: text + generic
-        chosen = [{"type": "text", "x": 0.5, "y": 0.35, "text": narration[:30], "font_size": 20, "fill": [40, 35, 30]}]
-        if rng.random() < 0.5:
-            chosen.append({"type": "human", "x": 0.5, "y": 0.6, "scale": 2.5})
+        # Try procedural engine for unknown keywords
+        from src.procedural_engine import ProceduralEngine
+        _pe = ProceduralEngine(seed=rng.randint(0, 999999))
+        pro_types = _pe.all_species()
+        matched_pro = []
+        for w in text.split():
+            wc = w.strip(".,!?;:'\"")
+            for pt in pro_types:
+                if wc == pt or (len(wc) > 3 and wc in pt):
+                    matched_pro.append(pt)
+                    break
+        if matched_pro:
+            for mp in matched_pro[:3]:
+                chosen.append({"type": mp, "x": round(rng.uniform(0.2, 0.8), 2),
+                              "y": round(rng.uniform(0.3, 0.7), 2), "scale": round(rng.uniform(0.8, 1.5), 2)})
+        if not chosen:
+            # Fallback: text + generic
+            chosen = [{"type": "text", "x": 0.5, "y": 0.35, "text": narration[:30], "font_size": 20, "fill": [40, 35, 30]}]
+            if rng.random() < 0.5:
+                chosen.append({"type": "human", "x": 0.5, "y": 0.6, "scale": 2.5})
 
     # Pick background
     bg = DEFAULT_BG

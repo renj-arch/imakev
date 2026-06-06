@@ -1278,6 +1278,68 @@ class SketchGenerator:
         for ox, oy in [(0.2,0.15), (-0.15,0.1), (0.05,-0.2)]:
             self.draw_circle(draw, int(x+ox*w), int(y+oy*h), int(2*s), fill=(120,160,100,80))
 
+    # ── Procedural element compositing ──────────────────────────
+
+    def draw_composite(self, draw, parts, cx, cy, scale=1.0):
+        """Render a list of composable parts (from elements_pro generators).
+        Part types: c=circle, r=rect, e=ellipse, l=line, p=polygon, a=arc.
+        Coordinates are relative to center (cx,cy) with scale factor.
+        Scale 1.0 maps normalized generator values (~0.001-0.30) to ~0.3-60px."""
+        for p in parts:
+            t = p.get("t", p.get("type", ""))
+            x = int(cx + p.get("x", 0) * scale)
+            y = int(cy + p.get("y", 0) * scale)
+            fill = tuple(p["f"]) if "f" in p else (200,200,200)
+            stroke = tuple(p["s"]) if "s" in p and p["s"] else None
+            sw = p.get("stroke_width", p.get("w_sw", 1))
+            alpha = p.get("a", fill[3] if len(fill) > 3 else 255) if isinstance(fill, tuple) else 255
+
+            if t == "c":
+                r = max(int(p.get("r", 5) * scale), 1)
+                self.draw_circle(draw, x, y, r, fill=fill, stroke=stroke, stroke_width=sw, opacity=alpha)
+            elif t == "r":
+                w = max(int(p.get("w", 10) * scale), 1)
+                h = max(int(p.get("h", 10) * scale), 1)
+                rx = p.get("rx", 0)
+                self.draw_rect(draw, x-w//2, y-h//2, w, h, fill=fill, stroke=stroke, stroke_width=sw, rx=rx, opacity=alpha)
+            elif t == "e":
+                w = max(int(p.get("w", 10) * scale), 1)
+                h = max(int(p.get("h", 10) * scale), 1)
+                self.draw_ellipse(draw, x, y, w, h, fill=fill, stroke=stroke, stroke_width=sw, opacity=alpha)
+            elif t == "l":
+                x1 = int(cx + p.get("x1", 0) * scale)
+                y1 = int(cy + p.get("y1", 0) * scale)
+                x2 = int(cx + p.get("x2", 0) * scale)
+                y2 = int(cy + p.get("y2", 0) * scale)
+                w = max(int(p.get("w", 2)), 1)  # line width is pixel value, don't scale
+                self.draw_line(draw, x1, y1, x2, y2, color=fill, width=w, opacity=alpha)
+            elif t == "p":
+                pts = p.get("pts", [])
+                if pts:
+                    pxs = [(int(cx + pt[0] * scale), int(cy + pt[1] * scale)) for pt in pts]
+                    self.draw_polygon(draw, pxs, fill=fill, stroke=stroke, stroke_width=sw, opacity=alpha)
+            elif t == "a":
+                r = max(int(p.get("r", 10) * scale), 1)
+                start = p.get("start", 0)
+                end = p.get("end", 360)
+                w = max(int(p.get("w", 2)), 1)  # arc width is pixel value, don't scale
+                self.draw_arc(draw, x, y, r, start, end, color=fill or (100,100,100), width=w)
+
+    def draw_ellipse(self, draw, x, y, w, h, fill=None, stroke=None, stroke_width=1, opacity=255):
+        """Draw an ellipse."""
+        if fill:
+            fc = tuple(fill[:3]) + (opacity,)
+            draw.ellipse([x-w//2, y-h//2, x+w//2, y+h//2], fill=fc)
+        if stroke:
+            sc = tuple(stroke[:3]) + (opacity,)
+            draw.ellipse([x-w//2, y-h//2, x+w//2, y+h//2], outline=sc, width=stroke_width)
+
+    def draw_arc(self, draw, x, y, r, start_deg, end_deg, color=(100,100,100), width=2):
+        """Draw an arc segment."""
+        import math as _m
+        c = tuple(color[:3]) if isinstance(color, (list, tuple)) else color
+        draw.arc([x-r, y-r, x+r, y+r], start_deg, end_deg, fill=c, width=width)
+
     # ── Main scene renderer ────────────────────────────────────
 
     def render_scene(self, desc: dict) -> Image.Image:
@@ -1610,6 +1672,30 @@ class SketchGenerator:
             self.draw_map(draw, x, y, s, fill or (220, 200, 160))
 
         else:
+            # Try procedural generator from elements_pro
+            try:
+                from src.elements_pro import PROCEDURAL_LIBRARY as _pro_lib
+                if etype in _pro_lib:
+                    rng = getattr(self, 'rng', __import__('random').Random())
+                    parts = _pro_lib[etype](rng, fill or None, s)
+                    # elements_pro generators produce normalized (~0.001-0.30) values
+                    self.draw_composite(draw, parts, x, y, scale=1000)
+                    return
+            except Exception:
+                pass
+            # Try infinite procedural engine (generate() auto-scales to pixels)
+            try:
+                from src.procedural_engine import ProceduralEngine as _PE
+                _pe = _PE(seed=getattr(self, 'rng', __import__('random').Random()).randint(0, 999999))
+                _kwargs = {"size": 1.0}
+                if fill is not None:
+                    _kwargs["color"] = fill
+                parts = _pe.generate(etype, **_kwargs)
+                if parts:
+                    self.draw_composite(draw, parts, x, y, scale=s)
+                    return
+            except Exception:
+                pass
             # Unknown type — draw with label
             if fill:
                 self.draw_circle(draw, x, y, 10*s, fill=fill + (180,))
