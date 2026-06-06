@@ -43,9 +43,9 @@ jobs:
           echo "LLM_API_KEY=${{ secrets.LLM_API_KEY }}" >> .env
           echo "LLM_MODEL=${{ vars.LLM_MODEL || 'moonshotai/kimi-k2.6:free' }}" >> .env
 
-      - name: Run story mode (12-scene pirate video)
+      - name: Run cinematic story mode (11-scene animated short)
         if: inputs.mode == 'story'
-        run: python storyboard_anim.py
+        run: python storyboard_cinematic.py
 
       - name: Run sketch mode
         if: inputs.mode == 'sketch'
