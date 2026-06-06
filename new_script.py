@@ -99,47 +99,45 @@ def _fallback_script(topic: str, n_scenes: int = 8) -> dict:
 #  LLM PROMPT
 # ═══════════════════════════════════════════════════════════════
 
-SYSTEM_PROMPT = """You are a documentary filmmaker and visual artist. You create compelling visual stories.
-You output ONLY valid JSON. You describe every visual detail precisely."""
+SYSTEM_PROMPT = """You are a documentary scriptwriter. You output ONLY valid JSON. Your scripts tell a complete story through short scenes. Each scene has exactly one sentence of narration. The sentences together form a flowing narrative."""
 
-USER_PROMPT_TEMPLATE = """Create a 60-90 second documentary about: {topic}
+USER_PROMPT_TEMPLATE = """Write a {n_scenes}-scene documentary script about: {topic}
 
-For each scene, you'll provide narration AND a full visual description that an illustration engine can render.
+RULES:
+- Each scene = ONE narration sentence (8-15 words, spoken naturally)
+- Scene 1: hook. Scenes 2-{n_minus_1}: develop. Scene {n_scenes}: conclusion.
+- All {n_scenes} narrations together form a coherent, flowing mini-documentary
+- Each scene's visual matches its narration
+- VARY element types between scenes (don't repeat)
 
-Output a JSON object with this structure:
+Output JSON:
 {{
-  "title": "documentary title",
+  "title": "Documentary Title",
   "scenes": [
     {{
       "scene_num": 1,
-      "title": "scene title",
-      "narration": "one compelling sentence, 8-15 words, spoken naturally",
-      "mood": "peaceful|dramatic|hopeful|somber|epic|mysterious",
+      "title": "Hook Title",
+      "narration": "One sentence narration for this scene.",
+      "mood": "epic|peaceful|dramatic|hopeful|somber|mysterious",
       "camera": null or "ken_burns_in|pan_right|pan_left|dolly_in",
       "visual": {{
         "bg": {{
           "type": "gradient|night|ocean|indoor|solid|sunset",
-          "colors": [[R,G,B], [R,G,B], ...],
+          "colors": [[R,G,B], [R,G,B]],
           "horizon": 0.55 or null,
           "ground_color": [R,G,B] or null
         }},
         "elements": [
           {{
-            "type": "mountain|tree|cloud|water|human|house|hill|sun|moon|star|ship|building|text|label|arrow|x_mark|line|circle|rect|cannon|flag|polygon|book|scroll|compass|globe|quill|lightbulb|fire|clock|gear|crown|key|coin|skull|map|bird|fish|grass|path",
+            "type": "mountain|tree|cloud|water|human|house|hill|sun|moon|star|ship|building|text|label|arrow|x_mark|circle|rect|book|scroll|compass|globe|lightbulb|fire|clock|gear|crown|key|coin|skull|map|bird|fish|grass|path|flower|plant|mushroom",
             "x": 0.0-1.0,
             "y": 0.0-1.0,
             "scale": 0.5-2.0 or null,
             "fill": [R,G,B] or null,
             "stroke": [R,G,B] or null,
-            "text": "text content" or null,
+            "text": "on-screen label" or null,
             "font_size": 14-60 or null,
-            "width": 0.0-1.0 or null,
-            "height": 0.0-1.0 or null,
-            "radius": 0.0-1.0 or null,
-            "tree_style": "round|pine|palm" or null,
-            "snow": true|false or null,
-            "sail_color": [R,G,B] or null,
-            "window_color": [R,G,B] or null
+            "tree_style": "round|pine|palm" or null
           }}
         ],
         "atmosphere": {{
@@ -152,20 +150,17 @@ Output a JSON object with this structure:
   ]
 }}
 
-CREATIVE RULES:
-- {n_scenes} scenes flowing like a documentary narrative
-- First scene: strong hook. Last scene: meaningful conclusion.
-- Vary scenes: close-ups, wide shots, different perspectives
-- Each scene's narration is 8-15 words, spoken naturally
-- The "visual" describes what the audience SEES during this scene
-- Choose background type and colors that match the mood and setting
-- Place 3-8 elements per scene for a complete composition
-- Use rich, harmonious colors (exact [R,G,B] values)
-- Use "text" or "label" type for on-screen titles/labels
-- Use "x_mark" for crossing out myths, "arrow" for pointing
-- VARY scenes — don't repeat the same element types in every scene
+EXAMPLE for topic "How Bees Make Honey":
+Scene 1: "A single honeybee visits over a thousand flowers every day." (bee+flower scene)
+Scene 2: "She drinks nectar with her straw-like tongue and stores it in her honey stomach." (bee close-up)
+Scene 3: "Back at the hive she passes the nectar to house bees who chew it for thirty minutes." (hive cross-section)
+Scene 4: "The chewed nectar goes into honeycomb cells where fanning bees dry it with their wings." (honeycomb detail)
+Scene 5: "When the moisture drops below eighteen percent the bees seal the cell with wax." (sealing wax close-up)
+Scene 6: "That sealed wax cap means breakfast is ready — pure honey stored for winter." (honey jar + hive)
 
-Respond with ONLY the JSON object, no other text."""
+Now write {n_scenes} scenes for: {topic}
+
+Respond with ONLY the JSON object."""
 
 
 # ═══════════════════════════════════════════════════════════════
@@ -175,7 +170,9 @@ Respond with ONLY the JSON object, no other text."""
 def generate_script_json(topic: str, n_scenes: int = 8) -> dict:
     """Generate a full documentary script JSON for any topic.
     Uses LLM if available, falls back to SceneComposer (no API)."""
-    prompt = USER_PROMPT_TEMPLATE.format(topic=topic, n_scenes=n_scenes)
+    prompt = USER_PROMPT_TEMPLATE.format(
+        topic=topic, n_scenes=n_scenes, n_minus_1=n_scenes - 1,
+    )
     fallback = _fallback_script(topic, n_scenes=n_scenes)
 
     if not config.LLM_API_KEY:
