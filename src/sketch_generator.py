@@ -1097,6 +1097,75 @@ class SketchGenerator:
         # Stem
         self.draw_line(draw, x, y - r, x + 2*s, y - r - 3*s, color=(60, 50, 40), width=int(1.5*s))
 
+    def draw_cave(self, draw, x, y, size=1.0, color=(55, 45, 40)):
+        """Draw a cave entrance with arch, stalactites, rocky texture, and dark interior."""
+        s = size; c = tuple(color[:3])
+        cave_w = int(35 * s)
+        cave_h = int(28 * s)
+        arch_h = int(18 * s)
+
+        # Shadow behind cave
+        self.draw_shadow_circle(draw, x, y + cave_h//2 - 4*s, cave_w//2 + int(4*s),
+                                offset=(3, 3), blur_radius=6, color=(0, 0, 0, 60))
+
+        # Cave arch: rocky arch shape using polygon (semi-circle with roughness)
+        arch_pts = []
+        for a in range(0, 190, 10):
+            rad = math.radians(a - 5)
+            rx = x + int(math.cos(rad) * cave_w // 2) + self.rng.randint(-2, 2)
+            ry = y + int(math.sin(rad) * arch_h) + int(2*s) + self.rng.randint(-1, 1)
+            arch_pts.append((rx, ry))
+        if arch_pts:
+            self.draw_polygon(draw, arch_pts,
+                            fill=self._darken(c, 10) + (230,),
+                            stroke=self._darken(c, 25) + (180,), stroke_width=2)
+
+        # Dark interior
+        interior_w = int(cave_w * 0.7)
+        self.draw_circle(draw, x, y + int(2*s), interior_w // 2,
+                        fill=(15, 12, 10, 250), stroke=(25, 20, 18, 200), stroke_width=1)
+        # Deepest shadow inside
+        self.draw_circle(draw, x, y + int(4*s), interior_w // 3,
+                        fill=(5, 4, 3, 255))
+
+        # Stalactites hanging from arch top
+        stal_count = max(2, int(5 * s))
+        for i in range(stal_count):
+            sx = x + int((i / stal_count - 0.5) * cave_w * 1.2)
+            stal_h = int((5 + self.rng.randint(0, 10)) * s)
+            stal_w = int((2 + self.rng.randint(0, 3)) * s)
+            self.draw_polygon(draw, [
+                (sx - stal_w, y + int(3*s)),
+                (sx, y + int(3*s) - stal_h),
+                (sx + stal_w, y + int(3*s))
+            ], fill=self._darken(c, 15) + (220,),
+               stroke=self._darken(c, 30) + (150,), stroke_width=1)
+
+        # Ground / floor inside cave
+        floor_y = y + arch_h - int(2*s)
+        self.draw_rect(draw, x - cave_w // 2, floor_y, cave_w, int(6*s),
+                      fill=(25, 20, 18, 230), stroke=(40, 35, 30, 150), stroke_width=1)
+
+        # Rock debris on floor
+        for _ in range(max(2, int(4 * s))):
+            rx = x + int((self.rng.random() - 0.5) * cave_w * 0.8)
+            ry = floor_y + int(2 * s) + int(self.rng.random() * 3 * s)
+            rr = int((2 + self.rng.random() * 4) * s)
+            self.draw_circle(draw, rx, ry, rr,
+                           fill=self._lighten(c, 5) + (200,),
+                           stroke=self._darken(c, 15) + (150,), stroke_width=1)
+
+        # Rocky texture on arch edges
+        for _ in range(max(3, int(8 * s))):
+            edge_angle = self.rng.uniform(0, 180)
+            rad = math.radians(edge_angle)
+            ex = x + int(math.cos(rad) * cave_w // 2 * 1.05)
+            ey = y + int(math.sin(rad) * arch_h) + int(2*s)
+            er = int((1.5 + self.rng.random() * 3) * s)
+            self.draw_circle(draw, ex, ey, er,
+                           fill=self._darken(c, 5) + (180,),
+                           stroke=self._darken(c, 20) + (120,), stroke_width=1)
+
     def draw_book(self, draw, x, y, size=1.0, color=(140, 100, 60)):
         s = size; c = tuple(color[:3])
         w, h = 16*s, 12*s
@@ -1802,9 +1871,7 @@ class SketchGenerator:
         elif etype in ("waterfall", "cascade", "falls"):
             self.draw_waterfall(draw, x, y, s, fill or (100, 180, 255))
         elif etype in ("cave", "cavern"):
-            r = 15*s
-            self.draw_circle(draw, x, y, r, fill=(40,35,30,220), stroke=(60,55,50), stroke_width=2)
-            self.draw_circle(draw, x+2*s, y-2*s, r*0.6, fill=(20,20,20,240))
+            self.draw_cave(draw, x, y, s, (fill[:3] if fill else (55, 45, 40)))
         elif etype in ("island", "isle"):
             r = 15*s
             self.draw_circle(draw, x, y, r, fill=(180,200,100,200), stroke=(100,140,60,180), stroke_width=2)
