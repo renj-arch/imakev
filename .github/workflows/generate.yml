@@ -131,9 +131,16 @@ jobs:
         if: inputs.mode == 'narration'
         env:
           SCRIPT_TEXT: |
-            ${{ inputs.script_file }}
+            ${{ inputs.script_file || inputs.topic }}
         run: |
-          python -c "import os; open('.github_narration.txt','w',encoding='utf-8').write(os.environ.get('SCRIPT_TEXT',''))"
+          TXT="${SCRIPT_TEXT}"
+          if [ -z "$TXT" ]; then
+            echo "Error: script_file or topic input is required for narration mode"
+            exit 1
+          fi
+          echo "$TXT" > .github_narration.txt
+          echo "=== Narration text ($(wc -c < .github_narration.txt) bytes) ==="
+          head -c 200 .github_narration.txt
 
       - name: Generate video(s)
         env:
