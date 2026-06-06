@@ -1268,25 +1268,29 @@ class SketchGenerator:
                 self.draw_text(draw, x, y+15*s, label, font_size=14, color=(100, 90, 80), align="center")
 
     def _post_process(self, canvas: Image.Image, mood: str = "", style: dict = {}) -> Image.Image:
-        """Apply final touches: vignette, grain, lighting."""
+        """Apply final touches: rectangular vignette, grain, lighting."""
         grain_intensity = style.get("grain", 0.12)
         draw = ImageDraw.Draw(canvas, "RGBA")
 
-        # ── Vignette ──
+        # ── Rectangular vignette (darkens edges, full-frame) ──
         vignette_strength = style.get("vignette", 0.4)
         if vignette_strength > 0:
-            cx, cy = self.w // 2, self.h // 2
-            max_dist = math.sqrt(cx**2 + cy**2)
-            for y in range(self.h):
-                for x in range(self.w):
-                    dist = math.sqrt((x - cx)**2 + (y - cy)**2)
-                    t = min(dist / max_dist, 1.0)
-                    alpha = int(t * vignette_strength * 60)
-                    if alpha > 0:
-                        draw.point((x, y), fill=(0, 0, 0, alpha))
+            arr = np.array(canvas, dtype=np.float32)
+            y_vals = np.arange(self.h, dtype=np.float32)
+            x_vals = np.arange(self.w, dtype=np.float32)
+            dy = np.abs(y_vals - self.h / 2)[:, None] / (self.h / 2)
+            dx = np.abs(x_vals - self.w / 2)[None, :] / (self.w / 2)
+            d = np.maximum(dx, dy)
+            mask = 1.0 - np.clip((d - 0.3) / 0.7, 0, 1) * vignette_strength
+            mask = np.clip(mask, 0, 1)
+            arr[:, :, 0] *= mask
+            arr[:, :, 1] *= mask
+            arr[:, :, 2] *= mask
+            canvas = Image.fromarray(arr.astype(np.uint8))
 
         # ── Paper grain ──
         if grain_intensity > 0:
+            draw = ImageDraw.Draw(canvas, "RGBA")
             for _ in range(int(3000 * grain_intensity)):
                 gx = self.rng.randint(0, self.w-1)
                 gy = self.rng.randint(0, self.h-1)
