@@ -8,7 +8,7 @@ from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 from moviepy import (
     VideoClip, AudioFileClip, CompositeAudioClip, concatenate_audioclips,
-    CompositeVideoClip,
+    CompositeVideoClip, concatenate_videoclips, VideoFileClip,
 )
 import config
 from src.text_to_speech import generate_tts_with_timestamps
@@ -232,24 +232,70 @@ def build_video(script_data: dict, output_path: str):
         })
         global_wi = we + 1
 
-    # ── 3. Render scenes ──
-    print(f"\n[3/4] Rendering {len(scenes)} scenes...")
-    scene_frames = []
-    total_frames = 0
+    # ── 3. Render scenes one by one → temp files ──
+    print(f"\n[3/4] Rendering {len(scenes)} scenes to temp files...")
+    TD, ED = 2.5, 2.0
+    scene_paths = []
     for i, scene in enumerate(scenes):
         sd = timeline[i]["duration"]
         if sd < 0.5: sd = 1.0
         print(f"  Scene {i+1}: {scene.get('title','')[:30]} [{scene.get('mood','')}] ({sd:.1f}s)")
         frames = render_scene_frames(scene, sd)
-        scene_frames.append(frames)
-        total_frames += len(frames)
         print(f"    → {len(frames)} frames")
 
+        # Wrap frames in a scene-specific make_frame with captions
+        tl = timeline[i]
+        widx = list(range(tl["word_start"], min(tl["word_end"] + 1, len(words))))
+
+        def make_scene(t, frames=frames, sd=sd, tl=tl, widx=widx, words=words, scene_start=tl["start"]):
+            tr = t  # time within scene
+            fi = min(int(tr / sd * len(frames)), len(frames) - 1)
+            base = frames[fi].copy()
+            # Captions overlay
+            cap = Image.fromarray(base)
+            cd = ImageDraw.Draw(cap)
+            ov = Image.new("RGBA", (W, 90), (0, 0, 0, 180))
+            cap.paste(ov, (0, H - 100), ov)
+            fcap = _font(28)
+            fhl = _font(32)
+            total_t = scene_start + tr
+            cw = -1
+            for wi in widx:
+                if words[wi]["start"] <= total_t:
+                    cw = wi
+                    break
+            x, lh = 20, H - 82
+            lh_base = 40
+            for wi in widx:
+                wt = words[wi]["text"]
+                f = fhl if wi == cw else fcap
+                d = " " + wt + " "
+                bb = cd.textbbox((0, 0), d, font=f)
+                ww = bb[2] - bb[0]
+                if x + ww > W - 20:
+                    x = 20
+                    lh_base += 40
+                if wi == cw:
+                    cd.rounded_rectangle([x - 4, lh_base - 2, x + ww + 4, lh_base + 38], radius=5, fill=(200, 80, 60, 200))
+                cd.text((x, lh_base), d, font=f, fill=(255, 255, 255) if wi != cw else (255, 220, 80))
+                x += ww
+            return np.array(cap)
+
+        scene_clip = VideoClip(make_scene, duration=sd)
+        scene_path = temp_dir / f"scene_{i:03d}.mp4"
+        print(f"    → writing {scene_path.name}")
+        scene_clip.write_videofile(str(scene_path), fps=FPS, codec="libx264",
+                                   preset="fast", ffmpeg_params=["-crf", "22"], logger=None)
+        scene_clip.close()
+        del frames, scene_clip
+        scene_paths.append(scene_path)
+        print(f"    → done")
+
     # ── 4. Assemble ──
-    print(f"\n[4/4] Assembling video ({total_frames} total frames)...")
-    TD, ED = 2.5, 2.0
-    vdur = total_dur + TD + ED
-    bg_arr = np.full((H, W, 3), 248, dtype=np.uint8)
+    print(f"\n[4/4] Assembling final video...")
+
+    # Reload scene clips from disk (low memory — only header info)
+    scene_clips = [VideoFileClip(str(p)) for p in scene_paths]
 
     # Title card
     ti = Image.new("RGB", (W, H), (252, 250, 245))
@@ -275,93 +321,27 @@ def build_video(script_data: dict, output_path: str):
     td.text(((W - (tb[2] - tb[0])) // 2, H - 160), sub, font=fsub, fill=(140, 130, 120))
     title_arr = np.array(ti)
 
-    # Pre-compute transitions
-    trans = {}
-    for i in range(len(scene_frames) - 1):
-        fa, fb = scene_frames[i], scene_frames[i + 1]
-        overlap = 8
-        if len(fa) < overlap or len(fb) < overlap:
-            continue
-        tf = []
-        for fi in range(overlap):
-            t = fi / max(overlap - 1, 1)
-            e = t * t * (3 - 2 * t)
-            ia = min(len(fa) - 1, int(fi * len(fa) / overlap))
-            ib = max(0, int((overlap - 1 - fi) * len(fb) / overlap))
-            tf.append(((1 - e) * fa[-ia - 1].astype(np.float32) + e * fb[ib].astype(np.float32)).astype(np.uint8))
-        trans[i] = tf
+    def make_title(t):
+        p = t / TD
+        a = int(255 * p * p * (3 - 2 * p))
+        bg = np.full((H, W, 3), 248, dtype=np.uint8)
+        return ((bg.astype(np.float32) * (255 - a) + title_arr.astype(np.float32) * a) / 255).astype(np.uint8)
 
-    # Frame map
-    frame_map = []
-    cursor = TD
-    for i, frames in enumerate(scene_frames):
-        sd = timeline[i]["duration"]
-        ft = sd / max(len(frames), 1)
-        frame_map.append({"idx": i, "frames": frames, "start": cursor, "end": cursor + sd, "ft": ft})
-        cursor += sd
+    title_clip = VideoClip(make_title, duration=TD)
 
-    # Make-frame function
-    def make_frame(t):
-        if t < TD:
-            p = t / TD
-            a = int(255 * p * p * (3 - 2 * p))
-            if a < 255:
-                return ((bg_arr.astype(np.float32) * (255 - a) + title_arr.astype(np.float32) * a) / 255).astype(np.uint8)
-            return title_arr
-        tr = t - TD
-        if tr > total_dur:
-            return bg_arr
-        active = None
-        for fm in frame_map:
-            if fm["start"] <= t < fm["end"]:
-                active = fm; break
-        if active is None:
-            for fm in reversed(frame_map):
-                if t >= fm["end"]:
-                    active = fm; break
-        if active is None:
-            return bg_arr
-        lt = t - active["start"]
-        fi = min(int(lt / active["ft"]), len(active["frames"]) - 1)
-        base = active["frames"][fi].copy()
-        si = active["idx"]
-        if si in trans and active["end"] - t < 0.4:
-            tt = (active["end"] - t) / 0.4
-            if tt > 0:
-                tfi = min(int((1 - tt) * len(trans[si])), len(trans[si]) - 1)
-                base = trans[si][tfi]
-        # Captions
-        tl = timeline[active["idx"]]
-        cap = Image.fromarray(base)
-        cd = ImageDraw.Draw(cap)
-        ov = Image.new("RGBA", (W, 90), (0, 0, 0, 180))
-        cap.paste(ov, (0, H - 100), ov)
-        fcap = _font(28)
-        fhl = _font(32)
-        widx = list(range(tl["word_start"], min(tl["word_end"] + 1, len(words))))
-        cw = -1
-        for wi in widx:
-            if words[wi]["start"] <= tr:
-                cw = wi; break
-        x, cy, lh = 20, H - 82, 40
-        for wi in widx:
-            wt = words[wi]["text"]
-            f = fhl if wi == cw else fcap
-            d = " " + wt + " "
-            bb = cd.textbbox((0, 0), d, font=f)
-            ww = bb[2] - bb[0]
-            if x + ww > W - 20:
-                x, lh = 20, lh + 40
-            if wi == cw:
-                cd.rounded_rectangle([x - 4, lh - 2, x + ww + 4, lh + 38], radius=5, fill=(200, 80, 60, 200))
-            cd.text((x, lh), d, font=f, fill=(255, 255, 255) if wi != cw else (255, 220, 80))
-            x += ww
-        return np.array(cap)
+    # Concatenate with crossfade
+    clips_with_fade = [title_clip]
+    for i, sc in enumerate(scene_clips):
+        if i == 0:
+            clips_with_fade.append(sc.crossfadein(0))
+        else:
+            clips_with_fade.append(sc.crossfadein(0.3).crossfadeout(0.3))
 
-    clip = VideoClip(make_frame, duration=vdur)
+    final_video = concatenate_videoclips(clips_with_fade, method="compose", padding=-0.3)
 
     # Audio
     audio = AudioFileClip(str(tts_path))
+    vdur = final_video.duration
     if vdur > audio.duration + TD:
         s = AudioFileClip(str(tts_path)).with_duration(vdur - audio.duration - TD).with_volume_scaled(0)
         audio = concatenate_audioclips([audio, s])
@@ -375,17 +355,25 @@ def build_video(script_data: dict, output_path: str):
 
     try:
         ec = subscribe_end_card(np.full((H, W, 3), 240, dtype=np.uint8), ED)
-        ec = ec.with_start(total_dur + TD)
-        final = CompositeVideoClip([clip, ec], size=config.SHORTS_SIZE).with_audio(audio)
+        ec = ec.with_start(vdur)
+        vdur2 = vdur + ED
+        final = CompositeVideoClip([final_video, ec], size=config.SHORTS_SIZE).with_duration(vdur2).with_audio(audio)
     except Exception as e:
         print(f"  End card error: {e}")
-        final = clip.with_audio(audio)
+        final = final_video.with_audio(audio)
 
     t0 = time.time()
     final.write_videofile(str(output_path), fps=FPS, codec="libx264", audio_codec="aac",
                           threads=4, preset="medium", ffmpeg_params=["-movflags", "+faststart", "-crf", "18"], logger=None)
     final.close()
+    for sc in scene_clips:
+        sc.close()
     print(f"\n  Done in {time.time() - t0:.0f}s: {output_path} ({os.path.getsize(output_path):,} bytes)")
+
+    # Cleanup temp files
+    for p in scene_paths:
+        try: p.unlink()
+        except: pass
 
 
 # ═══════════════════════════════════════════════════════════════
