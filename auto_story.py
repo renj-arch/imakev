@@ -10,6 +10,7 @@ from moviepy import (
     VideoClip, AudioFileClip, CompositeAudioClip, concatenate_audioclips,
     CompositeVideoClip, concatenate_videoclips, VideoFileClip,
 )
+from moviepy.video.fx import CrossFadeIn, CrossFadeOut
 import config
 from src.text_to_speech import generate_tts_with_timestamps
 from src.engagement import subscribe_end_card
@@ -332,10 +333,10 @@ def build_video(script_data: dict, output_path: str):
     # Concatenate with crossfade
     clips_with_fade = [title_clip]
     for i, sc in enumerate(scene_clips):
-        if i == 0:
-            clips_with_fade.append(sc.crossfadein(0))
-        else:
-            clips_with_fade.append(sc.crossfadein(0.3).crossfadeout(0.3))
+        if i > 0:
+            sc = CrossFadeIn(0.3).apply(sc)
+            sc = CrossFadeOut(0.3).apply(sc)
+        clips_with_fade.append(sc)
 
     final_video = concatenate_videoclips(clips_with_fade, method="compose", padding=-0.3)
 
