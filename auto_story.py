@@ -150,7 +150,7 @@ def _fallback_script(topic: str) -> dict:
 #  SCENE RENDERER — stroke-by-stroke progressive reveal
 # ═══════════════════════════════════════════════════════════════
 
-RENDER_FPS = 6  # Low fps for progressive reveal to keep memory in check
+RENDER_FPS = 3  # Low fps for progressive reveal — each frame holds for ~8 video frames at 24fps
 
 def render_scene_frames(scene: dict, scene_duration: float, fps=RENDER_FPS):
     """Render a scene as progressive frames. Elements appear one by one."""
@@ -359,7 +359,7 @@ def build_video(script_data: dict, output_path: str):
 
     t0 = time.time()
     final.write_videofile(str(output_path), fps=FPS, codec="libx264", audio_codec="aac",
-                          threads=4, preset="medium", ffmpeg_params=["-movflags", "+faststart", "-crf", "18"], logger=None)
+                          threads=4, preset="fast", ffmpeg_params=["-movflags", "+faststart", "-crf", "22"], logger=None)
     final.close()
     print(f"\n  Done in {time.time() - t0:.0f}s: {output_path} ({os.path.getsize(output_path):,} bytes)")
 
