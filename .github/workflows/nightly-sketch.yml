@@ -26,7 +26,10 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq fonts-dejavu-core fonts-liberation2
-          pip install Pillow numpy
+          pip install Pillow numpy opencv-python-headless requests python-dotenv
+
+      - name: Create .env
+        run: echo "PEXELS_API_KEY=${{ secrets.PEXELS_API_KEY }}" >> .env
 
       - name: Generate test hand-sketch image
         env:
