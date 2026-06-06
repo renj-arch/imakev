@@ -1316,6 +1316,52 @@ class SketchGenerator:
         for ox, oy in [(0.2,0.15), (-0.15,0.1), (0.05,-0.2)]:
             self.draw_circle(draw, int(x+ox*w), int(y+oy*h), int(2*s), fill=(120,160,100,80))
 
+    def draw_volcano(self, draw, x, y, size=1.0, color=(100, 80, 60)):
+        """Draw a volcano with smoke plume."""
+        s = size; c = tuple(color[:3])
+        w, h = 20*s, 18*s
+        # Mountain body
+        pts = [(x-w//2, y+6*s), (x, y-h//2), (x+w//2, y+6*s)]
+        self.draw_polygon(draw, pts, fill=c+(220,), stroke=self._darken(c,20)+(180,), stroke_width=2)
+        # Crater
+        self.draw_ellipse(draw, x-3*s, y-h//2, 6*s, 3*s, fill=(180,100,40,200), stroke=(120,60,30,180), stroke_width=1)
+        # Lava glow
+        self.draw_circle(draw, x, y-h//2+1*s, 4*s, fill=(255,150,50,60))
+        # Smoke plume
+        for i in range(5):
+            sy = y - h//2 - i*5*s
+            sr = 3*s + i*2*s
+            alpha = max(30, 120 - i*20)
+            self.draw_circle(draw, x+self.rng.randint(-3,3)*s, sy, sr, fill=(200,200,200,alpha))
+
+    def draw_rainbow(self, draw, x, y, size=1.0, color=None):
+        """Draw a rainbow arc."""
+        s = size
+        colors = [(255,50,50), (255,180,50), (255,255,80), (80,200,80), (80,120,255), (180,80,255)]
+        r = 30*s
+        for i, col in enumerate(colors):
+            cr = r - i*3*s
+            self.draw_arc(draw, x-cr, y-cr, cr*2, 0, 180, color=col+(180,), width=int(3*s))
+
+    def draw_waterfall(self, draw, x, y, size=1.0, color=(100, 180, 255)):
+        """Draw a cascading waterfall."""
+        s = size; c = tuple(color[:3])
+        w, h = 8*s, 30*s
+        # Water column
+        self.draw_rect(draw, x-w//2, y-h//2, w, h, fill=c+(180,), stroke=(80,140,200,150), stroke_width=1, rx=2)
+        # Foam lines
+        for i in range(6):
+            fy = y - h//2 + i*h//6
+            self.draw_line(draw, x-w//2+2, fy, x+w//2-2, fy, color=(255,255,255,80), width=int(1.5*s))
+        # Mist
+        self.draw_circle(draw, x, y+h//2+4*s, 8*s, fill=(200,220,255,40))
+        self.draw_circle(draw, x-3*s, y+h//2+6*s, 6*s, fill=(200,220,255,30))
+        # Splash
+        for i in range(3):
+            dx = self.rng.randint(-6, 6)*s
+            dy = self.rng.randint(2, 8)*s
+            self.draw_circle(draw, x+dx, y+h//2+dy, 1.5*s, fill=(200,220,255,60))
+
     # ── Procedural element compositing ──────────────────────────
 
     def draw_composite(self, draw, parts, cx, cy, scale=1.0):
@@ -1747,6 +1793,118 @@ class SketchGenerator:
             self.draw_printing_press(draw, x, y, s, fill or (100, 80, 60))
         elif etype == "map":
             self.draw_map(draw, x, y, s, fill or (220, 200, 160))
+
+        # ── Landscape / nature aliases ──
+        elif etype in ("volcano", "eruption", "volcanic"):
+            self.draw_volcano(draw, x, y, s, fill or (100, 80, 60))
+        elif etype == "rainbow":
+            self.draw_rainbow(draw, x, y, s, fill)
+        elif etype in ("waterfall", "cascade", "falls"):
+            self.draw_waterfall(draw, x, y, s, fill or (100, 180, 255))
+        elif etype in ("cave", "cavern"):
+            r = 15*s
+            self.draw_circle(draw, x, y, r, fill=(40,35,30,220), stroke=(60,55,50), stroke_width=2)
+            self.draw_circle(draw, x+2*s, y-2*s, r*0.6, fill=(20,20,20,240))
+        elif etype in ("island", "isle"):
+            r = 15*s
+            self.draw_circle(draw, x, y, r, fill=(180,200,100,200), stroke=(100,140,60,180), stroke_width=2)
+            self.draw_circle(draw, x-3*s, y-3*s, r*0.4, fill=(80,160,80,200))
+            self.draw_ellipse(draw, x-r, y+2*s, r*2, r*0.3, fill=(180,200,220,150))
+
+        # ── Animal aliases ──
+        elif etype in ("elephant", "lion", "tiger", "bear", "wolf", "fox", "deer",
+                       "horse", "zebra", "giraffe", "camel", "rhino", "hippo",
+                       "dog", "cat", "monkey", "panda", "squirrel", "rabbit",
+                       "dragon", "dinosaur", "snake", "lizard", "turtle", "frog",
+                       "goat", "sheep", "cow", "pig", "rat", "mouse", "beaver",
+                       "otter", "hedgehog", "bat", "kangaroo", "koala", "sloth",
+                       "raccoon", "skunk", "moose", "elk", "bison", "buffalo",
+                       "leopard", "panther", "jaguar", "cheetah", "hyena",
+                       "unicorn", "griffin", "phoenix", "pegasus", "chimera",
+                       "werewolf", "vampire", "zombie", "golem", "troll", "orc",
+                       "centaur", "minotaur", "satyr", "fairy", "elf", "dwarf",
+                       "giant", "ogre", "goblin", "gnome", "sprite", "nymph",
+                       "beast", "monster", "creature", "animal"):
+            self.draw_animal(draw, x, y, s, fill or (100, 80, 60))
+
+        # ── Bird aliases ──
+        elif etype in ("eagle", "hawk", "falcon", "vulture", "raven", "crow",
+                       "owl", "parrot", "macaw", "cockatoo", "swan", "goose",
+                       "duck", "heron", "crane", "stork", "flamingo", "peacock",
+                       "penguin", "ostrich", "pigeon", "dove", "sparrow",
+                       "robin", "bluebird", "cardinal", "hummingbird",
+                       "woodpecker", "kingfisher", "seagull", "pelican",
+                       "albatross", "magpie", "canary", "finch", "bird"):
+            self.draw_bird(draw, x, y, s, fill or (60, 50, 40))
+
+        # ── Fish / sea creature aliases ──
+        elif etype in ("shark", "dolphin", "whale", "orca", "tuna", "salmon",
+                       "trout", "bass", "goldfish", "koi", "clownfish",
+                       "swordfish", "marlin", "ray", "eel", "octopus", "squid",
+                       "jellyfish", "crab", "lobster", "shrimp", "seahorse",
+                       "starfish", "coral", "anemone", "fish"):
+            self.draw_fish(draw, x, y, s, fill or (200, 180, 100))
+
+        # ── Tree / plant aliases ──
+        elif etype in ("pine", "oak", "maple", "willow", "birch", "cedar",
+                       "spruce", "fir", "redwood", "sequoia", "baobab",
+                       "palm", "coconut", "bush", "shrub", "hedge",
+                       "cactus", "succulent", "bamboo", "fern", "moss",
+                       "vine", "ivy", "reed", "kelp", "seaweed"):
+            style = "round"
+            if etype in ("pine", "spruce", "fir", "redwood", "cedar"):
+                style = "pine"
+            elif etype in ("palm", "coconut"):
+                style = "palm"
+            self.draw_tree(draw, x, y, s, style, fill or (50, 120, 50))
+
+        # ── Flower aliases ──
+        elif etype in ("rose", "tulip", "daisy", "lotus", "lily", "orchid",
+                       "sunflower", "poppy", "lavender", "violet", "iris",
+                       "cherry_blossom", "blossom", "petal", "flower"):
+            self.draw_flower(draw, x, y, s, fill or (255, 100, 150))
+
+        # ── Fruit aliases ──
+        elif etype in ("apple", "orange", "lemon", "lime", "cherry", "grape",
+                       "berry", "strawberry", "blueberry", "raspberry",
+                       "banana", "mango", "peach", "pear", "plum",
+                       "watermelon", "melon", "pumpkin", "tomato", "fruit"):
+            self.draw_fruit(draw, x, y, s, fill or (255, 150, 50))
+
+        # ── Building / structure aliases ──
+        elif etype in ("tower", "castle", "fortress", "palace", "temple",
+                       "pyramid", "lighthouse", "windmill", "church",
+                       "monument", "shrine", "tomb", "dome", "column",
+                       "gate", "wall", "bridge", "ruin", "statue",
+                       "barn", "stable", "silo", "well", "fountain",
+                       "cabin", "hut", "shelter", "tent", "pavilion"):
+            bw = int(elem.get("width", 0.12) * self.w)
+            bh = int(elem.get("height", 0.25) * self.h)
+            self.draw_building(draw, x, y, bw, bh, fill or (120, 100, 80),
+                              window_color=_tc(elem.get("window_color", (255, 220, 100))) or (255, 220, 100))
+
+        # ── Ship / boat aliases ──
+        elif etype in ("boat", "sailboat", "vessel", "raft", "canoe",
+                       "kayak", "rowboat", "warship", "galleon", "raft"):
+            self.draw_ship(draw, x, y, s, fill or (80, 60, 40),
+                          _tc(elem.get("sail_color", (220, 210, 190))))
+
+        # ── Weapon aliases ──
+        elif etype in ("sword", "dagger", "knife", "blade", "spear",
+                       "lance", "pike", "axe", "battleaxe", "hammer",
+                       "mace", "club", "staff", "wand", "bow", "crossbow",
+                       "arrow", "shield", "armor", "helmet"):
+            # Use procedural object generator for weapons
+            try:
+                from src.procedural_engine import ProceduralEngine as _PE
+                _pe = _PE()
+                parts = _pe.generate(etype, size=s)
+                if parts:
+                    self.draw_composite(draw, parts, x, y, scale=s)
+                else:
+                    self.draw_rect(draw, x-10, y-5, 20, 10, fill=fill or (120,100,80))
+            except:
+                self.draw_rect(draw, x-10, y-5, 20, 10, fill=fill or (120,100,80))
 
         else:
             # Try procedural generator from elements_pro

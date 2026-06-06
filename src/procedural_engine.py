@@ -707,22 +707,56 @@ class ProceduralEngine:
     def all_species(cls):
         return list(cls._REGISTRY.keys())
 
+    # ── Category keyword lists for smart name routing ──
+    _CREATURE_KEYS = {"beast","monster","animal","creature","elephant","lion","tiger","bear","wolf",
+        "fox","deer","horse","zebra","giraffe","camel","rhino","hippo","dog","cat","rabbit","monkey",
+        "panda","squirrel","dragon","unicorn","griffin","phoenix","pegasus","demon","angel","devil",
+        "gargoyle","chimera","dinosaur","mammoth","snake","lizard","turtle","frog","shark","whale",
+        "dolphin","octopus","jellyfish","eagle","hawk","owl","raven","crow","bat","spider","scorpion",
+        "beetle","butterfly","ant","bee","wasp","human","man","woman","person","figure","bird","fish"}
+    _PLANT_KEYS = {"tree","bush","flower","cactus","mushroom","palm","pine","fern","moss","vine",
+        "grass","leaf","seed","berry","blossom","petal","root","branch","reed","kelp","seaweed",
+        "plant","fruit","crop","wheat","corn","bamboo","lotus","rose","tulip","daisy","herb"}
+    _OBJECT_KEYS = {"weapon","tool","sword","shield","spear","axe","hammer","crown","ring","gem",
+        "necklace","chalice","urn","vase","book","scroll","map","lantern","torch","candle","bell",
+        "mirror","key","lock","clock","gear","coin","cross","skull","lamp","globe","compass",
+        "quill","lightbulb","fire","telescope","printing_press","wheel","pot","basket","rope",
+        "net","arrow","bow","knife","helmet","armor","shield","chair","table","box","chest",
+        "bottle","cup","plate","bowl","spoon","fork","drum","flute","harp","lyre"}
+    _STRUCTURE_KEYS = {"tower","castle","house","building","temple","pyramid","bridge","monument",
+        "statue","ruin","fortress","palace","lighthouse","windmill","church","wall","gate",
+        "dome","column","arch","tomb","shrine","city","village","town","hut","cabin","shelter",
+        "tent","barn","stable","silo","well","fountain","stage","altar","throne","dungeon"}
+
     @staticmethod
     def _make_species_fn(species: str):
         """Create a deterministic generator function for ANY species name.
-        Uses the name hash as seed so same name always = same sketch."""
+        Uses the name hash as seed so same name always = same sketch.
+        Routes to the correct generator category by keyword matching."""
         h = int(hashlib.md5(species.encode()).hexdigest()[:8], 16)
-        style = h % 4
+        name = species.lower().replace("_", " ").replace("-", " ")
+
+        # Score each category by keyword matches
+        scores = {}
+        scores[0] = sum(1 for kw in ProceduralEngine._CREATURE_KEYS if kw in name)
+        scores[1] = sum(1 for kw in ProceduralEngine._PLANT_KEYS if kw in name)
+        scores[2] = sum(1 for kw in ProceduralEngine._OBJECT_KEYS if kw in name)
+        scores[3] = sum(1 for kw in ProceduralEngine._STRUCTURE_KEYS if kw in name)
+
+        best = max(scores, key=scores.get)
+        if scores[best] == 0:
+            # No keywords matched — use hash as before
+            best = h % 4
 
         def fn(self, **kw):
             old_rng = self.rng
             self.rng = random.Random(h)
             try:
-                if style == 0:
+                if best == 0:
                     parts = self._gen_creature(**kw)
-                elif style == 1:
+                elif best == 1:
                     parts = self._gen_plant(**kw)
-                elif style == 2:
+                elif best == 2:
                     parts = self._gen_object(**kw)
                 else:
                     parts = self._gen_structure(**kw)
