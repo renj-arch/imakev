@@ -26,7 +26,10 @@ def _generate(prompt: str, temperature: float = 0.8, max_tokens: int = 6000,
         if config.LLM_PROVIDER == "google":
             return _generate_gemini(prompt, temperature, max_tokens, system)
         return _generate_openai(prompt, temperature, max_tokens, system)
-    except Exception:
+    except Exception as e:
+        err = str(e)[:200]
+        code = getattr(e, 'status_code', getattr(e, 'code', ''))
+        print(f"  LLM error ({config.LLM_PROVIDER}): [{code}] {err}")
         return ""
 
 
@@ -182,7 +185,8 @@ def generate_script_json(topic: str, n_scenes: int = 8) -> dict:
     try:
         raw = _generate(prompt, temperature=0.8, max_tokens=6000, system=SYSTEM_PROMPT)
         if not raw:
-            print("  LLM returned empty, using fallback")
+            print("  LLM returned empty (check API key, rate limits, or model access)")
+            print("  Using rule-based fallback")
             return fallback
 
         raw = re.sub(r'^```(?:json)?\s*', '', raw.strip())
