@@ -1540,16 +1540,28 @@ def build_video(script_data: dict, output_path: str):
 # ═══════════════════════════════════════════════════════════════
 
 def main():
+    global FPS
     script = None
     custom_title = ""
     script_file = None
 
-    # Parse --title flag
+    # Parse flags
     args = sys.argv[1:]
     if "--title" in args:
         idx = args.index("--title")
         if idx + 1 < len(args):
             custom_title = args[idx + 1]
+            args = args[:idx] + args[idx+2:]
+    if "--fps" in args:
+        idx = args.index("--fps")
+        if idx + 1 < len(args):
+            try:
+                v = int(args[idx + 1])
+                if v > 0:
+                    config.VIDEO_FPS = v
+                    FPS = v
+                    print(f"  Using FPS={v}")
+            except: pass
             args = args[:idx] + args[idx+2:]
 
     if args:

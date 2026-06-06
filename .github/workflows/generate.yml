@@ -78,7 +78,7 @@ permissions:
 jobs:
   generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 120
 
     steps:
       - name: Checkout
@@ -170,7 +170,7 @@ jobs:
                 if [ -n "${{ inputs.custom_title }}" ]; then
                   TITLE_FLAG="--title '${{ inputs.custom_title }}'"
                 fi
-                python auto_story.py .github_narration.txt $TITLE_FLAG
+                python auto_story.py .github_narration.txt $TITLE_FLAG --fps 12
                 ;;
               *)
                 python run_pipeline.py "$MODE"
