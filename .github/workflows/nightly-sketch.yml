@@ -1,21 +1,12 @@
-name: 🎬 Sketch-Story Video
+name: 🎬 Auto Story Video
 
 on:
   workflow_dispatch:
     inputs:
-      mode:
-        description: 'Mode'
+      topic:
+        description: 'What should the story be about?'
         required: true
-        default: 'story'
-        type: choice
-        options:
-          - story
-          - sketch
-      prompt:
-        description: 'Custom prompt (sketch mode only)'
-        required: false
         type: string
-        default: ''
 
 jobs:
   generate:
@@ -43,20 +34,13 @@ jobs:
           echo "LLM_API_KEY=${{ secrets.LLM_API_KEY }}" >> .env
           echo "LLM_MODEL=${{ vars.LLM_MODEL || 'moonshotai/kimi-k2.6:free' }}" >> .env
 
-      - name: Run cinematic story mode (11-scene animated short)
-        if: inputs.mode == 'story'
-        run: python storyboard_cinematic.py
+      - name: Generate full story video
+        run: python auto_story.py "${{ inputs.topic }}"
 
-      - name: Run sketch mode
-        if: inputs.mode == 'sketch'
-        run: python sketch_pipeline.py "${{ inputs.prompt || 'a peaceful landscape' }}"
-
-      - name: Upload artifact
+      - name: Upload video
         uses: actions/upload-artifact@v4
         with:
-          name: output
-          path: |
-            output/*.mp4
-            sketch_*.png
+          name: auto-story-video
+          path: output/auto_story_*.mp4
           retention-days: 30
           if-no-files-found: error
