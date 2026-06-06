@@ -317,11 +317,15 @@ def generate_motion_video(prompt: str, w: int = 720, h: int = 1280,
         # Color grade
         frame = _color_grade(frame, scene)
 
-        # Add subtle vignette
-        mask = np.zeros((h, w), dtype=np.float32)
-        cv2.circle(mask, (w // 2, h // 2), int(min(w, h) * 0.45), 1, -1)
-        mask = cv2.GaussianBlur(mask, (w // 3 * 2 + 1, h // 3 * 2 + 1), w // 3)
-        mask = 1 - (1 - mask) * 0.4
+        # Add subtle vignette (full-frame rectangular)
+        cx, cy = w / 2, h / 2
+        yv = np.arange(h, dtype=np.float32)
+        xv = np.arange(w, dtype=np.float32)
+        dy = np.abs(yv - cy)[:, None] / cy
+        dx = np.abs(xv - cx)[None, :] / cx
+        d = np.maximum(dx, dy)
+        mask = 1.0 - np.clip((d - 0.3) / 0.7, 0, 1) * 0.4
+        mask = cv2.GaussianBlur(mask, (max(w // 8, 1) | 1, max(h // 8, 1) | 1), max(w, h) // 12)
         for c in range(3):
             frame[:, :, c] = (frame[:, :, c] * mask).astype(np.uint8)
 
