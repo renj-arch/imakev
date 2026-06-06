@@ -36,12 +36,20 @@ def generate_script(topic: str) -> dict:
     """LLM generates a full documentary script with visual scene descriptions."""
     from src.script_generator import _generate
 
-    system = """You are a documentary filmmaker and visual artist. You create compelling visual stories.
-You output ONLY valid JSON. You describe every visual detail precisely."""
+    system = """You are a documentary filmmaker and visual artist. You create rich, atmospheric visual stories like David Attenborough or Carl Sagan.
+You output ONLY valid JSON. You describe every visual detail precisely. Your narration is immersive storytelling — never Q&A, never textbook facts."""
 
-    prompt = f"""Create a 60-90 second documentary about: {topic}
+    prompt = f"""Create a documentary about: {topic}
 
-For each scene, you'll provide narration AND a full visual description that an illustration engine can render.
+Style: Immersive storytelling like a nature documentary. Rich, descriptive narration. Paint a picture with words. Never use question-and-answer format. Never list facts. Tell a story.
+
+NARRATION STYLE REFERENCE (this is how your narration should read):
+"Imagine standing in the African savanna millions of years ago. The land stretches endlessly. Trees dot the horizon. Herds of ancient animals wander through tall grass, all competing for the same thing: food."
+"But high above the struggle, untouched leaves sway in the branches. A green buffet hanging just out of reach."
+"Generation after generation, the process repeats. Not because nature planned it. Not because animals decided they wanted longer necks. But because individuals with small advantages were often better at surviving."
+"Over millions of years, those tiny differences accumulated. A centimeter became several. Several became dozens."
+
+For each scene, provide narration AND a full visual description that an illustration engine can render.
 
 Output a JSON object with this structure:
 {{
@@ -50,19 +58,19 @@ Output a JSON object with this structure:
     {{
       "scene_num": 1,
       "title": "scene title (like 'The Beginning')",
-      "narration": "one compelling sentence, 8-15 words, spoken naturally",
+      "narration": "one to three compelling sentences, storytelling style, no Q&A",
       "mood": "peaceful|dramatic|hopeful|somber|epic|mysterious",
       "camera": null or "ken_burns_in|pan_right|pan_left|dolly_in",
       "visual": {{
         "bg": {{
-          "type": "gradient|night|ocean|indoor|solid|sunset",
+          "type": "gradient|night|ocean|indoor|solid|sunset|forest",
           "colors": [[R,G,B], [R,G,B], ...],
           "horizon": 0.55 or null,
           "ground_color": [R,G,B] or null
         }},
         "elements": [
           {{
-            "type": "mountain|tree|cloud|water|human|house|hill|sun|moon|star|ship|building|text|label|arrow|x_mark|line|circle|rect|cannon|flag|polygon",
+            "type": "mountain|tree|cloud|water|human|house|hill|sun|moon|star|ship|building|text|label|arrow|x_mark|line|circle|rect|cannon|flag|polygon|animal|bird|grass|flower",
             "x": 0.0-1.0,
             "y": 0.0-1.0,
             "scale": 0.5-2.0 or null,
@@ -90,45 +98,23 @@ Output a JSON object with this structure:
 }}
 
 CREATIVE RULES:
-- 8-12 scenes flowing like a documentary narrative
-- First scene: strong hook. Last scene: meaningful conclusion.
-- Vary scenes: close-ups, wide shots, different perspectives
-- Each scene's narration is 8-15 words, spoken naturally
+- 6-12 scenes flowing like a documentary narrative
+- First scene: atmospheric setup. Last scene: powerful, reflective conclusion.
+- NARRATION: storytelling style — descriptive, atmospheric, 1-3 sentences per scene. Never Q&A. Never textbook.
 - The "visual" describes what the audience SEES during this scene
 - Choose background type and colors that match the mood and setting
 - Place 3-8 elements per scene for a complete composition
 - Use rich, harmonious colors (exact [R,G,B] values)
-- Use "text" or "label" type for on-screen titles/labels
+- Use "text" or "label" type for on-screen titles/labels only when needed
 - Use "x_mark" for crossing out myths, "arrow" for pointing
 - VARY scenes — don't repeat the same element types in every scene
-
-VISUAL ELEMENT REFERENCE:
-- mountain: with optional "snow": true/false
-- tree: use "tree_style": "round|pine|palm"
-- cloud: fluffy white cloud
-- water: water surface with waves
-- human/person: simplified figure, use "fill" for clothing color
-- house: simple house with roof, "roof_color" for roof
-- hill: rolling green hill
-- sun: with rays, "radius" for size
-- moon: crescent moon, "radius" for size
-- star: small dot, "radius" for size
-- ship: sailing ship, "sail_color" for sail
-- building: with "window_color" for lit windows
-- cannon: simple cannon
-- flag: with "text" for flag text
-- text: on-screen text, "font_size", "fill" for color
-- label/text_box: rounded box with text inside
-- arrow: directional arrow, "x2"/"y2" endpoint
-- x_mark: red X mark
-- circle/rect/line/polygon: primitive shapes
 
 Respond with ONLY the JSON object, no other text."""
 
     fallback = _fallback_script(topic)
 
     try:
-        raw = _generate(prompt, temperature=0.8, max_tokens=6000, system=system)
+        raw = _generate(prompt, temperature=0.9, max_tokens=4000, system=system)
         raw = re.sub(r'^```(?:json)?\s*', '', raw.strip())
         raw = re.sub(r'\s*```$', '', raw)
         data = json.loads(raw)

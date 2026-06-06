@@ -35,7 +35,7 @@ def _generate_openai(prompt: str, temperature: float = 0.8, max_tokens: int = 30
         base, key, model = config.HF_BASE, config.HF_API_KEY, config.HF_MODEL
     else:
         base, key, model = None, config.LLM_API_KEY, config.LLM_MODEL
-    client = OpenAI(api_key=key, base_url=base, timeout=30)
+    client = OpenAI(api_key=key, base_url=base, timeout=120)
     messages = []
     if system:
         messages.append({"role": "system", "content": system})

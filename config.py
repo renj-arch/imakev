@@ -16,7 +16,7 @@ for d in [ASSETS_DIR, BACKGROUNDS_DIR, FONTS_DIR, MUSIC_DIR, OUTPUT_DIR, TEMP_DI
     d.mkdir(exist_ok=True)
 
 LLM_PROVIDER = os.getenv("LLM_PROVIDER", "openrouter")
-LLM_MODEL = os.getenv("LLM_MODEL", "moonshotai/kimi-k2.6:free")
+LLM_MODEL = os.getenv("LLM_MODEL", "openai/gpt-4o-mini")
 LLM_API_KEY = os.getenv("LLM_API_KEY", "")
 
 OPENROUTER_BASE = "https://openrouter.ai/api/v1"
