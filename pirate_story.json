@@ -1,0 +1,239 @@
+{
+  "title": "The Real Pirates",
+  "scenes": [
+    {
+      "scene_num": 1,
+      "title": "The Pirate Myth",
+      "narration": "Picture a pirate with a parrot on his shoulder, hunting for buried treasure.",
+      "mood": "mysterious",
+      "camera": "ken_burns_in",
+      "visual": {
+        "bg": {"type": "gradient", "colors": [[180, 200, 220], [100, 150, 200]], "horizon": 0.6, "ground_color": [60, 80, 40]},
+        "elements": [
+          {"type": "human", "x": 0.35, "y": 0.55, "scale": 1.2, "fill": [100, 60, 40], "label": "pirate"},
+          {"type": "text", "x": 0.5, "y": 0.08, "text": "THE PIRATE MYTH", "font_size": 34, "fill": [40, 35, 30]},
+          {"type": "tree", "x": 0.15, "y": 0.68, "scale": 0.8, "tree_style": "palm", "fill": [40, 100, 40]},
+          {"type": "text", "x": 0.62, "y": 0.3, "text": "Parrot", "font_size": 16, "fill": [100, 90, 80]},
+          {"type": "label", "x": 0.75, "y": 0.78, "text": "Treasure Chest?", "font_size": 16, "fill": [120, 100, 60], "bg_color": [255, 250, 240]}
+        ],
+        "atmosphere": {"particles": "none", "fog": false}
+      }
+    },
+    {
+      "scene_num": 2,
+      "title": "Myth Shattered",
+      "narration": "But almost none of it was true.",
+      "mood": "dramatic",
+      "camera": null,
+      "visual": {
+        "bg": {"type": "gradient", "colors": [[200, 180, 160], [160, 140, 120]], "horizon": 0.6, "ground_color": [60, 50, 40]},
+        "elements": [
+          {"type": "text", "x": 0.5, "y": 0.08, "text": "NONE OF IT WAS TRUE", "font_size": 32, "fill": [180, 40, 40]},
+          {"type": "label", "x": 0.25, "y": 0.3, "text": "Parrot", "font_size": 18},
+          {"type": "x_mark", "x": 0.25, "y": 0.3, "scale": 0.8, "fill": [180, 40, 40]},
+          {"type": "label", "x": 0.75, "y": 0.4, "text": "Buried Treasure", "font_size": 18},
+          {"type": "x_mark", "x": 0.75, "y": 0.4, "scale": 0.8, "fill": [180, 40, 40]},
+          {"type": "label", "x": 0.5, "y": 0.6, "text": "Desert Island", "font_size": 18},
+          {"type": "x_mark", "x": 0.5, "y": 0.6, "scale": 1.0, "fill": [180, 40, 40]},
+          {"type": "text", "x": 0.5, "y": 0.8, "text": "All Hollywood fiction", "font_size": 18, "fill": [120, 100, 100]}
+        ],
+        "atmosphere": {"particles": "none", "fog": false}
+      }
+    },
+    {
+      "scene_num": 3,
+      "title": "Ordinary Sailor",
+      "narration": "Imagine it is 1715 and you are an ordinary merchant sailor.",
+      "mood": "peaceful",
+      "camera": "pan_right",
+      "visual": {
+        "bg": {"type": "ocean", "sky_color": [180, 210, 240], "horizon_color": [120, 170, 220], "horizon": 0.5, "water_color": [30, 70, 150]},
+        "elements": [
+          {"type": "ship", "x": 0.5, "y": 0.55, "scale": 1.0, "fill": [80, 60, 40], "sail_color": [220, 210, 190]},
+          {"type": "human", "x": 0.35, "y": 0.52, "scale": 0.6, "fill": [60, 60, 90], "label": "sailor"},
+          {"type": "human", "x": 0.6, "y": 0.5, "scale": 0.6, "fill": [70, 80, 60], "label": "sailor"},
+          {"type": "text", "x": 0.5, "y": 0.08, "text": "ORDINARY SAILOR", "font_size": 30, "fill": [40, 35, 30]},
+          {"type": "cloud", "x": 0.3, "y": 0.15, "scale": 0.6},
+          {"type": "cloud", "x": 0.7, "y": 0.2, "scale": 0.5}
+        ],
+        "atmosphere": {"particles": "none", "fog": false}
+      }
+    },
+    {
+      "scene_num": 4,
+      "title": "Miserable Conditions",
+      "narration": "The food was rotten, the pay was nothing, and life was harsh.",
+      "mood": "somber",
+      "camera": null,
+      "visual": {
+        "bg": {"type": "indoor", "wall_color": [180, 160, 140], "floor_color": [120, 100, 80]},
+        "elements": [
+          {"type": "text", "x": 0.5, "y": 0.08, "text": "MISERABLE CONDITIONS", "font_size": 28, "fill": [40, 35, 30]},
+          {"type": "label", "x": 0.2, "y": 0.3, "text": "Rotten Food", "font_size": 18, "fill": [120, 100, 60], "bg_color": [255, 230, 210]},
+          {"type": "label", "x": 0.5, "y": 0.3, "text": "No Pay", "font_size": 18, "fill": [180, 60, 60], "bg_color": [255, 230, 210]},
+          {"type": "label", "x": 0.8, "y": 0.3, "text": "Harsh Life", "font_size": 18, "fill": [100, 80, 80], "bg_color": [255, 230, 210]},
+          {"type": "human", "x": 0.3, "y": 0.6, "scale": 0.9, "fill": [60, 60, 90], "label": "sick sailor"},
+          {"type": "human", "x": 0.7, "y": 0.6, "scale": 0.9, "fill": [80, 70, 50], "label": "sailor"},
+          {"type": "text", "x": 0.5, "y": 0.85, "text": "Life at sea was brutal", "font_size": 18, "fill": [100, 90, 80]}
+        ],
+        "atmosphere": {"particles": "none", "fog": false}
+      }
+    },
+    {
+      "scene_num": 5,
+      "title": "Pirate Ship Appears",
+      "narration": "Then one day a pirate ship appears on the horizon.",
+      "mood": "dramatic",
+      "camera": "ken_burns_in",
+      "visual": {
+        "bg": {"type": "ocean", "sky_color": [200, 190, 180], "horizon_color": [160, 150, 140], "horizon": 0.5, "water_color": [40, 70, 130]},
+        "elements": [
+          {"type": "ship", "x": 0.5, "y": 0.4, "scale": 0.6, "fill": [50, 40, 30], "sail_color": [60, 60, 60]},
+          {"type": "text", "x": 0.5, "y": 0.08, "text": "PIRATE SHIP", "font_size": 34, "fill": [180, 40, 40]},
+          {"type": "text", "x": 0.5, "y": 0.78, "text": "A ship on the horizon...", "font_size": 20, "fill": [80, 70, 60]}
+        ],
+        "atmosphere": {"particles": "none", "fog": true}
+      }
+    },
+    {
+      "scene_num": 6,
+      "title": "A Choice",
+      "narration": "The pirates offered a terrible but tempting choice.",
+      "mood": "dramatic",
+      "camera": null,
+      "visual": {
+        "bg": {"type": "solid", "color": [252, 250, 245]},
+        "elements": [
+          {"type": "text", "x": 0.5, "y": 0.05, "text": "THE CHOICE", "font_size": 34, "fill": [40, 35, 30]},
+          {"type": "label", "x": 0.25, "y": 0.2, "text": "STAY A SAILOR", "font_size": 20, "fill": [40, 35, 30], "bg_color": [255, 220, 200]},
+          {"type": "text", "x": 0.25, "y": 0.32, "text": "Chains", "font_size": 18, "fill": [180, 40, 40]},
+          {"type": "text", "x": 0.25, "y": 0.4, "text": "No pay", "font_size": 18, "fill": [120, 100, 80]},
+          {"type": "text", "x": 0.25, "y": 0.48, "text": "Misery", "font_size": 18, "fill": [100, 90, 80]},
+          {"type": "arrow", "x": 0.25, "y": 0.53, "x2": 0.25, "y2": 0.58, "stroke": [180, 40, 40], "stroke_width": 3},
+          {"type": "label", "x": 0.75, "y": 0.2, "text": "JOIN THE PIRATES", "font_size": 20, "fill": [40, 35, 30], "bg_color": [200, 255, 200]},
+          {"type": "text", "x": 0.75, "y": 0.32, "text": "Freedom", "font_size": 18, "fill": [40, 160, 40]},
+          {"type": "text", "x": 0.75, "y": 0.4, "text": "Shared loot", "font_size": 18, "fill": [60, 140, 60]},
+          {"type": "text", "x": 0.75, "y": 0.48, "text": "Vote", "font_size": 18, "fill": [60, 120, 60]},
+          {"type": "arrow", "x": 0.75, "y": 0.53, "x2": 0.75, "y2": 0.58, "stroke": [40, 160, 40], "stroke_width": 3},
+          {"type": "circle", "x": 0.5, "y": 0.65, "radius": 0.04, "fill": [255, 240, 200], "stroke": [40, 35, 30], "stroke_width": 2},
+          {"type": "text", "x": 0.5, "y": 0.64, "text": "YOU", "font_size": 18, "fill": [40, 35, 30]},
+          {"type": "text", "x": 0.5, "y": 0.82, "text": "Many chose the pirate flag", "font_size": 18, "fill": [100, 90, 80]}
+        ],
+        "atmosphere": {"particles": "none", "fog": false}
+      }
+    },
+    {
+      "scene_num": 7,
+      "title": "Pirate Democracy",
+      "narration": "Pirate ships were surprisingly democratic for their time.",
+      "mood": "hopeful",
+      "camera": null,
+      "visual": {
+        "bg": {"type": "indoor", "wall_color": [200, 180, 160], "floor_color": [140, 120, 100]},
+        "elements": [
+          {"type": "text", "x": 0.5, "y": 0.05, "text": "PIRATE DEMOCRACY", "font_size": 30, "fill": [40, 35, 30]},
+          {"type": "human", "x": 0.2, "y": 0.55, "scale": 0.8, "fill": [80, 60, 100]},
+          {"type": "human", "x": 0.4, "y": 0.55, "scale": 0.8, "fill": [100, 60, 40]},
+          {"type": "human", "x": 0.6, "y": 0.55, "scale": 0.8, "fill": [60, 80, 100]},
+          {"type": "human", "x": 0.8, "y": 0.55, "scale": 0.8, "fill": [80, 70, 120]},
+          {"type": "label", "x": 0.2, "y": 0.3, "text": "Vote!", "font_size": 18, "fill": [40, 35, 30], "bg_color": [255, 255, 255]},
+          {"type": "label", "x": 0.4, "y": 0.3, "text": "Aye!", "font_size": 18, "fill": [40, 180, 40], "bg_color": [255, 255, 255]},
+          {"type": "label", "x": 0.6, "y": 0.28, "text": "Aye!", "font_size": 18, "fill": [40, 180, 40], "bg_color": [255, 255, 255]},
+          {"type": "label", "x": 0.8, "y": 0.3, "text": "Nay", "font_size": 18, "fill": [180, 40, 40], "bg_color": [255, 255, 255]},
+          {"type": "label", "x": 0.5, "y": 0.78, "text": "Captain Elected by Crew", "font_size": 18, "fill": [40, 35, 30], "bg_color": [255, 240, 200]}
+        ],
+        "atmosphere": {"particles": "none", "fog": false}
+      }
+    },
+    {
+      "scene_num": 8,
+      "title": "Boring Days at Sea",
+      "narration": "Most pirate days were surprisingly boring.",
+      "mood": "peaceful",
+      "camera": "pan_left",
+      "visual": {
+        "bg": {"type": "ocean", "sky_color": [200, 220, 240], "horizon_color": [160, 190, 220], "horizon": 0.45, "water_color": [30, 80, 160]},
+        "elements": [
+          {"type": "ship", "x": 0.5, "y": 0.5, "scale": 0.5, "fill": [60, 50, 40], "sail_color": [180, 170, 160]},
+          {"type": "text", "x": 0.5, "y": 0.08, "text": "BORING DAYS AT SEA", "font_size": 28, "fill": [40, 35, 30]},
+          {"type": "text", "x": 0.5, "y": 0.82, "text": "Day 1... Day 12... Day 27...", "font_size": 22, "fill": [120, 110, 100]},
+          {"type": "text", "x": 0.5, "y": 0.9, "text": "Nothing happens", "font_size": 18, "fill": [150, 140, 130]}
+        ],
+        "atmosphere": {"particles": "none", "fog": false}
+      }
+    },
+    {
+      "scene_num": 9,
+      "title": "Reality of Treasure",
+      "narration": "Most pirate loot was not gold but everyday goods.",
+      "mood": "mysterious",
+      "camera": null,
+      "visual": {
+        "bg": {"type": "solid", "color": [252, 250, 245]},
+        "elements": [
+          {"type": "text", "x": 0.5, "y": 0.05, "text": "REALITY OF TREASURE", "font_size": 28, "fill": [40, 35, 30]},
+          {"type": "label", "x": 0.25, "y": 0.3, "text": "Sugar", "font_size": 20, "fill": [40, 35, 30], "bg_color": [255, 250, 240]},
+          {"type": "label", "x": 0.5, "y": 0.3, "text": "Tobacco", "font_size": 20, "fill": [40, 35, 30], "bg_color": [255, 250, 240]},
+          {"type": "label", "x": 0.75, "y": 0.3, "text": "Cloth", "font_size": 20, "fill": [40, 35, 30], "bg_color": [255, 250, 240]},
+          {"type": "label", "x": 0.35, "y": 0.5, "text": "Spices", "font_size": 20, "fill": [40, 35, 30], "bg_color": [255, 250, 240]},
+          {"type": "label", "x": 0.65, "y": 0.5, "text": "Medicine", "font_size": 20, "fill": [40, 35, 30], "bg_color": [255, 250, 240]},
+          {"type": "circle", "x": 0.5, "y": 0.7, "radius": 0.04, "fill": [255, 215, 0, 150], "stroke": [180, 150, 0]},
+          {"type": "text", "x": 0.5, "y": 0.69, "text": "? No Gold", "font_size": 16, "fill": [180, 40, 40]},
+          {"type": "text", "x": 0.5, "y": 0.85, "text": "Not what movies show", "font_size": 18, "fill": [120, 110, 100]}
+        ],
+        "atmosphere": {"particles": "none", "fog": false}
+      }
+    },
+    {
+      "scene_num": 10,
+      "title": "Constant Danger",
+      "narration": "Every sail on the horizon could mean death.",
+      "mood": "dramatic",
+      "camera": "ken_burns_in",
+      "visual": {
+        "bg": {"type": "ocean", "sky_color": [180, 170, 160], "horizon_color": [140, 130, 120], "horizon": 0.5, "water_color": [40, 60, 110]},
+        "elements": [
+          {"type": "ship", "x": 0.5, "y": 0.45, "scale": 0.5, "fill": [50, 40, 30], "sail_color": [60, 60, 60]},
+          {"type": "text", "x": 0.5, "y": 0.08, "text": "CONSTANT DANGER", "font_size": 30, "fill": [180, 40, 40]},
+          {"type": "text", "x": 0.5, "y": 0.2, "text": "Every sail = potential death", "font_size": 18, "fill": [80, 70, 60]},
+          {"type": "text", "x": 0.3, "y": 0.78, "text": "Navy warship", "font_size": 16, "fill": [120, 60, 60]},
+          {"type": "text", "x": 0.7, "y": 0.78, "text": "Merchant ship", "font_size": 16, "fill": [100, 90, 80]}
+        ],
+        "atmosphere": {"particles": "none", "fog": true}
+      }
+    },
+    {
+      "scene_num": 11,
+      "title": "Capture",
+      "narration": "Captured pirates faced a grim fate at the gallows.",
+      "mood": "somber",
+      "camera": "dolly_in",
+      "visual": {
+        "bg": {"type": "night", "colors": [[15, 10, 25], [30, 20, 40]], "horizon": 0.7, "ground_color": [20, 15, 20]},
+        "elements": [
+          {"type": "text", "x": 0.5, "y": 0.05, "text": "THE GALLOWS", "font_size": 32, "fill": [180, 40, 40]},
+          {"type": "text", "x": 0.5, "y": 0.15, "text": "Capture meant execution", "font_size": 18, "fill": [150, 130, 120]},
+          {"type": "text", "x": 0.5, "y": 0.85, "text": "A dark end for many", "font_size": 16, "fill": [120, 110, 100]}
+        ],
+        "atmosphere": {"particles": "none", "fog": true}
+      }
+    },
+    {
+      "scene_num": 12,
+      "title": "Ending",
+      "narration": "Piracy offered something precious that life at sea could not.",
+      "mood": "epic",
+      "camera": "ken_burns_out",
+      "visual": {
+        "bg": {"type": "sunset", "colors": [[200, 120, 60], [180, 80, 80], [100, 50, 80], [30, 40, 30]]},
+        "elements": [
+          {"type": "human", "x": 0.5, "y": 0.55, "scale": 1.2, "fill": [80, 60, 40], "label": "pirate at sunrise"},
+          {"type": "sun", "x": 0.5, "y": 0.3, "radius": 30, "fill": [255, 200, 50]},
+          {"type": "text", "x": 0.5, "y": 0.82, "text": "Freedom came at a price", "font_size": 28, "fill": [255, 240, 220]},
+          {"type": "text", "x": 0.5, "y": 0.08, "text": "THE REAL PIRATES", "font_size": 32, "fill": [255, 240, 220]}
+        ],
+        "atmosphere": {"particles": "none", "fog": false}
+      }
+    }
+  ]
+}

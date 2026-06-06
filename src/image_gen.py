@@ -178,6 +178,39 @@ def _try_hf_inference_api(prompt: str, w: int, h: int) -> Image.Image | None:
     return None
 
 
+def _try_local_diffusion(prompt: str, w: int, h: int) -> Image.Image | None:
+    """Generate image via tiny Stable Diffusion model on CPU (no GPU needed)."""
+    try:
+        import torch
+        from diffusers import DiffusionPipeline
+    except ImportError:
+        print("    Local diffusion: install torch + diffusers to enable")
+        return None
+
+    models = [
+        "OFA-Sys/small-stable-diffusion-v0",
+        "nota-ai/bk-sdm-small",
+    ]
+    for model_id in models:
+        try:
+            print(f"    Loading {model_id}...")
+            pipe = DiffusionPipeline.from_pretrained(
+                model_id, torch_dtype=torch.float32, safety_checker=None
+            )
+            hw = min(w, h, 512)
+            img = pipe(
+                prompt, num_inference_steps=15, height=hw, width=hw,
+                guidance_scale=4.0,
+            ).images[0]
+            img = img.resize((w, h), Image.LANCZOS)
+            print(f"    >> Got image from {model_id}")
+            return img
+        except Exception as e:
+            print(f"    {model_id} failed: {e}")
+            continue
+    return None
+
+
 def gen_img(prompt: str, width: int = None, height: int = None) -> Image.Image:
     w = width or config.VIDEO_WIDTH
     h = height or config.VIDEO_HEIGHT
@@ -190,7 +223,12 @@ def gen_img(prompt: str, width: int = None, height: int = None) -> Image.Image:
         if img is not None:
             return img
 
-    # Try 2: Pexels stock photo (needs free API key from pexels.com, email only)
+    # Try 2: Local tiny Stable Diffusion on CPU (free, unlimited, ~2-5 min per image)
+    img = _try_local_diffusion(enhanced, w, h)
+    if img is not None:
+        return img
+
+    # Try 3: Pexels stock photo (needs free API key from pexels.com, email only)
     if os.getenv("PEXELS_API_KEY"):
         img = _try_pexels_photo(prompt, w, h)
         if img is not None:
