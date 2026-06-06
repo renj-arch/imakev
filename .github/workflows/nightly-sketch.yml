@@ -1,0 +1,47 @@
+name: Test Hand Sketch
+
+on:
+  workflow_dispatch:
+    inputs:
+      prompt:
+        description: 'Scene prompt for the hand sketch'
+        required: false
+        type: string
+        default: 'every night in my dreams'
+
+jobs:
+  sketch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install deps
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq fonts-dejavu-core fonts-liberation2
+          pip install -r requirements.txt
+
+      - name: Generate test hand-sketch image
+        run: |
+          PROMPT="${{ inputs.prompt || 'every night in my dreams' }}"
+          echo "=== Generating hand-sketch: $PROMPT ==="
+          python -c "
+from src.sketch_engine import generate_sketch_scene
+img = generate_sketch_scene('$PROMPT', 720, 1280)
+img.save('hand_sketch_test.png')
+print(f'Saved: hand_sketch_test.png ({img.size[0]}x{img.size[1]})')
+"
+
+      - name: Upload sketch image
+        uses: actions/upload-artifact@v4
+        with:
+          name: hand-sketch-test-${{ github.run_id }}
+          path: hand_sketch_test.png
+          retention-days: 7
+          if-no-files-found: error
