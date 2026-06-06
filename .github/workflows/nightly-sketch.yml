@@ -1,5 +1,6 @@
 name: Test Hand Sketch
 
+# Manual run to test hand-drawn sketch image generation
 on:
   workflow_dispatch:
     inputs:
