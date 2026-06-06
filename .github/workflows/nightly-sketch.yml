@@ -29,17 +29,9 @@ jobs:
           pip install Pillow numpy
 
       - name: Generate test hand-sketch image
-        run: |
-          PROMPT="${{ inputs.prompt || 'every night in my dreams' }}"
-          echo "=== Generating hand-sketch: $PROMPT ==="
-          python << 'PYEOF'
-from src.sketch_engine import generate_sketch_scene
-import os
-prompt = os.environ['PROMPT']
-img = generate_sketch_scene(prompt, 720, 1280)
-img.save('hand_sketch_test.png')
-print(f'Saved: hand_sketch_test.png ({img.size[0]}x{img.size[1]})')
-PYEOF
+        env:
+          PROMPT: ${{ inputs.prompt || 'every night in my dreams' }}
+        run: python sketch_test.py
 
       - name: Upload sketch image
         uses: actions/upload-artifact@v4
