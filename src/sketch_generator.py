@@ -964,7 +964,7 @@ class SketchGenerator:
             gh = self.rng.randint(4, 12)
             gc = self._harmonize(c, 20)
             self.draw_line(draw, gx, gy, gx + self.rng.randint(-1, 1), gy - gh,
-                           color=gc + (self.rng.randint(100, 180)), width=self.rng.randint(1, 2))
+                           color=gc + (self.rng.randint(100, 180),), width=self.rng.randint(1, 2))
 
     def draw_path(self, draw, x1, y1, x2, y2, color=(140, 120, 100), width=20):
         """Draw a winding path."""
@@ -1058,6 +1058,44 @@ class SketchGenerator:
         self.draw_circle(draw, x+body_len//2-1, y, 1*s, fill=(150, 130, 80, 180))
 
     # ── New element generators ──────────────────────────────────
+
+    def draw_flower(self, draw, x, y, size=1.0, color=(255, 100, 150)):
+        """Draw a simple flower with stem and petals."""
+        s = size; c = tuple(color[:3])
+        # Stem
+        self.draw_line(draw, x, y, x, y - 10*s, color=(40, 120, 40), width=int(2*s))
+        # Leaf
+        self.draw_arc(draw, x, y - 6*s, 4*s, 180, 360, color=(40, 120, 40), width=int(1.5*s))
+        # Petals
+        for a in range(0, 360, 45):
+            rad = math.radians(a)
+            self.draw_circle(draw, x + math.cos(rad) * 5*s, y - 10*s + math.sin(rad) * 5*s, 4*s,
+                           fill=c + (200,), stroke=self._darken(c, 20) + (150,), stroke_width=1)
+        # Center
+        self.draw_circle(draw, x, y - 10*s, 3*s, fill=(255, 200, 50, 200))
+
+    def draw_plant(self, draw, x, y, size=1.0, color=(50, 120, 50)):
+        """Draw a simple small plant."""
+        s = size; c = tuple(color[:3])
+        # Stem
+        self.draw_line(draw, x, y, x, y - 8*s, color=(60, 100, 40), width=int(2*s))
+        # Leaves
+        for side in [-1, 1]:
+            self.draw_circle(draw, x + side * 5*s, y - 4*s, 4*s,
+                           fill=c + (200,), stroke=self._darken(c, 20) + (150,), stroke_width=1)
+        # Top leaf cluster
+        self.draw_circle(draw, x, y - 8*s, 3*s, fill=self._lighten(c, 20) + (200,))
+
+    def draw_fruit(self, draw, x, y, size=1.0, color=(255, 150, 50)):
+        """Draw a simple fruit."""
+        s = size; c = tuple(color[:3])
+        r = 6 * s
+        self.draw_shadow_circle(draw, x, y + 2, r, offset=(2, 2), blur_radius=3, color=(0, 0, 0, 30))
+        self.draw_circle(draw, x, y, r, fill=c + (220,), stroke=self._darken(c, 20) + (150,), stroke_width=1)
+        # Highlight
+        self.draw_circle(draw, x - r//3, y - r//3, r//3, fill=(255, 255, 255, 60))
+        # Stem
+        self.draw_line(draw, x, y - r, x + 2*s, y - r - 3*s, color=(60, 50, 40), width=int(1.5*s))
 
     def draw_book(self, draw, x, y, size=1.0, color=(140, 100, 60)):
         s = size; c = tuple(color[:3])
@@ -1431,8 +1469,35 @@ class SketchGenerator:
             self.bg_gradient(draw, colors)
 
         elif bg_type == "solid":
-            c = self._tc(bg.get("color"), (245, 245, 240))
+            colors = bg.get("colors", [])
+            c = self._tc(colors[0] if colors else bg.get("color", None), (245, 245, 240))
             draw.rectangle([0, 0, self.w, self.h], fill=c)
+
+        elif bg_type == "forest":
+            sky = self._tc(bg.get("sky_color"), (180, 200, 180))
+            horizon = bg.get("horizon", 0.5)
+            gh = int(self.h * horizon)
+            for y in range(gh):
+                t = y / max(gh, 1)
+                r = int(sky[0] - t * 20)
+                g = int(sky[1] - t * 15)
+                b = int(sky[2] - t * 10)
+                draw.line([(0, y), (self.w, y)], fill=(r, g, b))
+            if bg.get("ground_color"):
+                gc = self._tc(bg["ground_color"], (40, 80, 40))
+                for y in range(gh, self.h):
+                    t = (y - gh) / max(self.h - gh, 1)
+                    r = int(gc[0] + t * 10)
+                    g = int(gc[1] + t * 8)
+                    b = int(gc[2] + t * 5)
+                    draw.line([(0, y), (self.w, y)], fill=(r, g, b))
+            else:
+                for y in range(gh, self.h):
+                    t = (y - gh) / max(self.h - gh, 1)
+                    r = int(40 + t * 20)
+                    g = int(80 + t * 15)
+                    b = int(40 + t * 10)
+                    draw.line([(0, y), (self.w, y)], fill=(r, g, b))
 
         elif bg_type == "sunset":
             colors = [(0, (220, 100, 70)), (0.2, (200, 120, 90)),
@@ -1445,7 +1510,7 @@ class SketchGenerator:
         etype = elem.get("type", "").lower()
         x = int(elem.get("x", 0.5) * self.w)
         y = int(elem.get("y", 0.5) * self.h)
-        s = elem.get("scale", elem.get("size", 1.0))
+        s = elem.get("scale", elem.get("size", 1.0)) * 5.0
 
         # Colors
         fill = elem.get("fill", elem.get("fill_color", elem.get("color", None)))
@@ -1612,6 +1677,18 @@ class SketchGenerator:
         elif etype == "fish":
             c = fill or (200, 180, 100)
             self.draw_fish(draw, x, y, s, c)
+
+        elif etype == "flower":
+            c = fill or (255, 100, 150)
+            self.draw_flower(draw, x, y, s, c)
+
+        elif etype == "plant":
+            c = fill or (50, 120, 50)
+            self.draw_plant(draw, x, y, s, c)
+
+        elif etype == "fruit":
+            c = fill or (255, 150, 50)
+            self.draw_fruit(draw, x, y, s, c)
 
         elif etype == "grass":
             count = elem.get("count", 40)

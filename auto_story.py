@@ -7,7 +7,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 import numpy as np
 from moviepy import (
-    VideoClip, AudioFileClip, CompositeAudioClip, concatenate_audioclips,
+    VideoClip, AudioFileClip, CompositeAudioClip,
     CompositeVideoClip,
 )
 import config
@@ -337,10 +337,7 @@ def build_video(script_data: dict, output_path: str):
 
     clip = VideoClip(make_frame, duration=vdur)
 
-    audio = AudioFileClip(str(tts_path))
-    if vdur > audio.duration + TD:
-        s = AudioFileClip(str(tts_path)).with_duration(vdur - audio.duration - TD).with_volume_scaled(0)
-        audio = concatenate_audioclips([audio, s])
+    audio = AudioFileClip(str(tts_path)).with_start(TD)
     music = list(config.MUSIC_DIR.glob("*.mp3"))
     if music:
         try:
