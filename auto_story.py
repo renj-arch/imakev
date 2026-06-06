@@ -3,6 +3,9 @@ Uses sketch_generator.py for clean, full-color illustrations of any topic.
 Each scene builds up progressively (stroke-by-stroke reveal animation)."""
 
 import sys, os, re, time, random, json
+if sys.stdout.encoding.lower() != 'utf-8':
+    try: sys.stdout.reconfigure(encoding='utf-8')
+    except: pass
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 import numpy as np
@@ -242,7 +245,7 @@ def build_video(script_data: dict, output_path: str):
         tl = timeline[i]
         scene_data.append({"frames": frames, "duration": sd, "timeline": tl})
         total_frames += len(frames)
-        print(f"    → {len(frames)} frames")
+        print(f"    -> {len(frames)} frames")
 
     # ── 4. Assemble ──
     print(f"\n[4/4] Assembling video ({total_frames} scene frames)...")

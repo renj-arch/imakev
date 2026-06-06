@@ -599,6 +599,12 @@ class SceneComposer:
             scene_title = self._scene_title(t, i, n_scenes, env)
             narration = self._scene_narration(t, i, n_scenes, topic, env)
             scene = self.compose_scene(t + " " + scene_title.lower(), scene_title)
+            # Wrap visual fields under "visual" key as expected by auto_story.py
+            scene["visual"] = {
+                "bg": scene.pop("bg", {}),
+                "elements": scene.pop("elements", []),
+                "atmosphere": scene.pop("atmosphere", {}),
+            }
             scene["narration"] = narration
             scene["title"] = scene_title
             scene["scene_num"] = i + 1
