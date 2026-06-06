@@ -1,14 +1,12 @@
-name: Test Hand Sketch
+name: 🎨 Hand-Drawn Sketch
 
-# Manual run to test hand-drawn sketch image generation
 on:
   workflow_dispatch:
     inputs:
       prompt:
-        description: 'Scene prompt for the hand sketch'
-        required: false
+        description: 'What to draw'
+        required: true
         type: string
-        default: 'every night in my dreams'
 
 jobs:
   sketch:
@@ -26,20 +24,21 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq fonts-dejavu-core fonts-liberation2
-          pip install Pillow numpy opencv-python-headless requests python-dotenv
+          pip install Pillow numpy python-dotenv openai
 
-      - name: Create .env
-        run: echo "PEXELS_API_KEY=${{ secrets.PEXELS_API_KEY }}" >> .env
+      - name: Set up LLM env
+        run: |
+          echo "LLM_PROVIDER=${{ vars.LLM_PROVIDER || 'openrouter' }}" >> .env
+          echo "LLM_API_KEY=${{ secrets.LLM_API_KEY }}" >> .env
+          echo "LLM_MODEL=${{ vars.LLM_MODEL || 'moonshotai/kimi-k2.6:free' }}" >> .env
 
-      - name: Generate test hand-sketch image
-        env:
-          PROMPT: ${{ inputs.prompt || 'every night in my dreams' }}
-        run: python sketch_test.py
+      - name: Generate hand-drawn sketch
+        run: python sketch_pipeline.py "${{ inputs.prompt }}"
 
-      - name: Upload sketch image
+      - name: Upload sketch
         uses: actions/upload-artifact@v4
         with:
-          name: hand-sketch-test-${{ github.run_id }}
-          path: hand_sketch_test.png
+          name: hand-drawn-sketch
+          path: sketch_*.png
           retention-days: 7
           if-no-files-found: error
