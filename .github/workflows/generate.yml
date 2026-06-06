@@ -21,6 +21,7 @@ on:
           - storyboard
           - textsync
           - sketch
+          - narration
           - facts
           - story
           - what_if
@@ -44,6 +45,16 @@ on:
           - try_this
       topic:
         description: 'Story topic (for storyboard mode, e.g. how dogs were domesticated)'
+        required: false
+        type: string
+        default: ''
+      script_file:
+        description: 'Pre-written narration text (for narration mode). Paste your storytelling script here.'
+        required: false
+        type: string
+        default: ''
+      custom_title:
+        description: 'Custom title (overrides auto-generated script title)'
         required: false
         type: string
         default: ''
@@ -119,6 +130,7 @@ jobs:
       - name: Generate video(s)
         env:
           LLM_PROVIDER: ${{ inputs.llm_provider || 'huggingface' }}
+          SCRIPT_TEXT: ${{ inputs.script_file }}
         run: |
           MODE="${{ inputs.mode || 'sketch' }}"
           REPEAT="${{ inputs.repeat || 1 }}"
@@ -134,6 +146,22 @@ jobs:
                 ;;
               storyboard)
                 python storyboard_video.py "${{ inputs.topic }}"
+                ;;
+              narration)
+                if [ -z "${{ inputs.script_file }}" ]; then
+                  echo "Error: script_file input is required for narration mode"
+                  exit 1
+                fi
+                python -c "
+import os
+with open('.github_narration.txt', 'w', encoding='utf-8') as f:
+    f.write(os.environ.get('SCRIPT_TEXT', ''))
+"
+                TITLE_FLAG=""
+                if [ -n "${{ inputs.custom_title }}" ]; then
+                  TITLE_FLAG="--title '${{ inputs.custom_title }}'"
+                fi
+                python auto_story.py .github_narration.txt $TITLE_FLAG
                 ;;
               *)
                 python run_pipeline.py "$MODE"

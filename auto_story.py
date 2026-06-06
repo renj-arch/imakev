@@ -114,7 +114,7 @@ Respond with ONLY the JSON object, no other text."""
     fallback = _fallback_script(topic)
 
     try:
-        raw = _generate(prompt, temperature=0.9, max_tokens=4000, system=system)
+        raw = _generate(prompt, temperature=0.9, max_tokens=1600, system=system)
         raw = re.sub(r'^```(?:json)?\s*', '', raw.strip())
         raw = re.sub(r'\s*```$', '', raw)
         data = json.loads(raw)
@@ -126,6 +126,90 @@ Respond with ONLY the JSON object, no other text."""
 
     print("  Using fallback script")
     return fallback
+
+
+def _scene_from_paragraph(text: str, scene_num: int, total: int,
+                          prev_summary: str = "", next_summary: str = "") -> dict:
+    """Generate visual JSON for a single paragraph/scene using LLM."""
+    from src.script_generator import _generate
+
+    pos = "opening" if scene_num == 1 else ("closing" if scene_num == total else "middle")
+    prompt = f"""You are a documentary visual director. Given a narration paragraph, output visual scene JSON.
+Position in story: {pos}
+
+Narration:
+{text}
+
+Output ONLY this JSON (no markdown, no code fences):
+{{"title":"<3-5 word scene title>","mood":"<peaceful|dramatic|hopeful|somber|epic|mysterious>","camera":<null or ken_burns_in|pan_right|pan_left|dolly_in>,"visual":{{"bg":{{"type":"<gradient|night|ocean|indoor|solid|sunset|forest>","colors":[[R,G,B],[R,G,B]],"horizon":0.55}},"elements":[{{"type":"<element type>","x":0.5,"y":0.5,"scale":1.0,"fill":[R,G,B]}}],"atmosphere":{{"particles":"<none|rain|snow|stars>","fog":false,"star_count":0}}}}}}"""
+
+    system = "You output ONLY valid JSON. No markdown, no extra text."
+    try:
+        raw = _generate(prompt, temperature=0.7, max_tokens=800, system=system)
+        raw = raw.strip()
+        if raw.startswith("```"):
+            raw = re.sub(r'^```(?:json)?\s*', '', raw)
+            raw = re.sub(r'\s*```$', '', raw)
+        data = json.loads(raw)
+        return data
+    except Exception:
+        return {}
+
+
+def generate_script_from_narration(text: str) -> dict:
+    """Split pre-written narration into scenes. Paragraphs become scenes, LLM generates visuals per scene."""
+    # Split by double newlines into paragraphs
+    paragraphs = [p.strip() for p in re.split(r'\n\s*\n', text) if p.strip()]
+
+    # If too few paragraphs, split by sentences instead
+    if len(paragraphs) < 4:
+        sentences = [s.strip() for s in text.replace('?', '.').replace('!', '.').split('.') if s.strip()]
+        sentences = [s + '.' for s in sentences if s]
+        # Group into ~3 sentence chunks
+        paragraphs = []
+        chunk = []
+        for s in sentences:
+            chunk.append(s)
+            if len(chunk) >= 3:
+                paragraphs.append(' '.join(chunk))
+                chunk = []
+        if chunk:
+            paragraphs.append(' '.join(chunk))
+
+    if len(paragraphs) < 2:
+        paragraphs = [text]
+
+    # Generate title from first paragraph
+    title_words = paragraphs[0].split()[:6]
+    title = " ".join(title_words).rstrip(".,!?")
+
+    scenes = []
+    for i, para in enumerate(paragraphs):
+        scene_num = i + 1
+        print(f"  Scene {scene_num}/{len(paragraphs)}: generating visuals...")
+        raw_prompt = para.strip()
+        if not raw_prompt:
+            continue
+
+        # Get visual data from LLM per scene (no narration text in LLM output)
+        visual_data = _scene_from_paragraph(raw_prompt, scene_num, len(paragraphs))
+
+        scene = {
+            "scene_num": scene_num,
+            "title": visual_data.get("title", f"Part {scene_num}"),
+            "narration": raw_prompt,
+            "mood": visual_data.get("mood", "peaceful"),
+            "camera": visual_data.get("camera", None),
+            "visual": visual_data.get("visual", {
+                "bg": {"type": "gradient", "colors": [[100, 120, 180], [50, 60, 100]], "horizon": 0.55},
+                "elements": [{"type": "star", "x": 0.5, "y": 0.3, "scale": 0.8, "fill": [255, 255, 200]}],
+                "atmosphere": {"particles": "none", "fog": False, "star_count": 5}
+            })
+        }
+        scenes.append(scene)
+
+    print(f"  Created {len(scenes)} scenes from narration")
+    return {"title": title, "scenes": scenes}
 
 
 def _fallback_script(topic: str) -> dict:
@@ -356,19 +440,41 @@ def build_video(script_data: dict, output_path: str):
 
 def main():
     script = None
-    # Check if first arg is a JSON file
-    if len(sys.argv) >= 2 and sys.argv[1].endswith(".json"):
-        path = Path(sys.argv[1])
-        if path.exists():
-            print(f"Loading script from: {path}")
-            with open(path, encoding="utf-8") as f:
-                script = json.load(f)
-            print(f"  Loaded: {script.get('title', 'untitled')} ({len(script.get('scenes', []))} scenes)")
-    elif len(sys.argv) >= 2:
-        topic = " ".join(sys.argv[1:])
-        print(f"Topic: {topic}")
-        print("\n[1/4] Generating LLM script...")
-        script = generate_script(topic)
+    custom_title = ""
+    script_file = None
+
+    # Parse --title flag
+    args = sys.argv[1:]
+    if "--title" in args:
+        idx = args.index("--title")
+        if idx + 1 < len(args):
+            custom_title = args[idx + 1]
+            args = args[:idx] + args[idx+2:]
+
+    if args:
+        arg = args[0]
+        # .json file → load pre-made script
+        if arg.endswith(".json"):
+            path = Path(arg)
+            if path.exists():
+                print(f"Loading script from: {path}")
+                with open(path, encoding="utf-8") as f:
+                    script = json.load(f)
+                print(f"  Loaded: {script.get('title', 'untitled')} ({len(script.get('scenes', []))} scenes)")
+        # .txt file → pre-written narration, auto-generate visuals
+        elif arg.endswith(".txt"):
+            script_file = arg
+            path = Path(arg)
+            if path.exists():
+                text = path.read_text(encoding="utf-8")
+                print(f"Loaded narration ({len(text)} chars from {path})")
+                print("\n[1/4] Generating scenes from narration...")
+                script = generate_script_from_narration(text)
+        else:
+            topic = " ".join(args)
+            print(f"Topic: {topic}")
+            print("\n[1/4] Generating LLM script...")
+            script = generate_script(topic)
     else:
         topic = "how the printing press changed the world"
         print(f"Topic: {topic}")
@@ -376,6 +482,8 @@ def main():
         script = generate_script(topic)
 
     if script:
+        if custom_title:
+            script["title"] = custom_title
         for s in script.get("scenes", []):
             ne = len(s.get("visual", {}).get("elements", []))
             print(f"  {s.get('title','?')[:35]}: {s['narration'][:50]}... [{s.get('mood','')}] ({ne} elements)")
