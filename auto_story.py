@@ -286,7 +286,7 @@ def build_video(script_data: dict, output_path: str):
         scene_path = temp_dir / f"scene_{i:03d}.mp4"
         print(f"    → writing {scene_path.name}")
         scene_clip.write_videofile(str(scene_path), fps=FPS, codec="libx264",
-                                   preset="fast", ffmpeg_params=["-crf", "22"], logger=None)
+                                   preset="ultrafast", ffmpeg_params=["-crf", "28"], logger=None)
         scene_clip.close()
         del frames, scene_clip
         scene_paths.append(scene_path)
