@@ -40,13 +40,15 @@ def sketch_from_narration(narration: str, width=W, height=H, seed=None) -> Image
 
 
 def _describe_scene(narration: str) -> dict:
-    """Convert narration to scene description. Tries LLM first, then keyword matching."""
+    """Convert narration to scene description. Tries LLM first, then SceneComposer."""
     # Try LLM
     result = _llm_describe(narration)
     if result:
         return result
-    # Fall back to keyword parsing
-    result = _keyword_describe(narration)
+    # Fall back to SceneComposer (works for ANY topic)
+    from src.scene_composer import SceneComposer
+    composer = SceneComposer()
+    result = composer.compose_scene(narration)
     if result:
         return result
     # Ultimate fallback
