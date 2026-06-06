@@ -1057,6 +1057,227 @@ class SketchGenerator:
         # Mouth
         self.draw_circle(draw, x+body_len//2-1, y, 1*s, fill=(150, 130, 80, 180))
 
+    # ── New element generators ──────────────────────────────────
+
+    def draw_book(self, draw, x, y, size=1.0, color=(140, 100, 60)):
+        s = size; c = tuple(color[:3])
+        w, h = 16*s, 12*s
+        self.draw_shadow_circle(draw, x, y+h//2, w//2, offset=(2,2), blur_radius=3, color=(0,0,0,30))
+        self.draw_polygon(draw, [(x-w//2, y+h//2), (x-w//2, y-h//2), (x, y-h//2+2*s), (x, y+h//2-2*s)], fill=c+(220,), stroke=self._darken(c,20)+(180,))
+        self.draw_polygon(draw, [(x, y-h//2+2*s), (x+w//2, y-h//2), (x+w//2, y+h//2), (x, y+h//2-2*s)], fill=self._lighten(c,15)+(220,), stroke=self._darken(c,20)+(180,))
+        self.draw_line(draw, x, y-h//2+2*s, x, y+h//2-2*s, color=(60,50,40,150), width=1)
+
+    def draw_scroll(self, draw, x, y, size=1.0, color=(220, 200, 170)):
+        s = size; c = tuple(color[:3])
+        w, h = 18*s, 14*s
+        self.draw_shadow_circle(draw, x, y+h//2, w//2, offset=(2,2), blur_radius=3, color=(0,0,0,30))
+        self.draw_rect(draw, x-w//2, y-h//2, w, h, fill=c+(220,), stroke=self._darken(c,15)+(180,), stroke_width=1, rx=2)
+        self.draw_rect(draw, x-w//2, y-h//2, w, 3*s, fill=self._darken(c,10)+(200,), stroke=self._darken(c,20)+(180,), stroke_width=1, rx=1)
+        self.draw_rect(draw, x-w//2, y+h//2-3*s, w, 3*s, fill=self._darken(c,10)+(200,), stroke=self._darken(c,20)+(180,), stroke_width=1, rx=1)
+
+    def draw_compass(self, draw, x, y, size=1.0, color=(180, 150, 80)):
+        s = size; c = tuple(color[:3])
+        r = 10*s
+        self.draw_shadow_circle(draw, x, y, r, offset=(2,2), blur_radius=3, color=(0,0,0,30))
+        self.draw_circle(draw, x, y, r, fill=(240,230,200,200), stroke=(120,100,80), stroke_width=2)
+        # 4 points
+        for angle, name, col in [(0,"N",(200,60,60)), (90,"E",(60,60,60)), (180,"S",(60,60,60)), (270,"W",(60,60,60))]:
+            rad = math.radians(angle)
+            px = x + math.cos(rad)*r*0.6
+            py = y + math.sin(rad)*r*0.6
+            self.draw_polygon(draw, [(x, y), (x+math.cos(rad+0.15)*r*0.4, y+math.sin(rad+0.15)*r*0.4), (px, py), (x+math.cos(rad-0.15)*r*0.4, y+math.sin(rad-0.15)*r*0.4)], fill=col+(200,))
+            self.draw_text(draw, px, py-4*s if angle==0 else py+2*s if angle==180 else px+2*s, name, font_size=int(8*s), color=(40,35,30), align="center")
+
+    def draw_globe(self, draw, x, y, size=1.0, color=(100, 150, 200)):
+        s = size; c = tuple(color[:3])
+        r = 10*s
+        self.draw_shadow_circle(draw, x, y+r, r, offset=(3,2), blur_radius=4, color=(0,0,0,40))
+        self.draw_circle(draw, x, y, r, fill=c+(200,), stroke=self._darken(c,20)+(180,), stroke_width=2)
+        # Continents blobs
+        for ox, oy in [(0.3,0.2), (-0.2,0.1), (0.1,-0.3), (-0.3,-0.1)]:
+            self.draw_circle(draw, int(x+ox*r), int(y+oy*r), int(r*0.25), fill=(60,120,80,120))
+        # Stand
+        self.draw_rect(draw, x-2*s, y+r, 4*s, 6*s, fill=(80,70,60,200), stroke=(50,45,40), stroke_width=1)
+        self.draw_rect(draw, x-5*s, y+6*s, 10*s, 2*s, fill=(80,70,60,200), stroke=(50,45,40), stroke_width=1)
+
+    def draw_quill(self, draw, x, y, size=1.0, color=(220, 200, 180)):
+        s = size; c = tuple(color[:3])
+        self.draw_line(draw, x, y, x-3*s, y-15*s, color=c+(200,), width=int(2*s))
+        self.draw_line(draw, x, y, x+2*s, y-14*s, color=c+(180,), width=int(1.5*s))
+        self.draw_line(draw, x, y, x-1*s, y-16*s, color=(255,255,255,80), width=int(1*s))
+        # Nib
+        self.draw_polygon(draw, [(x-1*s, y), (x+1*s, y), (x, y+2*s)], fill=(60,50,40,200))
+
+    def draw_lightbulb(self, draw, x, y, size=1.0, color=(255, 220, 50)):
+        s = size; c = tuple(color[:3])
+        r = 6*s
+        self.draw_shadow_circle(draw, x, y, r, offset=(2,2), blur_radius=4, color=(0,0,0,30))
+        # Bulb
+        self.draw_circle(draw, x, y-r, r, fill=c+(200,), stroke=(180,150,30,180), stroke_width=2)
+        # Glow
+        self.draw_circle(draw, x, y-r, r*1.3, fill=(255,220,50,30))
+        # Base
+        self.draw_rect(draw, x-2*s, y-r, 4*s, 3*s, fill=(100,90,80,200), stroke=(60,55,50), stroke_width=1)
+
+    def draw_fire(self, draw, x, y, size=1.0, color=(220, 120, 40)):
+        s = size; c = tuple(color[:3])
+        self.draw_shadow_circle(draw, x, y+2*s, 6*s, offset=(2,2), blur_radius=4, color=(0,0,0,30))
+        # Flame layers
+        for i, (r, col) in enumerate([(5*s, (255,200,50,120)), (4*s, c+(200,)), (2.5*s, (255,150,50,220)), (1.5*s, (255,200,80,200))]):
+            pts = [(x, y-r)]
+            for a in range(0, 360, 30):
+                rr = r * (0.6 + 0.4*abs(math.sin(math.radians(a*1.5))))
+                pts.append((x+math.cos(math.radians(a))*rr, y-math.sin(math.radians(a))*rr))
+            self.draw_polygon(draw, pts, fill=col, stroke=None)
+        # Logs
+        self.draw_rect(draw, x-5*s, y+3*s, 3*s, 2*s, fill=(80,60,40,200), stroke=(50,40,30), stroke_width=1)
+        self.draw_rect(draw, x+2*s, y+3*s, 3*s, 2*s, fill=(100,70,50,200), stroke=(50,40,30), stroke_width=1)
+
+    def draw_clock(self, draw, x, y, size=1.0, color=(200, 190, 170)):
+        s = size; c = tuple(color[:3])
+        r = 8*s
+        self.draw_shadow_circle(draw, x, y, r, offset=(2,2), blur_radius=3, color=(0,0,0,30))
+        self.draw_circle(draw, x, y, r, fill=c+(220,), stroke=self._darken(c,20)+(180,), stroke_width=2)
+        # Hour marks
+        for a in range(0, 360, 30):
+            rad = math.radians(a)
+            self.draw_line(draw, x+math.cos(rad)*r*0.75, y+math.sin(rad)*r*0.75, x+math.cos(rad)*r*0.9, y+math.sin(rad)*r*0.9, color=(60,50,40), width=1)
+        # Hands
+        self.draw_line(draw, x, y, x+math.cos(math.radians(210))*r*0.5, y+math.sin(math.radians(210))*r*0.5, color=(40,35,30), width=int(2*s))
+        self.draw_line(draw, x, y, x+math.cos(math.radians(60))*r*0.7, y+math.sin(math.radians(60))*r*0.7, color=(40,35,30), width=int(1.5*s))
+        self.draw_circle(draw, x, y, 1.5*s, fill=(40,35,30,200))
+
+    def draw_gear(self, draw, x, y, size=1.0, color=(160, 150, 140)):
+        s = size; c = tuple(color[:3])
+        r = 7*s
+        self.draw_shadow_circle(draw, x, y, r, offset=(2,2), blur_radius=3, color=(0,0,0,30))
+        pts = []
+        for i in range(24):
+            a = math.radians(i * 15)
+            rr = r * (1.0 if i % 2 == 0 else 0.7)
+            pts.append((x + math.cos(a)*rr, y + math.sin(a)*rr))
+        self.draw_polygon(draw, pts, fill=c+(200,), stroke=self._darken(c,20)+(150,), stroke_width=1)
+        self.draw_circle(draw, x, y, r*0.4, fill=(100,90,80,200))
+        self.draw_circle(draw, x, y, r*0.15, fill=(40,35,30,200))
+
+    def draw_skull(self, draw, x, y, size=1.0, color=(220, 210, 190)):
+        s = size; c = tuple(color[:3])
+        r = 5*s
+        self.draw_shadow_circle(draw, x, y, r, offset=(2,2), blur_radius=3, color=(0,0,0,30))
+        self.draw_circle(draw, x, y, r, fill=c+(220,), stroke=self._darken(c,20)+(150,), stroke_width=2)
+        # Eyes
+        self.draw_circle(draw, x-2*s, y-1*s, 1.5*s, fill=(30,25,20,200))
+        self.draw_circle(draw, x+2*s, y-1*s, 1.5*s, fill=(30,25,20,200))
+        # Nose
+        self.draw_polygon(draw, [(x-0.5*s, y+1*s), (x+0.5*s, y+1*s), (x, y+2.5*s)], fill=(40,35,30,200))
+        # Mouth
+        for i in range(4):
+            self.draw_line(draw, x-3*s+i*2*s, y+3*s, x-2*s+i*2*s, y+3*s, color=(40,35,30), width=1)
+
+    def draw_crown(self, draw, x, y, size=1.0, color=(220, 180, 50)):
+        s = size; c = tuple(color[:3])
+        w, h = 12*s, 7*s
+        self.draw_shadow_circle(draw, x, y+h//2, w//2, offset=(2,2), blur_radius=3, color=(0,0,0,30))
+        self.draw_polygon(draw, [(x-w//2, y+h//2), (x-w//2, y), (x-w//3, y-h//2), (x, y-1*s), (x+w//3, y-h//2), (x+w//2, y), (x+w//2, y+h//2)], fill=c+(200,), stroke=self._darken(c,20)+(150,), stroke_width=1)
+        self.draw_circle(draw, x-w//3, y-h//2, 1.5*s, fill=(255,50,50,200))
+        self.draw_circle(draw, x, y-1*s, 1.5*s, fill=(50,150,255,200))
+        self.draw_circle(draw, x+w//3, y-h//2, 1.5*s, fill=(50,200,50,200))
+
+    def draw_key(self, draw, x, y, size=1.0, color=(180, 160, 100)):
+        s = size; c = tuple(color[:3])
+        self.draw_shadow_circle(draw, x, y, 4*s, offset=(2,2), blur_radius=2, color=(0,0,0,20))
+        self.draw_circle(draw, x, y-4*s, 4*s, fill=c+(200,), stroke=self._darken(c,20)+(150,), stroke_width=2)
+        self.draw_line(draw, x, y, x, y+10*s, color=c+(200,), width=int(3*s))
+        self.draw_line(draw, x, y+8*s, x+4*s, y+12*s, color=c+(200,), width=int(2*s))
+        self.draw_line(draw, x, y+6*s, x-3*s, y+9*s, color=c+(200,), width=int(2*s))
+
+    def draw_lamp(self, draw, x, y, size=1.0, color=(180, 160, 120)):
+        s = size; c = tuple(color[:3])
+        # Base
+        self.draw_rect(draw, x-3*s, y+4*s, 6*s, 2*s, fill=c+(200,), stroke=self._darken(c,20), stroke_width=1)
+        # Stem
+        self.draw_line(draw, x, y+4*s, x, y-4*s, color=c, width=int(2*s))
+        # Lamp body
+        self.draw_polygon(draw, [(x-4*s, y-4*s), (x+4*s, y-4*s), (x+2*s, y+1*s), (x-2*s, y+1*s)], fill=c+(200,), stroke=self._darken(c,20), stroke_width=1)
+        # Flame
+        self.draw_circle(draw, x, y-5*s, 2*s, fill=(255,200,50,200))
+        self.draw_circle(draw, x, y-5*s, 3*s, fill=(255,200,50,60))
+
+    def draw_hand(self, draw, x, y, size=1.0, color=(235, 200, 175)):
+        s = size; c = tuple(color[:3])
+        # Palm
+        self.draw_circle(draw, x, y, 3*s, fill=c+(220,), stroke=self._darken(c,20)+(150,), stroke_width=1)
+        # Fingers
+        for dx, dy, a in [(-2.5*s, -3*s, 0.3), (-1*s, -4*s, 0), (1*s, -4*s, 0), (2.5*s, -3*s, -0.3)]:
+            self.draw_line(draw, x+dx*0.5, y+dy*0.5, x+dx, y+dy, color=c+(200,), width=int(2*s))
+        # Thumb
+        self.draw_line(draw, x-2*s, y+1*s, x-4*s, y+3*s, color=c+(200,), width=int(2*s))
+
+    def draw_eye(self, draw, x, y, size=1.0, color=(255, 250, 240)):
+        s = size; c = tuple(color[:3])
+        w, h = 8*s, 5*s
+        self.draw_circle(draw, x, y, h//2, fill=c+(220,), stroke=(60,50,40), stroke_width=2)
+        # Iris
+        self.draw_circle(draw, x, y, h//3, fill=(80,120,180,200))
+        # Pupil
+        self.draw_circle(draw, x, y, 1.5*s, fill=(20,20,20,200))
+        # Highlight
+        self.draw_circle(draw, x+1*s, y-1*s, 0.8*s, fill=(255,255,255,150))
+
+    def draw_cross(self, draw, x, y, size=1.0, color=(120, 80, 60)):
+        s = size; c = tuple(color[:3])
+        w, h = 3*s, 12*s
+        self.draw_shadow_circle(draw, x, y+h//2, w//2, offset=(2,2), blur_radius=2, color=(0,0,0,20))
+        self.draw_rect(draw, x-w//2, y-h//2, w, h, fill=c+(200,), stroke=self._darken(c,20)+(150,), stroke_width=1)
+        self.draw_rect(draw, x-w, y-h//4, w*2, h//3, fill=c+(200,), stroke=self._darken(c,20)+(150,), stroke_width=1)
+
+    def draw_coin(self, draw, x, y, size=1.0, color=(220, 190, 60)):
+        s = size; c = tuple(color[:3])
+        r = 4*s
+        self.draw_circle(draw, x+1*s, y+1*s, r, fill=(0,0,0,30))
+        self.draw_circle(draw, x, y, r, fill=c+(220,), stroke=self._darken(c,20)+(150,), stroke_width=2)
+        self.draw_circle(draw, x, y, r*0.7, fill=self._lighten(c,10)+(150,))
+
+    def draw_telescope(self, draw, x, y, size=1.0, color=(120, 80, 60)):
+        s = size; c = tuple(color[:3])
+        self.draw_shadow_circle(draw, x, y+2*s, 3*s, offset=(2,2), blur_radius=2, color=(0,0,0,20))
+        # Tube
+        self.draw_line(draw, x, y, x+8*s, y-4*s, color=c+(200,), width=int(3*s))
+        self.draw_line(draw, x, y, x+8*s, y-4*s, color=self._lighten(c,10)+(150,), width=int(1*s))
+        # Lens
+        self.draw_circle(draw, x+9*s, y-5*s, 2*s, fill=(200,220,255,150), stroke=(60,60,80), stroke_width=1)
+
+    def draw_question_mark(self, draw, x, y, size=1.0, color=(180, 60, 60)):
+        s = size; c = tuple(color[:3])
+        self.draw_text(draw, x, y, "?", font_size=int(30*s), color=c+(220,), align="center")
+
+    def draw_printing_press(self, draw, x, y, size=1.0, color=(100, 80, 60)):
+        s = size; c = tuple(color[:3])
+        self.draw_shadow_circle(draw, x, y+5*s, 5*s, offset=(2,2), blur_radius=3, color=(0,0,0,30))
+        # Base
+        self.draw_rect(draw, x-6*s, y+3*s, 12*s, 3*s, fill=c+(200,), stroke=self._darken(c,20), stroke_width=1)
+        # Pillars
+        self.draw_rect(draw, x-5*s, y-5*s, 2*s, 8*s, fill=self._darken(c,15)+(200,), stroke=self._darken(c,30), stroke_width=1)
+        self.draw_rect(draw, x+3*s, y-5*s, 2*s, 8*s, fill=self._darken(c,15)+(200,), stroke=self._darken(c,30), stroke_width=1)
+        # Top beam
+        self.draw_rect(draw, x-6*s, y-6*s, 12*s, 2*s, fill=self._darken(c,10)+(200,), stroke=self._darken(c,20), stroke_width=1)
+        # Screw
+        self.draw_line(draw, x, y-6*s, x, y-9*s, color=(80,60,40), width=int(2*s))
+        # Paper
+        self.draw_rect(draw, x-3*s, y-1*s, 6*s, 4*s, fill=(240,235,220,200), stroke=(120,100,80), stroke_width=1)
+
+    def draw_map(self, draw, x, y, size=1.0, color=(220, 200, 160)):
+        s = size; c = tuple(color[:3])
+        w, h = 16*s, 12*s
+        self.draw_shadow_circle(draw, x, y+h//2, w//2, offset=(2,2), blur_radius=3, color=(0,0,0,30))
+        self.draw_rect(draw, x-w//2, y-h//2, w, h, fill=c+(220,), stroke=self._darken(c,15)+(150,), stroke_width=2, rx=2)
+        # Folds
+        self.draw_line(draw, x-w//2, y, x+w//2, y, color=(180,165,130,100), width=1)
+        self.draw_line(draw, x, y-h//2, x, y+h//2, color=(180,165,130,100), width=1)
+        # Continent blobs
+        for ox, oy in [(0.2,0.15), (-0.15,0.1), (0.05,-0.2)]:
+            self.draw_circle(draw, int(x+ox*w), int(y+oy*h), int(2*s), fill=(120,160,100,80))
+
     # ── Main scene renderer ────────────────────────────────────
 
     def render_scene(self, desc: dict) -> Image.Image:
@@ -1344,6 +1565,49 @@ class SketchGenerator:
             c = fill or (140, 120, 100)
             w = elem.get("width", 20)
             self.draw_path(draw, x, y, int(x2), int(y2), c, w)
+
+        elif etype == "book":
+            self.draw_book(draw, x, y, s, fill or (140, 100, 60))
+        elif etype == "scroll":
+            self.draw_scroll(draw, x, y, s, fill or (220, 200, 170))
+        elif etype == "compass":
+            self.draw_compass(draw, x, y, s, fill or (180, 150, 80))
+        elif etype == "globe":
+            self.draw_globe(draw, x, y, s, fill or (100, 150, 200))
+        elif etype == "quill":
+            self.draw_quill(draw, x, y, s, fill or (220, 200, 180))
+        elif etype == "lightbulb":
+            self.draw_lightbulb(draw, x, y, s, fill or (255, 220, 50))
+        elif etype == "fire":
+            self.draw_fire(draw, x, y, s, fill or (220, 120, 40))
+        elif etype == "clock":
+            self.draw_clock(draw, x, y, s, fill or (200, 190, 170))
+        elif etype == "gear":
+            self.draw_gear(draw, x, y, s, fill or (160, 150, 140))
+        elif etype == "skull":
+            self.draw_skull(draw, x, y, s, fill or (220, 210, 190))
+        elif etype == "crown":
+            self.draw_crown(draw, x, y, s, fill or (220, 180, 50))
+        elif etype == "key":
+            self.draw_key(draw, x, y, s, fill or (180, 160, 100))
+        elif etype == "lamp":
+            self.draw_lamp(draw, x, y, s, fill or (180, 160, 120))
+        elif etype == "hand":
+            self.draw_hand(draw, x, y, s, fill or (235, 200, 175))
+        elif etype == "eye":
+            self.draw_eye(draw, x, y, s, fill or (255, 250, 240))
+        elif etype == "cross":
+            self.draw_cross(draw, x, y, s, fill or (120, 80, 60))
+        elif etype == "coin":
+            self.draw_coin(draw, x, y, s, fill or (220, 190, 60))
+        elif etype == "telescope":
+            self.draw_telescope(draw, x, y, s, fill or (120, 80, 60))
+        elif etype == "question_mark":
+            self.draw_question_mark(draw, x, y, s, fill or (180, 60, 60))
+        elif etype == "printing_press":
+            self.draw_printing_press(draw, x, y, s, fill or (100, 80, 60))
+        elif etype == "map":
+            self.draw_map(draw, x, y, s, fill or (220, 200, 160))
 
         else:
             # Unknown type — draw with label
