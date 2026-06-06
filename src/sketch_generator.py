@@ -1487,37 +1487,56 @@ class SketchGenerator:
             sc = tuple(stroke[:3]) + (opacity,)
             draw.ellipse([x-w//2, y-h//2, x+w//2, y+h//2], outline=sc, width=stroke_width)
 
-    def draw_arc(self, draw, x, y, r, start_deg, end_deg, color=(100,100,100), width=2):
-        """Draw an arc segment."""
-        import math as _m
-        c = tuple(color[:3]) if isinstance(color, (list, tuple)) else color
-        draw.arc([x-r, y-r, x+r, y+r], start_deg, end_deg, fill=c, width=width)
 
     # ── Main scene renderer ────────────────────────────────────
 
     def render_scene(self, desc: dict) -> Image.Image:
-        """Render a full scene from a structured description dict."""
+        """Render a full scene from a structured description dict.
+        Handles story scenes, diagrams, timelines, flowcharts, and maps generically."""
         self.desc = desc
-        canvas = self.create_canvas((255, 255, 255, 255))
+        scene_type = desc.get("scene_type", "story")
+
+        # Non-story types use clean informational backgrounds
+        if scene_type == "diagram":
+            base = (245, 242, 235)
+        elif scene_type == "timeline":
+            base = (250, 247, 240)
+        elif scene_type == "flowchart":
+            base = (248, 245, 238)
+        elif scene_type == "map":
+            base = (235, 240, 245)
+        elif scene_type in ("bar_chart", "pie_chart", "line_graph", "data_viz"):
+            base = (250, 248, 242)
+        elif scene_type in ("cycle_diagram", "step_diagram"):
+            base = (248, 246, 240)
+        elif scene_type == "venn_diagram":
+            base = (248, 245, 242)
+        elif scene_type == "comparison":
+            base = (250, 248, 245)
+        else:
+            base = None
+        canvas = self.create_canvas(base + (255,) if base else (255, 255, 255, 255))
+
         draw = ImageDraw.Draw(canvas, "RGBA")
 
-        # ── Background ──
-        bg = desc.get("bg", desc.get("background", {}))
-        bg_type = bg.get("type", "gradient") if isinstance(bg, dict) else "gradient"
+        if scene_type == "story":
+            # ── Background ──
+            bg = desc.get("bg", desc.get("background", {}))
+            bg_type = bg.get("type", "gradient") if isinstance(bg, dict) else "gradient"
 
-        if isinstance(bg, dict):
-            self._render_background(draw, bg)
+            if isinstance(bg, dict):
+                self._render_background(draw, bg)
 
-        # ── Atmosphere particles ──
-        atmos = desc.get("atmosphere", {})
-        if atmos.get("particles") == "stars" or bg_type == "night":
-            self.draw_stars(draw, count=atmos.get("star_count", 60))
+            # ── Atmosphere particles ──
+            atmos = desc.get("atmosphere", {})
+            if atmos.get("particles") == "stars" or bg_type == "night":
+                self.draw_stars(draw, count=atmos.get("star_count", 60))
 
-        # ── Landscape features (mountains, ground, trees, clouds) ──
-        if isinstance(bg, dict):
-            self._render_landscape(draw, bg)
+            # ── Landscape features (mountains, ground, trees, clouds) ──
+            if isinstance(bg, dict):
+                self._render_landscape(draw, bg)
 
-        # ── Elements ──
+        # ── Elements (all types) ──
         for elem in desc.get("elements", []):
             self._render_element(draw, elem)
 
@@ -1848,6 +1867,28 @@ class SketchGenerator:
                  (int(ax - math.sin(angle)*hl//2), int(ay + math.cos(angle)*hl//2))],
                 fill=c + (opacity,))
 
+        elif etype == "arc":
+            r = int(elem.get("radius", 40) * (elem.get("r_scale", 1)))
+            start_angle = elem.get("start_angle", 0)
+            end_angle = elem.get("end_angle", 90)
+            c = stroke or (80, 70, 60)
+            w = elem.get("stroke_width", 2)
+            self.draw_arc(draw, x, y, max(r, 5), start_angle, end_angle, color=c, width=w, opacity=opacity)
+            label = elem.get("label")
+            if label:
+                mid_angle = math.radians((start_angle + end_angle) / 2)
+                lx = x + int(math.cos(mid_angle) * (r + 20))
+                ly = y - int(math.sin(mid_angle) * (r + 20))
+                self.draw_text(draw, lx, ly, label, font_size=elem.get("font_size", 18), color=c, align="center")
+
+        elif etype == "ellipse":
+            w = int(elem.get("width", 80) * (elem.get("w_scale", 1)))
+            h = int(elem.get("height", 60) * (elem.get("h_scale", 1)))
+            fill_color = fill
+            stroke_color = stroke or (40, 35, 30)
+            draw.ellipse([x - w // 2, y - h // 2, x + w // 2, y + h // 2],
+                        fill=fill_color, outline=stroke_color, width=elem.get("stroke_width", 2))
+
         elif etype == "x_mark":
             c = fill or (180, 40, 40)
             l = 12 * s
@@ -1992,7 +2033,13 @@ class SketchGenerator:
                        "penguin", "ostrich", "pigeon", "dove", "sparrow",
                        "robin", "bluebird", "cardinal", "hummingbird",
                        "woodpecker", "kingfisher", "seagull", "pelican",
-                       "albatross", "magpie", "canary", "finch", "bird"):
+                       "albatross", "magpie", "canary", "finch",
+                       "chicken", "hen", "rooster", "cock", "chick", "quail",
+                       "pheasant", "grouse", "partridge", "cuckoo",
+                       "nightingale", "lark", "thrush", "blackbird", "starling",
+                       "oriole", "tanager", "wren", "swift", "martin",
+                       "warbler", "bunting", "meadowlark", "grackle",
+                       "bird"):
             self.draw_bird(draw, x, y, s, fill or (60, 50, 40))
 
         # ── Fish / sea creature aliases ──
@@ -2064,6 +2111,118 @@ class SketchGenerator:
             except:
                 self.draw_rect(draw, x-10, y-5, 20, 10, fill=fill or (120,100,80))
 
+        # ── Charts & diagrams ──
+        elif etype == "bar_chart":
+            data = elem.get("data", [])
+            cw = elem.get("chart_w", 400)
+            ch = elem.get("chart_h", 300)
+            bc = fill or (70, 130, 180)
+            ct = elem.get("chart_title", "")
+            self.draw_bar_chart(draw, x, y, data, w=cw, h=ch, bar_color=bc, title=ct)
+
+        elif etype == "pie_chart":
+            data = elem.get("data", [])
+            r = elem.get("radius", 120)
+            self.draw_pie_chart(draw, x, y, data, radius=r)
+
+        elif etype == "line_graph":
+            data = elem.get("data", [])
+            cw = elem.get("chart_w", 400)
+            ch = elem.get("chart_h", 280)
+            lc = fill or (200, 80, 60)
+            self.draw_line_graph(draw, x, y, data, w=cw, h=ch, line_color=lc)
+
+        elif etype == "cycle_diagram":
+            steps = elem.get("steps", [])
+            r = elem.get("radius", 130)
+            self.draw_cycle_diagram(draw, x, y, steps, radius=r)
+
+        elif etype == "venn_diagram":
+            self.draw_venn_diagram(draw, x, y,
+                                  left_label=elem.get("left_label", "A"),
+                                  right_label=elem.get("right_label", "B"),
+                                  common_label=elem.get("common_label", "Both"),
+                                  r=elem.get("radius", 100))
+
+        elif etype == "comparison":
+            self.draw_comparison(draw, x, y,
+                                left_title=elem.get("left_title", "Before"),
+                                right_title=elem.get("right_title", "After"),
+                                left_items=elem.get("left_items", []),
+                                right_items=elem.get("right_items", []))
+
+        elif etype == "step_diagram":
+            steps = elem.get("steps", [])
+            bw = elem.get("box_w", 160)
+            bh = elem.get("box_h", 50)
+            gap = elem.get("gap", 60)
+            self.draw_step_diagram(draw, x, y, steps, box_w=bw, box_h=bh, gap=gap)
+
+        # ── Abstract / concept elements ──
+        elif etype == "atom":
+            r = elem.get("radius", 50)
+            self.draw_atom(draw, x, y, r=r, color=fill)
+        elif etype == "dna":
+            w = elem.get("width", 160)
+            h = elem.get("height", 180)
+            self.draw_dna(draw, x, y, w=w, h=h, color=fill)
+        elif etype == "heart":
+            s = elem.get("scale", 1.0)
+            self.draw_heart(draw, x, y, s=int(40 * s), color=fill)
+        elif etype == "infinity":
+            s = elem.get("scale", 1.0)
+            self.draw_infinity(draw, x, y, s=int(50 * s), color=fill)
+        elif etype == "target":
+            r = elem.get("radius", 50)
+            self.draw_target(draw, x, y, r=r, color=fill)
+        elif etype == "puzzle":
+            s = elem.get("scale", 1.0)
+            self.draw_puzzle(draw, x, y, s=int(40 * s), color=fill)
+        elif etype == "scales":
+            s = elem.get("scale", 1.0)
+            self.draw_scales(draw, x, y, s=int(40 * s), color=fill)
+        elif etype == "astronaut":
+            s = elem.get("scale", 1.0)
+            self.draw_astronaut(draw, x, y, s=int(30 * s), color=fill)
+        elif etype == "spaceship":
+            s = elem.get("scale", 1.0)
+            self.draw_spaceship(draw, x, y, s=int(35 * s), color=fill)
+        elif etype == "hourglass":
+            s = elem.get("scale", 1.0)
+            self.draw_hourglass(draw, x, y, s=int(35 * s), color=fill)
+        elif etype == "treasure_chest":
+            s = elem.get("scale", 1.0)
+            self.draw_treasure_chest(draw, x, y, s=int(35 * s), color=fill)
+        elif etype == "gravestone":
+            s = elem.get("scale", 1.0)
+            self.draw_gravestone(draw, x, y, s=int(30 * s), color=fill)
+        elif etype == "hat":
+            s = elem.get("scale", 1.0)
+            self.draw_hat(draw, x, y, s=int(28 * s), color=fill)
+
+        # ── New diagram types ──
+        elif etype == "network_diagram":
+            nodes = elem.get("nodes", [])
+            edges = elem.get("edges", [])
+            r = elem.get("radius", 30)
+            self.draw_network_diagram(draw, x, y, nodes, edges, r=r)
+
+        elif etype == "tree_diagram":
+            levels = elem.get("levels", [])
+            self.draw_tree_diagram(draw, x, y, levels)
+
+        elif etype == "histogram":
+            data = elem.get("data", [])
+            cw = elem.get("chart_w", 400)
+            ch = elem.get("chart_h", 280)
+            self.draw_histogram(draw, x, y, data, w=cw, h=ch, color=fill)
+
+        elif etype == "scatter_plot":
+            points = elem.get("points", [])
+            cw = elem.get("chart_w", 400)
+            ch = elem.get("chart_h", 300)
+            self.draw_scatter_plot(draw, x, y, points, w=cw, h=ch, color=fill)
+
         else:
             # Try procedural generator from elements_pro
             try:
@@ -2097,6 +2256,393 @@ class SketchGenerator:
             label = elem.get("label", elem.get("text", etype))
             if label:
                 self.draw_text(draw, x, y+15*s, label, font_size=14, color=(100, 90, 80), align="center")
+
+    # ── Chart renderers ────────────────────────────────────────
+
+    def draw_bar_chart(self, draw, x, y, data, w=400, h=300, bar_color=None, title=None):
+        """Draw a bar chart. data = [(label, value), ...], values 0-1."""
+        if not data: return
+        bc = bar_color or (70, 130, 180)
+        bars = data
+        n = len(bars)
+        if n == 0: return
+        chart_left = x - w // 2 + 60
+        chart_bottom = y + h // 2 - 30
+        chart_top = y - h // 2 + 30
+        chart_right = x + w // 2 - 20
+        bar_w = max(10, (chart_right - chart_left) // n * 0.6)
+        gap = (chart_right - chart_left) / n
+        if title:
+            self.draw_text(draw, x, chart_top - 20, title, font_size=18, color=(60, 55, 50))
+        self.draw_line(draw, chart_left, chart_bottom, chart_right, chart_bottom, color=(100, 95, 90), width=2)
+        self.draw_line(draw, chart_left, chart_top, chart_left, chart_bottom, color=(100, 95, 90), width=2)
+        for i, (label, val) in enumerate(bars):
+            v = max(val, 0.02)
+            bar_h = int((chart_bottom - chart_top) * v)
+            bx = int(chart_left + gap * i + (gap - bar_w) / 2)
+            by = chart_bottom - bar_h
+            shade = tuple(int(c * (0.6 + 0.4 * (i / max(n - 1, 1)))) for c in bc)
+            self.draw_rect(draw, bx, by, int(bar_w), bar_h, fill=shade + (220,), stroke=tuple(min(255, c + 30) for c in shade) + (200,), stroke_width=1)
+            self.draw_text(draw, bx + bar_w // 2, chart_bottom + 12, str(label)[:8], font_size=11, color=(80, 75, 70), align="center")
+            self.draw_text(draw, bx + bar_w // 2, by - 10, f"{int(val*100)}%", font_size=10, color=(60, 55, 50), align="center")
+
+    def draw_pie_chart(self, draw, x, y, data, radius=120):
+        """Draw a pie chart. data = [(label, value), ...], values sum to 1."""
+        if not data: return
+        pie_colors = [(70,130,180),(220,120,60),(60,160,80),(200,80,80),(160,120,200),(180,160,60),(140,80,140),(80,180,180)]
+        total = sum(v for _, v in data)
+        if total == 0: return
+        start_angle = 90
+        cx, cy = x, y + 10
+        legend_x = x + radius + 40
+        legend_y = y - radius
+        for i, (label, val) in enumerate(data):
+            frac = val / total
+            end_angle = start_angle - frac * 360
+            c = pie_colors[i % len(pie_colors)]
+            self.draw_arc(draw, cx, cy, radius, end_angle, start_angle, color=c, width=radius)
+            mid = math.radians((start_angle + end_angle) / 2)
+            lx = int(cx + math.cos(mid) * radius * 0.6)
+            ly = int(cy - math.sin(mid) * radius * 0.6)
+            pct = int(frac * 100)
+            if pct >= 8:
+                self.draw_text(draw, lx, ly, f"{pct}%", font_size=12, color=(255, 255, 255, 200), align="center")
+            start_angle = end_angle
+            lx2 = legend_x
+            ly2 = legend_y + i * 22
+            self.draw_rect(draw, lx2, ly2, 12, 12, fill=c + (220,))
+            self.draw_text(draw, lx2 + 18, ly2 + 6, str(label)[:18], font_size=12, color=(60, 55, 50), align="left")
+
+    def draw_line_graph(self, draw, x, y, data, w=400, h=280, line_color=None):
+        """Draw a line graph. data = [(label, val), ...], vals 0-1."""
+        if len(data) < 2: return
+        lc = line_color or (200, 80, 60)
+        chart_left = x - w // 2 + 60
+        chart_bottom = y + h // 2 - 30
+        chart_top = y - h // 2 + 30
+        chart_right = x + w // 2 - 30
+        self.draw_line(draw, chart_left, chart_bottom, chart_right, chart_bottom, color=(100, 95, 90), width=2)
+        self.draw_line(draw, chart_left, chart_top, chart_left, chart_bottom, color=(100, 95, 90), width=2)
+        points = []
+        for i, (label, val) in enumerate(data):
+            px = chart_left + (chart_right - chart_left) * i / max(len(data) - 1, 1)
+            py = chart_bottom - (chart_bottom - chart_top) * min(max(val, 0), 1)
+            points.append((int(px), int(py)))
+        for i in range(len(points) - 1):
+            self.draw_line(draw, points[i][0], points[i][1], points[i+1][0], points[i+1][1], color=lc + (220,), width=3)
+        for i, (px, py) in enumerate(points):
+            self.draw_circle(draw, px, py, 4, fill=(255,255,255,230), stroke=lc + (220,), stroke_width=2)
+            label = str(data[i][0])[:6]
+            self.draw_text(draw, px, chart_bottom + 12, label, font_size=10, color=(80, 75, 70), align="center")
+            val_str = f"{int(data[i][1]*100)}%"
+            self.draw_text(draw, px, py - 14, val_str, font_size=10, color=(60, 55, 50), align="center")
+
+    def draw_cycle_diagram(self, draw, x, y, steps, radius=130):
+        """Draw a cycle diagram. steps = [label, ...]."""
+        if not steps: return
+        n = len(steps)
+        for i in range(n):
+            angle = math.radians(i * 360 / n - 90)
+            nx = int(x + math.cos(angle) * radius)
+            ny = int(y + math.sin(angle) * radius)
+            r2 = 40
+            shade = (70 + i * 25, 130 + i * 10, 180)
+            self.draw_circle(draw, nx, ny, r2, fill=shade + (200,), stroke=(40, 40, 60) + (180,), stroke_width=2)
+            self.draw_text(draw, nx, ny, steps[i], font_size=11, color=(255, 255, 255, 230), align="center")
+            if i > 0:
+                prev_angle = math.radians((i - 1) * 360 / n - 90)
+                px = int(x + math.cos(prev_angle) * radius)
+                py = int(y + math.sin(prev_angle) * radius)
+                mid_a = math.radians((i - 0.5) * 360 / n - 90)
+                mx = int(x + math.cos(mid_a) * radius * 0.5)
+                my = int(y + math.sin(mid_a) * radius * 0.5)
+                self.draw_line(draw, px, py, nx, ny, color=(120, 140, 180, 150), width=2)
+                arr_angle = math.atan2(ny - py, nx - px)
+                hl = 10
+                ax = nx - math.cos(arr_angle) * hl
+                ay = ny - math.sin(arr_angle) * hl
+                self.draw_polygon(draw, [(nx, ny), (int(ax + math.sin(arr_angle)*hl//2), int(ay - math.cos(arr_angle)*hl//2)), (int(ax - math.sin(arr_angle)*hl//2), int(ay + math.cos(arr_angle)*hl//2))], fill=(120, 140, 180, 180))
+
+    def draw_venn_diagram(self, draw, x, y, left_label="A", right_label="B", common_label="Both", r=100):
+        """Draw a Venn diagram with two overlapping circles."""
+        offset = r // 2
+        self.draw_circle(draw, x - offset, y, r, fill=(70, 130, 180, 100), stroke=(40, 80, 120, 200), stroke_width=2)
+        self.draw_circle(draw, x + offset, y, r, fill=(200, 80, 80, 100), stroke=(140, 50, 50, 200), stroke_width=2)
+        self.draw_text(draw, x - offset - r // 2, y, str(left_label)[:10], font_size=16, color=(40, 80, 120), align="center")
+        self.draw_text(draw, x + offset + r // 2, y, str(right_label)[:10], font_size=16, color=(140, 50, 50), align="center")
+        self.draw_text(draw, x, y, str(common_label)[:10], font_size=14, color=(100, 60, 60), align="center")
+
+    def draw_comparison(self, draw, x, y, left_title="Before", right_title="After", left_items=None, right_items=None):
+        """Draw a two-column comparison layout."""
+        if left_items is None: left_items = ["Item A", "Item B", "Item C"]
+        if right_items is None: right_items = ["Item X", "Item Y", "Item Z"]
+        col_w = 160
+        cx1 = x - col_w // 2 - 100
+        cx2 = x + col_w // 2 + 100
+        cy = y - 60
+        self.draw_text(draw, cx1, cy, str(left_title)[:15], font_size=18, color=(70, 130, 180), align="center")
+        self.draw_text(draw, cx2, cy, str(right_title)[:15], font_size=18, color=(200, 80, 60), align="center")
+        self.draw_line(draw, x, y - 40, x, y + 100, color=(150, 145, 140, 150), width=2)
+        for i, item in enumerate(left_items):
+            iy = cy + 40 + i * 28
+            self.draw_circle(draw, cx1 - 40, iy, 4, fill=(70, 130, 180, 200))
+            self.draw_text(draw, cx1 - 30, iy, str(item)[:15], font_size=13, color=(60, 55, 50), align="left")
+        for i, item in enumerate(right_items):
+            iy = cy + 40 + i * 28
+            self.draw_circle(draw, cx2 - 40, iy, 4, fill=(200, 80, 80, 200))
+            self.draw_text(draw, cx2 - 30, iy, str(item)[:15], font_size=13, color=(60, 55, 50), align="left")
+
+    def draw_step_diagram(self, draw, x, y, steps, box_w=160, box_h=50, gap=60):
+        """Draw numbered steps with connecting arrows. steps = [label, ...]."""
+        n = len(steps)
+        if n == 0: return
+        total_w = n * box_w + (n - 1) * gap
+        start_x = x - total_w // 2 + box_w // 2
+        for i, label in enumerate(steps):
+            sx = start_x + i * (box_w + gap)
+            shade = (70 + i * 20, 130 + i * 10, 180)
+            self.draw_rect(draw, sx - box_w // 2, y - box_h // 2, box_w, box_h, fill=shade + (210,), stroke=(40, 40, 60) + (180,), stroke_width=2, rx=6)
+            self.draw_text(draw, sx - box_w // 2 + 8, y - box_h // 2 + 4, f"{i+1}.", font_size=12, color=(255, 255, 255, 200), align="left")
+            self.draw_text(draw, sx + 4, y, str(label)[:18], font_size=12, color=(255, 255, 255, 230), align="left")
+            if i < n - 1:
+                ax1 = sx + box_w // 2
+                ax2 = sx + box_w // 2 + gap
+                ay = y
+                self.draw_line(draw, ax1, ay, ax2, ay, color=(120, 140, 180, 180), width=2)
+                hl = 10
+                self.draw_polygon(draw, [(ax2, ay), (ax2 - hl, ay - hl//2), (ax2 - hl, ay + hl//2)], fill=(120, 140, 180, 200))
+
+    # ── Abstract / concept renderers ──
+
+    def draw_atom(self, draw, x, y, r=50, color=None):
+        c = color or (80, 140, 200)
+        self.draw_circle(draw, x, y, 12, fill=(255, 255, 255, 200), stroke=c + (200,), stroke_width=2)
+        for angle in (0, 60, 120):
+            a = math.radians(angle)
+            ex = int(x + math.cos(a) * r)
+            ey = int(y + math.sin(a) * r)
+            self.draw_ellipse(draw, x, y, r * 2 * 0.7, 8, stroke=c + (150 + angle,), stroke_width=2)
+
+    def draw_dna(self, draw, x, y, w=160, h=180, color=None):
+        c = color or (60, 140, 200)
+        steps = 12
+        for i in range(steps):
+            t = i / (steps - 1)
+            yp = y - h // 2 + t * h
+            x1 = x - w // 2
+            x2 = x + w // 2
+            phase = t * math.pi * 4
+            lx = x1 + math.sin(phase) * w * 0.15
+            rx = x2 + math.sin(phase + math.pi) * w * 0.15
+            self.draw_circle(draw, int(lx), int(yp), 4, fill=c + (200,))
+            self.draw_circle(draw, int(rx), int(yp), 4, fill=(200, 80, 80, 200))
+            mid_x = (lx + rx) / 2
+            self.draw_line(draw, int(lx), int(yp), int(mid_x), int(yp), color=(150, 150, 150, 150), width=2)
+            self.draw_line(draw, int(mid_x), int(yp), int(rx), int(yp), color=(150, 150, 150, 150), width=2)
+        self.draw_line(draw, x - w // 2, y - h // 2, x - w // 2, y + h // 2, color=c + (150,), width=2)
+        self.draw_line(draw, x + w // 2, y - h // 2, x + w // 2, y + h // 2, color=(200, 80, 80, 150), width=2)
+
+    def draw_heart(self, draw, x, y, s=40, color=None):
+        c = color or (220, 60, 80)
+        pts = []
+        for a in range(0, 360, 5):
+            rad = math.radians(a)
+            hx = x + int(s * 16 * math.sin(rad) ** 3)
+            hy = y + int(s * (-13 * math.cos(rad) + 5 * math.cos(2 * rad) + 2 * math.cos(3 * rad) + math.cos(4 * rad)))
+            pts.append((hx, hy))
+        if len(pts) >= 3:
+            self.draw_polygon(draw, pts, fill=c + (220,), stroke=tuple(min(255, v + 20) for v in c) + (200,), stroke_width=2)
+
+    def draw_infinity(self, draw, x, y, s=50, color=None):
+        c = color or (100, 160, 200)
+        pts = []
+        for a in range(0, 720, 3):
+            rad = math.radians(a)
+            denom = 1 + math.sin(rad) ** 2
+            ix = x + int(s * 30 * math.cos(rad) / denom)
+            iy = y + int(s * 15 * math.sin(rad) * math.cos(rad) / denom)
+            pts.append((ix, iy))
+        for i in range(len(pts) - 1):
+            self.draw_line(draw, pts[i][0], pts[i][1], pts[i + 1][0], pts[i + 1][1], color=c + (200,), width=3)
+
+    def draw_target(self, draw, x, y, r=50, color=None):
+        c = color or (200, 60, 60)
+        for i in range(4):
+            cr = r - i * (r // 4)
+            fill_c = ((255 - i * 40, 255 - i * 40, 255 - i * 40) if i % 2 == 0 else c) + (200,)
+            self.draw_circle(draw, x, y, cr, fill=fill_c, stroke=(60, 60, 60, 150), stroke_width=1)
+        self.draw_line(draw, x - r, y, x + r, y, color=(60, 60, 60, 120), width=1)
+        self.draw_line(draw, x, y - r, x, y + r, color=(60, 60, 60, 120), width=1)
+
+    def draw_puzzle(self, draw, x, y, s=40, color=None):
+        c = color or (180, 140, 80)
+        hw, hh = int(25 * s), int(25 * s)
+        pts = [(x - hw, y - hh), (x + hw, y - hh), (x + hw, y - hh // 3),
+               (x + hw // 2, y - hh // 3), (x + hw // 2, y - hh // 6),
+               (x + hw, y - hh // 6), (x + hw, y + hh),
+               (x - hw, y + hh)]
+        self.draw_polygon(draw, pts, fill=c + (200,), stroke=self._darken(c, 30) + (180,), stroke_width=2)
+        self.draw_circle(draw, x - hw // 2, y - hh // 2, 4, fill=c + (200,))
+
+    def draw_scales(self, draw, x, y, s=40, color=None):
+        c = color or (180, 160, 100)
+        sw = int(30 * s)
+        self.draw_line(draw, x, y - sw, x, y + sw, color=c + (200,), width=3)
+        self.draw_line(draw, x - sw, y - sw // 2, x + sw, y - sw // 2, color=c + (200,), width=2)
+        self.draw_arc(draw, x, y + sw, int(8 * s), 0, 360, color=c + (200,), width=2)
+        self.draw_polygon(draw, [(x - sw, y - sw * 3 // 4), (x - sw // 2, y - sw // 2), (x - sw, y - sw // 4)], fill=c + (180,), stroke=self._darken(c, 20) + (150,), stroke_width=1)
+        self.draw_polygon(draw, [(x + sw, y - sw * 3 // 4), (x + sw // 2, y - sw // 2), (x + sw, y - sw // 4)], fill=c + (180,), stroke=self._darken(c, 20) + (150,), stroke_width=1)
+
+    def draw_astronaut(self, draw, x, y, s=30, color=None):
+        c = color or (220, 220, 230)
+        self.draw_circle(draw, x, y - int(15 * s), int(12 * s), fill=c + (200,), stroke=(160, 160, 170, 200), stroke_width=2)
+        self.draw_rect(draw, x - int(8 * s), y - int(5 * s), int(16 * s), int(20 * s), fill=c + (200,), stroke=(160, 160, 170, 200), stroke_width=2, rx=3)
+        self.draw_circle(draw, x - int(4 * s), y - int(17 * s), int(3 * s), fill=(100, 140, 200, 180))
+        self.draw_circle(draw, x + int(4 * s), y - int(17 * s), int(3 * s), fill=(100, 140, 200, 180))
+        self.draw_rect(draw, x - int(12 * s), y + int(15 * s), int(8 * s), int(8 * s), fill=c + (180,), stroke=(160, 160, 170, 150), stroke_width=1, rx=2)
+        self.draw_rect(draw, x + int(4 * s), y + int(15 * s), int(8 * s), int(8 * s), fill=c + (180,), stroke=(160, 160, 170, 150), stroke_width=1, rx=2)
+
+    def draw_spaceship(self, draw, x, y, s=35, color=None):
+        c = color or (160, 180, 210)
+        self.draw_ellipse(draw, x, y, int(30 * s), int(12 * s), fill=c + (200,), stroke=(120, 140, 180, 200), stroke_width=2)
+        self.draw_ellipse(draw, x, y - int(4 * s), int(10 * s), int(6 * s), fill=(100, 160, 255, 150), stroke=(80, 120, 200, 150), stroke_width=1)
+        self.draw_polygon(draw, [(x, y + int(8 * s)), (x - int(6 * s), y + int(18 * s)), (x + int(6 * s), y + int(18 * s))], fill=(200, 100, 60, 200))
+        self.draw_polygon(draw, [(x - int(15 * s), y - int(2 * s)), (x - int(28 * s), y + int(6 * s)), (x - int(15 * s), y + int(4 * s))], fill=c + (180,))
+        self.draw_polygon(draw, [(x + int(15 * s), y - int(2 * s)), (x + int(28 * s), y + int(6 * s)), (x + int(15 * s), y + int(4 * s))], fill=c + (180,))
+
+    def draw_hourglass(self, draw, x, y, s=35, color=None):
+        c = color or (180, 160, 120)
+        hw, hh = int(18 * s), int(30 * s)
+        self.draw_polygon(draw, [(x - hw, y - hh), (x + hw, y - hh), (x + hw, y - hh + int(4 * s)), (x - hw, y - hh + int(4 * s))], fill=c + (200,), stroke=self._darken(c, 20) + (180,), stroke_width=2)
+        self.draw_polygon(draw, [(x - hw, y + hh), (x + hw, y + hh), (x + hw, y + hh - int(4 * s)), (x - hw, y + hh - int(4 * s))], fill=c + (200,), stroke=self._darken(c, 20) + (180,), stroke_width=2)
+        self.draw_polygon(draw, [(x - hw, y - hh + int(4 * s)), (x, y), (x + hw, y - hh + int(4 * s))], fill=(220, 190, 130, 180), stroke=c + (150,), stroke_width=1)
+        self.draw_polygon(draw, [(x - hw, y + hh - int(4 * s)), (x, y), (x + hw, y + hh - int(4 * s))], fill=(220, 190, 130, 180), stroke=c + (150,), stroke_width=1)
+        self.draw_line(draw, x, y - int(2 * s), x, y + int(2 * s), color=(200, 180, 100, 200), width=2)
+
+    def draw_treasure_chest(self, draw, x, y, s=35, color=None):
+        c = color or (140, 90, 50)
+        hw, hh = int(22 * s), int(16 * s)
+        self.draw_rect(draw, x - hw, y, int(2 * hw), hh, fill=c + (200,), stroke=self._darken(c, 30) + (180,), stroke_width=2, rx=4)
+        self.draw_rect(draw, x - hw + int(2 * s), y - hh // 2, int(2 * hw) - int(4 * s), hh // 2, fill=(200, 180, 80, 220), stroke=(180, 150, 50, 180), stroke_width=2, rx=3)
+        self.draw_rect(draw, x - int(3 * s), y + int(4 * s), int(6 * s), int(4 * s), fill=(200, 180, 80, 200), stroke=(180, 150, 50, 180), stroke_width=1)
+
+    def draw_gravestone(self, draw, x, y, s=30, color=None):
+        c = color or (160, 150, 140)
+        hw, hh = int(16 * s), int(28 * s)
+        self.draw_rect(draw, x - hw, y - hh, int(2 * hw), hh, fill=c + (200,), stroke=self._darken(c, 20) + (180,), stroke_width=2, rx=int(8 * s))
+        self.draw_text(draw, x, y - hh // 2, "RIP", font_size=14, color=(80, 75, 70, 200), align="center")
+        self.draw_line(draw, x - hw, y, x - hw, y + int(8 * s), color=c + (200,), width=int(3 * s))
+        self.draw_line(draw, x + hw, y, x + hw, y + int(8 * s), color=c + (200,), width=int(3 * s))
+
+    def draw_hat(self, draw, x, y, s=28, color=None):
+        c = color or (180, 160, 100)
+        hw, hh = int(20 * s), int(10 * s)
+        self.draw_arc(draw, x, y, hw, 0, 180, color=self._darken(c, 10) + (200,), width=int(4 * s))
+        self.draw_rect(draw, x - hw // 2, y - hh, hw, hh, fill=c + (200,), stroke=self._darken(c, 20) + (180,), stroke_width=2, rx=int(2 * s))
+        self.draw_circle(draw, x, y - hh // 2 - int(3 * s), int(4 * s), fill=c + (200,))
+
+    # ── New diagram types ──
+
+    def draw_network_diagram(self, draw, x, y, nodes, edges, r=30, w=400, h=350):
+        """Draw a network graph. nodes = [label, ...], edges = [(i, j), ...]."""
+        if not nodes: return
+        n = len(nodes)
+        positions = []
+        for i in range(n):
+            angle = math.radians(i * 360 / n - 90)
+            nx = x + int(math.cos(angle) * w * 0.4)
+            ny = y + int(math.sin(angle) * h * 0.4)
+            positions.append((nx, ny))
+        for i, j in edges:
+            if i < len(positions) and j < len(positions):
+                self.draw_line(draw, positions[i][0], positions[i][1], positions[j][0], positions[j][1], color=(140, 150, 170, 120), width=2)
+        for i, (nx, ny) in enumerate(positions):
+            shade = (70 + i * 20, 130 + i * 10, 180)
+            self.draw_circle(draw, nx, ny, r, fill=shade + (200,), stroke=(40, 40, 60, 180), stroke_width=2)
+            if i < len(nodes):
+                self.draw_text(draw, nx, ny, str(nodes[i])[:6], font_size=11, color=(255, 255, 255, 230), align="center")
+
+    def draw_tree_diagram(self, draw, x, y, levels, box_w=120, box_h=35, level_h=70):
+        """Draw a tree/hierarchy. levels = [[label, ...], [label, ...], ...] (top to bottom)."""
+        if not levels: return
+        def _draw_level(level_items, cy, parent_centers=None):
+            n = len(level_items)
+            total_w = n * box_w + (n - 1) * 20
+            start_x = x - total_w // 2 + box_w // 2
+            centers = []
+            for i, label in enumerate(level_items):
+                cx = start_x + i * (box_w + 20)
+                cy_pos = cy
+                shade = (80 + cy // 2, 130, 180)
+                self.draw_rect(draw, cx - box_w // 2, cy_pos - box_h // 2, box_w, box_h, fill=shade + (210,), stroke=(40, 40, 60, 180), stroke_width=2, rx=4)
+                self.draw_text(draw, cx, cy_pos, str(label)[:16], font_size=12, color=(255, 255, 255, 230), align="center")
+                centers.append(cx)
+                if parent_centers and i < len(parent_centers):
+                    px = parent_centers[i] if i < len(parent_centers) else parent_centers[-1]
+                    py = cy_pos - level_h // 2
+                    self.draw_line(draw, px, py, cx, cy_pos - box_h // 2, color=(140, 150, 170, 150), width=2)
+            return centers
+        cy = y - len(levels) * level_h // 2
+        parents = None
+        for level in levels:
+            parents = _draw_level(level, cy, parents)
+            cy += level_h
+
+    def draw_histogram(self, draw, x, y, data, w=400, h=280, color=None):
+        """Draw a histogram (bar chart + normal curve overlay). data = [(label, val), ...]."""
+        if not data: return
+        bc = color or (70, 130, 180)
+        chart_left = x - w // 2 + 60
+        chart_bottom = y + h // 2 - 30
+        chart_top = y - h // 2 + 30
+        chart_right = x + w // 2 - 30
+        n = len(data)
+        bar_w = max(8, (chart_right - chart_left) // n * 0.7)
+        gap = (chart_right - chart_left) / n
+        self.draw_line(draw, chart_left, chart_bottom, chart_right, chart_bottom, color=(100, 95, 90), width=2)
+        self.draw_line(draw, chart_left, chart_top, chart_left, chart_bottom, color=(100, 95, 90), width=2)
+        max_val = max((v for _, v in data), default=1)
+        for i, (label, val) in enumerate(data):
+            v = max(val / max_val, 0.02)
+            bar_h = int((chart_bottom - chart_top) * v)
+            bx = int(chart_left + gap * i + (gap - bar_w) / 2)
+            by = chart_bottom - bar_h
+            self.draw_rect(draw, bx, by, int(bar_w), bar_h, fill=bc + (160,), stroke=self._darken(bc, 20) + (120,), stroke_width=1)
+            self.draw_text(draw, bx + bar_w // 2, chart_bottom + 10, str(label)[:5], font_size=10, color=(80, 75, 70), align="center")
+        curve_pts = []
+        for i in range(101):
+            t = i / 100
+            px = chart_left + (chart_right - chart_left) * t
+            py = chart_bottom - (chart_bottom - chart_top) * (math.exp(-((t - 0.5) ** 2) * 10) * 0.95 + 0.02)
+            curve_pts.append((int(px), int(py)))
+        for i in range(len(curve_pts) - 1):
+            self.draw_line(draw, curve_pts[i][0], curve_pts[i][1], curve_pts[i + 1][0], curve_pts[i + 1][1], color=(200, 80, 60, 200), width=2)
+
+    def draw_scatter_plot(self, draw, x, y, points, w=400, h=300, color=None):
+        """Draw a scatter plot. points = [(label, x_val, y_val), ...], values 0-1."""
+        if not points: return
+        pc = color or (70, 130, 180)
+        chart_left = x - w // 2 + 60
+        chart_bottom = y + h // 2 - 30
+        chart_top = y - h // 2 + 30
+        chart_right = x + w // 2 - 30
+        self.draw_line(draw, chart_left, chart_bottom, chart_right, chart_bottom, color=(100, 95, 90), width=2)
+        self.draw_line(draw, chart_left, chart_top, chart_left, chart_bottom, color=(100, 95, 90), width=2)
+        scatter_colors = [(70, 130, 180), (200, 80, 60), (60, 160, 80), (180, 160, 60), (160, 120, 200)]
+        for i, (label, xv, yv) in enumerate(points):
+            px = int(chart_left + (chart_right - chart_left) * min(max(xv, 0), 1))
+            py = int(chart_bottom - (chart_bottom - chart_top) * min(max(yv, 0), 1))
+            sc = scatter_colors[i % len(scatter_colors)]
+            self.draw_circle(draw, px, py, 5, fill=sc + (220,), stroke=self._darken(sc, 20) + (180,), stroke_width=1)
+            self.draw_text(draw, px + 8, py - 6, str(label)[:6], font_size=10, color=(60, 55, 50), align="left")
+        for i in range(11):
+            gx = int(chart_left + (chart_right - chart_left) * i / 10)
+            gy = int(chart_top + (chart_bottom - chart_top) * i / 10)
+            self.draw_line(draw, gx, chart_bottom, gx, chart_bottom + 4, color=(100, 95, 90, 100), width=1)
+            txt = f"{int(i*10)}%"
+            self.draw_text(draw, gx, chart_bottom + 14, txt, font_size=9, color=(120, 115, 110), align="center")
+            if i > 0:
+                self.draw_line(draw, chart_left, gy, chart_left - 4, gy, color=(100, 95, 90, 100), width=1)
 
     def _post_process(self, canvas: Image.Image, mood: str = "", style: dict = {}) -> Image.Image:
         """Apply final touches: rectangular vignette, grain, lighting."""
