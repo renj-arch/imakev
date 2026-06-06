@@ -1,30 +1,6 @@
 {
   "entries": [
     {
-      "title": "Have you ever wondered... The floor was a trampoline",
-      "hook": "Have you ever wondered...",
-      "scenarios": [
-        "the floor was a trampoline",
-        "feelings changed the weather",
-        "gravity turned off",
-        "the moon was made of cheese"
-      ],
-      "explanations": [
-        "Walking would be bouncing and going upstairs would be the most fun ever.",
-        "Happy thoughts would bring sunshine and laughter would create rainbows.",
-        "Everyone would float around like astronauts and paper airplanes would never come down.",
-        "Astronauts would bring crackers and telescopes would make everyone hungry."
-      ],
-      "image_prompts": [
-        "whimsical children's book illustration: the floor was a trampoline, colorful magical dreamlike, wide shot, 9:16 vertical, vibrant pastels, soft lighting",
-        "whimsical children's book illustration: feelings changed the weather, colorful magical dreamlike, wide shot, 9:16 vertical, vibrant pastels, soft lighting",
-        "whimsical children's book illustration: gravity turned off, colorful magical dreamlike, wide shot, 9:16 vertical, vibrant pastels, soft lighting",
-        "whimsical children's book illustration: the moon was made of cheese, colorful magical dreamlike, wide shot, 9:16 vertical, vibrant pastels, soft lighting"
-      ],
-      "script": "Walking would be bouncing and going upstairs would be the most fun ever. Happy thoughts would bring sunshine and laughter would create rainbows. Everyone would float around like astronauts and paper airplanes would never come down. Astronauts would bring crackers and telescopes would make everyone hungry.",
-      "tts_script": "Walking would be bouncing and going upstairs would be the most fun ever. Happy thoughts would bring sunshine and laughter would create rainbows. Everyone would float around like astronauts and paper airplanes would never come down. Astronauts would bring crackers and telescopes would make everyone hungry."
-    },
-    {
       "title": "Picture this: Trees grew candy",
       "hook": "Picture this:",
       "scenarios": [
