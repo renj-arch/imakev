@@ -1,0 +1,218 @@
+{
+  "title": "How the First Maps Were Drawn",
+  "scenes": [
+    {
+      "scene_num": 1,
+      "title": "A World Without Maps",
+      "narration": "Imagine a world with no maps. No GPS, no street signs, no way to know what lay beyond the next hill.",
+      "mood": "mysterious",
+      "camera": "ken_burns_in",
+      "visual": {
+        "bg": {"type": "gradient", "colors": [[200, 190, 180], [160, 150, 140]], "horizon": 0.65, "ground_color": [80, 70, 55]},
+        "elements": [
+          {"type": "text", "x": 0.5, "y": 0.05, "text": "A WORLD WITHOUT MAPS", "font_size": 30, "fill": [40, 35, 30]},
+          {"type": "human", "x": 0.3, "y": 0.58, "scale": 0.9, "fill": [100, 70, 50], "label": "ancient traveler"},
+          {"type": "human", "x": 0.7, "y": 0.58, "scale": 0.9, "fill": [80, 90, 70], "label": "wanderer"},
+          {"type": "text", "x": 0.5, "y": 0.82, "text": "Only word of mouth and memory", "font_size": 18, "fill": [100, 90, 80]}
+        ],
+        "atmosphere": {"particles": "none", "fog": false}
+      }
+    },
+    {
+      "scene_num": 2,
+      "title": "Navigation by Nature",
+      "narration": "The earliest travelers read the land itself: the stars, the sun, rivers, and mountain peaks.",
+      "mood": "peaceful",
+      "camera": "pan_right",
+      "visual": {
+        "bg": {"type": "night", "colors": [[10, 8, 30], [20, 15, 45]], "horizon": 0.6, "ground_color": [20, 18, 15]},
+        "elements": [
+          {"type": "text", "x": 0.5, "y": 0.05, "text": "NAVIGATION BY NATURE", "font_size": 28, "fill": [220, 210, 200]},
+          {"type": "star", "x": 0.5, "y": 0.12, "count": 30, "brightness": 200},
+          {"type": "mountain", "x": 0.25, "y": 0.5, "scale": 0.7, "fill": [40, 35, 50]},
+          {"type": "mountain", "x": 0.75, "y": 0.55, "scale": 0.5, "fill": [35, 30, 45]},
+          {"type": "human", "x": 0.5, "y": 0.65, "scale": 0.7, "fill": [60, 50, 70], "label": "navigator"},
+          {"type": "text", "x": 0.5, "y": 0.85, "text": "The sky was the first map", "font_size": 18, "fill": [180, 170, 160]}
+        ],
+        "atmosphere": {"particles": "none", "fog": false}
+      }
+    },
+    {
+      "scene_num": 3,
+      "title": "The First Map",
+      "narration": "Around 600 BC, the Babylonians scratched the oldest known map onto a clay tablet.",
+      "mood": "mysterious",
+      "camera": "dolly_in",
+      "visual": {
+        "bg": {"type": "indoor", "wall_color": [200, 180, 160], "floor_color": [140, 120, 100]},
+        "elements": [
+          {"type": "text", "x": 0.5, "y": 0.05, "text": "THE FIRST MAP", "font_size": 30, "fill": [40, 35, 30]},
+          {"type": "rect", "x": 0.4, "y": 0.3, "width": 0.25, "height": 0.3, "fill": [180, 160, 130], "stroke": [120, 100, 80], "stroke_width": 2},
+          {"type": "circle", "x": 0.5, "y": 0.4, "radius": 0.08, "fill": [200, 185, 150], "stroke": [100, 85, 60], "stroke_width": 2},
+          {"type": "text", "x": 0.5, "y": 0.42, "text": "Imago Mundi", "font_size": 14, "fill": [80, 70, 55]},
+          {"type": "label", "x": 0.5, "y": 0.68, "text": "Babylon at the center of the world", "font_size": 16, "fill": [80, 70, 55], "bg_color": [255, 245, 230]},
+          {"type": "text", "x": 0.5, "y": 0.88, "text": "Drawn on clay, baked in the sun", "font_size": 18, "fill": [120, 110, 100]}
+        ],
+        "atmosphere": {"particles": "none", "fog": false}
+      }
+    },
+    {
+      "scene_num": 4,
+      "title": "The Greek Revolution",
+      "narration": "The ancient Greeks realized the Earth was a sphere and began measuring it with geometry.",
+      "mood": "hopeful",
+      "camera": null,
+      "visual": {
+        "bg": {"type": "solid", "color": [250, 248, 240]},
+        "elements": [
+          {"type": "text", "x": 0.5, "y": 0.05, "text": "THE GREEK REVOLUTION", "font_size": 28, "fill": [40, 35, 30]},
+          {"type": "circle", "x": 0.5, "y": 0.35, "radius": 0.1, "fill": [200, 220, 255], "stroke": [60, 100, 180], "stroke_width": 2},
+          {"type": "text", "x": 0.5, "y": 0.33, "text": "Earth", "font_size": 14, "fill": [60, 100, 180]},
+          {"type": "label", "x": 0.25, "y": 0.55, "text": "Anaximander", "font_size": 18, "fill": [40, 35, 30], "bg_color": [255, 255, 240]},
+          {"type": "label", "x": 0.25, "y": 0.62, "text": "6th century BC", "font_size": 14, "fill": [120, 110, 100], "bg_color": [255, 255, 240]},
+          {"type": "label", "x": 0.75, "y": 0.55, "text": "Ptolemy", "font_size": 18, "fill": [40, 35, 30], "bg_color": [255, 255, 240]},
+          {"type": "label", "x": 0.75, "y": 0.62, "text": "Added latitude & longitude", "font_size": 14, "fill": [120, 110, 100], "bg_color": [255, 255, 240]},
+          {"type": "line", "x": 0.3, "y": 0.38, "x2": 0.7, "y2": 0.38, "stroke": [180, 80, 60], "stroke_width": 2},
+          {"type": "line", "x": 0.5, "y": 0.25, "x2": 0.5, "y2": 0.5, "stroke": [60, 100, 180], "stroke_width": 2},
+          {"type": "text", "x": 0.5, "y": 0.82, "text": "Geometry made mapmaking a science", "font_size": 18, "fill": [120, 110, 100]}
+        ],
+        "atmosphere": {"particles": "none", "fog": false}
+      }
+    },
+    {
+      "scene_num": 5,
+      "title": "Medieval World Maps",
+      "narration": "In medieval Europe, maps became less about geography and more about faith and stories.",
+      "mood": "mysterious",
+      "camera": "ken_burns_in",
+      "visual": {
+        "bg": {"type": "gradient", "colors": [[210, 190, 170], [170, 150, 130]], "horizon": 0.6, "ground_color": [80, 70, 55]},
+        "elements": [
+          {"type": "text", "x": 0.5, "y": 0.05, "text": "MEDIEVAL MAPS", "font_size": 30, "fill": [40, 35, 30]},
+          {"type": "circle", "x": 0.5, "y": 0.4, "radius": 0.15, "fill": [230, 215, 190], "stroke": [140, 120, 100], "stroke_width": 2},
+          {"type": "text", "x": 0.5, "y": 0.28, "text": "East", "font_size": 14, "fill": [120, 100, 80]},
+          {"type": "text", "x": 0.35, "y": 0.4, "text": "Asia", "font_size": 14, "fill": [160, 130, 80]},
+          {"type": "text", "x": 0.5, "y": 0.42, "text": "Jerusalem", "font_size": 14, "fill": [120, 60, 60]},
+          {"type": "text", "x": 0.65, "y": 0.4, "text": "Africa", "font_size": 14, "fill": [180, 140, 80]},
+          {"type": "text", "x": 0.5, "y": 0.5, "text": "Europe", "font_size": 14, "fill": [100, 120, 160]},
+          {"type": "label", "x": 0.5, "y": 0.65, "text": "T-O Map: Jerusalem at the center", "font_size": 16, "fill": [80, 70, 55], "bg_color": [255, 245, 230]},
+          {"type": "text", "x": 0.5, "y": 0.85, "text": "Faith, not geography, guided the pen", "font_size": 18, "fill": [120, 110, 100]}
+        ],
+        "atmosphere": {"particles": "none", "fog": false}
+      }
+    },
+    {
+      "scene_num": 6,
+      "title": "Portolan Charts",
+      "narration": "Then came the portolan charts: accurate, practical maps used by real sailors.",
+      "mood": "hopeful",
+      "camera": "pan_right",
+      "visual": {
+        "bg": {"type": "solid", "color": [245, 235, 210]},
+        "elements": [
+          {"type": "text", "x": 0.5, "y": 0.05, "text": "PORTOLAN CHARTS", "font_size": 30, "fill": [40, 35, 30]},
+          {"type": "polygon", "x": 0.25, "y": 0.25, "points": [[0.2, 0.2], [0.35, 0.2], [0.4, 0.3], [0.3, 0.35], [0.2, 0.3]], "fill": [200, 180, 140, 150], "stroke": [100, 85, 60], "stroke_width": 1},
+          {"type": "polygon", "x": 0.45, "y": 0.22, "points": [[0.4, 0.2], [0.55, 0.18], [0.6, 0.25], [0.5, 0.3], [0.42, 0.28]], "fill": [180, 200, 160, 150], "stroke": [100, 85, 60], "stroke_width": 1},
+          {"type": "polygon", "x": 0.35, "y": 0.35, "points": [[0.3, 0.3], [0.5, 0.3], [0.52, 0.4], [0.35, 0.42]], "fill": [220, 200, 170, 150], "stroke": [100, 85, 60], "stroke_width": 1},
+          {"type": "circle", "x": 0.75, "y": 0.3, "radius": 0.04, "fill": [255, 240, 200], "stroke": [120, 100, 80], "stroke_width": 1},
+          {"type": "line", "x": 0.75, "y": 0.22, "x2": 0.75, "y2": 0.14, "stroke": [120, 100, 80], "stroke_width": 1},
+          {"type": "line", "x": 0.75, "y": 0.24, "x2": 0.68, "y2": 0.18, "stroke": [120, 100, 80], "stroke_width": 1},
+          {"type": "line", "x": 0.75, "y": 0.28, "x2": 0.82, "y2": 0.2, "stroke": [120, 100, 80], "stroke_width": 1},
+          {"type": "label", "x": 0.5, "y": 0.55, "text": "Compass rose guided navigation", "font_size": 16, "fill": [80, 70, 55], "bg_color": [255, 250, 235]},
+          {"type": "label", "x": 0.5, "y": 0.62, "text": "Portolan = practical sailing maps", "font_size": 16, "fill": [80, 70, 55], "bg_color": [255, 250, 235]},
+          {"type": "text", "x": 0.5, "y": 0.82, "text": "First maps accurate enough to navigate by", "font_size": 18, "fill": [120, 110, 100]}
+        ],
+        "atmosphere": {"particles": "none", "fog": false}
+      }
+    },
+    {
+      "scene_num": 7,
+      "title": "Measuring the World",
+      "narration": "Explorers returned with new coastlines, and mapmakers faced a huge problem: how to draw a round world on flat paper.",
+      "mood": "dramatic",
+      "camera": null,
+      "visual": {
+        "bg": {"type": "gradient", "colors": [[180, 200, 225], [140, 170, 210]], "horizon": 0.5, "ground_color": [60, 80, 60]},
+        "elements": [
+          {"type": "text", "x": 0.5, "y": 0.05, "text": "MEASURING THE WORLD", "font_size": 28, "fill": [40, 35, 30]},
+          {"type": "circle", "x": 0.35, "y": 0.4, "radius": 0.1, "fill": [100, 150, 200, 100], "stroke": [60, 100, 160], "stroke_width": 2},
+          {"type": "rect", "x": 0.52, "y": 0.32, "width": 0.16, "height": 0.16, "fill": [200, 200, 180], "stroke": [120, 100, 80], "stroke_width": 2, "rx": 2},
+          {"type": "arrow", "x": 0.48, "y": 0.35, "x2": 0.52, "y2": 0.35, "stroke": [180, 60, 60], "stroke_width": 2},
+          {"type": "arrow", "x": 0.48, "y": 0.45, "x2": 0.52, "y2": 0.45, "stroke": [180, 60, 60], "stroke_width": 2},
+          {"type": "label", "x": 0.5, "y": 0.55, "text": "Sphere on flat paper = distortion", "font_size": 16, "fill": [40, 35, 30], "bg_color": [255, 250, 240]},
+          {"type": "ship", "x": 0.15, "y": 0.75, "scale": 0.4, "fill": [60, 50, 40], "sail_color": [200, 190, 180]},
+          {"type": "text", "x": 0.5, "y": 0.85, "text": "The problem of projection was born", "font_size": 18, "fill": [100, 90, 80]}
+        ],
+        "atmosphere": {"particles": "none", "fog": false}
+      }
+    },
+    {
+      "scene_num": 8,
+      "title": "Mercator's Solution",
+      "narration": "In 1569, Gerardus Mercator created a map that changed everything by keeping straight lines true.",
+      "mood": "hopeful",
+      "camera": "ken_burns_in",
+      "visual": {
+        "bg": {"type": "solid", "color": [245, 240, 225]},
+        "elements": [
+          {"type": "text", "x": 0.5, "y": 0.05, "text": "MERCATOR'S SOLUTION", "font_size": 30, "fill": [40, 35, 30]},
+          {"type": "human", "x": 0.25, "y": 0.55, "scale": 0.8, "fill": [80, 70, 100], "label": "Gerardus Mercator"},
+          {"type": "rect", "x": 0.42, "y": 0.25, "width": 0.5, "height": 0.35, "fill": [220, 210, 185], "stroke": [120, 100, 80], "stroke_width": 2, "rx": 2},
+          {"type": "line", "x": 0.45, "y": 0.35, "x2": 0.85, "y2": 0.35, "stroke": [160, 150, 140], "stroke_width": 1},
+          {"type": "line", "x": 0.45, "y": 0.45, "x2": 0.85, "y2": 0.45, "stroke": [160, 150, 140], "stroke_width": 1},
+          {"type": "line", "x": 0.45, "y": 0.55, "x2": 0.85, "y2": 0.55, "stroke": [160, 150, 140], "stroke_width": 1},
+          {"type": "line", "x": 0.55, "y": 0.28, "x2": 0.55, "y2": 0.58, "stroke": [160, 150, 140], "stroke_width": 1},
+          {"type": "line", "x": 0.65, "y": 0.28, "x2": 0.65, "y2": 0.58, "stroke": [160, 150, 140], "stroke_width": 1},
+          {"type": "line", "x": 0.75, "y": 0.28, "x2": 0.75, "y2": 0.58, "stroke": [160, 150, 140], "stroke_width": 1},
+          {"type": "polygon", "x": 0.52, "y": 0.32, "points": [[0.48, 0.32], [0.58, 0.3], [0.6, 0.36], [0.5, 0.38]], "fill": [140, 180, 120, 150], "stroke": [100, 140, 80], "stroke_width": 1},
+          {"type": "polygon", "x": 0.58, "y": 0.35, "points": [[0.55, 0.35], [0.65, 0.33], [0.67, 0.4], [0.57, 0.42]], "fill": [180, 160, 120, 150], "stroke": [140, 120, 80], "stroke_width": 1},
+          {"type": "polygon", "x": 0.62, "y": 0.42, "points": [[0.58, 0.4], [0.72, 0.38], [0.75, 0.46], [0.6, 0.48]], "fill": [200, 180, 140, 150], "stroke": [160, 140, 100], "stroke_width": 1},
+          {"type": "label", "x": 0.5, "y": 0.68, "text": "Mercator projection: straight rhumb lines", "font_size": 16, "fill": [40, 35, 30], "bg_color": [255, 250, 240]},
+          {"type": "text", "x": 0.5, "y": 0.85, "text": "Navigators could finally sail a straight line", "font_size": 18, "fill": [120, 110, 100]}
+        ],
+        "atmosphere": {"particles": "none", "fog": false}
+      }
+    },
+    {
+      "scene_num": 9,
+      "title": "From Hand to Press",
+      "narration": "The printing press let maps spread across the world, making cartography a global conversation.",
+      "mood": "hopeful",
+      "camera": "pan_left",
+      "visual": {
+        "bg": {"type": "indoor", "wall_color": [190, 170, 150], "floor_color": [130, 110, 90]},
+        "elements": [
+          {"type": "text", "x": 0.5, "y": 0.05, "text": "MAPS FOR EVERYONE", "font_size": 30, "fill": [40, 35, 30]},
+          {"type": "rect", "x": 0.15, "y": 0.25, "width": 0.15, "height": 0.2, "fill": [80, 60, 40], "stroke": [50, 40, 30], "stroke_width": 2},
+          {"type": "rect", "x": 0.18, "y": 0.3, "width": 0.09, "height": 0.12, "fill": [180, 160, 130], "stroke": [100, 85, 60], "stroke_width": 1},
+          {"type": "human", "x": 0.4, "y": 0.55, "scale": 0.8, "fill": [80, 70, 100], "label": "printer"},
+          {"type": "rect", "x": 0.55, "y": 0.28, "width": 0.12, "height": 0.16, "fill": [220, 210, 185], "stroke": [120, 100, 80], "stroke_width": 2, "rx": 2},
+          {"type": "text", "x": 0.61, "y": 0.35, "text": "Map", "font_size": 14, "fill": [80, 70, 55]},
+          {"type": "arrow", "x": 0.3, "y": 0.38, "x2": 0.38, "y2": 0.45, "stroke": [140, 100, 60], "stroke_width": 2},
+          {"type": "label", "x": 0.5, "y": 0.72, "text": "Printed maps reached thousands", "font_size": 16, "fill": [40, 35, 30], "bg_color": [255, 250, 240]},
+          {"type": "text", "x": 0.5, "y": 0.85, "text": "Cartography became a science for everyone", "font_size": 18, "fill": [120, 110, 100]}
+        ],
+        "atmosphere": {"particles": "none", "fog": false}
+      }
+    },
+    {
+      "scene_num": 10,
+      "title": "Mapping Continues",
+      "narration": "Today, satellites map every inch of our planet from space, but every map still starts the same way: with a question about where we are.",
+      "mood": "epic",
+      "camera": "ken_burns_out",
+      "visual": {
+        "bg": {"type": "night", "colors": [[5, 5, 20], [15, 15, 40]], "horizon": 0.5, "ground_color": [10, 10, 15]},
+        "elements": [
+          {"type": "circle", "x": 0.5, "y": 0.35, "radius": 0.12, "fill": [100, 150, 255, 80], "stroke": [80, 130, 255], "stroke_width": 2},
+          {"type": "circle", "x": 0.5, "y": 0.35, "radius": 0.05, "fill": [255, 215, 0, 100], "stroke": [200, 170, 50], "stroke_width": 1},
+          {"type": "text", "x": 0.5, "y": 0.06, "text": "MAPPING CONTINUES", "font_size": 30, "fill": [220, 210, 200]},
+          {"type": "text", "x": 0.5, "y": 0.62, "text": "From clay tablets to satellites", "font_size": 20, "fill": [180, 170, 160]},
+          {"type": "text", "x": 0.5, "y": 0.72, "text": "The human urge to map never ends", "font_size": 18, "fill": [150, 140, 130]},
+          {"type": "text", "x": 0.5, "y": 0.85, "text": "Every map is a story of exploration", "font_size": 18, "fill": [150, 140, 130]}
+        ],
+        "atmosphere": {"particles": "none", "fog": true}
+      }
+    }
+  ]
+}
