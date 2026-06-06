@@ -129,68 +129,127 @@ Respond with ONLY the JSON object, no other text."""
 
 
 def _infer_visuals(text: str, scene_num: int, total: int) -> dict:
-    """Infer scene visuals from narration keywords — no LLM needed."""
+    """Infer scene visuals from narrative arc position + keywords.
+
+    The story arc drives the emotional progression: opening (mystery/setup)
+    → rising action → climax → falling action → resolution.
+    This gives the video a cinematic feel — scenes flow naturally.
+    """
     t = text.lower()
+    progress = (scene_num - 1) / max(total - 1, 1)
 
-    # ── Mood ──
-    if any(w in t for w in ["terrify", "fear", "darken", "eclipse", "monster", "disappear", "end of the world"]):
+    # ── Pick arc phase from position ──
+    if progress < 0.10:
+        phase = "opening"
+    elif progress < 0.30:
+        phase = "rising_early"
+    elif progress < 0.55:
+        phase = "rising_late"
+    elif progress < 0.70:
+        phase = "climax"
+    elif progress < 0.88:
+        phase = "falling"
+    else:
+        phase = "resolution"
+
+    # ── Arc-driven mood base (overridden by keywords below) ──
+    arc_moods = {
+        "opening": "mysterious",
+        "rising_early": "hopeful",
+        "rising_late": "peaceful",
+        "climax": "dramatic",
+        "falling": "somber",
+        "resolution": "hopeful",
+    }
+
+    # ── Arc-driven background palette ──
+    arc_bgs = {
+        "opening":      {"type": "gradient", "colors": [[25, 25, 55], [55, 45, 80]]},
+        "rising_early": {"type": "gradient", "colors": [[60, 70, 110], [120, 100, 130]]},
+        "rising_late":  {"type": "gradient", "colors": [[100, 130, 170], [180, 150, 130]]},
+        "climax":       {"type": "sunset",   "colors": [[200, 90, 40], [140, 60, 80]]},
+        "falling":      {"type": "gradient", "colors": [[120, 100, 130], [80, 70, 110]]},
+        "resolution":   {"type": "sunset",   "colors": [[240, 190, 120], [200, 140, 100]]},
+    }
+
+    bg = dict(arc_bgs[phase])
+    bg["horizon"] = 0.55
+
+    # ── Arc-driven camera ──
+    arc_cameras = {
+        "opening": "ken_burns_in",
+        "rising_early": None,
+        "rising_late": "pan_right",
+        "climax": "dolly_in",
+        "falling": None,
+        "resolution": "ken_burns_in",
+    }
+
+    # ── Arc-driven element density ──
+    arc_density = {
+        "opening": 0.4,
+        "rising_early": 0.6,
+        "rising_late": 0.8,
+        "climax": 1.0,
+        "falling": 0.6,
+        "resolution": 0.5,
+    }
+
+    # ── Keyword overrides ──
+    mood = arc_moods[phase]
+    camera = arc_cameras[phase]
+
+    # Mood override from keywords
+    if any(w in t for w in ["terrify", "fear", "darken", "eclipse", "monster", "devour", "end of the world"]):
         mood = "somber"
-    elif any(w in t for w in ["amazing", "extraordinary", "astonish", "revolutionary", "discover"]):
+    elif any(w in t for w in ["amazing", "extraordinary", "astonish", "revolutionary", "discover", "astonishing"]):
         mood = "epic"
-    elif any(w in t for w in ["mystery", "mysterious", "unknown", "wonder", "why", "strange"]):
+    elif any(w in t for w in ["mystery", "mysterious", "unknown", "strange", "why"]):
         mood = "mysterious"
-    elif any(w in t for w in ["hope", "relief", "return", "won", "spared", "beautiful"]):
+    elif any(w in t for w in ["hope", "relief", "return", "spared", "won"]):
         mood = "hopeful"
-    elif any(w in t for w in ["battle", "fought", "powerful", "immense", "force"]):
+    elif any(w in t for w in ["battle", "fought", "powerful", "immense", "force", "terrifying"]):
         mood = "dramatic"
-    else:
-        mood = "peaceful"
 
-    # ── Camera ──
-    if any(w in t for w in ["journey", "across", "sail", "travel", "crossing"]):
-        camera = "pan_right"
-    elif any(w in t for w in ["rise", "rises", "ascend", "above"]):
-        camera = "dolly_in"
-    elif any(w in t for w in ["observe", "watch", "stare", "gaze"]):
-        camera = "ken_burns_in"
-    else:
-        camera = None
-
-    # ── Background ──
+    # Background override from keywords
     if any(w in t for w in ["sunset", "dusk", "dawn", "morning", "sunrise"]) or \
        ("rise" in t and "horizon" in t):
-        bg_type = "sunset"
-        colors = [[255, 180, 80], [200, 100, 60]]
+        bg = {"type": "sunset", "colors": [[255, 190, 80], [210, 120, 60]], "horizon": 0.55}
     elif any(w in t for w in ["night", "dark", "darkness", "evening", "disappear", "fade"]):
-        bg_type = "night"
-        colors = [[10, 10, 40], [30, 20, 60]]
-    elif any(w in t for w in ["ocean", "sea", "water", "sail", "boat", "ship"]):
-        bg_type = "ocean"
-        colors = [[30, 120, 200], [200, 220, 240]]
-    elif any(w in t for w in ["forest", "tree", "plant", "grow", "woods", "jungle"]):
-        bg_type = "forest"
-        colors = [[60, 120, 60], [100, 160, 80]]
+        bg = {"type": "night", "colors": [[8, 8, 35], [28, 18, 55]], "horizon": 0.55}
+    elif any(w in t for w in ["ocean", "sea", "sail", "boat", "ship"]):
+        bg = {"type": "ocean", "colors": [[25, 105, 190], [190, 210, 230]], "horizon": 0.55}
+    elif any(w in t for w in ["forest", "tree", "plant", "grow", "woods"]):
+        bg = {"type": "forest", "colors": [[50, 110, 50], [90, 150, 70]], "horizon": 0.55}
     elif any(w in t for w in ["snow", "frozen", "ice", "cold", "winter"]):
-        bg_type = "gradient"
-        colors = [[200, 220, 240], [150, 180, 210]]
-    elif any(w in t for w in ["indoor", "temple", "cave", "room", "inside"]):
-        bg_type = "indoor"
-        colors = [[80, 60, 50], [140, 110, 90]]
+        bg = {"type": "gradient", "colors": [[190, 215, 235], [140, 170, 200]], "horizon": 0.55}
+    elif any(w in t for w in ["indoor", "temple", "cave", "inside"]):
+        bg = {"type": "indoor", "colors": [[70, 55, 45], [130, 100, 80]], "horizon": 0.55}
     elif any(w in t for w in ["fire", "campfire", "flame", "burn"]):
-        bg_type = "sunset"
-        colors = [[180, 80, 30], [80, 30, 10]]
+        bg = {"type": "sunset", "colors": [[175, 70, 25], [75, 25, 10]], "horizon": 0.55}
     elif any(w in t for w in ["desert", "sand", "egypt"]):
-        bg_type = "gradient"
-        colors = [[220, 190, 140], [180, 150, 100]]
-    else:
-        bg_type = "gradient"
-        colors = [[100, 120, 180], [60, 80, 140]]
+        bg = {"type": "gradient", "colors": [[210, 180, 130], [175, 140, 95]], "horizon": 0.55}
+
+    camera_override = None
+    if any(w in t for w in ["journey", "across", "sail", "travel", "crossing"]):
+        camera_override = "pan_right"
+    elif any(w in t for w in ["rise", "rises", "ascend", "above"]):
+        camera_override = "dolly_in"
+    elif any(w in t for w in ["observe", "watch", "stare", "gaze", "look"]):
+        camera_override = "ken_burns_in"
+    if camera_override:
+        camera = camera_override
 
     # ── Elements ──
     elements = []
+    added_types = set()
     rng = random.Random(scene_num * 9973 + total * 7919)
+    density = arc_density[phase]
 
     def add(etype, x=None, y=None, scale=None, fill=None):
+        if etype in added_types and len([e for e in elements if e["type"] == etype]) >= 2:
+            return
+        added_types.add(etype)
         elements.append({
             "type": etype,
             "x": x if x is not None else round(rng.uniform(0.15, 0.85), 2),
@@ -199,79 +258,133 @@ def _infer_visuals(text: str, scene_num: int, total: int) -> dict:
             "fill": fill if fill else [rng.randint(80, 255) for _ in range(3)],
         })
 
-    if any(w in t for w in ["sun", "sunrise", "dawn", "morning", "daylight"]):
-        add("sun", 0.5, 0.25, 1.5, [255, 220, 50])
-    if any(w in t for w in ["moon", "night"]):
-        add("moon", 0.7, 0.2, 1.2, [220, 220, 240])
+    # Background layer — mountains/horizon always present (scaled by density)
+    if rng.random() < density:
+        add("mountain", 0.5, 0.68, round(1.0 + density * 0.3, 1), [80 + int(40 * density), 90 + int(40 * density), 120 + int(40 * density)])
+
+    # Keyword-matched elements with arc-aware count
+    def kw_count(keywords, max_n=3):
+        """Return how many of this element to place based on keyword match + arc density."""
+        if not any(w in t for w in keywords):
+            return 0
+        raw = max_n if phase == "climax" else max(1, int(max_n * density))
+        return rng.randint(1, raw)
+
+    n = kw_count(["sun", "sunrise", "dawn", "morning", "daylight"], 2)
+    for _ in range(n):
+        add("sun", 0.5 if n == 1 else round(rng.uniform(0.3, 0.7), 2), 0.22 + rng.random() * 0.08, 1.2 + rng.random() * 0.4, [255, 215 + int(rng.random() * 40), 50])
+
+    n = kw_count(["moon", "night"], 1)
+    for _ in range(n):
+        add("moon", round(rng.uniform(0.6, 0.8), 2), 0.18, 1.1, [215, 215, 235])
+
     if any(w in t for w in ["star", "stars", "universe", "galaxy", "billions"]):
-        for _ in range(min(rng.randint(3, 8), 5)):
-            add("star", round(rng.uniform(0.1, 0.9), 2), round(rng.uniform(0.05, 0.35), 2), 0.3, [255, 255, 220])
-    if any(w in t for w in ["cloud", "sky"]):
-        add("cloud", 0.5, 0.15, 1.0, [220, 220, 230])
-    if any(w in t for w in ["mountain", "hill", "landscape", "horizon"]):
-        add("mountain", 0.5, 0.65, 1.2, [100, 110, 140])
-    if any(w in t for w in ["tree", "forest", "plant", "grow", "woods", "jungle"]):
-        add("tree", round(rng.uniform(0.2, 0.8), 2), round(rng.uniform(0.5, 0.7), 2), 1.0, [60, 140, 60])
-        add("grass", round(rng.uniform(0.3, 0.7), 2), round(rng.uniform(0.7, 0.85), 2), 0.6, [80, 170, 70])
-    if any(w in t for w in ["flower", "bloom"]):
-        add("flower", round(rng.uniform(0.2, 0.8), 2), round(rng.uniform(0.55, 0.75), 2), 0.7, [220, 80, 160])
-    if any(w in t for w in ["animal", "animals", "creature", "beast"]):
-        add("animal", round(rng.uniform(0.2, 0.7), 2), round(rng.uniform(0.55, 0.7), 2), 1.0, [150, 100, 80])
-    if any(w in t for w in ["bird", "birds"]):
-        add("bird", round(rng.uniform(0.3, 0.7), 2), round(rng.uniform(0.15, 0.35), 2), 0.8, [100, 100, 120])
-    if any(w in t for w in ["water", "river", "lake", "ocean", "sea"]):
-        add("water", 0.5, 0.7, 1.5, [60, 140, 210])
-    if any(w in t for w in ["ship", "boat", "sail"]):
-        add("ship", 0.5, 0.55, 1.2, [120, 80, 50])
-    if any(w in t for w in ["fire", "campfire", "flame", "burn"]):
-        add("fire", 0.5, 0.65, 1.0, [255, 160, 40])
-    if any(w in t for w in ["temple", "pyramid", "monument", "stone", "ruin"]):
-        add("building", 0.5, 0.55, 1.2, [180, 150, 100])
-    if any(w in t for w in ["cave"]):
-        add("cave", 0.5, 0.5, 1.2, [80, 60, 50])
-    if any(w in t for w in ["volcano", "lava"]):
-        add("volcano", 0.5, 0.5, 1.5, [120, 60, 40])
-    if any(w in t for w in ["rainbow"]):
-        add("rainbow", 0.5, 0.3, 1.0, [255, 200, 100])
-    if any(w in t for w in ["snow", "ice", "frozen"]):
-        add("snow", round(rng.uniform(0.2, 0.8), 2), round(rng.uniform(0.65, 0.8), 2), 0.8, [220, 230, 250])
-    if any(w in t for w in ["book", "scroll", "story", "knowledge"]):
-        add("book", 0.5, 0.55, 0.8, [180, 140, 80])
-    if any(w in t for w in ["chariot", "chariot", "helio", "golden"]):
-        add("sun", 0.5, 0.25, 1.5, [255, 220, 50])
-    if any(w in t for w in ["compass", "map", "astronomer", "science", "observ"]):
-        add("compass", 0.5, 0.5, 0.8, [180, 140, 80])
-    if any(w in t for w in ["globe", "earth", "world", "planet"]):
-        add("globe", 0.5, 0.45, 0.9, [60, 120, 180])
-    if any(w in t for w in ["human", "people", "civilization", "ancient", "culture"]):
-        add("human", round(rng.uniform(0.3, 0.6), 2), round(rng.uniform(0.5, 0.65), 2), 0.8, [180, 140, 110])
-    if any(w in t for w in ["village", "city", "civilization", "settle"]):
-        add("building", round(rng.uniform(0.3, 0.7), 2), round(rng.uniform(0.5, 0.6), 2), 0.7, [160, 130, 100])
+        n = rng.randint(3, 8) if phase == "climax" else max(1, int(6 * density))
+        for _ in range(min(n, 8)):
+            add("star", round(rng.uniform(0.05, 0.95), 2), round(rng.uniform(0.03, 0.4), 2), 0.2 + rng.random() * 0.2, [255, 255, 210 + int(rng.random() * 45)])
+
+    n = kw_count(["cloud", "sky"], 2)
+    for _ in range(n):
+        add("cloud", round(rng.uniform(0.2, 0.8), 2), round(rng.uniform(0.08, 0.22), 2), 0.7 + rng.random() * 0.5, [210, 215, 225])
+
+    n = kw_count(["tree", "forest", "plant", "grow", "woods", "jungle"], 3)
+    for _ in range(n):
+        side = 0.15 if _ == 0 else (0.85 if _ == 2 else round(rng.uniform(0.25, 0.75), 2))
+        add("tree", side, round(rng.uniform(0.5, 0.65), 2), 0.7 + rng.random() * 0.6, [50 + int(rng.random() * 60), 120 + int(rng.random() * 60), 50 + int(rng.random() * 30)])
+    n = kw_count(["tree", "forest", "plant", "grow", "woods", "jungle"], 2)
+    for _ in range(n):
+        add("grass", round(rng.uniform(0.15, 0.85), 2), round(rng.uniform(0.72, 0.88), 2), 0.5 + rng.random() * 0.3, [70 + int(rng.random() * 50), 155 + int(rng.random() * 40), 60 + int(rng.random() * 30)])
+
+    n = kw_count(["animal", "animals", "creature", "beast"], 2)
+    for _ in range(n):
+        add("animal", round(rng.uniform(0.2, 0.7), 2), round(rng.uniform(0.58, 0.72), 2), 0.8 + rng.random() * 0.4, [130 + int(rng.random() * 50), 85 + int(rng.random() * 40), 65 + int(rng.random() * 40)])
+
+    n = kw_count(["bird", "birds"], 3)
+    for _ in range(n):
+        add("bird", round(rng.uniform(0.15, 0.85), 2), round(rng.uniform(0.08, 0.3), 2), 0.5 + rng.random() * 0.4, [90 + int(rng.random() * 40), 90 + int(rng.random() * 40), 110 + int(rng.random() * 30)])
+
+    n = kw_count(["water", "river", "lake", "ocean", "sea"], 1)
+    for _ in range(n):
+        add("water", 0.5, 0.72, 1.3 + rng.random() * 0.4, [50 + int(rng.random() * 30), 130 + int(rng.random() * 30), 200 + int(rng.random() * 20)])
+
+    n = kw_count(["flower", "bloom"], 2)
+    for _ in range(n):
+        add("flower", round(rng.uniform(0.2, 0.8), 2), round(rng.uniform(0.58, 0.78), 2), 0.5 + rng.random() * 0.3, [200 + int(rng.random() * 55), 60 + int(rng.random() * 60), 140 + int(rng.random() * 60)])
+
+    n = kw_count(["ship", "boat", "sail"], 1)
+    for _ in range(n):
+        add("ship", round(rng.uniform(0.3, 0.6), 2), round(rng.uniform(0.5, 0.6), 2), 1.0 + rng.random() * 0.3, [110, 75, 45])
+
+    n = kw_count(["fire", "campfire", "flame", "burn"], 1)
+    for _ in range(n):
+        add("fire", round(rng.uniform(0.35, 0.65), 2), 0.62, 0.8 + rng.random() * 0.3, [255, 150 + int(rng.random() * 60), 30 + int(rng.random() * 30)])
+
+    n = kw_count(["temple", "pyramid", "monument", "stone", "ruin"], 2)
+    for _ in range(n):
+        add("building", round(rng.uniform(0.2, 0.6), 2), round(rng.uniform(0.52, 0.6), 2), 0.9 + rng.random() * 0.4, [160 + int(rng.random() * 40), 135 + int(rng.random() * 40), 85 + int(rng.random() * 40)])
+
+    n = kw_count(["human", "people", "civilization", "ancient", "culture"], 2)
+    for _ in range(n):
+        add("human", round(rng.uniform(0.25, 0.55), 2), round(rng.uniform(0.52, 0.65), 2), 0.7 + rng.random() * 0.2, [165 + int(rng.random() * 40), 125 + int(rng.random() * 40), 95 + int(rng.random() * 40)])
+
+    n = kw_count(["book", "scroll", "story", "knowledge"], 1)
+    for _ in range(n):
+        add("book", round(rng.uniform(0.35, 0.65), 2), round(rng.uniform(0.5, 0.6), 2), 0.7 + rng.random() * 0.2, [170, 130, 75])
+
+    n = kw_count(["compass", "map", "astronomer", "science", "observ"], 1)
+    for _ in range(n):
+        add("compass", round(rng.uniform(0.35, 0.65), 2), round(rng.uniform(0.45, 0.55), 2), 0.7 + rng.random() * 0.2, [170, 130, 75])
+
+    n = kw_count(["globe", "earth", "world", "planet"], 1)
+    for _ in range(n):
+        add("globe", round(rng.uniform(0.4, 0.6), 2), round(rng.uniform(0.42, 0.52), 2), 0.8 + rng.random() * 0.2, [50 + int(rng.random() * 30), 110 + int(rng.random() * 30), 170 + int(rng.random() * 30)])
+
+    # Cultural overrides
     if any(w in t for w in ["egypt", "pharaoh", "ra", "nile"]):
-        add("building", 0.3, 0.55, 1.2, [200, 170, 100])
-        add("sun", 0.7, 0.25, 1.5, [255, 200, 40])
+        add("building", 0.25, 0.55, 1.3 + rng.random() * 0.3, [195, 165, 95])
+        add("sun", 0.75, 0.22, 1.6, [255, 195, 35])
     if any(w in t for w in ["greece", "greek", "helio", "chariot"]):
-        add("building", 0.5, 0.55, 1.0, [200, 190, 170])
+        add("building", 0.5, 0.55, 1.0 + rng.random() * 0.3, [195, 185, 165])
     if any(w in t for w in ["eclipse"]):
-        add("moon", 0.5, 0.3, 1.5, [30, 30, 50])
-        add("sun", 0.5, 0.3, 1.5, [255, 220, 50])
+        add("moon", 0.48, 0.28, 1.4, [25, 25, 45])
+        add("sun", 0.52, 0.28, 1.4, [255, 215, 45])
+
+    n = kw_count(["snow", "ice", "frozen"], 3)
+    for _ in range(n):
+        add("snow", round(rng.uniform(0.1, 0.9), 2), round(rng.uniform(0.65, 0.85), 2), 0.6 + rng.random() * 0.4, [210 + int(rng.random() * 45), 220 + int(rng.random() * 35), 240 + int(rng.random() * 15)])
+
+    n = kw_count(["village", "city", "settle"], 2)
+    for _ in range(n):
+        add("building", round(rng.uniform(0.2, 0.7), 2), round(rng.uniform(0.5, 0.62), 2), 0.6 + rng.random() * 0.3, [150 + int(rng.random() * 40), 120 + int(rng.random() * 40), 90 + int(rng.random() * 40)])
+
+    if any(w in t for w in ["cave"]):
+        add("cave", 0.5, 0.5, 1.1 + rng.random() * 0.3, [75, 55, 45])
+    if any(w in t for w in ["volcano", "lava"]):
+        add("volcano", 0.5, 0.45, 1.4 + rng.random() * 0.3, [115, 55, 35])
+    if any(w in t for w in ["rainbow"]):
+        add("rainbow", 0.5, 0.25, 0.9 + rng.random() * 0.3, [255, 200, 100])
 
     if not elements:
-        add("star", 0.5, 0.3, 0.8, [255, 255, 200])
+        add("star", 0.5, 0.3, 0.7, [255, 255, 210])
 
     # ── Atmosphere ──
     particles = "none"
     star_count = 0
     fog = False
-    if bg_type == "night":
-        star_count = rng.randint(20, 50)
+
+    if bg["type"] == "night":
+        star_count = rng.randint(15, 45)
         particles = "stars"
+
     if any(w in t for w in ["snow", "ice", "frozen", "winter"]):
         particles = "snow"
     if any(w in t for w in ["rain", "storm"]):
         particles = "rain"
-    if any(w in t for w in ["fog", "mist", "shadow"]):
+    if any(w in t for w in ["fog", "mist", "shadow", "underworld"]):
         fog = True
+
+    if phase == "climax" and particles == "none":
+        particles = "stars" if bg["type"] == "night" else "rain"
 
     # ── Title ──
     words = text.split()
@@ -284,7 +397,7 @@ def _infer_visuals(text: str, scene_num: int, total: int) -> dict:
         "mood": mood,
         "camera": camera,
         "visual": {
-            "bg": {"type": bg_type, "colors": colors, "horizon": 0.55},
+            "bg": bg,
             "elements": elements,
             "atmosphere": {"particles": particles, "fog": fog, "star_count": star_count},
         },
