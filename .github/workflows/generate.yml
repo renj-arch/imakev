@@ -130,7 +130,6 @@ jobs:
       - name: Generate video(s)
         env:
           LLM_PROVIDER: ${{ inputs.llm_provider || 'huggingface' }}
-          SCRIPT_TEXT: ${{ inputs.script_file }}
         run: |
           MODE="${{ inputs.mode || 'sketch' }}"
           REPEAT="${{ inputs.repeat || 1 }}"
@@ -152,11 +151,7 @@ jobs:
                   echo "Error: script_file input is required for narration mode"
                   exit 1
                 fi
-                python -c "
-import os
-with open('.github_narration.txt', 'w', encoding='utf-8') as f:
-    f.write(os.environ.get('SCRIPT_TEXT', ''))
-"
+                python -c "import json,sys; open('.github_narration.txt','w',encoding='utf-8').write(json.loads(sys.argv[1]))" '${{ toJSON(inputs.script_file) }}'
                 TITLE_FLAG=""
                 if [ -n "${{ inputs.custom_title }}" ]; then
                   TITLE_FLAG="--title '${{ inputs.custom_title }}'"
