@@ -93,8 +93,9 @@ def draw_tree(draw, cx, cy, s, color=(50,80,40)):
         _circle(draw, cx+ox, cy-th+oy, rr, fill_c=(*color,80), line_c=(*[c-10 for c in color],200))
         _hatch(draw, [(cx+ox-rr, cy-th+oy-rr), (cx+ox+rr, cy-th+oy-rr), (cx+ox+rr, cy-th+oy+rr), (cx+ox-rr, cy-th+oy+rr)], spacing=5, color=(0,30,0,20))
 
-def draw_mountain(draw, cx, cy, w, h, s=1.0):
-    pts = [(cx-w, cy), (cx, cy-h), (cx+w, cy)]
+def draw_mountain(draw, cx, cy, s):
+    mw, mh = int(120*s), int(80*s)
+    pts = [(cx-mw, cy), (cx, cy-mh), (cx+mw, cy)]
     c = (rng.randint(80,120), rng.randint(90,130), rng.randint(130,160))
     _fill(draw, pts, (*c,100), amp=2)
     _stroke(draw, pts, w=2, color=(60,60,80,150), amp=1.5)
@@ -282,7 +283,7 @@ def draw_cat(draw, cx, cy, s, color=(180,120,80)):
 
 OBJECT_RENDERERS = {
     "sun": draw_sun, "moon": draw_moon, "star": lambda d,cx,cy,s: _circle(d, cx, cy, 2, fill_c=(255,255,200,150), line_c=(255,255,200)),
-    "tree": draw_tree, "mountain": draw_mountain, "cloud": draw_cloud,
+    "tree": draw_tree,     "mountain": lambda d,cx,cy,s: draw_mountain(d, cx, cy, s), "cloud": draw_cloud,
     "water": lambda d,cx,cy,s: draw_water(d, cx-50, cy-50, 100, 100),
     "flower": draw_flower, "grass": lambda d,cx,cy,s: draw_grass_blade(d, cx, cy, 10*s),
     "bird": draw_bird, "house": draw_house, "fence": lambda d,cx,cy,s: draw_fence(d, cx-50, cy, 100, 30*s),
@@ -417,7 +418,7 @@ def render_scene(data: dict, w=W, h=H) -> Image.Image:
             continue
         if "mountain" in bg_name:
             for i in range(3):
-                draw_mountain(draw, w*(0.2+0.3*i), ground_y, int(w*0.25), int(h*0.2), 0.8)
+                draw_mountain(draw, int(w*(0.15+0.35*i)), int(ground_y), 0.8)
         elif "cloud" in bg_name:
             for i in range(rng.randint(2,4)):
                 draw_cloud(draw, rng.randint(50, w-50), rng.randint(30, ground_y//3), rng.uniform(0.5,1.2))
