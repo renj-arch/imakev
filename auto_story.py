@@ -128,44 +128,176 @@ Respond with ONLY the JSON object, no other text."""
     return fallback
 
 
-def _scene_from_paragraph(text: str, scene_num: int, total: int,
-                          prev_summary: str = "", next_summary: str = "") -> dict:
-    """Generate visual JSON for a single paragraph/scene using LLM."""
-    from src.script_generator import _generate
+def _infer_visuals(text: str, scene_num: int, total: int) -> dict:
+    """Infer scene visuals from narration keywords — no LLM needed."""
+    t = text.lower()
 
-    pos = "opening" if scene_num == 1 else ("closing" if scene_num == total else "middle")
-    prompt = f"""You are a documentary visual director. Given a narration paragraph, output visual scene JSON.
-Position in story: {pos}
+    # ── Mood ──
+    if any(w in t for w in ["terrify", "fear", "darken", "eclipse", "monster", "disappear", "end of the world"]):
+        mood = "somber"
+    elif any(w in t for w in ["amazing", "extraordinary", "astonish", "revolutionary", "discover"]):
+        mood = "epic"
+    elif any(w in t for w in ["mystery", "mysterious", "unknown", "wonder", "why", "strange"]):
+        mood = "mysterious"
+    elif any(w in t for w in ["hope", "relief", "return", "won", "spared", "beautiful"]):
+        mood = "hopeful"
+    elif any(w in t for w in ["battle", "fought", "powerful", "immense", "force"]):
+        mood = "dramatic"
+    else:
+        mood = "peaceful"
 
-Narration:
-{text}
+    # ── Camera ──
+    if any(w in t for w in ["journey", "across", "sail", "travel", "crossing"]):
+        camera = "pan_right"
+    elif any(w in t for w in ["rise", "rises", "ascend", "above"]):
+        camera = "dolly_in"
+    elif any(w in t for w in ["observe", "watch", "stare", "gaze"]):
+        camera = "ken_burns_in"
+    else:
+        camera = None
 
-Output ONLY this JSON (no markdown, no code fences):
-{{"title":"<3-5 word scene title>","mood":"<peaceful|dramatic|hopeful|somber|epic|mysterious>","camera":<null or ken_burns_in|pan_right|pan_left|dolly_in>,"visual":{{"bg":{{"type":"<gradient|night|ocean|indoor|solid|sunset|forest>","colors":[[R,G,B],[R,G,B]],"horizon":0.55}},"elements":[{{"type":"<element type>","x":0.5,"y":0.5,"scale":1.0,"fill":[R,G,B]}}],"atmosphere":{{"particles":"<none|rain|snow|stars>","fog":false,"star_count":0}}}}}}"""
+    # ── Background ──
+    if any(w in t for w in ["sunset", "dusk", "dawn", "morning", "sunrise"]) or \
+       ("rise" in t and "horizon" in t):
+        bg_type = "sunset"
+        colors = [[255, 180, 80], [200, 100, 60]]
+    elif any(w in t for w in ["night", "dark", "darkness", "evening", "disappear", "fade"]):
+        bg_type = "night"
+        colors = [[10, 10, 40], [30, 20, 60]]
+    elif any(w in t for w in ["ocean", "sea", "water", "sail", "boat", "ship"]):
+        bg_type = "ocean"
+        colors = [[30, 120, 200], [200, 220, 240]]
+    elif any(w in t for w in ["forest", "tree", "plant", "grow", "woods", "jungle"]):
+        bg_type = "forest"
+        colors = [[60, 120, 60], [100, 160, 80]]
+    elif any(w in t for w in ["snow", "frozen", "ice", "cold", "winter"]):
+        bg_type = "gradient"
+        colors = [[200, 220, 240], [150, 180, 210]]
+    elif any(w in t for w in ["indoor", "temple", "cave", "room", "inside"]):
+        bg_type = "indoor"
+        colors = [[80, 60, 50], [140, 110, 90]]
+    elif any(w in t for w in ["fire", "campfire", "flame", "burn"]):
+        bg_type = "sunset"
+        colors = [[180, 80, 30], [80, 30, 10]]
+    elif any(w in t for w in ["desert", "sand", "egypt"]):
+        bg_type = "gradient"
+        colors = [[220, 190, 140], [180, 150, 100]]
+    else:
+        bg_type = "gradient"
+        colors = [[100, 120, 180], [60, 80, 140]]
 
-    system = "You output ONLY valid JSON. No markdown, no extra text."
-    try:
-        raw = _generate(prompt, temperature=0.7, max_tokens=800, system=system)
-        raw = raw.strip()
-        if raw.startswith("```"):
-            raw = re.sub(r'^```(?:json)?\s*', '', raw)
-            raw = re.sub(r'\s*```$', '', raw)
-        data = json.loads(raw)
-        return data
-    except Exception:
-        return {}
+    # ── Elements ──
+    elements = []
+    rng = random.Random(scene_num * 9973 + total * 7919)
+
+    def add(etype, x=None, y=None, scale=None, fill=None):
+        elements.append({
+            "type": etype,
+            "x": x if x is not None else round(rng.uniform(0.15, 0.85), 2),
+            "y": y if y is not None else round(rng.uniform(0.25, 0.75), 2),
+            "scale": scale if scale is not None else round(rng.uniform(0.6, 1.5), 1),
+            "fill": fill if fill else [rng.randint(80, 255) for _ in range(3)],
+        })
+
+    if any(w in t for w in ["sun", "sunrise", "dawn", "morning", "daylight"]):
+        add("sun", 0.5, 0.25, 1.5, [255, 220, 50])
+    if any(w in t for w in ["moon", "night"]):
+        add("moon", 0.7, 0.2, 1.2, [220, 220, 240])
+    if any(w in t for w in ["star", "stars", "universe", "galaxy", "billions"]):
+        for _ in range(min(rng.randint(3, 8), 5)):
+            add("star", round(rng.uniform(0.1, 0.9), 2), round(rng.uniform(0.05, 0.35), 2), 0.3, [255, 255, 220])
+    if any(w in t for w in ["cloud", "sky"]):
+        add("cloud", 0.5, 0.15, 1.0, [220, 220, 230])
+    if any(w in t for w in ["mountain", "hill", "landscape", "horizon"]):
+        add("mountain", 0.5, 0.65, 1.2, [100, 110, 140])
+    if any(w in t for w in ["tree", "forest", "plant", "grow", "woods", "jungle"]):
+        add("tree", round(rng.uniform(0.2, 0.8), 2), round(rng.uniform(0.5, 0.7), 2), 1.0, [60, 140, 60])
+        add("grass", round(rng.uniform(0.3, 0.7), 2), round(rng.uniform(0.7, 0.85), 2), 0.6, [80, 170, 70])
+    if any(w in t for w in ["flower", "bloom"]):
+        add("flower", round(rng.uniform(0.2, 0.8), 2), round(rng.uniform(0.55, 0.75), 2), 0.7, [220, 80, 160])
+    if any(w in t for w in ["animal", "animals", "creature", "beast"]):
+        add("animal", round(rng.uniform(0.2, 0.7), 2), round(rng.uniform(0.55, 0.7), 2), 1.0, [150, 100, 80])
+    if any(w in t for w in ["bird", "birds"]):
+        add("bird", round(rng.uniform(0.3, 0.7), 2), round(rng.uniform(0.15, 0.35), 2), 0.8, [100, 100, 120])
+    if any(w in t for w in ["water", "river", "lake", "ocean", "sea"]):
+        add("water", 0.5, 0.7, 1.5, [60, 140, 210])
+    if any(w in t for w in ["ship", "boat", "sail"]):
+        add("ship", 0.5, 0.55, 1.2, [120, 80, 50])
+    if any(w in t for w in ["fire", "campfire", "flame", "burn"]):
+        add("fire", 0.5, 0.65, 1.0, [255, 160, 40])
+    if any(w in t for w in ["temple", "pyramid", "monument", "stone", "ruin"]):
+        add("building", 0.5, 0.55, 1.2, [180, 150, 100])
+    if any(w in t for w in ["cave"]):
+        add("cave", 0.5, 0.5, 1.2, [80, 60, 50])
+    if any(w in t for w in ["volcano", "lava"]):
+        add("volcano", 0.5, 0.5, 1.5, [120, 60, 40])
+    if any(w in t for w in ["rainbow"]):
+        add("rainbow", 0.5, 0.3, 1.0, [255, 200, 100])
+    if any(w in t for w in ["snow", "ice", "frozen"]):
+        add("snow", round(rng.uniform(0.2, 0.8), 2), round(rng.uniform(0.65, 0.8), 2), 0.8, [220, 230, 250])
+    if any(w in t for w in ["book", "scroll", "story", "knowledge"]):
+        add("book", 0.5, 0.55, 0.8, [180, 140, 80])
+    if any(w in t for w in ["chariot", "chariot", "helio", "golden"]):
+        add("sun", 0.5, 0.25, 1.5, [255, 220, 50])
+    if any(w in t for w in ["compass", "map", "astronomer", "science", "observ"]):
+        add("compass", 0.5, 0.5, 0.8, [180, 140, 80])
+    if any(w in t for w in ["globe", "earth", "world", "planet"]):
+        add("globe", 0.5, 0.45, 0.9, [60, 120, 180])
+    if any(w in t for w in ["human", "people", "civilization", "ancient", "culture"]):
+        add("human", round(rng.uniform(0.3, 0.6), 2), round(rng.uniform(0.5, 0.65), 2), 0.8, [180, 140, 110])
+    if any(w in t for w in ["village", "city", "civilization", "settle"]):
+        add("building", round(rng.uniform(0.3, 0.7), 2), round(rng.uniform(0.5, 0.6), 2), 0.7, [160, 130, 100])
+    if any(w in t for w in ["egypt", "pharaoh", "ra", "nile"]):
+        add("building", 0.3, 0.55, 1.2, [200, 170, 100])
+        add("sun", 0.7, 0.25, 1.5, [255, 200, 40])
+    if any(w in t for w in ["greece", "greek", "helio", "chariot"]):
+        add("building", 0.5, 0.55, 1.0, [200, 190, 170])
+    if any(w in t for w in ["eclipse"]):
+        add("moon", 0.5, 0.3, 1.5, [30, 30, 50])
+        add("sun", 0.5, 0.3, 1.5, [255, 220, 50])
+
+    if not elements:
+        add("star", 0.5, 0.3, 0.8, [255, 255, 200])
+
+    # ── Atmosphere ──
+    particles = "none"
+    star_count = 0
+    fog = False
+    if bg_type == "night":
+        star_count = rng.randint(20, 50)
+        particles = "stars"
+    if any(w in t for w in ["snow", "ice", "frozen", "winter"]):
+        particles = "snow"
+    if any(w in t for w in ["rain", "storm"]):
+        particles = "rain"
+    if any(w in t for w in ["fog", "mist", "shadow"]):
+        fog = True
+
+    # ── Title ──
+    words = text.split()
+    title = " ".join(words[:5]).rstrip(".,!?") if len(words) > 3 else f"Scene {scene_num}"
+    if len(title) > 40:
+        title = title[:40]
+
+    return {
+        "title": title,
+        "mood": mood,
+        "camera": camera,
+        "visual": {
+            "bg": {"type": bg_type, "colors": colors, "horizon": 0.55},
+            "elements": elements,
+            "atmosphere": {"particles": particles, "fog": fog, "star_count": star_count},
+        },
+    }
 
 
 def generate_script_from_narration(text: str) -> dict:
-    """Split pre-written narration into scenes. Paragraphs become scenes, LLM generates visuals per scene."""
-    # Split by double newlines into paragraphs
+    """Split pre-written narration into scenes. Keyword-based visuals — no LLM needed."""
     paragraphs = [p.strip() for p in re.split(r'\n\s*\n', text) if p.strip()]
 
-    # If too few paragraphs, split by sentences instead
     if len(paragraphs) < 4:
         sentences = [s.strip() for s in text.replace('?', '.').replace('!', '.').split('.') if s.strip()]
         sentences = [s + '.' for s in sentences if s]
-        # Group into ~3 sentence chunks
         paragraphs = []
         chunk = []
         for s in sentences:
@@ -179,34 +311,29 @@ def generate_script_from_narration(text: str) -> dict:
     if len(paragraphs) < 2:
         paragraphs = [text]
 
-    # Generate title from first paragraph
     title_words = paragraphs[0].split()[:6]
     title = " ".join(title_words).rstrip(".,!?")
 
     scenes = []
     for i, para in enumerate(paragraphs):
         scene_num = i + 1
-        print(f"  Scene {scene_num}/{len(paragraphs)}: generating visuals...")
         raw_prompt = para.strip()
         if not raw_prompt:
             continue
 
-        # Get visual data from LLM per scene (no narration text in LLM output)
-        visual_data = _scene_from_paragraph(raw_prompt, scene_num, len(paragraphs))
+        visuals = _infer_visuals(raw_prompt, scene_num, len(paragraphs))
 
         scene = {
             "scene_num": scene_num,
-            "title": visual_data.get("title", f"Part {scene_num}"),
+            "title": visuals["title"],
             "narration": raw_prompt,
-            "mood": visual_data.get("mood", "peaceful"),
-            "camera": visual_data.get("camera", None),
-            "visual": visual_data.get("visual", {
-                "bg": {"type": "gradient", "colors": [[100, 120, 180], [50, 60, 100]], "horizon": 0.55},
-                "elements": [{"type": "star", "x": 0.5, "y": 0.3, "scale": 0.8, "fill": [255, 255, 200]}],
-                "atmosphere": {"particles": "none", "fog": False, "star_count": 5}
-            })
+            "mood": visuals["mood"],
+            "camera": visuals["camera"],
+            "visual": visuals["visual"],
         }
         scenes.append(scene)
+        elems = len(scene["visual"]["elements"])
+        print(f"  Scene {scene_num}/{len(paragraphs)}: {scene['mood']} ({elems} elems)")
 
     print(f"  Created {len(scenes)} scenes from narration")
     return {"title": title, "scenes": scenes}
