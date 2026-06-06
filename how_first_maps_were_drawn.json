@@ -3,293 +3,7510 @@
   "scenes": [
     {
       "scene_num": 1,
-      "title": "A World Without Maps",
-      "narration": "Imagine a world with no maps at all. No GPS guiding your car, no street signs at every corner, no phone telling you exactly where you are. If you wanted to go somewhere new, you had to ask someone who had been there before. You had to remember landmarks, follow riverbeds, and hope you did not get lost. The world was full of unknown places, and the only way to find them was by word of mouth, by memory, by sheer determination. Every journey was an adventure into the truly unknown.",
+      "title": "Imagine a world with no maps at all",
+      "narration": "Imagine a world with no maps at all.",
       "mood": "mysterious",
-      "camera": "ken_burns_in",
+      "camera": null,
       "visual": {
-        "bg": {"type": "gradient", "colors": [[200, 190, 180], [160, 150, 140]], "horizon": 0.65, "ground_color": [100, 85, 65]},
+        "bg": {
+          "type": "sunset",
+          "colors": [
+            [
+              220,
+              100,
+              70
+            ],
+            [
+              200,
+              120,
+              90
+            ],
+            [
+              160,
+              80,
+              100
+            ],
+            [
+              80,
+              50,
+              80
+            ]
+          ]
+        },
         "elements": [
-          {"type": "text", "x": 0.5, "y": 0.04, "text": "A WORLD WITHOUT MAPS", "font_size": 28, "fill": [40, 35, 30]},
-          {"type": "human", "x": 0.25, "y": 0.65, "scale": 2.5, "fill": [110, 75, 55], "label": "traveler"},
-          {"type": "human", "x": 0.7, "y": 0.65, "scale": 2.5, "fill": [90, 80, 60], "label": "stranger"},
-          {"type": "label", "x": 0.7, "y": 0.38, "text": "\"Which way to the river?\"", "font_size": 16, "fill": [80, 70, 55], "bg_color": [255, 245, 230]},
-          {"type": "mountain", "x": 0.15, "y": 0.4, "scale": 0.4, "fill": [120, 100, 80]},
-          {"type": "tree", "x": 0.85, "y": 0.6, "scale": 0.6, "fill": [60, 100, 50]},
-          {"type": "path", "x": 0.35, "y": 0.7, "x2": 0.6, "y2": 0.9, "width": 8, "fill": [140, 120, 90]},
-          {"type": "text", "x": 0.5, "y": 0.88, "text": "Every journey was an adventure into the unknown", "font_size": 18, "fill": [100, 90, 80]}
+          {
+            "type": "human",
+            "x": 0.67,
+            "y": 0.33,
+            "scale": 2.1,
+            "fill": [
+              76,
+              83,
+              97
+            ]
+          }
         ],
-        "atmosphere": {"particles": "none", "fog": true}
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
       }
     },
     {
       "scene_num": 2,
-      "title": "Reading the Stars",
-      "narration": "Before maps existed, people read the world around them like a book. The sun rose in the east and set in the west, giving travelers a reliable direction every single day. At night, the stars formed patterns in the sky that hunters and sailors memorized across generations. Rivers carved paths through forests that were easy to follow. Mountain peaks stood as giant landmarks visible from miles away. The ocean carried smells that told fishermen how close they were to shore. The earth itself was the very first map, and every person was their own navigator.",
+      "title": "No GPS, no street signs, nothing.",
+      "narration": "No GPS, no street signs, nothing.",
       "mood": "peaceful",
-      "camera": "pan_right",
+      "camera": "ken_burns_in",
       "visual": {
-        "bg": {"type": "night", "colors": [[8, 6, 28], [18, 14, 42]], "horizon": 0.55, "ground_color": [25, 22, 18]},
+        "bg": {
+          "type": "ocean",
+          "sky_color": [
+            180,
+            210,
+            240
+          ],
+          "horizon_color": [
+            140,
+            180,
+            220
+          ],
+          "horizon": 0.45,
+          "water_color": [
+            30,
+            70,
+            150
+          ]
+        },
         "elements": [
-          {"type": "text", "x": 0.5, "y": 0.04, "text": "READING THE STARS", "font_size": 26, "fill": [220, 210, 200]},
-          {"type": "star", "x": 0.5, "y": 0.1, "count": 35, "brightness": 200},
-          {"type": "mountain", "x": 0.2, "y": 0.45, "scale": 0.6, "fill": [35, 30, 48]},
-          {"type": "mountain", "x": 0.7, "y": 0.5, "scale": 0.5, "fill": [30, 28, 42]},
-          {"type": "human", "x": 0.45, "y": 0.68, "scale": 2.0, "fill": [55, 45, 65], "label": "navigator"},
-          {"type": "human", "x": 0.55, "y": 0.68, "scale": 2.0, "fill": [65, 55, 45], "label": "traveler"},
-          {"type": "circle", "x": 0.3, "y": 0.18, "radius": 0.022, "fill": [255, 230, 150, 200]},
-          {"type": "circle", "x": 0.55, "y": 0.14, "radius": 0.015, "fill": [255, 240, 180, 150]},
-          {"type": "circle", "x": 0.72, "y": 0.2, "radius": 0.012, "fill": [255, 250, 200, 120]},
-          {"type": "label", "x": 0.3, "y": 0.12, "text": "North Star", "font_size": 14, "fill": [200, 190, 180], "bg_color": [30, 25, 50]},
-          {"type": "text", "x": 0.5, "y": 0.88, "text": "The earth itself was the first map", "font_size": 18, "fill": [180, 170, 160]}
+          {
+            "type": "mountain",
+            "x": 0.17,
+            "y": 0.32,
+            "scale": 0.6,
+            "fill": [
+              51,
+              105,
+              42
+            ]
+          },
+          {
+            "type": "bird",
+            "x": 0.6,
+            "y": 0.5,
+            "scale": 0.7,
+            "fill": [
+              107,
+              67,
+              81
+            ]
+          }
         ],
-        "atmosphere": {"particles": "none", "fog": false}
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
       }
     },
     {
       "scene_num": 3,
-      "title": "The Babylonian Map",
-      "narration": "Around six hundred years before the common era, in ancient Babylon, a scribe did something remarkable. He took a tablet of wet clay and scratched lines into its surface with a reed stylus. He drew a circle to represent the ocean, and inside it he placed Babylon at the very center, surrounded by neighboring cities and rivers. This clay tablet, now called the Imago Mundi or the Babylonian Map of the World, is the oldest surviving map we have ever discovered. It was simple and small, barely larger than your hand, but it marked the moment humans first tried to draw the world around them.",
-      "mood": "mysterious",
-      "camera": "dolly_in",
+      "title": "You asked strangers for directions.",
+      "narration": "You asked strangers for directions.",
+      "mood": "hopeful",
+      "camera": "ken_burns_out",
       "visual": {
-        "bg": {"type": "indoor", "wall_color": [195, 175, 155], "floor_color": [135, 115, 95]},
+        "bg": {
+          "type": "forest",
+          "sky_color": [
+            180,
+            200,
+            180
+          ],
+          "horizon": 0.5,
+          "ground_color": [
+            40,
+            80,
+            40
+          ]
+        },
         "elements": [
-          {"type": "text", "x": 0.5, "y": 0.04, "text": "THE BABYLONIAN MAP", "font_size": 28, "fill": [40, 35, 30]},
-          {"type": "rect", "x": 0.35, "y": 0.25, "width": 0.3, "height": 0.35, "fill": [175, 155, 125], "stroke": [110, 90, 70], "stroke_width": 2},
-          {"type": "circle", "x": 0.5, "y": 0.4, "radius": 0.1, "fill": [195, 180, 145], "stroke": [90, 75, 55], "stroke_width": 2},
-          {"type": "circle", "x": 0.5, "y": 0.4, "radius": 0.024, "fill": [160, 130, 90], "stroke": [90, 75, 55], "stroke_width": 1},
-          {"type": "text", "x": 0.5, "y": 0.38, "text": "Babylon", "font_size": 11, "fill": [60, 50, 40]},
-          {"type": "text", "x": 0.42, "y": 0.3, "text": "Euphrates", "font_size": 10, "fill": [80, 70, 55]},
-          {"type": "text", "x": 0.6, "y": 0.45, "text": "Assyria", "font_size": 10, "fill": [80, 70, 55]},
-          {"type": "human", "x": 0.78, "y": 0.62, "scale": 2.2, "fill": [70, 60, 90], "label": "Babylonian scribe"},
-          {"type": "label", "x": 0.5, "y": 0.68, "text": "Imago Mundi — 600 BC", "font_size": 18, "fill": [80, 70, 55], "bg_color": [255, 245, 230]},
-          {"type": "text", "x": 0.5, "y": 0.88, "text": "A clay tablet no larger than your hand", "font_size": 18, "fill": [120, 110, 100]}
+          {
+            "type": "bird",
+            "x": 0.45,
+            "y": 0.35,
+            "scale": 0.7,
+            "fill": [
+              118,
+              71,
+              36
+            ]
+          }
         ],
-        "atmosphere": {"particles": "none", "fog": false}
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
       }
     },
     {
       "scene_num": 4,
-      "title": "The Greek Revolution",
-      "narration": "Then came the ancient Greeks, and everything changed. Philosophers like Anaximander proposed that the Earth was not a flat disc but a sphere floating freely in space. He drew one of the first circular world maps, placing Greece at the center and surrounding it with known lands and oceans. Centuries later, the scholar Ptolemy took mapmaking to an entirely new level. He introduced the concepts of latitude and longitude, creating a grid system that allowed anyone anywhere to pinpoint a location with numbers. His book Geography contained maps of the entire known world and remained the gold standard for over a thousand years.",
-      "mood": "hopeful",
-      "camera": null,
+      "title": "You followed rivers and mountain pe",
+      "narration": "You followed rivers and mountain peaks.",
+      "mood": "dramatic",
+      "camera": "pan_right",
       "visual": {
-        "bg": {"type": "solid", "color": [250, 248, 238]},
+        "bg": {
+          "type": "indoor",
+          "wall_color": [
+            195,
+            175,
+            155
+          ],
+          "floor_color": [
+            135,
+            115,
+            95
+          ]
+        },
         "elements": [
-          {"type": "text", "x": 0.5, "y": 0.04, "text": "THE GREEK REVOLUTION", "font_size": 26, "fill": [40, 35, 30]},
-          {"type": "circle", "x": 0.3, "y": 0.32, "radius": 0.09, "fill": [200, 220, 255], "stroke": [60, 100, 180], "stroke_width": 2},
-          {"type": "text", "x": 0.3, "y": 0.3, "text": "Earth", "font_size": 14, "fill": [60, 100, 180]},
-          {"type": "label", "x": 0.15, "y": 0.48, "text": "Anaximander", "font_size": 16, "fill": [40, 35, 30], "bg_color": [255, 255, 240]},
-          {"type": "label", "x": 0.15, "y": 0.54, "text": "550 BC — First world map", "font_size": 13, "fill": [120, 110, 100], "bg_color": [255, 255, 240]},
-          {"type": "rect", "x": 0.48, "y": 0.22, "width": 0.3, "height": 0.28, "fill": [235, 230, 215], "stroke": [140, 130, 110], "stroke_width": 1, "rx": 2},
-          {"type": "line", "x": 0.52, "y": 0.26, "x2": 0.72, "y2": 0.26, "stroke": [180, 80, 60], "stroke_width": 1},
-          {"type": "line", "x": 0.52, "y": 0.34, "x2": 0.72, "y2": 0.34, "stroke": [180, 80, 60], "stroke_width": 1},
-          {"type": "line", "x": 0.52, "y": 0.42, "x2": 0.72, "y2": 0.42, "stroke": [180, 80, 60], "stroke_width": 1},
-          {"type": "line", "x": 0.58, "y": 0.24, "x2": 0.58, "y2": 0.46, "stroke": [60, 100, 180], "stroke_width": 1},
-          {"type": "line", "x": 0.66, "y": 0.24, "x2": 0.66, "y2": 0.46, "stroke": [60, 100, 180], "stroke_width": 1},
-          {"type": "label", "x": 0.63, "y": 0.55, "text": "Ptolemy: latitude & longitude grid", "font_size": 14, "fill": [40, 35, 30], "bg_color": [255, 255, 240]},
-          {"type": "human", "x": 0.7, "y": 0.75, "scale": 2.2, "fill": [100, 80, 120], "label": "Ptolemy"},
-          {"type": "text", "x": 0.5, "y": 0.88, "text": "Mapmaking became a science thanks to Greek genius", "font_size": 17, "fill": [120, 110, 100]}
+          {
+            "type": "text",
+            "x": 0.74,
+            "y": 0.53,
+            "text": "Scene 4",
+            "font_size": 26,
+            "fill": [
+              12,
+              51,
+              29
+            ]
+          }
         ],
-        "atmosphere": {"particles": "none", "fog": false}
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
       }
     },
     {
       "scene_num": 5,
-      "title": "Islamic Golden Age",
-      "narration": "While Europe entered the dark ages, Islamic scholars carried the torch of cartography forward. In 1154, a Muslim geographer named Muhammad al-Idrisi created one of the most advanced maps of the medieval world for King Roger II of Sicily. His Tabula Rogeriana was drawn on a silver tablet and divided the world into seven climate zones. It showed Europe, Asia, and North Africa with remarkable accuracy, far surpassing anything produced in Europe at the time. Al-Idrisi incorporated knowledge from Islamic traders who had traveled as far as China and sub-Saharan Africa, creating a truly global picture of the known world.",
-      "mood": "hopeful",
-      "camera": "ken_burns_in",
+      "title": "Every journey was a gamble.",
+      "narration": "Every journey was a gamble.",
+      "mood": "somber",
+      "camera": "pan_left",
       "visual": {
-        "bg": {"type": "gradient", "colors": [[220, 200, 170], [190, 170, 140]], "horizon": 0.6, "ground_color": [60, 50, 40]},
+        "bg": {
+          "type": "indoor",
+          "wall_color": [
+            195,
+            175,
+            155
+          ],
+          "floor_color": [
+            135,
+            115,
+            95
+          ]
+        },
         "elements": [
-          {"type": "text", "x": 0.5, "y": 0.04, "text": "ISLAMIC GOLDEN AGE", "font_size": 28, "fill": [40, 35, 30]},
-          {"type": "human", "x": 0.2, "y": 0.65, "scale": 2.5, "fill": [100, 80, 60], "label": "Al-Idrisi"},
-          {"type": "circle", "x": 0.55, "y": 0.3, "radius": 0.12, "fill": [230, 215, 185], "stroke": [140, 120, 90], "stroke_width": 2},
-          {"type": "line", "x": 0.45, "y": 0.22, "x2": 0.65, "y2": 0.22, "stroke": [160, 140, 110], "stroke_width": 1},
-          {"type": "line", "x": 0.45, "y": 0.28, "x2": 0.65, "y2": 0.28, "stroke": [160, 140, 110], "stroke_width": 1},
-          {"type": "line", "x": 0.45, "y": 0.34, "x2": 0.65, "y2": 0.34, "stroke": [160, 140, 110], "stroke_width": 1},
-          {"type": "line", "x": 0.45, "y": 0.4, "x2": 0.65, "y2": 0.4, "stroke": [160, 140, 110], "stroke_width": 1},
-          {"type": "label", "x": 0.55, "y": 0.5, "text": "Tabula Rogeriana — 1154", "font_size": 16, "fill": [80, 70, 55], "bg_color": [255, 245, 225]},
-          {"type": "label", "x": 0.55, "y": 0.57, "text": "7 climate zones, 3 continents", "font_size": 14, "fill": [120, 110, 100], "bg_color": [255, 245, 225]},
-          {"type": "text", "x": 0.5, "y": 0.82, "text": "Islamic traders reached China and Africa", "font_size": 17, "fill": [100, 90, 80]}
+          {
+            "type": "line",
+            "x": 0.36,
+            "y": 0.55,
+            "x2": 0.64,
+            "y2": 0.52,
+            "stroke": [
+              162,
+              95,
+              34
+            ],
+            "stroke_width": 2
+          }
         ],
-        "atmosphere": {"particles": "none", "fog": false}
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
       }
     },
     {
       "scene_num": 6,
-      "title": "Jerusalem at the Center",
-      "narration": "In medieval Europe, mapmaking took a very different path. Maps became less about geography and more about telling stories of faith and religion. The most common style was called the T-O map. A circle represented the world, divided into three continents by a T-shaped body of water. Asia sat at the top, Europe at the bottom left, Africa at the bottom right, and Jerusalem stood proudly at the very center. These maps were not meant for navigation at all — they were spiritual guides that showed a Christian view of creation, with the Garden of Eden placed at the top and mythical creatures filling the edges.",
-      "mood": "mysterious",
-      "camera": "ken_burns_in",
+      "title": "Getting lost meant danger.",
+      "narration": "Getting lost meant danger.",
+      "mood": "epic",
+      "camera": "dolly_in",
       "visual": {
-        "bg": {"type": "gradient", "colors": [[210, 190, 170], [170, 150, 130]], "horizon": 0.6, "ground_color": [90, 75, 55]},
+        "bg": {
+          "type": "forest",
+          "sky_color": [
+            180,
+            200,
+            180
+          ],
+          "horizon": 0.5,
+          "ground_color": [
+            40,
+            80,
+            40
+          ]
+        },
         "elements": [
-          {"type": "text", "x": 0.5, "y": 0.04, "text": "JERUSALEM AT THE CENTER", "font_size": 26, "fill": [40, 35, 30]},
-          {"type": "circle", "x": 0.5, "y": 0.38, "radius": 0.17, "fill": [225, 210, 185], "stroke": [130, 110, 90], "stroke_width": 3},
-          {"type": "line", "x": 0.33, "y": 0.42, "x2": 0.67, "y2": 0.42, "stroke": [130, 110, 90], "stroke_width": 2},
-          {"type": "line", "x": 0.5, "y": 0.21, "x2": 0.5, "y2": 0.55, "stroke": [130, 110, 90], "stroke_width": 2},
-          {"type": "text", "x": 0.5, "y": 0.24, "text": "ASIA", "font_size": 15, "fill": [160, 130, 60]},
-          {"type": "text", "x": 0.38, "y": 0.48, "text": "EUROPE", "font_size": 12, "fill": [100, 120, 160]},
-          {"type": "text", "x": 0.62, "y": 0.48, "text": "AFRICA", "font_size": 12, "fill": [180, 140, 80]},
-          {"type": "circle", "x": 0.5, "y": 0.38, "radius": 0.022, "fill": [160, 80, 80], "stroke": [100, 50, 50], "stroke_width": 1},
-          {"type": "text", "x": 0.5, "y": 0.37, "text": "Jerusalem", "font_size": 10, "fill": [60, 30, 30]},
-          {"type": "label", "x": 0.5, "y": 0.63, "text": "T-O Map: Faith over geography", "font_size": 15, "fill": [80, 70, 55], "bg_color": [255, 245, 230]},
-          {"type": "text", "x": 0.5, "y": 0.88, "text": "Maps became spiritual guides, not navigational tools", "font_size": 17, "fill": [120, 110, 100]}
+          {
+            "type": "tree",
+            "x": 0.75,
+            "y": 0.68,
+            "scale": 0.7,
+            "fill": [
+              49,
+              130,
+              73
+            ],
+            "tree_style": "pine"
+          },
+          {
+            "type": "hill",
+            "x": 0.41,
+            "y": 0.32,
+            "scale": 0.5,
+            "fill": [
+              109,
+              113,
+              71
+            ]
+          }
         ],
-        "atmosphere": {"particles": "none", "fog": false}
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
       }
     },
     {
       "scene_num": 7,
-      "title": "Portolan Charts",
-      "narration": "Meanwhile, a revolution in practical mapmaking was unfolding along the Mediterranean coast. Sailors and merchants created portolan charts — hand-drawn maps on sheepskin that showed coastlines, harbors, and ports with stunning accuracy. These maps were covered with rhumb lines radiating from compass roses in every direction, allowing sailors to plot a course from one port to another using only a straightedge. Unlike the spiritual maps of medieval monasteries, portolan charts were working tools used by real navigators. They were so precise that some sections look remarkably accurate even by modern standards.",
-      "mood": "hopeful",
-      "camera": "pan_right",
+      "title": "People relied on memory alone.",
+      "narration": "People relied on memory alone.",
+      "mood": "mysterious",
+      "camera": null,
       "visual": {
-        "bg": {"type": "ocean", "sky_color": [180, 210, 240], "horizon_color": [140, 180, 220], "horizon": 0.45, "water_color": [30, 70, 150]},
+        "bg": {
+          "type": "ocean",
+          "sky_color": [
+            180,
+            210,
+            240
+          ],
+          "horizon_color": [
+            140,
+            180,
+            220
+          ],
+          "horizon": 0.45,
+          "water_color": [
+            30,
+            70,
+            150
+          ]
+        },
         "elements": [
-          {"type": "text", "x": 0.5, "y": 0.04, "text": "PORTOLAN CHARTS", "font_size": 28, "fill": [40, 35, 30]},
-          {"type": "polygon", "x": 0.2, "y": 0.2, "points": [[0.15, 0.18], [0.3, 0.16], [0.35, 0.26], [0.25, 0.3], [0.15, 0.25]], "fill": [180, 200, 150, 150], "stroke": [100, 85, 60], "stroke_width": 1},
-          {"type": "polygon", "x": 0.4, "y": 0.18, "points": [[0.35, 0.16], [0.5, 0.14], [0.55, 0.22], [0.45, 0.26], [0.37, 0.24]], "fill": [200, 180, 140, 150], "stroke": [100, 85, 60], "stroke_width": 1},
-          {"type": "polygon", "x": 0.3, "y": 0.3, "points": [[0.25, 0.26], [0.45, 0.26], [0.48, 0.35], [0.3, 0.38]], "fill": [220, 200, 170, 150], "stroke": [100, 85, 60], "stroke_width": 1},
-          {"type": "circle", "x": 0.75, "y": 0.28, "radius": 0.035, "fill": [255, 240, 200], "stroke": [120, 100, 80], "stroke_width": 1},
-          {"type": "line", "x": 0.75, "y": 0.2, "x2": 0.75, "y2": 0.14, "stroke": [120, 100, 80], "stroke_width": 1},
-          {"type": "line", "x": 0.75, "y": 0.22, "x2": 0.69, "y2": 0.18, "stroke": [120, 100, 80], "stroke_width": 1},
-          {"type": "line", "x": 0.75, "y": 0.25, "x2": 0.82, "y2": 0.2, "stroke": [120, 100, 80], "stroke_width": 1},
-          {"type": "line", "x": 0.75, "y": 0.28, "x2": 0.68, "y2": 0.26, "stroke": [120, 100, 80], "stroke_width": 1},
-          {"type": "line", "x": 0.75, "y": 0.3, "x2": 0.82, "y2": 0.28, "stroke": [120, 100, 80], "stroke_width": 1},
-          {"type": "ship", "x": 0.5, "y": 0.55, "scale": 0.5, "fill": [60, 50, 40], "sail_color": [200, 190, 180]},
-          {"type": "label", "x": 0.5, "y": 0.72, "text": "Sheepskin maps with rhumb lines for navigation", "font_size": 15, "fill": [40, 35, 30], "bg_color": [255, 250, 235]},
-          {"type": "text", "x": 0.5, "y": 0.88, "text": "First maps accurate enough to navigate by", "font_size": 17, "fill": [100, 90, 80]}
+          {
+            "type": "hill",
+            "x": 0.52,
+            "y": 0.33,
+            "scale": 0.6,
+            "fill": [
+              67,
+              129,
+              70
+            ]
+          },
+          {
+            "type": "bird",
+            "x": 0.54,
+            "y": 0.58,
+            "scale": 1.1,
+            "fill": [
+              119,
+              53,
+              44
+            ]
+          },
+          {
+            "type": "mountain",
+            "x": 0.71,
+            "y": 0.42,
+            "scale": 0.4,
+            "fill": [
+              108,
+              130,
+              66
+            ]
+          }
         ],
-        "atmosphere": {"particles": "none", "fog": false}
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
       }
     },
     {
       "scene_num": 8,
-      "title": "The Projection Problem",
-      "narration": "As explorers mapped more of the world, a crisis emerged. The Earth is a sphere, but maps are flat pieces of paper. How do you squeeze a round world onto a flat surface without stretching or distorting everything? If you tried to flatten an orange peel, you would understand the problem immediately. Some maps made Greenland look as big as Africa. Others made distances near the equator look tiny. Mapmakers around the world wrestled with this mathematical nightmare for centuries. The problem seemed impossible. How could you create a flat map that was accurate for navigation? The answer would come from a man with a revolutionary idea.",
-      "mood": "dramatic",
-      "camera": null,
+      "title": "Stories passed down for generations",
+      "narration": "Stories passed down for generations.",
+      "mood": "peaceful",
+      "camera": "ken_burns_in",
       "visual": {
-        "bg": {"type": "gradient", "colors": [[180, 200, 225], [140, 170, 210]], "horizon": 0.5, "ground_color": [60, 80, 60]},
+        "bg": {
+          "type": "night",
+          "colors": [
+            [
+              8,
+              6,
+              28
+            ],
+            [
+              18,
+              14,
+              42
+            ]
+          ],
+          "horizon": 0.55,
+          "ground_color": [
+            20,
+            18,
+            15
+          ]
+        },
         "elements": [
-          {"type": "text", "x": 0.5, "y": 0.04, "text": "THE PROJECTION PROBLEM", "font_size": 26, "fill": [40, 35, 30]},
-          {"type": "circle", "x": 0.3, "y": 0.38, "radius": 0.1, "fill": [100, 150, 200, 100], "stroke": [60, 100, 160], "stroke_width": 2},
-          {"type": "circle", "x": 0.3, "y": 0.38, "radius": 0.02, "fill": [60, 120, 180, 100]},
-          {"type": "rect", "x": 0.45, "y": 0.28, "width": 0.25, "height": 0.2, "fill": [200, 200, 180], "stroke": [120, 100, 80], "stroke_width": 2, "rx": 2},
-          {"type": "arrow", "x": 0.42, "y": 0.32, "x2": 0.45, "y2": 0.32, "stroke": [180, 60, 60], "stroke_width": 2},
-          {"type": "arrow", "x": 0.42, "y": 0.44, "x2": 0.45, "y2": 0.44, "stroke": [180, 60, 60], "stroke_width": 2},
-          {"type": "label", "x": 0.44, "y": 0.52, "text": "Sphere to flat = distortion", "font_size": 15, "fill": [180, 60, 60], "bg_color": [255, 250, 240]},
-          {"type": "label", "x": 0.68, "y": 0.52, "text": "Greenland same size as Africa?", "font_size": 14, "fill": [180, 80, 60], "bg_color": [255, 250, 240]},
-          {"type": "human", "x": 0.5, "y": 0.75, "scale": 2.5, "fill": [80, 70, 100], "label": "puzzled mapmaker"},
-          {"type": "text", "x": 0.5, "y": 0.88, "text": "Squeezing a sphere onto flat paper seemed impossible", "font_size": 17, "fill": [100, 90, 80]}
+          {
+            "type": "circle",
+            "x": 0.43,
+            "y": 0.7,
+            "radius": 0.053,
+            "fill": [
+              107,
+              75,
+              103,
+              100
+            ],
+            "stroke": [
+              183,
+              177,
+              107
+            ],
+            "stroke_width": 2
+          },
+          {
+            "type": "polygon",
+            "x": 0.43,
+            "y": 0.32,
+            "points": [
+              [
+                0.5096060170392176,
+                0.32152420698823436
+              ],
+              [
+                0.364545505947807,
+                0.24753862006795754
+              ],
+              [
+                0.36754386085610546,
+                0.3403913666724944
+              ],
+              [
+                0.47673269829807424,
+                0.30754559468794945
+              ]
+            ],
+            "fill": [
+              56,
+              138,
+              137,
+              120
+            ]
+          },
+          {
+            "type": "flag",
+            "x": 0.85,
+            "y": 0.49,
+            "scale": 1.0,
+            "fill": [
+              105,
+              90,
+              10
+            ]
+          }
         ],
-        "atmosphere": {"particles": "none", "fog": false}
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
       }
     },
     {
       "scene_num": 9,
-      "title": "Mercator's Breakthrough",
-      "narration": "In 1569, a Flemish mapmaker named Gerardus Mercator published a map that would change the world forever. His solution was ingeniously simple: he stretched the map vertically as you moved away from the equator, so that the lines of longitude stayed straight and parallel. The result was a map where straight lines represented constant compass bearings, meaning sailors could draw a straight line between two ports and follow it exactly. The trade-off was that countries near the poles like Greenland appeared huge, but for navigation the Mercator projection was pure genius. It became the standard map for sailors for the next four hundred years.",
+      "title": "But stories can be wrong.",
+      "narration": "But stories can be wrong.",
       "mood": "hopeful",
-      "camera": "ken_burns_in",
+      "camera": "ken_burns_out",
       "visual": {
-        "bg": {"type": "solid", "color": [245, 240, 225]},
+        "bg": {
+          "type": "sunset",
+          "colors": [
+            [
+              220,
+              100,
+              70
+            ],
+            [
+              200,
+              120,
+              90
+            ],
+            [
+              160,
+              80,
+              100
+            ],
+            [
+              80,
+              50,
+              80
+            ]
+          ]
+        },
         "elements": [
-          {"type": "text", "x": 0.5, "y": 0.04, "text": "MERCATOR'S BREAKTHROUGH", "font_size": 26, "fill": [40, 35, 30]},
-          {"type": "human", "x": 0.2, "y": 0.65, "scale": 2.5, "fill": [80, 70, 100], "label": "Gerardus Mercator"},
-          {"type": "rect", "x": 0.38, "y": 0.18, "width": 0.55, "height": 0.4, "fill": [220, 210, 185], "stroke": [120, 100, 80], "stroke_width": 2, "rx": 2},
-          {"type": "line", "x": 0.41, "y": 0.24, "x2": 0.88, "y2": 0.24, "stroke": [160, 150, 140], "stroke_width": 1},
-          {"type": "line", "x": 0.41, "y": 0.32, "x2": 0.88, "y2": 0.32, "stroke": [160, 150, 140], "stroke_width": 1},
-          {"type": "line", "x": 0.41, "y": 0.4, "x2": 0.88, "y2": 0.4, "stroke": [160, 150, 140], "stroke_width": 1},
-          {"type": "line", "x": 0.41, "y": 0.48, "x2": 0.88, "y2": 0.48, "stroke": [160, 150, 140], "stroke_width": 1},
-          {"type": "line", "x": 0.41, "y": 0.56, "x2": 0.88, "y2": 0.56, "stroke": [160, 150, 140], "stroke_width": 1},
-          {"type": "polygon", "x": 0.48, "y": 0.22, "points": [[0.42, 0.22], [0.56, 0.2], [0.58, 0.28], [0.44, 0.3]], "fill": [140, 180, 120, 150]},
-          {"type": "polygon", "x": 0.56, "y": 0.28, "points": [[0.52, 0.28], [0.64, 0.26], [0.66, 0.34], [0.54, 0.36]], "fill": [180, 160, 120, 150]},
-          {"type": "polygon", "x": 0.6, "y": 0.36, "points": [[0.54, 0.34], [0.7, 0.32], [0.73, 0.42], [0.56, 0.44]], "fill": [200, 180, 140, 150]},
-          {"type": "polygon", "x": 0.62, "y": 0.44, "points": [[0.56, 0.42], [0.76, 0.4], [0.8, 0.5], [0.58, 0.52]], "fill": [220, 200, 160, 150]},
-          {"type": "label", "x": 0.5, "y": 0.66, "text": "1569: Straight lines = true compass bearings", "font_size": 15, "fill": [40, 35, 30], "bg_color": [255, 250, 240]},
-          {"type": "text", "x": 0.5, "y": 0.85, "text": "Sailors could draw a straight line and follow it", "font_size": 17, "fill": [120, 110, 100]}
+          {
+            "type": "house",
+            "x": 0.34,
+            "y": 0.55,
+            "scale": 0.6,
+            "fill": [
+              157,
+              110,
+              99
+            ]
+          },
+          {
+            "type": "human",
+            "x": 0.82,
+            "y": 0.68,
+            "scale": 2.2,
+            "fill": [
+              102,
+              88,
+              61
+            ]
+          },
+          {
+            "type": "rect",
+            "x": 0.79,
+            "y": 0.68,
+            "width": 0.12,
+            "height": 0.12,
+            "fill": [
+              195,
+              90,
+              79,
+              150
+            ],
+            "stroke": [
+              135,
+              81,
+              178
+            ]
+          }
         ],
-        "atmosphere": {"particles": "none", "fog": false}
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
       }
     },
     {
       "scene_num": 10,
-      "title": "Printing and Spreading",
-      "narration": "For centuries, maps were rare and expensive treasures owned only by kings, scholars, and wealthy merchants. A single hand-drawn map could take months to complete and cost a small fortune. But then Johannes Gutenberg invented the printing press, and everything changed again. Suddenly maps could be printed in large numbers, copied exactly, and distributed across entire continents. Ordinary people could own maps for the first time in history. Explorers could share their discoveries instantly. Cartography became a conversation among nations. The world shrank as maps spread, and knowledge that was once locked away in royal libraries became available to anyone with a few coins.",
-      "mood": "hopeful",
-      "camera": "pan_left",
+      "title": "The world needed something better.",
+      "narration": "The world needed something better.",
+      "mood": "dramatic",
+      "camera": "pan_right",
       "visual": {
-        "bg": {"type": "indoor", "wall_color": [190, 170, 150], "floor_color": [130, 110, 90]},
+        "bg": {
+          "type": "ocean",
+          "sky_color": [
+            180,
+            210,
+            240
+          ],
+          "horizon_color": [
+            140,
+            180,
+            220
+          ],
+          "horizon": 0.45,
+          "water_color": [
+            30,
+            70,
+            150
+          ]
+        },
         "elements": [
-          {"type": "text", "x": 0.5, "y": 0.04, "text": "PRINTING AND SPREADING", "font_size": 26, "fill": [40, 35, 30]},
-          {"type": "rect", "x": 0.12, "y": 0.22, "width": 0.16, "height": 0.22, "fill": [75, 55, 35], "stroke": [45, 35, 25], "stroke_width": 2},
-          {"type": "rect", "x": 0.14, "y": 0.25, "width": 0.12, "height": 0.16, "fill": [170, 150, 120], "stroke": [90, 75, 55], "stroke_width": 1},
-          {"type": "human", "x": 0.35, "y": 0.65, "scale": 2.5, "fill": [80, 70, 100], "label": "printer"},
-          {"type": "human", "x": 0.35, "y": 0.55, "scale": 2.0, "fill": [90, 80, 70], "label": "apprentice"},
-          {"type": "rect", "x": 0.52, "y": 0.2, "width": 0.2, "height": 0.25, "fill": [225, 215, 190], "stroke": [130, 110, 90], "stroke_width": 2, "rx": 2},
-          {"type": "circle", "x": 0.62, "y": 0.3, "radius": 0.03, "fill": [200, 210, 180]},
-          {"type": "text", "x": 0.62, "y": 0.35, "text": "World", "font_size": 10, "fill": [80, 70, 55]},
-          {"type": "arrow", "x": 0.3, "y": 0.3, "x2": 0.35, "y2": 0.4, "stroke": [140, 100, 60], "stroke_width": 2},
-          {"type": "label", "x": 0.48, "y": 0.55, "text": "Printing press made maps affordable for all", "font_size": 15, "fill": [40, 35, 30], "bg_color": [255, 250, 240]},
-          {"type": "text", "x": 0.5, "y": 0.88, "text": "Knowledge once locked in libraries spread everywhere", "font_size": 16, "fill": [120, 110, 100]}
+          {
+            "type": "circle",
+            "x": 0.16,
+            "y": 0.71,
+            "radius": 0.074,
+            "fill": [
+              118,
+              101,
+              54,
+              100
+            ],
+            "stroke": [
+              101,
+              185,
+              60
+            ],
+            "stroke_width": 1
+          },
+          {
+            "type": "fish",
+            "x": 0.49,
+            "y": 0.24,
+            "scale": 1.1,
+            "fill": [
+              119,
+              58,
+              38
+            ]
+          }
         ],
-        "atmosphere": {"particles": "none", "fog": false}
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
       }
     },
     {
       "scene_num": 11,
-      "title": "Surveying the Land",
-      "narration": "But drawing a map required more than just artistry — it required measurement. Surveyors developed techniques using chains, compasses, and theodolites to measure distances and angles across vast stretches of land. They used triangulation, a method where they measured one baseline distance carefully, then used triangles and trigonometry to calculate all other distances from that single measurement. National mapping projects like the Ordnance Survey of Britain took decades of painstaking work, sending surveyors across every hill and valley on foot. These detailed maps became the foundation for modern cartography.",
-      "mood": "peaceful",
-      "camera": "dolly_in",
+      "title": "The sun was the first compass.",
+      "narration": "The sun was the first compass.",
+      "mood": "somber",
+      "camera": "pan_left",
       "visual": {
-        "bg": {"type": "gradient", "colors": [[190, 200, 180], [150, 170, 140]], "horizon": 0.6, "ground_color": [80, 100, 60]},
+        "bg": {
+          "type": "ocean",
+          "sky_color": [
+            180,
+            210,
+            240
+          ],
+          "horizon_color": [
+            140,
+            180,
+            220
+          ],
+          "horizon": 0.45,
+          "water_color": [
+            30,
+            70,
+            150
+          ]
+        },
         "elements": [
-          {"type": "text", "x": 0.5, "y": 0.04, "text": "SURVEYING THE LAND", "font_size": 26, "fill": [40, 35, 30]},
-          {"type": "human", "x": 0.3, "y": 0.65, "scale": 2.5, "fill": [100, 80, 60], "label": "surveyor"},
-          {"type": "line", "x": 0.4, "y": 0.3, "x2": 0.7, "y2": 0.3, "stroke": [180, 80, 60], "stroke_width": 2},
-          {"type": "line", "x": 0.4, "y": 0.3, "x2": 0.65, "y2": 0.5, "stroke": [180, 80, 60], "stroke_width": 2},
-          {"type": "line", "x": 0.7, "y": 0.3, "x2": 0.65, "y2": 0.5, "stroke": [180, 80, 60], "stroke_width": 2},
-          {"type": "label", "x": 0.55, "y": 0.28, "text": "baseline", "font_size": 13, "fill": [180, 80, 60], "bg_color": [255, 250, 240]},
-          {"type": "label", "x": 0.42, "y": 0.42, "text": "triangulation", "font_size": 13, "fill": [60, 80, 60], "bg_color": [255, 250, 240]},
-          {"type": "mountain", "x": 0.65, "y": 0.4, "scale": 0.3, "fill": [80, 100, 60]},
-          {"type": "text", "x": 0.5, "y": 0.82, "text": "One baseline + triangles = entire country mapped", "font_size": 16, "fill": [100, 90, 80]}
+          {
+            "type": "star",
+            "x": 0.52,
+            "y": 0.53,
+            "count": 21,
+            "brightness": 219
+          }
         ],
-        "atmosphere": {"particles": "none", "fog": false}
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
       }
     },
     {
       "scene_num": 12,
-      "title": "Maps Today",
-      "narration": "Today we carry maps in our pockets that would have seemed like magic to the Babylonians. Satellites orbiting hundreds of miles above Earth photograph every square meter of the planet in stunning detail. GPS satellites triangulate our position to within a few meters anywhere on the globe. We can zoom in on our own house from space, get turn-by-turn directions to any address, and see live traffic on roads we have never driven. Yet despite all this technology, the fundamental human urge behind mapmaking has not changed at all. Every map, from a clay tablet to Google Maps, starts with the same question: where am I, and what is out there?",
+      "title": "East in the morning, west at night.",
+      "narration": "East in the morning, west at night.",
       "mood": "epic",
+      "camera": "dolly_in",
+      "visual": {
+        "bg": {
+          "type": "sunset",
+          "colors": [
+            [
+              220,
+              100,
+              70
+            ],
+            [
+              200,
+              120,
+              90
+            ],
+            [
+              160,
+              80,
+              100
+            ],
+            [
+              80,
+              50,
+              80
+            ]
+          ]
+        },
+        "elements": [
+          {
+            "type": "label",
+            "x": 0.85,
+            "y": 0.56,
+            "text": "Scene 12",
+            "font_size": 21,
+            "fill": [
+              67,
+              38,
+              28
+            ],
+            "bg_color": [
+              255,
+              250,
+              240
+            ]
+          },
+          {
+            "type": "cloud",
+            "x": 0.32,
+            "y": 0.24,
+            "scale": 0.4
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 13,
+      "title": "The stars were the first map.",
+      "narration": "The stars were the first map.",
+      "mood": "mysterious",
+      "camera": null,
+      "visual": {
+        "bg": {
+          "type": "ocean",
+          "sky_color": [
+            180,
+            210,
+            240
+          ],
+          "horizon_color": [
+            140,
+            180,
+            220
+          ],
+          "horizon": 0.45,
+          "water_color": [
+            30,
+            70,
+            150
+          ]
+        },
+        "elements": [
+          {
+            "type": "human",
+            "x": 0.2,
+            "y": 0.55,
+            "scale": 2.2,
+            "fill": [
+              127,
+              42,
+              105
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 14,
+      "title": "Sailors memorized every constellati",
+      "narration": "Sailors memorized every constellation.",
+      "mood": "peaceful",
+      "camera": "ken_burns_in",
+      "visual": {
+        "bg": {
+          "type": "gradient",
+          "colors": [
+            [
+              200,
+              190,
+              180
+            ],
+            [
+              160,
+              150,
+              140
+            ]
+          ],
+          "horizon": 0.6,
+          "ground_color": [
+            80,
+            70,
+            55
+          ]
+        },
+        "elements": [
+          {
+            "type": "moon",
+            "x": 0.34,
+            "y": 0.47,
+            "radius": 19,
+            "fill": [
+              240,
+              230,
+              200
+            ]
+          },
+          {
+            "type": "fish",
+            "x": 0.8,
+            "y": 0.51,
+            "scale": 0.9,
+            "fill": [
+              120,
+              80,
+              81
+            ]
+          },
+          {
+            "type": "arrow",
+            "x": 0.28,
+            "y": 0.25,
+            "x2": 0.47,
+            "y2": 0.25,
+            "stroke": [
+              180,
+              60,
+              60
+            ],
+            "stroke_width": 3
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 15,
+      "title": "The North Star never moved.",
+      "narration": "The North Star never moved.",
+      "mood": "hopeful",
       "camera": "ken_burns_out",
       "visual": {
-        "bg": {"type": "night", "colors": [[5, 5, 20], [15, 15, 40]], "horizon": 0.5, "ground_color": [10, 10, 15]},
+        "bg": {
+          "type": "indoor",
+          "wall_color": [
+            195,
+            175,
+            155
+          ],
+          "floor_color": [
+            135,
+            115,
+            95
+          ]
+        },
         "elements": [
-          {"type": "circle", "x": 0.5, "y": 0.3, "radius": 0.13, "fill": [80, 130, 255, 70], "stroke": [60, 110, 240], "stroke_width": 2},
-          {"type": "circle", "x": 0.5, "y": 0.3, "radius": 0.06, "fill": [255, 215, 0, 80], "stroke": [200, 170, 50], "stroke_width": 1},
-          {"type": "circle", "x": 0.42, "y": 0.25, "radius": 0.006, "fill": [80, 130, 255, 100]},
-          {"type": "circle", "x": 0.58, "y": 0.28, "radius": 0.005, "fill": [80, 130, 255, 100]},
-          {"type": "circle", "x": 0.46, "y": 0.35, "radius": 0.004, "fill": [80, 130, 255, 100]},
-          {"type": "text", "x": 0.5, "y": 0.06, "text": "MAPS TODAY", "font_size": 28, "fill": [220, 210, 200]},
-          {"type": "rect", "x": 0.2, "y": 0.55, "width": 0.12, "height": 0.06, "fill": [40, 40, 50, 150], "stroke": [100, 100, 120], "stroke_width": 1, "rx": 1},
-          {"type": "text", "x": 0.26, "y": 0.56, "text": "GPS", "font_size": 12, "fill": [200, 220, 255]},
-          {"type": "rect", "x": 0.45, "y": 0.55, "width": 0.1, "height": 0.06, "fill": [40, 40, 50, 150], "stroke": [100, 100, 120], "stroke_width": 1, "rx": 1},
-          {"type": "text", "x": 0.5, "y": 0.56, "text": "Satellite", "font_size": 10, "fill": [200, 220, 255]},
-          {"type": "rect", "x": 0.68, "y": 0.55, "width": 0.14, "height": 0.06, "fill": [40, 40, 50, 150], "stroke": [100, 100, 120], "stroke_width": 1, "rx": 1},
-          {"type": "text", "x": 0.75, "y": 0.56, "text": "Google Maps", "font_size": 10, "fill": [200, 220, 255]},
-          {"type": "text", "x": 0.5, "y": 0.7, "text": "From clay tablets to space satellites", "font_size": 20, "fill": [180, 170, 160]},
-          {"type": "text", "x": 0.5, "y": 0.82, "text": "Every map begins with: where am I, and what is out there?", "font_size": 16, "fill": [140, 130, 120]}
+          {
+            "type": "mountain",
+            "x": 0.62,
+            "y": 0.74,
+            "scale": 0.4,
+            "fill": [
+              75,
+              116,
+              51
+            ]
+          },
+          {
+            "type": "cloud",
+            "x": 0.32,
+            "y": 0.3,
+            "scale": 0.6
+          },
+          {
+            "type": "arrow",
+            "x": 0.28,
+            "y": 0.45,
+            "x2": 0.55,
+            "y2": 0.45,
+            "stroke": [
+              180,
+              60,
+              60
+            ],
+            "stroke_width": 2
+          }
         ],
-        "atmosphere": {"particles": "none", "fog": true}
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 16,
+      "title": "Rivers carved highways through fore",
+      "narration": "Rivers carved highways through forests.",
+      "mood": "dramatic",
+      "camera": "pan_right",
+      "visual": {
+        "bg": {
+          "type": "forest",
+          "sky_color": [
+            180,
+            200,
+            180
+          ],
+          "horizon": 0.5,
+          "ground_color": [
+            40,
+            80,
+            40
+          ]
+        },
+        "elements": [
+          {
+            "type": "cloud",
+            "x": 0.19,
+            "y": 0.75,
+            "scale": 0.7
+          },
+          {
+            "type": "tree",
+            "x": 0.8,
+            "y": 0.67,
+            "scale": 0.6,
+            "fill": [
+              51,
+              120,
+              33
+            ],
+            "tree_style": "pine"
+          },
+          {
+            "type": "mountain",
+            "x": 0.27,
+            "y": 0.2,
+            "scale": 0.6,
+            "fill": [
+              109,
+              120,
+              80
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 17,
+      "title": "Mountains stood tall as landmarks.",
+      "narration": "Mountains stood tall as landmarks.",
+      "mood": "somber",
+      "camera": "pan_left",
+      "visual": {
+        "bg": {
+          "type": "solid",
+          "color": [
+            252,
+            250,
+            245
+          ]
+        },
+        "elements": [
+          {
+            "type": "bird",
+            "x": 0.82,
+            "y": 0.75,
+            "scale": 0.9,
+            "fill": [
+              115,
+              81,
+              39
+            ]
+          },
+          {
+            "type": "sun",
+            "x": 0.36,
+            "y": 0.73,
+            "radius": 38,
+            "fill": [
+              255,
+              200,
+              50
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 18,
+      "title": "The wind carried familiar smells.",
+      "narration": "The wind carried familiar smells.",
+      "mood": "epic",
+      "camera": "dolly_in",
+      "visual": {
+        "bg": {
+          "type": "sunset",
+          "colors": [
+            [
+              220,
+              100,
+              70
+            ],
+            [
+              200,
+              120,
+              90
+            ],
+            [
+              160,
+              80,
+              100
+            ],
+            [
+              80,
+              50,
+              80
+            ]
+          ]
+        },
+        "elements": [
+          {
+            "type": "mountain",
+            "x": 0.19,
+            "y": 0.46,
+            "scale": 0.8,
+            "fill": [
+              83,
+              80,
+              33
+            ]
+          },
+          {
+            "type": "rect",
+            "x": 0.21,
+            "y": 0.3,
+            "width": 0.15,
+            "height": 0.12,
+            "fill": [
+              100,
+              143,
+              70,
+              150
+            ],
+            "stroke": [
+              185,
+              103,
+              188
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 19,
+      "title": "The earth spoke if you listened.",
+      "narration": "The earth spoke if you listened.",
+      "mood": "mysterious",
+      "camera": null,
+      "visual": {
+        "bg": {
+          "type": "ocean",
+          "sky_color": [
+            180,
+            210,
+            240
+          ],
+          "horizon_color": [
+            140,
+            180,
+            220
+          ],
+          "horizon": 0.45,
+          "water_color": [
+            30,
+            70,
+            150
+          ]
+        },
+        "elements": [
+          {
+            "type": "arrow",
+            "x": 0.61,
+            "y": 0.51,
+            "x2": 0.77,
+            "y2": 0.51,
+            "stroke": [
+              180,
+              60,
+              60
+            ],
+            "stroke_width": 3
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 20,
+      "title": "This was navigation before maps.",
+      "narration": "This was navigation before maps.",
+      "mood": "peaceful",
+      "camera": "ken_burns_in",
+      "visual": {
+        "bg": {
+          "type": "sunset",
+          "colors": [
+            [
+              220,
+              100,
+              70
+            ],
+            [
+              200,
+              120,
+              90
+            ],
+            [
+              160,
+              80,
+              100
+            ],
+            [
+              80,
+              50,
+              80
+            ]
+          ]
+        },
+        "elements": [
+          {
+            "type": "building",
+            "x": 0.32,
+            "y": 0.42,
+            "scale": 0.7,
+            "fill": [
+              129,
+              119,
+              90
+            ]
+          },
+          {
+            "type": "house",
+            "x": 0.81,
+            "y": 0.21,
+            "scale": 0.8,
+            "fill": [
+              166,
+              106,
+              74
+            ]
+          },
+          {
+            "type": "line",
+            "x": 0.3,
+            "y": 0.35,
+            "x2": 0.59,
+            "y2": 0.43,
+            "stroke": [
+              206,
+              65,
+              53
+            ],
+            "stroke_width": 3
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 21,
+      "title": "Then someone had a brilliant idea.",
+      "narration": "Then someone had a brilliant idea.",
+      "mood": "hopeful",
+      "camera": "ken_burns_out",
+      "visual": {
+        "bg": {
+          "type": "indoor",
+          "wall_color": [
+            195,
+            175,
+            155
+          ],
+          "floor_color": [
+            135,
+            115,
+            95
+          ]
+        },
+        "elements": [
+          {
+            "type": "bird",
+            "x": 0.36,
+            "y": 0.74,
+            "scale": 1.1,
+            "fill": [
+              103,
+              50,
+              72
+            ]
+          },
+          {
+            "type": "line",
+            "x": 0.36,
+            "y": 0.56,
+            "x2": 0.65,
+            "y2": 0.49,
+            "stroke": [
+              157,
+              106,
+              36
+            ],
+            "stroke_width": 4
+          },
+          {
+            "type": "water",
+            "x": 0.34,
+            "y": 0.53,
+            "scale": 0.7,
+            "fill": [
+              30,
+              80,
+              160
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 22,
+      "title": "Draw the world on clay.",
+      "narration": "Draw the world on clay.",
+      "mood": "dramatic",
+      "camera": "pan_right",
+      "visual": {
+        "bg": {
+          "type": "sunset",
+          "colors": [
+            [
+              220,
+              100,
+              70
+            ],
+            [
+              200,
+              120,
+              90
+            ],
+            [
+              160,
+              80,
+              100
+            ],
+            [
+              80,
+              50,
+              80
+            ]
+          ]
+        },
+        "elements": [
+          {
+            "type": "star",
+            "x": 0.5,
+            "y": 0.34,
+            "count": 16,
+            "brightness": 161
+          },
+          {
+            "type": "path",
+            "x": 0.45,
+            "y": 0.35,
+            "x2": 0.65,
+            "y2": 0.6,
+            "width": 12,
+            "fill": [
+              140,
+              120,
+              90
+            ]
+          },
+          {
+            "type": "hill",
+            "x": 0.67,
+            "y": 0.5,
+            "scale": 0.6,
+            "fill": [
+              50,
+              77,
+              34
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 23,
+      "title": "Babylon, six hundred years before C",
+      "narration": "Babylon, six hundred years before Christ.",
+      "mood": "somber",
+      "camera": "pan_left",
+      "visual": {
+        "bg": {
+          "type": "ocean",
+          "sky_color": [
+            180,
+            210,
+            240
+          ],
+          "horizon_color": [
+            140,
+            180,
+            220
+          ],
+          "horizon": 0.45,
+          "water_color": [
+            30,
+            70,
+            150
+          ]
+        },
+        "elements": [
+          {
+            "type": "text",
+            "x": 0.56,
+            "y": 0.28,
+            "text": "Scene 23",
+            "font_size": 16,
+            "fill": [
+              12,
+              24,
+              23
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 24,
+      "title": "A scribe picked up a reed.",
+      "narration": "A scribe picked up a reed.",
+      "mood": "epic",
+      "camera": "dolly_in",
+      "visual": {
+        "bg": {
+          "type": "solid",
+          "color": [
+            252,
+            250,
+            245
+          ]
+        },
+        "elements": [
+          {
+            "type": "animal",
+            "x": 0.32,
+            "y": 0.26,
+            "scale": 1.1,
+            "fill": [
+              126,
+              105,
+              56
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 25,
+      "title": "He scratched lines into wet clay.",
+      "narration": "He scratched lines into wet clay.",
+      "mood": "mysterious",
+      "camera": null,
+      "visual": {
+        "bg": {
+          "type": "night",
+          "colors": [
+            [
+              8,
+              6,
+              28
+            ],
+            [
+              18,
+              14,
+              42
+            ]
+          ],
+          "horizon": 0.55,
+          "ground_color": [
+            20,
+            18,
+            15
+          ]
+        },
+        "elements": [
+          {
+            "type": "hill",
+            "x": 0.77,
+            "y": 0.21,
+            "scale": 0.7,
+            "fill": [
+              71,
+              120,
+              89
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 26,
+      "title": "A circle for the ocean.",
+      "narration": "A circle for the ocean.",
+      "mood": "peaceful",
+      "camera": "ken_burns_in",
+      "visual": {
+        "bg": {
+          "type": "forest",
+          "sky_color": [
+            180,
+            200,
+            180
+          ],
+          "horizon": 0.5,
+          "ground_color": [
+            40,
+            80,
+            40
+          ]
+        },
+        "elements": [
+          {
+            "type": "fish",
+            "x": 0.72,
+            "y": 0.35,
+            "scale": 1.1,
+            "fill": [
+              76,
+              74,
+              85
+            ]
+          },
+          {
+            "type": "mountain",
+            "x": 0.75,
+            "y": 0.32,
+            "scale": 0.7,
+            "fill": [
+              79,
+              92,
+              49
+            ]
+          },
+          {
+            "type": "moon",
+            "x": 0.31,
+            "y": 0.56,
+            "radius": 27,
+            "fill": [
+              240,
+              230,
+              200
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 27,
+      "title": "Babylon at the very center.",
+      "narration": "Babylon at the very center.",
+      "mood": "hopeful",
+      "camera": "ken_burns_out",
+      "visual": {
+        "bg": {
+          "type": "solid",
+          "color": [
+            252,
+            250,
+            245
+          ]
+        },
+        "elements": [
+          {
+            "type": "house",
+            "x": 0.35,
+            "y": 0.55,
+            "scale": 0.8,
+            "fill": [
+              183,
+              134,
+              91
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 28,
+      "title": "Rivers flowing outward from the cit",
+      "narration": "Rivers flowing outward from the city.",
+      "mood": "dramatic",
+      "camera": "pan_right",
+      "visual": {
+        "bg": {
+          "type": "gradient",
+          "colors": [
+            [
+              200,
+              190,
+              180
+            ],
+            [
+              160,
+              150,
+              140
+            ]
+          ],
+          "horizon": 0.6,
+          "ground_color": [
+            80,
+            70,
+            55
+          ]
+        },
+        "elements": [
+          {
+            "type": "hill",
+            "x": 0.56,
+            "y": 0.74,
+            "scale": 0.4,
+            "fill": [
+              88,
+              97,
+              52
+            ]
+          },
+          {
+            "type": "fish",
+            "x": 0.7,
+            "y": 0.44,
+            "scale": 1.2,
+            "fill": [
+              77,
+              74,
+              87
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 29,
+      "title": "Cities marked with tiny dots.",
+      "narration": "Cities marked with tiny dots.",
+      "mood": "somber",
+      "camera": "pan_left",
+      "visual": {
+        "bg": {
+          "type": "solid",
+          "color": [
+            252,
+            250,
+            245
+          ]
+        },
+        "elements": [
+          {
+            "type": "bird",
+            "x": 0.46,
+            "y": 0.49,
+            "scale": 1.1,
+            "fill": [
+              113,
+              96,
+              90
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 30,
+      "title": "The oldest map was born.",
+      "narration": "The oldest map was born.",
+      "mood": "epic",
+      "camera": "dolly_in",
+      "visual": {
+        "bg": {
+          "type": "solid",
+          "color": [
+            252,
+            250,
+            245
+          ]
+        },
+        "elements": [
+          {
+            "type": "tree",
+            "x": 0.81,
+            "y": 0.71,
+            "scale": 0.7,
+            "fill": [
+              62,
+              144,
+              27
+            ],
+            "tree_style": "palm"
+          },
+          {
+            "type": "ship",
+            "x": 0.5,
+            "y": 0.57,
+            "scale": 0.5,
+            "fill": [
+              60,
+              50,
+              40
+            ],
+            "sail_color": [
+              200,
+              190,
+              180
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 31,
+      "title": "The Greeks took mapmaking further.",
+      "narration": "The Greeks took mapmaking further.",
+      "mood": "mysterious",
+      "camera": null,
+      "visual": {
+        "bg": {
+          "type": "ocean",
+          "sky_color": [
+            180,
+            210,
+            240
+          ],
+          "horizon_color": [
+            140,
+            180,
+            220
+          ],
+          "horizon": 0.45,
+          "water_color": [
+            30,
+            70,
+            150
+          ]
+        },
+        "elements": [
+          {
+            "type": "sun",
+            "x": 0.44,
+            "y": 0.72,
+            "radius": 25,
+            "fill": [
+              255,
+              200,
+              50
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 32,
+      "title": "Anaximander said the earth is round",
+      "narration": "Anaximander said the earth is round.",
+      "mood": "peaceful",
+      "camera": "ken_burns_in",
+      "visual": {
+        "bg": {
+          "type": "indoor",
+          "wall_color": [
+            195,
+            175,
+            155
+          ],
+          "floor_color": [
+            135,
+            115,
+            95
+          ]
+        },
+        "elements": [
+          {
+            "type": "human",
+            "x": 0.36,
+            "y": 0.32,
+            "scale": 2.6,
+            "fill": [
+              108,
+              81,
+              70
+            ]
+          },
+          {
+            "type": "x_mark",
+            "x": 0.46,
+            "y": 0.57,
+            "scale": 0.8,
+            "fill": [
+              180,
+              40,
+              40
+            ]
+          },
+          {
+            "type": "fish",
+            "x": 0.27,
+            "y": 0.25,
+            "scale": 0.9,
+            "fill": [
+              110,
+              89,
+              51
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 33,
+      "title": "A radical idea for its time.",
+      "narration": "A radical idea for its time.",
+      "mood": "hopeful",
+      "camera": "ken_burns_out",
+      "visual": {
+        "bg": {
+          "type": "forest",
+          "sky_color": [
+            180,
+            200,
+            180
+          ],
+          "horizon": 0.5,
+          "ground_color": [
+            40,
+            80,
+            40
+          ]
+        },
+        "elements": [
+          {
+            "type": "animal",
+            "x": 0.37,
+            "y": 0.64,
+            "scale": 0.7,
+            "fill": [
+              72,
+              65,
+              60
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 34,
+      "title": "Ptolemy added latitude and longitud",
+      "narration": "Ptolemy added latitude and longitude.",
+      "mood": "dramatic",
+      "camera": "pan_right",
+      "visual": {
+        "bg": {
+          "type": "indoor",
+          "wall_color": [
+            195,
+            175,
+            155
+          ],
+          "floor_color": [
+            135,
+            115,
+            95
+          ]
+        },
+        "elements": [
+          {
+            "type": "path",
+            "x": 0.55,
+            "y": 0.6,
+            "x2": 0.87,
+            "y2": 0.78,
+            "width": 10,
+            "fill": [
+              140,
+              120,
+              90
+            ]
+          },
+          {
+            "type": "bird",
+            "x": 0.15,
+            "y": 0.61,
+            "scale": 1.1,
+            "fill": [
+              76,
+              99,
+              57
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 35,
+      "title": "Numbers could now pinpoint places.",
+      "narration": "Numbers could now pinpoint places.",
+      "mood": "somber",
+      "camera": "pan_left",
+      "visual": {
+        "bg": {
+          "type": "night",
+          "colors": [
+            [
+              8,
+              6,
+              28
+            ],
+            [
+              18,
+              14,
+              42
+            ]
+          ],
+          "horizon": 0.55,
+          "ground_color": [
+            20,
+            18,
+            15
+          ]
+        },
+        "elements": [
+          {
+            "type": "rect",
+            "x": 0.48,
+            "y": 0.51,
+            "width": 0.19,
+            "height": 0.07,
+            "fill": [
+              74,
+              158,
+              210,
+              150
+            ],
+            "stroke": [
+              175,
+              183,
+              192
+            ]
+          },
+          {
+            "type": "building",
+            "x": 0.82,
+            "y": 0.69,
+            "scale": 0.7,
+            "fill": [
+              156,
+              147,
+              102
+            ]
+          },
+          {
+            "type": "arrow",
+            "x": 0.73,
+            "y": 0.5,
+            "x2": 1.01,
+            "y2": 0.5,
+            "stroke": [
+              180,
+              60,
+              60
+            ],
+            "stroke_width": 4
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 36,
+      "title": "Greece, Rome, Persia all mapped.",
+      "narration": "Greece, Rome, Persia all mapped.",
+      "mood": "epic",
+      "camera": "dolly_in",
+      "visual": {
+        "bg": {
+          "type": "indoor",
+          "wall_color": [
+            195,
+            175,
+            155
+          ],
+          "floor_color": [
+            135,
+            115,
+            95
+          ]
+        },
+        "elements": [
+          {
+            "type": "house",
+            "x": 0.32,
+            "y": 0.55,
+            "scale": 0.9,
+            "fill": [
+              163,
+              131,
+              110
+            ]
+          },
+          {
+            "type": "moon",
+            "x": 0.34,
+            "y": 0.24,
+            "radius": 24,
+            "fill": [
+              240,
+              230,
+              200
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 37,
+      "title": "His book Geography was legendary.",
+      "narration": "His book Geography was legendary.",
+      "mood": "mysterious",
+      "camera": null,
+      "visual": {
+        "bg": {
+          "type": "solid",
+          "color": [
+            252,
+            250,
+            245
+          ]
+        },
+        "elements": [
+          {
+            "type": "building",
+            "x": 0.78,
+            "y": 0.24,
+            "scale": 0.5,
+            "fill": [
+              134,
+              134,
+              79
+            ]
+          },
+          {
+            "type": "bird",
+            "x": 0.3,
+            "y": 0.43,
+            "scale": 0.8,
+            "fill": [
+              99,
+              76,
+              33
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 38,
+      "title": "It stayed the standard for a thousa",
+      "narration": "It stayed the standard for a thousand years.",
+      "mood": "peaceful",
+      "camera": "ken_burns_in",
+      "visual": {
+        "bg": {
+          "type": "forest",
+          "sky_color": [
+            180,
+            200,
+            180
+          ],
+          "horizon": 0.5,
+          "ground_color": [
+            40,
+            80,
+            40
+          ]
+        },
+        "elements": [
+          {
+            "type": "label",
+            "x": 0.78,
+            "y": 0.52,
+            "text": "Scene 38",
+            "font_size": 25,
+            "fill": [
+              11,
+              59,
+              56
+            ],
+            "bg_color": [
+              255,
+              250,
+              240
+            ]
+          },
+          {
+            "type": "house",
+            "x": 0.55,
+            "y": 0.46,
+            "scale": 1.0,
+            "fill": [
+              149,
+              148,
+              94
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 39,
+      "title": "Mapmaking became a real science.",
+      "narration": "Mapmaking became a real science.",
+      "mood": "hopeful",
+      "camera": "ken_burns_out",
+      "visual": {
+        "bg": {
+          "type": "ocean",
+          "sky_color": [
+            180,
+            210,
+            240
+          ],
+          "horizon_color": [
+            140,
+            180,
+            220
+          ],
+          "horizon": 0.45,
+          "water_color": [
+            30,
+            70,
+            150
+          ]
+        },
+        "elements": [
+          {
+            "type": "fish",
+            "x": 0.53,
+            "y": 0.53,
+            "scale": 0.7,
+            "fill": [
+              84,
+              67,
+              57
+            ]
+          },
+          {
+            "type": "circle",
+            "x": 0.17,
+            "y": 0.38,
+            "radius": 0.064,
+            "fill": [
+              143,
+              82,
+              159,
+              100
+            ],
+            "stroke": [
+              72,
+              199,
+              176
+            ],
+            "stroke_width": 1
+          },
+          {
+            "type": "label",
+            "x": 0.56,
+            "y": 0.56,
+            "text": "Scene 39",
+            "font_size": 15,
+            "fill": [
+              51,
+              32,
+              8
+            ],
+            "bg_color": [
+              255,
+              250,
+              240
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 40,
+      "title": "The world finally had coordinates.",
+      "narration": "The world finally had coordinates.",
+      "mood": "dramatic",
+      "camera": "pan_right",
+      "visual": {
+        "bg": {
+          "type": "night",
+          "colors": [
+            [
+              8,
+              6,
+              28
+            ],
+            [
+              18,
+              14,
+              42
+            ]
+          ],
+          "horizon": 0.55,
+          "ground_color": [
+            20,
+            18,
+            15
+          ]
+        },
+        "elements": [
+          {
+            "type": "star",
+            "x": 0.42,
+            "y": 0.32,
+            "count": 25,
+            "brightness": 193
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 41,
+      "title": "While Europe slept, Islam advanced.",
+      "narration": "While Europe slept, Islam advanced.",
+      "mood": "somber",
+      "camera": "pan_left",
+      "visual": {
+        "bg": {
+          "type": "solid",
+          "color": [
+            252,
+            250,
+            245
+          ]
+        },
+        "elements": [
+          {
+            "type": "star",
+            "x": 0.73,
+            "y": 0.46,
+            "count": 38,
+            "brightness": 219
+          },
+          {
+            "type": "mountain",
+            "x": 0.85,
+            "y": 0.39,
+            "scale": 0.7,
+            "fill": [
+              99,
+              111,
+              32
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 42,
+      "title": "Al-Idrisi, a brilliant geographer.",
+      "narration": "Al-Idrisi, a brilliant geographer.",
+      "mood": "epic",
+      "camera": "dolly_in",
+      "visual": {
+        "bg": {
+          "type": "night",
+          "colors": [
+            [
+              8,
+              6,
+              28
+            ],
+            [
+              18,
+              14,
+              42
+            ]
+          ],
+          "horizon": 0.55,
+          "ground_color": [
+            20,
+            18,
+            15
+          ]
+        },
+        "elements": [
+          {
+            "type": "human",
+            "x": 0.58,
+            "y": 0.33,
+            "scale": 2.4,
+            "fill": [
+              77,
+              76,
+              110
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 43,
+      "title": "He served King Roger of Sicily.",
+      "narration": "He served King Roger of Sicily.",
+      "mood": "mysterious",
+      "camera": null,
+      "visual": {
+        "bg": {
+          "type": "indoor",
+          "wall_color": [
+            195,
+            175,
+            155
+          ],
+          "floor_color": [
+            135,
+            115,
+            95
+          ]
+        },
+        "elements": [
+          {
+            "type": "star",
+            "x": 0.69,
+            "y": 0.29,
+            "count": 34,
+            "brightness": 164
+          },
+          {
+            "type": "house",
+            "x": 0.72,
+            "y": 0.73,
+            "scale": 0.6,
+            "fill": [
+              131,
+              159,
+              89
+            ]
+          },
+          {
+            "type": "polygon",
+            "x": 0.62,
+            "y": 0.73,
+            "points": [
+              [
+                0.6034647106426604,
+                0.7644023528079149
+              ],
+              [
+                0.5521594364548896,
+                0.7604983065492769
+              ],
+              [
+                0.6403587832961671,
+                0.6663042088713562
+              ],
+              [
+                0.6635969415921958,
+                0.7860469182542074
+              ]
+            ],
+            "fill": [
+              193,
+              70,
+              184,
+              120
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 44,
+      "title": "His map showed three continents.",
+      "narration": "His map showed three continents.",
+      "mood": "peaceful",
+      "camera": "ken_burns_in",
+      "visual": {
+        "bg": {
+          "type": "solid",
+          "color": [
+            252,
+            250,
+            245
+          ]
+        },
+        "elements": [
+          {
+            "type": "arrow",
+            "x": 0.61,
+            "y": 0.24,
+            "x2": 0.84,
+            "y2": 0.24,
+            "stroke": [
+              180,
+              60,
+              60
+            ],
+            "stroke_width": 2
+          },
+          {
+            "type": "circle",
+            "x": 0.22,
+            "y": 0.73,
+            "radius": 0.062,
+            "fill": [
+              157,
+              79,
+              151,
+              100
+            ],
+            "stroke": [
+              85,
+              173,
+              206
+            ],
+            "stroke_width": 2
+          },
+          {
+            "type": "flag",
+            "x": 0.72,
+            "y": 0.5,
+            "scale": 0.8,
+            "fill": [
+              77,
+              82,
+              56
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 45,
+      "title": "Divided into seven climate zones.",
+      "narration": "Divided into seven climate zones.",
+      "mood": "hopeful",
+      "camera": "ken_burns_out",
+      "visual": {
+        "bg": {
+          "type": "solid",
+          "color": [
+            252,
+            250,
+            245
+          ]
+        },
+        "elements": [
+          {
+            "type": "tree",
+            "x": 0.35,
+            "y": 0.45,
+            "scale": 0.8,
+            "fill": [
+              56,
+              129,
+              62
+            ],
+            "tree_style": "pine"
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 46,
+      "title": "More accurate than anything before.",
+      "narration": "More accurate than anything before.",
+      "mood": "dramatic",
+      "camera": "pan_right",
+      "visual": {
+        "bg": {
+          "type": "gradient",
+          "colors": [
+            [
+              200,
+              190,
+              180
+            ],
+            [
+              160,
+              150,
+              140
+            ]
+          ],
+          "horizon": 0.6,
+          "ground_color": [
+            80,
+            70,
+            55
+          ]
+        },
+        "elements": [
+          {
+            "type": "building",
+            "x": 0.28,
+            "y": 0.32,
+            "scale": 0.7,
+            "fill": [
+              131,
+              107,
+              126
+            ]
+          },
+          {
+            "type": "flag",
+            "x": 0.64,
+            "y": 0.35,
+            "scale": 0.6,
+            "fill": [
+              110,
+              42,
+              15
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 47,
+      "title": "Traders brought knowledge from Chin",
+      "narration": "Traders brought knowledge from China.",
+      "mood": "somber",
+      "camera": "pan_left",
+      "visual": {
+        "bg": {
+          "type": "sunset",
+          "colors": [
+            [
+              220,
+              100,
+              70
+            ],
+            [
+              200,
+              120,
+              90
+            ],
+            [
+              160,
+              80,
+              100
+            ],
+            [
+              80,
+              50,
+              80
+            ]
+          ]
+        },
+        "elements": [
+          {
+            "type": "circle",
+            "x": 0.54,
+            "y": 0.33,
+            "radius": 0.054,
+            "fill": [
+              165,
+              154,
+              44,
+              100
+            ],
+            "stroke": [
+              63,
+              115,
+              96
+            ],
+            "stroke_width": 2
+          },
+          {
+            "type": "bird",
+            "x": 0.32,
+            "y": 0.57,
+            "scale": 0.8,
+            "fill": [
+              105,
+              83,
+              52
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 48,
+      "title": "From Africa to India to Asia.",
+      "narration": "From Africa to India to Asia.",
+      "mood": "epic",
+      "camera": "dolly_in",
+      "visual": {
+        "bg": {
+          "type": "sunset",
+          "colors": [
+            [
+              220,
+              100,
+              70
+            ],
+            [
+              200,
+              120,
+              90
+            ],
+            [
+              160,
+              80,
+              100
+            ],
+            [
+              80,
+              50,
+              80
+            ]
+          ]
+        },
+        "elements": [
+          {
+            "type": "building",
+            "x": 0.4,
+            "y": 0.45,
+            "scale": 0.6,
+            "fill": [
+              124,
+              97,
+              116
+            ]
+          },
+          {
+            "type": "sun",
+            "x": 0.37,
+            "y": 0.61,
+            "radius": 25,
+            "fill": [
+              255,
+              200,
+              50
+            ]
+          },
+          {
+            "type": "fish",
+            "x": 0.49,
+            "y": 0.6,
+            "scale": 1.2,
+            "fill": [
+              103,
+              88,
+              48
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 49,
+      "title": "The world was bigger than anyone kn",
+      "narration": "The world was bigger than anyone knew.",
+      "mood": "mysterious",
+      "camera": null,
+      "visual": {
+        "bg": {
+          "type": "forest",
+          "sky_color": [
+            180,
+            200,
+            180
+          ],
+          "horizon": 0.5,
+          "ground_color": [
+            40,
+            80,
+            40
+          ]
+        },
+        "elements": [
+          {
+            "type": "ship",
+            "x": 0.31,
+            "y": 0.3,
+            "scale": 0.4,
+            "fill": [
+              60,
+              50,
+              40
+            ],
+            "sail_color": [
+              200,
+              190,
+              180
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 50,
+      "title": "Islamic cartography led the way.",
+      "narration": "Islamic cartography led the way.",
+      "mood": "peaceful",
+      "camera": "ken_burns_in",
+      "visual": {
+        "bg": {
+          "type": "solid",
+          "color": [
+            252,
+            250,
+            245
+          ]
+        },
+        "elements": [
+          {
+            "type": "mountain",
+            "x": 0.54,
+            "y": 0.58,
+            "scale": 0.5,
+            "fill": [
+              105,
+              118,
+              61
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 51,
+      "title": "Medieval Europe had different prior",
+      "narration": "Medieval Europe had different priorities.",
+      "mood": "hopeful",
+      "camera": "ken_burns_out",
+      "visual": {
+        "bg": {
+          "type": "forest",
+          "sky_color": [
+            180,
+            200,
+            180
+          ],
+          "horizon": 0.5,
+          "ground_color": [
+            40,
+            80,
+            40
+          ]
+        },
+        "elements": [
+          {
+            "type": "polygon",
+            "x": 0.35,
+            "y": 0.46,
+            "points": [
+              [
+                0.32451294920964674,
+                0.5344796229021271
+              ],
+              [
+                0.3103965424788756,
+                0.5178756743404022
+              ],
+              [
+                0.2882539425159879,
+                0.39045494961822924
+              ],
+              [
+                0.3486794496465708,
+                0.4723233850353309
+              ]
+            ],
+            "fill": [
+              215,
+              53,
+              78,
+              120
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 52,
+      "title": "Maps became about faith, not facts.",
+      "narration": "Maps became about faith, not facts.",
+      "mood": "dramatic",
+      "camera": "pan_right",
+      "visual": {
+        "bg": {
+          "type": "forest",
+          "sky_color": [
+            180,
+            200,
+            180
+          ],
+          "horizon": 0.5,
+          "ground_color": [
+            40,
+            80,
+            40
+          ]
+        },
+        "elements": [
+          {
+            "type": "ship",
+            "x": 0.21,
+            "y": 0.34,
+            "scale": 0.6,
+            "fill": [
+              60,
+              50,
+              40
+            ],
+            "sail_color": [
+              200,
+              190,
+              180
+            ]
+          },
+          {
+            "type": "arrow",
+            "x": 0.57,
+            "y": 0.63,
+            "x2": 0.72,
+            "y2": 0.63,
+            "stroke": [
+              180,
+              60,
+              60
+            ],
+            "stroke_width": 4
+          },
+          {
+            "type": "label",
+            "x": 0.47,
+            "y": 0.44,
+            "text": "Scene 52",
+            "font_size": 27,
+            "fill": [
+              47,
+              32,
+              19
+            ],
+            "bg_color": [
+              255,
+              250,
+              240
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 53,
+      "title": "The T-O map was everywhere.",
+      "narration": "The T-O map was everywhere.",
+      "mood": "somber",
+      "camera": "pan_left",
+      "visual": {
+        "bg": {
+          "type": "ocean",
+          "sky_color": [
+            180,
+            210,
+            240
+          ],
+          "horizon_color": [
+            140,
+            180,
+            220
+          ],
+          "horizon": 0.45,
+          "water_color": [
+            30,
+            70,
+            150
+          ]
+        },
+        "elements": [
+          {
+            "type": "cloud",
+            "x": 0.81,
+            "y": 0.31,
+            "scale": 0.5
+          },
+          {
+            "type": "animal",
+            "x": 0.21,
+            "y": 0.33,
+            "scale": 0.9,
+            "fill": [
+              80,
+              50,
+              56
+            ]
+          },
+          {
+            "type": "x_mark",
+            "x": 0.63,
+            "y": 0.46,
+            "scale": 0.6,
+            "fill": [
+              180,
+              40,
+              40
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 54,
+      "title": "A circle split by a T-shaped sea.",
+      "narration": "A circle split by a T-shaped sea.",
+      "mood": "epic",
+      "camera": "dolly_in",
+      "visual": {
+        "bg": {
+          "type": "sunset",
+          "colors": [
+            [
+              220,
+              100,
+              70
+            ],
+            [
+              200,
+              120,
+              90
+            ],
+            [
+              160,
+              80,
+              100
+            ],
+            [
+              80,
+              50,
+              80
+            ]
+          ]
+        },
+        "elements": [
+          {
+            "type": "bird",
+            "x": 0.75,
+            "y": 0.24,
+            "scale": 0.7,
+            "fill": [
+              86,
+              100,
+              80
+            ]
+          },
+          {
+            "type": "path",
+            "x": 0.56,
+            "y": 0.64,
+            "x2": 0.82,
+            "y2": 0.76,
+            "width": 11,
+            "fill": [
+              140,
+              120,
+              90
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 55,
+      "title": "Asia on top, Europe left, Africa ri",
+      "narration": "Asia on top, Europe left, Africa right.",
+      "mood": "mysterious",
+      "camera": null,
+      "visual": {
+        "bg": {
+          "type": "solid",
+          "color": [
+            252,
+            250,
+            245
+          ]
+        },
+        "elements": [
+          {
+            "type": "tree",
+            "x": 0.19,
+            "y": 0.64,
+            "scale": 0.7,
+            "fill": [
+              72,
+              126,
+              78
+            ],
+            "tree_style": "pine"
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 56,
+      "title": "Jerusalem sat at the center.",
+      "narration": "Jerusalem sat at the center.",
+      "mood": "peaceful",
+      "camera": "ken_burns_in",
+      "visual": {
+        "bg": {
+          "type": "gradient",
+          "colors": [
+            [
+              200,
+              190,
+              180
+            ],
+            [
+              160,
+              150,
+              140
+            ]
+          ],
+          "horizon": 0.6,
+          "ground_color": [
+            80,
+            70,
+            55
+          ]
+        },
+        "elements": [
+          {
+            "type": "bird",
+            "x": 0.36,
+            "y": 0.42,
+            "scale": 0.8,
+            "fill": [
+              104,
+              81,
+              58
+            ]
+          },
+          {
+            "type": "tree",
+            "x": 0.57,
+            "y": 0.69,
+            "scale": 0.8,
+            "fill": [
+              58,
+              106,
+              21
+            ],
+            "tree_style": "round"
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 57,
+      "title": "The Garden of Eden at the edge.",
+      "narration": "The Garden of Eden at the edge.",
+      "mood": "hopeful",
+      "camera": "ken_burns_out",
+      "visual": {
+        "bg": {
+          "type": "sunset",
+          "colors": [
+            [
+              220,
+              100,
+              70
+            ],
+            [
+              200,
+              120,
+              90
+            ],
+            [
+              160,
+              80,
+              100
+            ],
+            [
+              80,
+              50,
+              80
+            ]
+          ]
+        },
+        "elements": [
+          {
+            "type": "polygon",
+            "x": 0.82,
+            "y": 0.75,
+            "points": [
+              [
+                0.8475650534885182,
+                0.7131217641547286
+              ],
+              [
+                0.7464370677031386,
+                0.7910030128660092
+              ],
+              [
+                0.8152801317202614,
+                0.7742415183093898
+              ],
+              [
+                0.8865716460682828,
+                0.6990382635557002
+              ]
+            ],
+            "fill": [
+              189,
+              151,
+              202,
+              120
+            ]
+          },
+          {
+            "type": "circle",
+            "x": 0.83,
+            "y": 0.46,
+            "radius": 0.05,
+            "fill": [
+              122,
+              211,
+              66,
+              100
+            ],
+            "stroke": [
+              81,
+              124,
+              145
+            ],
+            "stroke_width": 2
+          },
+          {
+            "type": "ship",
+            "x": 0.61,
+            "y": 0.42,
+            "scale": 0.6,
+            "fill": [
+              60,
+              50,
+              40
+            ],
+            "sail_color": [
+              200,
+              190,
+              180
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 58,
+      "title": "Monsters filled the unknown spaces.",
+      "narration": "Monsters filled the unknown spaces.",
+      "mood": "dramatic",
+      "camera": "pan_right",
+      "visual": {
+        "bg": {
+          "type": "indoor",
+          "wall_color": [
+            195,
+            175,
+            155
+          ],
+          "floor_color": [
+            135,
+            115,
+            95
+          ]
+        },
+        "elements": [
+          {
+            "type": "building",
+            "x": 0.33,
+            "y": 0.26,
+            "scale": 0.7,
+            "fill": [
+              165,
+              122,
+              122
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 59,
+      "title": "These maps were spiritual, not prac",
+      "narration": "These maps were spiritual, not practical.",
+      "mood": "somber",
+      "camera": "pan_left",
+      "visual": {
+        "bg": {
+          "type": "sunset",
+          "colors": [
+            [
+              220,
+              100,
+              70
+            ],
+            [
+              200,
+              120,
+              90
+            ],
+            [
+              160,
+              80,
+              100
+            ],
+            [
+              80,
+              50,
+              80
+            ]
+          ]
+        },
+        "elements": [
+          {
+            "type": "x_mark",
+            "x": 0.44,
+            "y": 0.3,
+            "scale": 0.7,
+            "fill": [
+              180,
+              40,
+              40
+            ]
+          },
+          {
+            "type": "house",
+            "x": 0.5,
+            "y": 0.44,
+            "scale": 0.6,
+            "fill": [
+              147,
+              135,
+              78
+            ]
+          },
+          {
+            "type": "ship",
+            "x": 0.46,
+            "y": 0.58,
+            "scale": 0.4,
+            "fill": [
+              60,
+              50,
+              40
+            ],
+            "sail_color": [
+              200,
+              190,
+              180
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 60,
+      "title": "Navigation was not the point.",
+      "narration": "Navigation was not the point.",
+      "mood": "epic",
+      "camera": "dolly_in",
+      "visual": {
+        "bg": {
+          "type": "sunset",
+          "colors": [
+            [
+              220,
+              100,
+              70
+            ],
+            [
+              200,
+              120,
+              90
+            ],
+            [
+              160,
+              80,
+              100
+            ],
+            [
+              80,
+              50,
+              80
+            ]
+          ]
+        },
+        "elements": [
+          {
+            "type": "ship",
+            "x": 0.54,
+            "y": 0.5,
+            "scale": 0.4,
+            "fill": [
+              60,
+              50,
+              40
+            ],
+            "sail_color": [
+              200,
+              190,
+              180
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 61,
+      "title": "Sailors needed real working maps.",
+      "narration": "Sailors needed real working maps.",
+      "mood": "mysterious",
+      "camera": null,
+      "visual": {
+        "bg": {
+          "type": "indoor",
+          "wall_color": [
+            195,
+            175,
+            155
+          ],
+          "floor_color": [
+            135,
+            115,
+            95
+          ]
+        },
+        "elements": [
+          {
+            "type": "path",
+            "x": 0.73,
+            "y": 0.47,
+            "x2": 1.14,
+            "y2": 0.67,
+            "width": 12,
+            "fill": [
+              140,
+              120,
+              90
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 62,
+      "title": "Portolan charts delivered.",
+      "narration": "Portolan charts delivered.",
+      "mood": "peaceful",
+      "camera": "ken_burns_in",
+      "visual": {
+        "bg": {
+          "type": "forest",
+          "sky_color": [
+            180,
+            200,
+            180
+          ],
+          "horizon": 0.5,
+          "ground_color": [
+            40,
+            80,
+            40
+          ]
+        },
+        "elements": [
+          {
+            "type": "circle",
+            "x": 0.32,
+            "y": 0.5,
+            "radius": 0.049,
+            "fill": [
+              193,
+              170,
+              74,
+              100
+            ],
+            "stroke": [
+              57,
+              110,
+              146
+            ],
+            "stroke_width": 2
+          },
+          {
+            "type": "rect",
+            "x": 0.34,
+            "y": 0.2,
+            "width": 0.17,
+            "height": 0.14,
+            "fill": [
+              188,
+              208,
+              165,
+              150
+            ],
+            "stroke": [
+              78,
+              154,
+              177
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 63,
+      "title": "Drawn on sheepskin, incredibly accu",
+      "narration": "Drawn on sheepskin, incredibly accurate.",
+      "mood": "hopeful",
+      "camera": "ken_burns_out",
+      "visual": {
+        "bg": {
+          "type": "solid",
+          "color": [
+            252,
+            250,
+            245
+          ]
+        },
+        "elements": [
+          {
+            "type": "line",
+            "x": 0.68,
+            "y": 0.41,
+            "x2": 0.97,
+            "y2": 0.48,
+            "stroke": [
+              194,
+              65,
+              66
+            ],
+            "stroke_width": 3
+          },
+          {
+            "type": "moon",
+            "x": 0.75,
+            "y": 0.43,
+            "radius": 25,
+            "fill": [
+              240,
+              230,
+              200
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 64,
+      "title": "Radiating lines from compass roses.",
+      "narration": "Radiating lines from compass roses.",
+      "mood": "dramatic",
+      "camera": "pan_right",
+      "visual": {
+        "bg": {
+          "type": "sunset",
+          "colors": [
+            [
+              220,
+              100,
+              70
+            ],
+            [
+              200,
+              120,
+              90
+            ],
+            [
+              160,
+              80,
+              100
+            ],
+            [
+              80,
+              50,
+              80
+            ]
+          ]
+        },
+        "elements": [
+          {
+            "type": "label",
+            "x": 0.84,
+            "y": 0.64,
+            "text": "Scene 64",
+            "font_size": 24,
+            "fill": [
+              19,
+              36,
+              2
+            ],
+            "bg_color": [
+              255,
+              250,
+              240
+            ]
+          },
+          {
+            "type": "water",
+            "x": 0.5,
+            "y": 0.52,
+            "scale": 0.7,
+            "fill": [
+              30,
+              80,
+              160
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 65,
+      "title": "Sailors followed straight rhumb lin",
+      "narration": "Sailors followed straight rhumb lines.",
+      "mood": "somber",
+      "camera": "pan_left",
+      "visual": {
+        "bg": {
+          "type": "gradient",
+          "colors": [
+            [
+              200,
+              190,
+              180
+            ],
+            [
+              160,
+              150,
+              140
+            ]
+          ],
+          "horizon": 0.6,
+          "ground_color": [
+            80,
+            70,
+            55
+          ]
+        },
+        "elements": [
+          {
+            "type": "x_mark",
+            "x": 0.16,
+            "y": 0.28,
+            "scale": 0.9,
+            "fill": [
+              180,
+              40,
+              40
+            ]
+          },
+          {
+            "type": "water",
+            "x": 0.2,
+            "y": 0.63,
+            "scale": 0.5,
+            "fill": [
+              30,
+              80,
+              160
+            ]
+          },
+          {
+            "type": "flag",
+            "x": 0.63,
+            "y": 0.56,
+            "scale": 0.9,
+            "fill": [
+              104,
+              73,
+              64
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 66,
+      "title": "Port to port, safely and fast.",
+      "narration": "Port to port, safely and fast.",
+      "mood": "epic",
+      "camera": "dolly_in",
+      "visual": {
+        "bg": {
+          "type": "solid",
+          "color": [
+            252,
+            250,
+            245
+          ]
+        },
+        "elements": [
+          {
+            "type": "bird",
+            "x": 0.77,
+            "y": 0.47,
+            "scale": 0.9,
+            "fill": [
+              109,
+              54,
+              45
+            ]
+          },
+          {
+            "type": "path",
+            "x": 0.63,
+            "y": 0.36,
+            "x2": 0.9,
+            "y2": 0.48,
+            "width": 9,
+            "fill": [
+              140,
+              120,
+              90
+            ]
+          },
+          {
+            "type": "house",
+            "x": 0.59,
+            "y": 0.68,
+            "scale": 0.8,
+            "fill": [
+              174,
+              119,
+              127
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 67,
+      "title": "The Mediterranean was mapped perfec",
+      "narration": "The Mediterranean was mapped perfectly.",
+      "mood": "mysterious",
+      "camera": null,
+      "visual": {
+        "bg": {
+          "type": "gradient",
+          "colors": [
+            [
+              200,
+              190,
+              180
+            ],
+            [
+              160,
+              150,
+              140
+            ]
+          ],
+          "horizon": 0.6,
+          "ground_color": [
+            80,
+            70,
+            55
+          ]
+        },
+        "elements": [
+          {
+            "type": "mountain",
+            "x": 0.36,
+            "y": 0.41,
+            "scale": 0.5,
+            "fill": [
+              83,
+              96,
+              66
+            ]
+          },
+          {
+            "type": "animal",
+            "x": 0.7,
+            "y": 0.29,
+            "scale": 0.6,
+            "fill": [
+              125,
+              74,
+              69
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 68,
+      "title": "These maps were tools, not art.",
+      "narration": "These maps were tools, not art.",
+      "mood": "peaceful",
+      "camera": "ken_burns_in",
+      "visual": {
+        "bg": {
+          "type": "indoor",
+          "wall_color": [
+            195,
+            175,
+            155
+          ],
+          "floor_color": [
+            135,
+            115,
+            95
+          ]
+        },
+        "elements": [
+          {
+            "type": "water",
+            "x": 0.31,
+            "y": 0.55,
+            "scale": 0.6,
+            "fill": [
+              30,
+              80,
+              160
+            ]
+          },
+          {
+            "type": "animal",
+            "x": 0.16,
+            "y": 0.64,
+            "scale": 1.1,
+            "fill": [
+              113,
+              84,
+              40
+            ]
+          },
+          {
+            "type": "tree",
+            "x": 0.46,
+            "y": 0.39,
+            "scale": 0.7,
+            "fill": [
+              60,
+              117,
+              64
+            ],
+            "tree_style": "pine"
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 69,
+      "title": "Practical, precise, and priceless.",
+      "narration": "Practical, precise, and priceless.",
+      "mood": "hopeful",
+      "camera": "ken_burns_out",
+      "visual": {
+        "bg": {
+          "type": "forest",
+          "sky_color": [
+            180,
+            200,
+            180
+          ],
+          "horizon": 0.5,
+          "ground_color": [
+            40,
+            80,
+            40
+          ]
+        },
+        "elements": [
+          {
+            "type": "sun",
+            "x": 0.85,
+            "y": 0.67,
+            "radius": 23,
+            "fill": [
+              255,
+              200,
+              50
+            ]
+          },
+          {
+            "type": "moon",
+            "x": 0.42,
+            "y": 0.4,
+            "radius": 24,
+            "fill": [
+              240,
+              230,
+              200
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 70,
+      "title": "Navigation finally had reliable gui",
+      "narration": "Navigation finally had reliable guides.",
+      "mood": "dramatic",
+      "camera": "pan_right",
+      "visual": {
+        "bg": {
+          "type": "gradient",
+          "colors": [
+            [
+              200,
+              190,
+              180
+            ],
+            [
+              160,
+              150,
+              140
+            ]
+          ],
+          "horizon": 0.6,
+          "ground_color": [
+            80,
+            70,
+            55
+          ]
+        },
+        "elements": [
+          {
+            "type": "label",
+            "x": 0.34,
+            "y": 0.51,
+            "text": "Scene 70",
+            "font_size": 24,
+            "fill": [
+              59,
+              52,
+              3
+            ],
+            "bg_color": [
+              255,
+              250,
+              240
+            ]
+          },
+          {
+            "type": "flag",
+            "x": 0.67,
+            "y": 0.66,
+            "scale": 1.0,
+            "fill": [
+              99,
+              81,
+              24
+            ]
+          },
+          {
+            "type": "text",
+            "x": 0.3,
+            "y": 0.3,
+            "text": "Scene 70",
+            "font_size": 18,
+            "fill": [
+              53,
+              53,
+              46
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 71,
+      "title": "But a huge problem remained.",
+      "narration": "But a huge problem remained.",
+      "mood": "somber",
+      "camera": "pan_left",
+      "visual": {
+        "bg": {
+          "type": "sunset",
+          "colors": [
+            [
+              220,
+              100,
+              70
+            ],
+            [
+              200,
+              120,
+              90
+            ],
+            [
+              160,
+              80,
+              100
+            ],
+            [
+              80,
+              50,
+              80
+            ]
+          ]
+        },
+        "elements": [
+          {
+            "type": "path",
+            "x": 0.6,
+            "y": 0.37,
+            "x2": 0.93,
+            "y2": 0.59,
+            "width": 10,
+            "fill": [
+              140,
+              120,
+              90
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 72,
+      "title": "The earth is a sphere.",
+      "narration": "The earth is a sphere.",
+      "mood": "epic",
+      "camera": "dolly_in",
+      "visual": {
+        "bg": {
+          "type": "solid",
+          "color": [
+            252,
+            250,
+            245
+          ]
+        },
+        "elements": [
+          {
+            "type": "fish",
+            "x": 0.44,
+            "y": 0.31,
+            "scale": 1.1,
+            "fill": [
+              126,
+              73,
+              63
+            ]
+          },
+          {
+            "type": "rect",
+            "x": 0.79,
+            "y": 0.66,
+            "width": 0.11,
+            "height": 0.13,
+            "fill": [
+              163,
+              115,
+              126,
+              150
+            ],
+            "stroke": [
+              69,
+              159,
+              59
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 73,
+      "title": "Maps are flat paper.",
+      "narration": "Maps are flat paper.",
+      "mood": "mysterious",
+      "camera": null,
+      "visual": {
+        "bg": {
+          "type": "forest",
+          "sky_color": [
+            180,
+            200,
+            180
+          ],
+          "horizon": 0.5,
+          "ground_color": [
+            40,
+            80,
+            40
+          ]
+        },
+        "elements": [
+          {
+            "type": "animal",
+            "x": 0.66,
+            "y": 0.74,
+            "scale": 1.2,
+            "fill": [
+              121,
+              85,
+              53
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 74,
+      "title": "You cannot flatten a sphere perfect",
+      "narration": "You cannot flatten a sphere perfectly.",
+      "mood": "peaceful",
+      "camera": "ken_burns_in",
+      "visual": {
+        "bg": {
+          "type": "forest",
+          "sky_color": [
+            180,
+            200,
+            180
+          ],
+          "horizon": 0.5,
+          "ground_color": [
+            40,
+            80,
+            40
+          ]
+        },
+        "elements": [
+          {
+            "type": "human",
+            "x": 0.34,
+            "y": 0.27,
+            "scale": 2.3,
+            "fill": [
+              117,
+              83,
+              66
+            ]
+          },
+          {
+            "type": "polygon",
+            "x": 0.42,
+            "y": 0.55,
+            "points": [
+              [
+                0.39943578256171475,
+                0.5779738488600515
+              ],
+              [
+                0.41543629887703015,
+                0.5691274987271248
+              ],
+              [
+                0.4909070617692558,
+                0.5224810050907802
+              ],
+              [
+                0.4376131513373461,
+                0.5736243809023107
+              ]
+            ],
+            "fill": [
+              202,
+              158,
+              219,
+              120
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 75,
+      "title": "Greenland looks as big as Africa.",
+      "narration": "Greenland looks as big as Africa.",
+      "mood": "hopeful",
+      "camera": "ken_burns_out",
+      "visual": {
+        "bg": {
+          "type": "sunset",
+          "colors": [
+            [
+              220,
+              100,
+              70
+            ],
+            [
+              200,
+              120,
+              90
+            ],
+            [
+              160,
+              80,
+              100
+            ],
+            [
+              80,
+              50,
+              80
+            ]
+          ]
+        },
+        "elements": [
+          {
+            "type": "cloud",
+            "x": 0.25,
+            "y": 0.72,
+            "scale": 0.5
+          },
+          {
+            "type": "circle",
+            "x": 0.23,
+            "y": 0.33,
+            "radius": 0.057,
+            "fill": [
+              139,
+              156,
+              134,
+              100
+            ],
+            "stroke": [
+              211,
+              218,
+              178
+            ],
+            "stroke_width": 2
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 76,
+      "title": "Distances near the poles are wrong.",
+      "narration": "Distances near the poles are wrong.",
+      "mood": "dramatic",
+      "camera": "pan_right",
+      "visual": {
+        "bg": {
+          "type": "indoor",
+          "wall_color": [
+            195,
+            175,
+            155
+          ],
+          "floor_color": [
+            135,
+            115,
+            95
+          ]
+        },
+        "elements": [
+          {
+            "type": "cloud",
+            "x": 0.73,
+            "y": 0.54,
+            "scale": 0.8
+          },
+          {
+            "type": "star",
+            "x": 0.17,
+            "y": 0.4,
+            "count": 29,
+            "brightness": 206
+          },
+          {
+            "type": "moon",
+            "x": 0.75,
+            "y": 0.25,
+            "radius": 26,
+            "fill": [
+              240,
+              230,
+              200
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 77,
+      "title": "Mapmakers struggled for centuries.",
+      "narration": "Mapmakers struggled for centuries.",
+      "mood": "somber",
+      "camera": "pan_left",
+      "visual": {
+        "bg": {
+          "type": "gradient",
+          "colors": [
+            [
+              200,
+              190,
+              180
+            ],
+            [
+              160,
+              150,
+              140
+            ]
+          ],
+          "horizon": 0.6,
+          "ground_color": [
+            80,
+            70,
+            55
+          ]
+        },
+        "elements": [
+          {
+            "type": "star",
+            "x": 0.28,
+            "y": 0.27,
+            "count": 29,
+            "brightness": 161
+          },
+          {
+            "type": "animal",
+            "x": 0.3,
+            "y": 0.55,
+            "scale": 1.2,
+            "fill": [
+              73,
+              100,
+              51
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 78,
+      "title": "The math seemed impossible.",
+      "narration": "The math seemed impossible.",
+      "mood": "epic",
+      "camera": "dolly_in",
+      "visual": {
+        "bg": {
+          "type": "night",
+          "colors": [
+            [
+              8,
+              6,
+              28
+            ],
+            [
+              18,
+              14,
+              42
+            ]
+          ],
+          "horizon": 0.55,
+          "ground_color": [
+            20,
+            18,
+            15
+          ]
+        },
+        "elements": [
+          {
+            "type": "sun",
+            "x": 0.2,
+            "y": 0.62,
+            "radius": 26,
+            "fill": [
+              255,
+              200,
+              50
+            ]
+          },
+          {
+            "type": "polygon",
+            "x": 0.3,
+            "y": 0.68,
+            "points": [
+              [
+                0.27256952854915684,
+                0.623608668790631
+              ],
+              [
+                0.3640849657010813,
+                0.6004536882368027
+              ],
+              [
+                0.3573449802208282,
+                0.6231500768512813
+              ],
+              [
+                0.2407987410309499,
+                0.6401046714764999
+              ]
+            ],
+            "fill": [
+              84,
+              68,
+              209,
+              120
+            ]
+          },
+          {
+            "type": "human",
+            "x": 0.24,
+            "y": 0.4,
+            "scale": 2.6,
+            "fill": [
+              107,
+              60,
+              51
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 79,
+      "title": "How to make a flat map accurate?",
+      "narration": "How to make a flat map accurate?",
+      "mood": "mysterious",
+      "camera": null,
+      "visual": {
+        "bg": {
+          "type": "solid",
+          "color": [
+            252,
+            250,
+            245
+          ]
+        },
+        "elements": [
+          {
+            "type": "water",
+            "x": 0.67,
+            "y": 0.49,
+            "scale": 0.7,
+            "fill": [
+              30,
+              80,
+              160
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 80,
+      "title": "The answer came from one man.",
+      "narration": "The answer came from one man.",
+      "mood": "peaceful",
+      "camera": "ken_burns_in",
+      "visual": {
+        "bg": {
+          "type": "indoor",
+          "wall_color": [
+            195,
+            175,
+            155
+          ],
+          "floor_color": [
+            135,
+            115,
+            95
+          ]
+        },
+        "elements": [
+          {
+            "type": "rect",
+            "x": 0.57,
+            "y": 0.45,
+            "width": 0.11,
+            "height": 0.12,
+            "fill": [
+              208,
+              173,
+              117,
+              150
+            ],
+            "stroke": [
+              157,
+              204,
+              47
+            ]
+          },
+          {
+            "type": "mountain",
+            "x": 0.85,
+            "y": 0.67,
+            "scale": 0.6,
+            "fill": [
+              56,
+              101,
+              75
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 81,
+      "title": "Gerardus Mercator, fifteen sixty ni",
+      "narration": "Gerardus Mercator, fifteen sixty nine.",
+      "mood": "hopeful",
+      "camera": "ken_burns_out",
+      "visual": {
+        "bg": {
+          "type": "gradient",
+          "colors": [
+            [
+              200,
+              190,
+              180
+            ],
+            [
+              160,
+              150,
+              140
+            ]
+          ],
+          "horizon": 0.6,
+          "ground_color": [
+            80,
+            70,
+            55
+          ]
+        },
+        "elements": [
+          {
+            "type": "building",
+            "x": 0.58,
+            "y": 0.24,
+            "scale": 0.6,
+            "fill": [
+              150,
+              127,
+              105
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 82,
+      "title": "His solution was brilliantly simple",
+      "narration": "His solution was brilliantly simple.",
+      "mood": "dramatic",
+      "camera": "pan_right",
+      "visual": {
+        "bg": {
+          "type": "indoor",
+          "wall_color": [
+            195,
+            175,
+            155
+          ],
+          "floor_color": [
+            135,
+            115,
+            95
+          ]
+        },
+        "elements": [
+          {
+            "type": "rect",
+            "x": 0.36,
+            "y": 0.48,
+            "width": 0.13,
+            "height": 0.13,
+            "fill": [
+              69,
+              207,
+              206,
+              150
+            ],
+            "stroke": [
+              181,
+              95,
+              150
+            ]
+          },
+          {
+            "type": "x_mark",
+            "x": 0.77,
+            "y": 0.43,
+            "scale": 0.9,
+            "fill": [
+              180,
+              40,
+              40
+            ]
+          },
+          {
+            "type": "label",
+            "x": 0.44,
+            "y": 0.25,
+            "text": "Scene 82",
+            "font_size": 20,
+            "fill": [
+              30,
+              47,
+              16
+            ],
+            "bg_color": [
+              255,
+              250,
+              240
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 83,
+      "title": "Stretch the map near the poles.",
+      "narration": "Stretch the map near the poles.",
+      "mood": "somber",
+      "camera": "pan_left",
+      "visual": {
+        "bg": {
+          "type": "night",
+          "colors": [
+            [
+              8,
+              6,
+              28
+            ],
+            [
+              18,
+              14,
+              42
+            ]
+          ],
+          "horizon": 0.55,
+          "ground_color": [
+            20,
+            18,
+            15
+          ]
+        },
+        "elements": [
+          {
+            "type": "circle",
+            "x": 0.2,
+            "y": 0.66,
+            "radius": 0.035,
+            "fill": [
+              64,
+              135,
+              73,
+              100
+            ],
+            "stroke": [
+              182,
+              55,
+              190
+            ],
+            "stroke_width": 2
+          },
+          {
+            "type": "animal",
+            "x": 0.24,
+            "y": 0.39,
+            "scale": 1.0,
+            "fill": [
+              118,
+              77,
+              85
+            ]
+          },
+          {
+            "type": "fish",
+            "x": 0.19,
+            "y": 0.36,
+            "scale": 0.8,
+            "fill": [
+              76,
+              86,
+              62
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 84,
+      "title": "Keep lines of longitude parallel.",
+      "narration": "Keep lines of longitude parallel.",
+      "mood": "epic",
+      "camera": "dolly_in",
+      "visual": {
+        "bg": {
+          "type": "night",
+          "colors": [
+            [
+              8,
+              6,
+              28
+            ],
+            [
+              18,
+              14,
+              42
+            ]
+          ],
+          "horizon": 0.55,
+          "ground_color": [
+            20,
+            18,
+            15
+          ]
+        },
+        "elements": [
+          {
+            "type": "circle",
+            "x": 0.31,
+            "y": 0.26,
+            "radius": 0.072,
+            "fill": [
+              134,
+              69,
+              111,
+              100
+            ],
+            "stroke": [
+              186,
+              97,
+              149
+            ],
+            "stroke_width": 1
+          },
+          {
+            "type": "flag",
+            "x": 0.8,
+            "y": 0.66,
+            "scale": 0.7,
+            "fill": [
+              61,
+              47,
+              54
+            ]
+          },
+          {
+            "type": "house",
+            "x": 0.37,
+            "y": 0.39,
+            "scale": 0.6,
+            "fill": [
+              185,
+              109,
+              106
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 85,
+      "title": "A straight line equals constant bea",
+      "narration": "A straight line equals constant bearing.",
+      "mood": "mysterious",
+      "camera": null,
+      "visual": {
+        "bg": {
+          "type": "gradient",
+          "colors": [
+            [
+              200,
+              190,
+              180
+            ],
+            [
+              160,
+              150,
+              140
+            ]
+          ],
+          "horizon": 0.6,
+          "ground_color": [
+            80,
+            70,
+            55
+          ]
+        },
+        "elements": [
+          {
+            "type": "fish",
+            "x": 0.59,
+            "y": 0.22,
+            "scale": 1.0,
+            "fill": [
+              83,
+              74,
+              56
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 86,
+      "title": "Sailors could navigate with a ruler",
+      "narration": "Sailors could navigate with a ruler.",
+      "mood": "peaceful",
+      "camera": "ken_burns_in",
+      "visual": {
+        "bg": {
+          "type": "solid",
+          "color": [
+            252,
+            250,
+            245
+          ]
+        },
+        "elements": [
+          {
+            "type": "text",
+            "x": 0.37,
+            "y": 0.38,
+            "text": "Scene 86",
+            "font_size": 23,
+            "fill": [
+              48,
+              10,
+              56
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 87,
+      "title": "Draw a line from A to B and follow ",
+      "narration": "Draw a line from A to B and follow it.",
+      "mood": "hopeful",
+      "camera": "ken_burns_out",
+      "visual": {
+        "bg": {
+          "type": "night",
+          "colors": [
+            [
+              8,
+              6,
+              28
+            ],
+            [
+              18,
+              14,
+              42
+            ]
+          ],
+          "horizon": 0.55,
+          "ground_color": [
+            20,
+            18,
+            15
+          ]
+        },
+        "elements": [
+          {
+            "type": "house",
+            "x": 0.58,
+            "y": 0.57,
+            "scale": 0.7,
+            "fill": [
+              172,
+              127,
+              101
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 88,
+      "title": "It was revolutionary for navigation",
+      "narration": "It was revolutionary for navigation.",
+      "mood": "dramatic",
+      "camera": "pan_right",
+      "visual": {
+        "bg": {
+          "type": "indoor",
+          "wall_color": [
+            195,
+            175,
+            155
+          ],
+          "floor_color": [
+            135,
+            115,
+            95
+          ]
+        },
+        "elements": [
+          {
+            "type": "sun",
+            "x": 0.68,
+            "y": 0.26,
+            "radius": 33,
+            "fill": [
+              255,
+              200,
+              50
+            ]
+          },
+          {
+            "type": "cloud",
+            "x": 0.35,
+            "y": 0.57,
+            "scale": 0.6
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 89,
+      "title": "The Mercator projection was born.",
+      "narration": "The Mercator projection was born.",
+      "mood": "somber",
+      "camera": "pan_left",
+      "visual": {
+        "bg": {
+          "type": "gradient",
+          "colors": [
+            [
+              200,
+              190,
+              180
+            ],
+            [
+              160,
+              150,
+              140
+            ]
+          ],
+          "horizon": 0.6,
+          "ground_color": [
+            80,
+            70,
+            55
+          ]
+        },
+        "elements": [
+          {
+            "type": "label",
+            "x": 0.84,
+            "y": 0.23,
+            "text": "Scene 89",
+            "font_size": 17,
+            "fill": [
+              29,
+              65,
+              13
+            ],
+            "bg_color": [
+              255,
+              250,
+              240
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 90,
+      "title": "It ruled for four hundred years.",
+      "narration": "It ruled for four hundred years.",
+      "mood": "epic",
+      "camera": "dolly_in",
+      "visual": {
+        "bg": {
+          "type": "forest",
+          "sky_color": [
+            180,
+            200,
+            180
+          ],
+          "horizon": 0.5,
+          "ground_color": [
+            40,
+            80,
+            40
+          ]
+        },
+        "elements": [
+          {
+            "type": "ship",
+            "x": 0.38,
+            "y": 0.2,
+            "scale": 0.6,
+            "fill": [
+              60,
+              50,
+              40
+            ],
+            "sail_color": [
+              200,
+              190,
+              180
+            ]
+          },
+          {
+            "type": "hill",
+            "x": 0.24,
+            "y": 0.49,
+            "scale": 0.5,
+            "fill": [
+              85,
+              123,
+              72
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 91,
+      "title": "Maps were once rare treasures.",
+      "narration": "Maps were once rare treasures.",
+      "mood": "mysterious",
+      "camera": null,
+      "visual": {
+        "bg": {
+          "type": "gradient",
+          "colors": [
+            [
+              200,
+              190,
+              180
+            ],
+            [
+              160,
+              150,
+              140
+            ]
+          ],
+          "horizon": 0.6,
+          "ground_color": [
+            80,
+            70,
+            55
+          ]
+        },
+        "elements": [
+          {
+            "type": "fish",
+            "x": 0.18,
+            "y": 0.21,
+            "scale": 1.2,
+            "fill": [
+              125,
+              70,
+              66
+            ]
+          },
+          {
+            "type": "arrow",
+            "x": 0.55,
+            "y": 0.59,
+            "x2": 0.73,
+            "y2": 0.59,
+            "stroke": [
+              180,
+              60,
+              60
+            ],
+            "stroke_width": 2
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 92,
+      "title": "Only kings and scholars owned them.",
+      "narration": "Only kings and scholars owned them.",
+      "mood": "peaceful",
+      "camera": "ken_burns_in",
+      "visual": {
+        "bg": {
+          "type": "gradient",
+          "colors": [
+            [
+              200,
+              190,
+              180
+            ],
+            [
+              160,
+              150,
+              140
+            ]
+          ],
+          "horizon": 0.6,
+          "ground_color": [
+            80,
+            70,
+            55
+          ]
+        },
+        "elements": [
+          {
+            "type": "hill",
+            "x": 0.71,
+            "y": 0.54,
+            "scale": 0.7,
+            "fill": [
+              108,
+              93,
+              35
+            ]
+          },
+          {
+            "type": "arrow",
+            "x": 0.74,
+            "y": 0.33,
+            "x2": 0.96,
+            "y2": 0.33,
+            "stroke": [
+              180,
+              60,
+              60
+            ],
+            "stroke_width": 4
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 93,
+      "title": "A single map took months to draw.",
+      "narration": "A single map took months to draw.",
+      "mood": "hopeful",
+      "camera": "ken_burns_out",
+      "visual": {
+        "bg": {
+          "type": "indoor",
+          "wall_color": [
+            195,
+            175,
+            155
+          ],
+          "floor_color": [
+            135,
+            115,
+            95
+          ]
+        },
+        "elements": [
+          {
+            "type": "fish",
+            "x": 0.39,
+            "y": 0.38,
+            "scale": 0.7,
+            "fill": [
+              102,
+              90,
+              37
+            ]
+          },
+          {
+            "type": "rect",
+            "x": 0.51,
+            "y": 0.7,
+            "width": 0.12,
+            "height": 0.13,
+            "fill": [
+              205,
+              77,
+              100,
+              150
+            ],
+            "stroke": [
+              66,
+              77,
+              105
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 94,
+      "title": "Then Gutenberg changed everything.",
+      "narration": "Then Gutenberg changed everything.",
+      "mood": "dramatic",
+      "camera": "pan_right",
+      "visual": {
+        "bg": {
+          "type": "night",
+          "colors": [
+            [
+              8,
+              6,
+              28
+            ],
+            [
+              18,
+              14,
+              42
+            ]
+          ],
+          "horizon": 0.55,
+          "ground_color": [
+            20,
+            18,
+            15
+          ]
+        },
+        "elements": [
+          {
+            "type": "water",
+            "x": 0.68,
+            "y": 0.56,
+            "scale": 0.5,
+            "fill": [
+              30,
+              80,
+              160
+            ]
+          },
+          {
+            "type": "house",
+            "x": 0.59,
+            "y": 0.46,
+            "scale": 0.8,
+            "fill": [
+              167,
+              128,
+              113
+            ]
+          },
+          {
+            "type": "polygon",
+            "x": 0.6,
+            "y": 0.74,
+            "points": [
+              [
+                0.5717133186629377,
+                0.8153556902733057
+              ],
+              [
+                0.5705822231184928,
+                0.7303620506146982
+              ],
+              [
+                0.5950273733642197,
+                0.7610216192040686
+              ],
+              [
+                0.6474127486642285,
+                0.7546271610929633
+              ]
+            ],
+            "fill": [
+              130,
+              169,
+              58,
+              120
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 95,
+      "title": "Maps could be printed by the thousa",
+      "narration": "Maps could be printed by the thousands.",
+      "mood": "somber",
+      "camera": "pan_left",
+      "visual": {
+        "bg": {
+          "type": "indoor",
+          "wall_color": [
+            195,
+            175,
+            155
+          ],
+          "floor_color": [
+            135,
+            115,
+            95
+          ]
+        },
+        "elements": [
+          {
+            "type": "mountain",
+            "x": 0.19,
+            "y": 0.66,
+            "scale": 0.4,
+            "fill": [
+              105,
+              124,
+              35
+            ]
+          },
+          {
+            "type": "flag",
+            "x": 0.57,
+            "y": 0.41,
+            "scale": 0.8,
+            "fill": [
+              100,
+              77,
+              67
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 96,
+      "title": "Identical copies everywhere.",
+      "narration": "Identical copies everywhere.",
+      "mood": "epic",
+      "camera": "dolly_in",
+      "visual": {
+        "bg": {
+          "type": "indoor",
+          "wall_color": [
+            195,
+            175,
+            155
+          ],
+          "floor_color": [
+            135,
+            115,
+            95
+          ]
+        },
+        "elements": [
+          {
+            "type": "path",
+            "x": 0.28,
+            "y": 0.53,
+            "x2": 0.63,
+            "y2": 0.82,
+            "width": 15,
+            "fill": [
+              140,
+              120,
+              90
+            ]
+          },
+          {
+            "type": "cloud",
+            "x": 0.72,
+            "y": 0.66,
+            "scale": 0.8
+          },
+          {
+            "type": "tree",
+            "x": 0.5,
+            "y": 0.29,
+            "scale": 0.6,
+            "fill": [
+              48,
+              118,
+              53
+            ],
+            "tree_style": "palm"
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 97,
+      "title": "Ordinary people could finally own m",
+      "narration": "Ordinary people could finally own maps.",
+      "mood": "mysterious",
+      "camera": null,
+      "visual": {
+        "bg": {
+          "type": "solid",
+          "color": [
+            252,
+            250,
+            245
+          ]
+        },
+        "elements": [
+          {
+            "type": "ship",
+            "x": 0.42,
+            "y": 0.63,
+            "scale": 0.6,
+            "fill": [
+              60,
+              50,
+              40
+            ],
+            "sail_color": [
+              200,
+              190,
+              180
+            ]
+          },
+          {
+            "type": "mountain",
+            "x": 0.7,
+            "y": 0.56,
+            "scale": 0.4,
+            "fill": [
+              56,
+              105,
+              73
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 98,
+      "title": "Explorers shared discoveries instan",
+      "narration": "Explorers shared discoveries instantly.",
+      "mood": "peaceful",
+      "camera": "ken_burns_in",
+      "visual": {
+        "bg": {
+          "type": "solid",
+          "color": [
+            252,
+            250,
+            245
+          ]
+        },
+        "elements": [
+          {
+            "type": "fish",
+            "x": 0.75,
+            "y": 0.73,
+            "scale": 1.0,
+            "fill": [
+              79,
+              71,
+              35
+            ]
+          },
+          {
+            "type": "polygon",
+            "x": 0.61,
+            "y": 0.7,
+            "points": [
+              [
+                0.5796370780082899,
+                0.7249687548857688
+              ],
+              [
+                0.6359416251086688,
+                0.6406322653234496
+              ],
+              [
+                0.6434134422993686,
+                0.6335550419206403
+              ],
+              [
+                0.6194275312145702,
+                0.7229589221378111
+              ]
+            ],
+            "fill": [
+              124,
+              72,
+              211,
+              120
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 99,
+      "title": "Cartography became a global convers",
+      "narration": "Cartography became a global conversation.",
+      "mood": "hopeful",
+      "camera": "ken_burns_out",
+      "visual": {
+        "bg": {
+          "type": "sunset",
+          "colors": [
+            [
+              220,
+              100,
+              70
+            ],
+            [
+              200,
+              120,
+              90
+            ],
+            [
+              160,
+              80,
+              100
+            ],
+            [
+              80,
+              50,
+              80
+            ]
+          ]
+        },
+        "elements": [
+          {
+            "type": "arrow",
+            "x": 0.51,
+            "y": 0.21,
+            "x2": 0.67,
+            "y2": 0.21,
+            "stroke": [
+              180,
+              60,
+              60
+            ],
+            "stroke_width": 2
+          },
+          {
+            "type": "building",
+            "x": 0.81,
+            "y": 0.47,
+            "scale": 0.6,
+            "fill": [
+              118,
+              99,
+              74
+            ]
+          },
+          {
+            "type": "ship",
+            "x": 0.74,
+            "y": 0.26,
+            "scale": 0.6,
+            "fill": [
+              60,
+              50,
+              40
+            ],
+            "sail_color": [
+              200,
+              190,
+              180
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 100,
+      "title": "Knowledge locked away spread to all",
+      "narration": "Knowledge locked away spread to all.",
+      "mood": "dramatic",
+      "camera": "pan_right",
+      "visual": {
+        "bg": {
+          "type": "sunset",
+          "colors": [
+            [
+              220,
+              100,
+              70
+            ],
+            [
+              200,
+              120,
+              90
+            ],
+            [
+              160,
+              80,
+              100
+            ],
+            [
+              80,
+              50,
+              80
+            ]
+          ]
+        },
+        "elements": [
+          {
+            "type": "house",
+            "x": 0.58,
+            "y": 0.53,
+            "scale": 0.7,
+            "fill": [
+              141,
+              153,
+              114
+            ]
+          },
+          {
+            "type": "flag",
+            "x": 0.72,
+            "y": 0.29,
+            "scale": 0.8,
+            "fill": [
+              76,
+              53,
+              53
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 101,
+      "title": "But drawing maps required measureme",
+      "narration": "But drawing maps required measurement.",
+      "mood": "somber",
+      "camera": "pan_left",
+      "visual": {
+        "bg": {
+          "type": "indoor",
+          "wall_color": [
+            195,
+            175,
+            155
+          ],
+          "floor_color": [
+            135,
+            115,
+            95
+          ]
+        },
+        "elements": [
+          {
+            "type": "ship",
+            "x": 0.68,
+            "y": 0.63,
+            "scale": 0.5,
+            "fill": [
+              60,
+              50,
+              40
+            ],
+            "sail_color": [
+              200,
+              190,
+              180
+            ]
+          },
+          {
+            "type": "moon",
+            "x": 0.37,
+            "y": 0.64,
+            "radius": 30,
+            "fill": [
+              240,
+              230,
+              200
+            ]
+          },
+          {
+            "type": "sun",
+            "x": 0.41,
+            "y": 0.72,
+            "radius": 34,
+            "fill": [
+              255,
+              200,
+              50
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 102,
+      "title": "Surveyors walked every inch of land",
+      "narration": "Surveyors walked every inch of land.",
+      "mood": "epic",
+      "camera": "dolly_in",
+      "visual": {
+        "bg": {
+          "type": "forest",
+          "sky_color": [
+            180,
+            200,
+            180
+          ],
+          "horizon": 0.5,
+          "ground_color": [
+            40,
+            80,
+            40
+          ]
+        },
+        "elements": [
+          {
+            "type": "house",
+            "x": 0.42,
+            "y": 0.49,
+            "scale": 1.0,
+            "fill": [
+              182,
+              112,
+              121
+            ]
+          },
+          {
+            "type": "flag",
+            "x": 0.25,
+            "y": 0.34,
+            "scale": 0.9,
+            "fill": [
+              105,
+              53,
+              45
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 103,
+      "title": "They used chains and theodolites.",
+      "narration": "They used chains and theodolites.",
+      "mood": "mysterious",
+      "camera": null,
+      "visual": {
+        "bg": {
+          "type": "sunset",
+          "colors": [
+            [
+              220,
+              100,
+              70
+            ],
+            [
+              200,
+              120,
+              90
+            ],
+            [
+              160,
+              80,
+              100
+            ],
+            [
+              80,
+              50,
+              80
+            ]
+          ]
+        },
+        "elements": [
+          {
+            "type": "cloud",
+            "x": 0.35,
+            "y": 0.62,
+            "scale": 0.5
+          },
+          {
+            "type": "rect",
+            "x": 0.25,
+            "y": 0.44,
+            "width": 0.19,
+            "height": 0.08,
+            "fill": [
+              155,
+              129,
+              46,
+              150
+            ],
+            "stroke": [
+              146,
+              53,
+              141
+            ]
+          },
+          {
+            "type": "text",
+            "x": 0.32,
+            "y": 0.75,
+            "text": "Scene 103",
+            "font_size": 19,
+            "fill": [
+              24,
+              6,
+              20
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 104,
+      "title": "Triangulation was the magic trick.",
+      "narration": "Triangulation was the magic trick.",
+      "mood": "peaceful",
+      "camera": "ken_burns_in",
+      "visual": {
+        "bg": {
+          "type": "forest",
+          "sky_color": [
+            180,
+            200,
+            180
+          ],
+          "horizon": 0.5,
+          "ground_color": [
+            40,
+            80,
+            40
+          ]
+        },
+        "elements": [
+          {
+            "type": "path",
+            "x": 0.38,
+            "y": 0.28,
+            "x2": 0.59,
+            "y2": 0.56,
+            "width": 15,
+            "fill": [
+              140,
+              120,
+              90
+            ]
+          },
+          {
+            "type": "bird",
+            "x": 0.73,
+            "y": 0.62,
+            "scale": 0.9,
+            "fill": [
+              109,
+              50,
+              87
+            ]
+          },
+          {
+            "type": "tree",
+            "x": 0.16,
+            "y": 0.32,
+            "scale": 0.6,
+            "fill": [
+              80,
+              136,
+              58
+            ],
+            "tree_style": "palm"
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 105,
+      "title": "Measure one baseline carefully.",
+      "narration": "Measure one baseline carefully.",
+      "mood": "hopeful",
+      "camera": "ken_burns_out",
+      "visual": {
+        "bg": {
+          "type": "gradient",
+          "colors": [
+            [
+              200,
+              190,
+              180
+            ],
+            [
+              160,
+              150,
+              140
+            ]
+          ],
+          "horizon": 0.6,
+          "ground_color": [
+            80,
+            70,
+            55
+          ]
+        },
+        "elements": [
+          {
+            "type": "moon",
+            "x": 0.36,
+            "y": 0.23,
+            "radius": 28,
+            "fill": [
+              240,
+              230,
+              200
+            ]
+          },
+          {
+            "type": "path",
+            "x": 0.71,
+            "y": 0.45,
+            "x2": 0.94,
+            "y2": 0.73,
+            "width": 8,
+            "fill": [
+              140,
+              120,
+              90
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 106,
+      "title": "Then use triangles to calculate eve",
+      "narration": "Then use triangles to calculate everything.",
+      "mood": "dramatic",
+      "camera": "pan_right",
+      "visual": {
+        "bg": {
+          "type": "sunset",
+          "colors": [
+            [
+              220,
+              100,
+              70
+            ],
+            [
+              200,
+              120,
+              90
+            ],
+            [
+              160,
+              80,
+              100
+            ],
+            [
+              80,
+              50,
+              80
+            ]
+          ]
+        },
+        "elements": [
+          {
+            "type": "ship",
+            "x": 0.45,
+            "y": 0.54,
+            "scale": 0.5,
+            "fill": [
+              60,
+              50,
+              40
+            ],
+            "sail_color": [
+              200,
+              190,
+              180
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 107,
+      "title": "The Ordnance Survey mapped all of B",
+      "narration": "The Ordnance Survey mapped all of Britain.",
+      "mood": "somber",
+      "camera": "pan_left",
+      "visual": {
+        "bg": {
+          "type": "night",
+          "colors": [
+            [
+              8,
+              6,
+              28
+            ],
+            [
+              18,
+              14,
+              42
+            ]
+          ],
+          "horizon": 0.55,
+          "ground_color": [
+            20,
+            18,
+            15
+          ]
+        },
+        "elements": [
+          {
+            "type": "animal",
+            "x": 0.21,
+            "y": 0.74,
+            "scale": 0.6,
+            "fill": [
+              103,
+              84,
+              62
+            ]
+          },
+          {
+            "type": "rect",
+            "x": 0.54,
+            "y": 0.41,
+            "width": 0.14,
+            "height": 0.12,
+            "fill": [
+              135,
+              104,
+              44,
+              150
+            ],
+            "stroke": [
+              131,
+              57,
+              128
+            ]
+          },
+          {
+            "type": "moon",
+            "x": 0.66,
+            "y": 0.55,
+            "radius": 25,
+            "fill": [
+              240,
+              230,
+              200
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 108,
+      "title": "It took decades of walking.",
+      "narration": "It took decades of walking.",
+      "mood": "epic",
+      "camera": "dolly_in",
+      "visual": {
+        "bg": {
+          "type": "gradient",
+          "colors": [
+            [
+              200,
+              190,
+              180
+            ],
+            [
+              160,
+              150,
+              140
+            ]
+          ],
+          "horizon": 0.6,
+          "ground_color": [
+            80,
+            70,
+            55
+          ]
+        },
+        "elements": [
+          {
+            "type": "line",
+            "x": 0.39,
+            "y": 0.55,
+            "x2": 0.66,
+            "y2": 0.59,
+            "stroke": [
+              194,
+              80,
+              70
+            ],
+            "stroke_width": 2
+          },
+          {
+            "type": "water",
+            "x": 0.19,
+            "y": 0.63,
+            "scale": 0.6,
+            "fill": [
+              30,
+              80,
+              160
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 109,
+      "title": "Hill by hill, valley by valley.",
+      "narration": "Hill by hill, valley by valley.",
+      "mood": "mysterious",
+      "camera": null,
+      "visual": {
+        "bg": {
+          "type": "night",
+          "colors": [
+            [
+              8,
+              6,
+              28
+            ],
+            [
+              18,
+              14,
+              42
+            ]
+          ],
+          "horizon": 0.55,
+          "ground_color": [
+            20,
+            18,
+            15
+          ]
+        },
+        "elements": [
+          {
+            "type": "sun",
+            "x": 0.77,
+            "y": 0.37,
+            "radius": 29,
+            "fill": [
+              255,
+              200,
+              50
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 110,
+      "title": "These became the first modern maps.",
+      "narration": "These became the first modern maps.",
+      "mood": "peaceful",
+      "camera": "ken_burns_in",
+      "visual": {
+        "bg": {
+          "type": "forest",
+          "sky_color": [
+            180,
+            200,
+            180
+          ],
+          "horizon": 0.5,
+          "ground_color": [
+            40,
+            80,
+            40
+          ]
+        },
+        "elements": [
+          {
+            "type": "circle",
+            "x": 0.33,
+            "y": 0.61,
+            "radius": 0.04,
+            "fill": [
+              131,
+              52,
+              207,
+              100
+            ],
+            "stroke": [
+              124,
+              109,
+              71
+            ],
+            "stroke_width": 2
+          },
+          {
+            "type": "arrow",
+            "x": 0.77,
+            "y": 0.61,
+            "x2": 1.05,
+            "y2": 0.61,
+            "stroke": [
+              180,
+              60,
+              60
+            ],
+            "stroke_width": 3
+          },
+          {
+            "type": "building",
+            "x": 0.83,
+            "y": 0.47,
+            "scale": 0.6,
+            "fill": [
+              169,
+              141,
+              103
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 111,
+      "title": "Now satellites do the work from spa",
+      "narration": "Now satellites do the work from space.",
+      "mood": "hopeful",
+      "camera": "ken_burns_out",
+      "visual": {
+        "bg": {
+          "type": "forest",
+          "sky_color": [
+            180,
+            200,
+            180
+          ],
+          "horizon": 0.5,
+          "ground_color": [
+            40,
+            80,
+            40
+          ]
+        },
+        "elements": [
+          {
+            "type": "fish",
+            "x": 0.45,
+            "y": 0.44,
+            "scale": 1.2,
+            "fill": [
+              81,
+              84,
+              48
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 112,
+      "title": "GPS pinpoints you anywhere on earth",
+      "narration": "GPS pinpoints you anywhere on earth.",
+      "mood": "dramatic",
+      "camera": "pan_right",
+      "visual": {
+        "bg": {
+          "type": "gradient",
+          "colors": [
+            [
+              200,
+              190,
+              180
+            ],
+            [
+              160,
+              150,
+              140
+            ]
+          ],
+          "horizon": 0.6,
+          "ground_color": [
+            80,
+            70,
+            55
+          ]
+        },
+        "elements": [
+          {
+            "type": "building",
+            "x": 0.61,
+            "y": 0.37,
+            "scale": 0.7,
+            "fill": [
+              137,
+              100,
+              114
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 113,
+      "title": "Every meter photographed from orbit",
+      "narration": "Every meter photographed from orbit.",
+      "mood": "somber",
+      "camera": "pan_left",
+      "visual": {
+        "bg": {
+          "type": "solid",
+          "color": [
+            252,
+            250,
+            245
+          ]
+        },
+        "elements": [
+          {
+            "type": "mountain",
+            "x": 0.66,
+            "y": 0.7,
+            "scale": 0.6,
+            "fill": [
+              77,
+              87,
+              70
+            ]
+          },
+          {
+            "type": "tree",
+            "x": 0.62,
+            "y": 0.42,
+            "scale": 0.7,
+            "fill": [
+              67,
+              133,
+              30
+            ],
+            "tree_style": "round"
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 114,
+      "title": "You carry a map in your pocket.",
+      "narration": "You carry a map in your pocket.",
+      "mood": "epic",
+      "camera": "dolly_in",
+      "visual": {
+        "bg": {
+          "type": "forest",
+          "sky_color": [
+            180,
+            200,
+            180
+          ],
+          "horizon": 0.5,
+          "ground_color": [
+            40,
+            80,
+            40
+          ]
+        },
+        "elements": [
+          {
+            "type": "animal",
+            "x": 0.7,
+            "y": 0.22,
+            "scale": 0.6,
+            "fill": [
+              119,
+              91,
+              53
+            ]
+          },
+          {
+            "type": "text",
+            "x": 0.42,
+            "y": 0.51,
+            "text": "Scene 114",
+            "font_size": 23,
+            "fill": [
+              19,
+              48,
+              28
+            ]
+          },
+          {
+            "type": "x_mark",
+            "x": 0.68,
+            "y": 0.52,
+            "scale": 0.8,
+            "fill": [
+              180,
+              40,
+              40
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 115,
+      "title": "Turn by turn directions to any addr",
+      "narration": "Turn by turn directions to any address.",
+      "mood": "mysterious",
+      "camera": null,
+      "visual": {
+        "bg": {
+          "type": "solid",
+          "color": [
+            252,
+            250,
+            245
+          ]
+        },
+        "elements": [
+          {
+            "type": "star",
+            "x": 0.32,
+            "y": 0.26,
+            "count": 38,
+            "brightness": 173
+          },
+          {
+            "type": "circle",
+            "x": 0.51,
+            "y": 0.7,
+            "radius": 0.036,
+            "fill": [
+              106,
+              220,
+              154,
+              100
+            ],
+            "stroke": [
+              94,
+              196,
+              113
+            ],
+            "stroke_width": 2
+          },
+          {
+            "type": "sun",
+            "x": 0.24,
+            "y": 0.67,
+            "radius": 34,
+            "fill": [
+              255,
+              200,
+              50
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 116,
+      "title": "Live traffic, street view, satellit",
+      "narration": "Live traffic, street view, satellite.",
+      "mood": "peaceful",
+      "camera": "ken_burns_in",
+      "visual": {
+        "bg": {
+          "type": "sunset",
+          "colors": [
+            [
+              220,
+              100,
+              70
+            ],
+            [
+              200,
+              120,
+              90
+            ],
+            [
+              160,
+              80,
+              100
+            ],
+            [
+              80,
+              50,
+              80
+            ]
+          ]
+        },
+        "elements": [
+          {
+            "type": "tree",
+            "x": 0.72,
+            "y": 0.73,
+            "scale": 0.9,
+            "fill": [
+              62,
+              112,
+              65
+            ],
+            "tree_style": "round"
+          },
+          {
+            "type": "line",
+            "x": 0.53,
+            "y": 0.69,
+            "x2": 0.8,
+            "y2": 0.73,
+            "stroke": [
+              209,
+              94,
+              70
+            ],
+            "stroke_width": 2
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 117,
+      "title": "All of human geography at your fing",
+      "narration": "All of human geography at your fingertips.",
+      "mood": "hopeful",
+      "camera": "ken_burns_out",
+      "visual": {
+        "bg": {
+          "type": "ocean",
+          "sky_color": [
+            180,
+            210,
+            240
+          ],
+          "horizon_color": [
+            140,
+            180,
+            220
+          ],
+          "horizon": 0.45,
+          "water_color": [
+            30,
+            70,
+            150
+          ]
+        },
+        "elements": [
+          {
+            "type": "cloud",
+            "x": 0.84,
+            "y": 0.64,
+            "scale": 0.5
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 118,
+      "title": "But the question is still the same.",
+      "narration": "But the question is still the same.",
+      "mood": "dramatic",
+      "camera": "pan_right",
+      "visual": {
+        "bg": {
+          "type": "gradient",
+          "colors": [
+            [
+              200,
+              190,
+              180
+            ],
+            [
+              160,
+              150,
+              140
+            ]
+          ],
+          "horizon": 0.6,
+          "ground_color": [
+            80,
+            70,
+            55
+          ]
+        },
+        "elements": [
+          {
+            "type": "line",
+            "x": 0.55,
+            "y": 0.46,
+            "x2": 0.85,
+            "y2": 0.39,
+            "stroke": [
+              206,
+              55,
+              34
+            ],
+            "stroke_width": 3
+          },
+          {
+            "type": "label",
+            "x": 0.85,
+            "y": 0.6,
+            "text": "Scene 118",
+            "font_size": 22,
+            "fill": [
+              36,
+              54,
+              26
+            ],
+            "bg_color": [
+              255,
+              250,
+              240
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 119,
+      "title": "Where am I right now?",
+      "narration": "Where am I right now?",
+      "mood": "somber",
+      "camera": "pan_left",
+      "visual": {
+        "bg": {
+          "type": "night",
+          "colors": [
+            [
+              8,
+              6,
+              28
+            ],
+            [
+              18,
+              14,
+              42
+            ]
+          ],
+          "horizon": 0.55,
+          "ground_color": [
+            20,
+            18,
+            15
+          ]
+        },
+        "elements": [
+          {
+            "type": "path",
+            "x": 0.2,
+            "y": 0.46,
+            "x2": 0.56,
+            "y2": 0.59,
+            "width": 10,
+            "fill": [
+              140,
+              120,
+              90
+            ]
+          },
+          {
+            "type": "house",
+            "x": 0.83,
+            "y": 0.44,
+            "scale": 1.0,
+            "fill": [
+              133,
+              153,
+              77
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 120,
+      "title": "And what is out there?",
+      "narration": "And what is out there?",
+      "mood": "epic",
+      "camera": "dolly_in",
+      "visual": {
+        "bg": {
+          "type": "solid",
+          "color": [
+            252,
+            250,
+            245
+          ]
+        },
+        "elements": [
+          {
+            "type": "hill",
+            "x": 0.38,
+            "y": 0.59,
+            "scale": 0.5,
+            "fill": [
+              110,
+              103,
+              87
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 121,
+      "title": "From clay tablet to satellite.",
+      "narration": "From clay tablet to satellite.",
+      "mood": "mysterious",
+      "camera": null,
+      "visual": {
+        "bg": {
+          "type": "forest",
+          "sky_color": [
+            180,
+            200,
+            180
+          ],
+          "horizon": 0.5,
+          "ground_color": [
+            40,
+            80,
+            40
+          ]
+        },
+        "elements": [
+          {
+            "type": "star",
+            "x": 0.29,
+            "y": 0.73,
+            "count": 23,
+            "brightness": 166
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 122,
+      "title": "From Babylon to Google Maps.",
+      "narration": "From Babylon to Google Maps.",
+      "mood": "peaceful",
+      "camera": "ken_burns_in",
+      "visual": {
+        "bg": {
+          "type": "ocean",
+          "sky_color": [
+            180,
+            210,
+            240
+          ],
+          "horizon_color": [
+            140,
+            180,
+            220
+          ],
+          "horizon": 0.45,
+          "water_color": [
+            30,
+            70,
+            150
+          ]
+        },
+        "elements": [
+          {
+            "type": "tree",
+            "x": 0.5,
+            "y": 0.29,
+            "scale": 0.9,
+            "fill": [
+              29,
+              100,
+              62
+            ],
+            "tree_style": "palm"
+          },
+          {
+            "type": "fish",
+            "x": 0.78,
+            "y": 0.39,
+            "scale": 1.2,
+            "fill": [
+              72,
+              102,
+              85
+            ]
+          },
+          {
+            "type": "human",
+            "x": 0.21,
+            "y": 0.72,
+            "scale": 2.6,
+            "fill": [
+              86,
+              81,
+              63
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 123,
+      "title": "The journey took two thousand years",
+      "narration": "The journey took two thousand years.",
+      "mood": "hopeful",
+      "camera": "ken_burns_out",
+      "visual": {
+        "bg": {
+          "type": "ocean",
+          "sky_color": [
+            180,
+            210,
+            240
+          ],
+          "horizon_color": [
+            140,
+            180,
+            220
+          ],
+          "horizon": 0.45,
+          "water_color": [
+            30,
+            70,
+            150
+          ]
+        },
+        "elements": [
+          {
+            "type": "human",
+            "x": 0.5,
+            "y": 0.54,
+            "scale": 2.2,
+            "fill": [
+              89,
+              70,
+              65
+            ]
+          },
+          {
+            "type": "animal",
+            "x": 0.43,
+            "y": 0.45,
+            "scale": 1.0,
+            "fill": [
+              80,
+              78,
+              56
+            ]
+          },
+          {
+            "type": "circle",
+            "x": 0.48,
+            "y": 0.39,
+            "radius": 0.037,
+            "fill": [
+              121,
+              128,
+              142,
+              100
+            ],
+            "stroke": [
+              73,
+              134,
+              171
+            ],
+            "stroke_width": 1
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 124,
+      "title": "Every map tells a story of explorat",
+      "narration": "Every map tells a story of exploration.",
+      "mood": "dramatic",
+      "camera": "pan_right",
+      "visual": {
+        "bg": {
+          "type": "night",
+          "colors": [
+            [
+              8,
+              6,
+              28
+            ],
+            [
+              18,
+              14,
+              42
+            ]
+          ],
+          "horizon": 0.55,
+          "ground_color": [
+            20,
+            18,
+            15
+          ]
+        },
+        "elements": [
+          {
+            "type": "cloud",
+            "x": 0.34,
+            "y": 0.34,
+            "scale": 0.4
+          },
+          {
+            "type": "ship",
+            "x": 0.81,
+            "y": 0.68,
+            "scale": 0.5,
+            "fill": [
+              60,
+              50,
+              40
+            ],
+            "sail_color": [
+              200,
+              190,
+              180
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 125,
+      "title": "Of curiosity and courage.",
+      "narration": "Of curiosity and courage.",
+      "mood": "somber",
+      "camera": "pan_left",
+      "visual": {
+        "bg": {
+          "type": "forest",
+          "sky_color": [
+            180,
+            200,
+            180
+          ],
+          "horizon": 0.5,
+          "ground_color": [
+            40,
+            80,
+            40
+          ]
+        },
+        "elements": [
+          {
+            "type": "polygon",
+            "x": 0.65,
+            "y": 0.3,
+            "points": [
+              [
+                0.5954947859028167,
+                0.37935510577526665
+              ],
+              [
+                0.6446904188379761,
+                0.36065210617606697
+              ],
+              [
+                0.6495792436876014,
+                0.23440785520700547
+              ],
+              [
+                0.6329187494581275,
+                0.29315690275035694
+              ]
+            ],
+            "fill": [
+              101,
+              95,
+              189,
+              120
+            ]
+          },
+          {
+            "type": "text",
+            "x": 0.18,
+            "y": 0.35,
+            "text": "Scene 125",
+            "font_size": 23,
+            "fill": [
+              66,
+              58,
+              41
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 126,
+      "title": "The urge to map is deeply human.",
+      "narration": "The urge to map is deeply human.",
+      "mood": "epic",
+      "camera": "dolly_in",
+      "visual": {
+        "bg": {
+          "type": "solid",
+          "color": [
+            252,
+            250,
+            245
+          ]
+        },
+        "elements": [
+          {
+            "type": "human",
+            "x": 0.74,
+            "y": 0.44,
+            "scale": 2.7,
+            "fill": [
+              116,
+              63,
+              98
+            ]
+          },
+          {
+            "type": "label",
+            "x": 0.41,
+            "y": 0.42,
+            "text": "Scene 126",
+            "font_size": 23,
+            "fill": [
+              45,
+              17,
+              23
+            ],
+            "bg_color": [
+              255,
+              250,
+              240
+            ]
+          },
+          {
+            "type": "line",
+            "x": 0.35,
+            "y": 0.41,
+            "x2": 0.54,
+            "y2": 0.42,
+            "stroke": [
+              202,
+              89,
+              73
+            ],
+            "stroke_width": 4
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 127,
+      "title": "We need to know where we are.",
+      "narration": "We need to know where we are.",
+      "mood": "mysterious",
+      "camera": null,
+      "visual": {
+        "bg": {
+          "type": "night",
+          "colors": [
+            [
+              8,
+              6,
+              28
+            ],
+            [
+              18,
+              14,
+              42
+            ]
+          ],
+          "horizon": 0.55,
+          "ground_color": [
+            20,
+            18,
+            15
+          ]
+        },
+        "elements": [
+          {
+            "type": "label",
+            "x": 0.41,
+            "y": 0.74,
+            "text": "Scene 127",
+            "font_size": 22,
+            "fill": [
+              70,
+              28,
+              48
+            ],
+            "bg_color": [
+              255,
+              250,
+              240
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 128,
+      "title": "And what lies beyond the next hill.",
+      "narration": "And what lies beyond the next hill.",
+      "mood": "peaceful",
+      "camera": "ken_burns_in",
+      "visual": {
+        "bg": {
+          "type": "night",
+          "colors": [
+            [
+              8,
+              6,
+              28
+            ],
+            [
+              18,
+              14,
+              42
+            ]
+          ],
+          "horizon": 0.55,
+          "ground_color": [
+            20,
+            18,
+            15
+          ]
+        },
+        "elements": [
+          {
+            "type": "rect",
+            "x": 0.43,
+            "y": 0.22,
+            "width": 0.08,
+            "height": 0.12,
+            "fill": [
+              161,
+              172,
+              156,
+              150
+            ],
+            "stroke": [
+              78,
+              195,
+              171
+            ]
+          },
+          {
+            "type": "water",
+            "x": 0.38,
+            "y": 0.54,
+            "scale": 0.5,
+            "fill": [
+              30,
+              80,
+              160
+            ]
+          },
+          {
+            "type": "flag",
+            "x": 0.67,
+            "y": 0.36,
+            "scale": 0.7,
+            "fill": [
+              103,
+              62,
+              44
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": false
+        }
+      }
+    },
+    {
+      "scene_num": 129,
+      "title": "That question never gets old.",
+      "narration": "That question never gets old.",
+      "mood": "hopeful",
+      "camera": "ken_burns_out",
+      "visual": {
+        "bg": {
+          "type": "sunset",
+          "colors": [
+            [
+              220,
+              100,
+              70
+            ],
+            [
+              200,
+              120,
+              90
+            ],
+            [
+              160,
+              80,
+              100
+            ],
+            [
+              80,
+              50,
+              80
+            ]
+          ]
+        },
+        "elements": [
+          {
+            "type": "ship",
+            "x": 0.48,
+            "y": 0.21,
+            "scale": 0.5,
+            "fill": [
+              60,
+              50,
+              40
+            ],
+            "sail_color": [
+              200,
+              190,
+              180
+            ]
+          },
+          {
+            "type": "cloud",
+            "x": 0.84,
+            "y": 0.52,
+            "scale": 0.7
+          },
+          {
+            "type": "fish",
+            "x": 0.76,
+            "y": 0.55,
+            "scale": 1.0,
+            "fill": [
+              86,
+              91,
+              80
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
+      }
+    },
+    {
+      "scene_num": 130,
+      "title": "And neither does the adventure.",
+      "narration": "And neither does the adventure.",
+      "mood": "dramatic",
+      "camera": "pan_right",
+      "visual": {
+        "bg": {
+          "type": "sunset",
+          "colors": [
+            [
+              220,
+              100,
+              70
+            ],
+            [
+              200,
+              120,
+              90
+            ],
+            [
+              160,
+              80,
+              100
+            ],
+            [
+              80,
+              50,
+              80
+            ]
+          ]
+        },
+        "elements": [
+          {
+            "type": "polygon",
+            "x": 0.49,
+            "y": 0.49,
+            "points": [
+              [
+                0.5253892536398599,
+                0.5339369807734098
+              ],
+              [
+                0.47083045381042443,
+                0.5414658065804564
+              ],
+              [
+                0.4487514496225959,
+                0.5016112434246601
+              ],
+              [
+                0.5220833457826323,
+                0.4405254924523084
+              ]
+            ],
+            "fill": [
+              152,
+              120,
+              147,
+              120
+            ]
+          }
+        ],
+        "atmosphere": {
+          "particles": "none",
+          "fog": true
+        }
       }
     }
   ]

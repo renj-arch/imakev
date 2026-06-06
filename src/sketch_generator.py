@@ -591,15 +591,18 @@ class SketchGenerator:
                        fill=door_color + (220,), stroke=(50, 35, 25, 180), stroke_width=2, rx=2)
         # Door knob
         self.draw_circle(draw, x + dw//2 - 3, y - dh//2, 1.5*s, fill=(180, 160, 100, 200))
-        # Door panels
-        self.draw_rect(draw, x - dw//2 + 2, y - dh + 2, dw//2 - 3, dh//2 - 3,
-                       stroke=(80, 50, 30, 100), stroke_width=1)
-        self.draw_rect(draw, x + 2, y - dh + 2, dw//2 - 3, dh//2 - 3,
-                       stroke=(80, 50, 30, 100), stroke_width=1)
-        self.draw_rect(draw, x - dw//2 + 2, y - dh//2 + 1, dw//2 - 3, dh//2 - 3,
-                       stroke=(80, 50, 30, 100), stroke_width=1)
-        self.draw_rect(draw, x + 2, y - dh//2 + 1, dw//2 - 3, dh//2 - 3,
-                       stroke=(80, 50, 30, 100), stroke_width=1)
+        # Door panels (skip if too small)
+        if dw > 6 and dh > 6:
+            pw = max(1, dw//2 - 3)
+            ph = max(1, dh//2 - 3)
+            self.draw_rect(draw, x - dw//2 + 2, y - dh + 2, pw, ph,
+                           stroke=(80, 50, 30, 100), stroke_width=1)
+            self.draw_rect(draw, x + 2, y - dh + 2, pw, ph,
+                           stroke=(80, 50, 30, 100), stroke_width=1)
+            self.draw_rect(draw, x - dw//2 + 2, y - dh//2 + 1, pw, ph,
+                           stroke=(80, 50, 30, 100), stroke_width=1)
+            self.draw_rect(draw, x + 2, y - dh//2 + 1, pw, ph,
+                           stroke=(80, 50, 30, 100), stroke_width=1)
 
 
         # ── Windows ──
@@ -982,6 +985,78 @@ class SketchGenerator:
             self.draw_line(draw, pts[i][0], pts[i][1], pts[i+1][0], pts[i+1][1],
                            color=self._darken(c, 20) + (80,), width=2)
 
+    def draw_animal(self, draw, x, y, size=1.0, color=(100, 80, 60)):
+        """Draw a simple four-legged animal."""
+        s = size
+        c = tuple(color[:3])
+        body_w, body_h = 25*s, 12*s
+        # Shadow
+        self.draw_shadow_circle(draw, x, y + body_h//2 + 2, body_w//2, offset=(2, 2), blur_radius=4, color=(0, 0, 0, 40))
+        # Body
+        self.draw_rect(draw, x-body_w//2, y-body_h, body_w, body_h, fill=c + (220,), stroke=self._darken(c, 20) + (180,), stroke_width=2, rx=4)
+        # Legs
+        leg_color = self._darken(c, 15)
+        for lx in [x-body_w//3, x+body_w//3]:
+            self.draw_line(draw, lx, y-body_h//2, lx-3*s, y+5*s, color=leg_color, width=int(2.5*s))
+            self.draw_line(draw, lx+2*s, y-body_h//2, lx+4*s, y+5*s, color=leg_color, width=int(2.5*s))
+        # Head
+        head_r = 7*s
+        hx = x + body_w//2 + head_r
+        self.draw_circle(draw, hx, y-body_h+2*s, head_r, fill=self._lighten(c, 10) + (220,), stroke=self._darken(c, 20) + (180,), stroke_width=2)
+        # Eye
+        self.draw_circle(draw, hx+2*s, y-body_h, 1.5*s, fill=(30, 25, 20, 200))
+        # Ear
+        self.draw_circle(draw, hx-2*s, y-body_h-4*s, 3*s, fill=self._darken(c, 10) + (200,))
+        # Tail
+        tx = x - body_w//2 - 3*s
+        self.draw_line(draw, tx, y-body_h+3*s, tx-5*s, y-body_h-5*s, color=self._darken(c, 10), width=int(2*s))
+
+    def draw_bird(self, draw, x, y, size=1.0, color=(60, 50, 40)):
+        """Draw a bird in flight or perched."""
+        s = size
+        c = tuple(color[:3])
+        # Body
+        body_r = 5*s
+        self.draw_circle(draw, x, y, body_r, fill=c + (220,), stroke=self._darken(c, 20) + (180,), stroke_width=1)
+        # Head
+        self.draw_circle(draw, x+5*s, y-2*s, 3*s, fill=c + (220,), stroke=self._darken(c, 20) + (180,), stroke_width=1)
+        # Beak
+        self.draw_polygon(draw, [(x+7*s, y-2*s), (x+10*s, y-2*s), (x+8*s, y-s)],
+                         fill=(200, 180, 100, 200), stroke=(150, 130, 60, 180), stroke_width=1)
+        # Wing (as a curve)
+        self.draw_arc(draw, x-3*s, y-3*s, 8*s, 200, 340, color=self._darken(c, 15), width=int(2*s))
+        # Tail
+        self.draw_line(draw, x-6*s, y, x-10*s, y-3*s, color=self._darken(c, 10), width=int(1.5*s))
+        self.draw_line(draw, x-6*s, y, x-10*s, y+2*s, color=self._darken(c, 10), width=int(1.5*s))
+        # Eye
+        self.draw_circle(draw, x+6*s, y-3*s, 1*s, fill=(20, 20, 20, 200))
+
+    def draw_fish(self, draw, x, y, size=1.0, color=(200, 180, 100)):
+        """Draw a fish."""
+        s = size
+        c = tuple(color[:3])
+        # Body (ellipse-like)
+        body_len = 20*s
+        body_h = 8*s
+        self.draw_shadow_circle(draw, x, y, body_len//2, offset=(2, 2), blur_radius=3, color=(0, 0, 0, 30))
+        pts = []
+        for i in range(13):
+            a = math.radians(i * 30)
+            rx = x + math.cos(a) * body_len/2 * (0.5 + 0.5*abs(math.sin(a)))
+            ry = y + math.sin(a) * body_h/2
+            pts.append((rx, ry))
+        self.draw_polygon(draw, pts, fill=c + (200,), stroke=self._darken(c, 20) + (150,), stroke_width=1)
+        # Tail fin
+        self.draw_polygon(draw, [(x-body_len//2, y), (x-body_len//2-8*s, y-6*s), (x-body_len//2-8*s, y+6*s)],
+                         fill=c + (200,), stroke=self._darken(c, 20) + (150,), stroke_width=1)
+        # Dorsal fin
+        self.draw_polygon(draw, [(x-3*s, y-body_h//2), (x+3*s, y-body_h//2), (x, y-body_h//2-5*s)],
+                         fill=self._lighten(c, 10) + (180,))
+        # Eye
+        self.draw_circle(draw, x+body_len//3, y-1*s, 2*s, fill=(30, 25, 20, 200))
+        # Mouth
+        self.draw_circle(draw, x+body_len//2-1, y, 1*s, fill=(150, 130, 80, 180))
+
     # ── Main scene renderer ────────────────────────────────────
 
     def render_scene(self, desc: dict) -> Image.Image:
@@ -1242,6 +1317,18 @@ class SketchGenerator:
         elif etype == "flag":
             c = fill or (200, 50, 50)
             self.draw_flag(draw, x, y, s, c)
+
+        elif etype == "animal":
+            c = fill or (100, 80, 60)
+            self.draw_animal(draw, x, y, s, c)
+
+        elif etype == "bird":
+            c = fill or (60, 50, 40)
+            self.draw_bird(draw, x, y, s, c)
+
+        elif etype == "fish":
+            c = fill or (200, 180, 100)
+            self.draw_fish(draw, x, y, s, c)
 
         elif etype == "grass":
             count = elem.get("count", 40)
