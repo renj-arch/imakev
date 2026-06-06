@@ -32,12 +32,14 @@ jobs:
         run: |
           PROMPT="${{ inputs.prompt || 'every night in my dreams' }}"
           echo "=== Generating hand-sketch: $PROMPT ==="
-          python -c "
+          python << 'PYEOF'
 from src.sketch_engine import generate_sketch_scene
-img = generate_sketch_scene('$PROMPT', 720, 1280)
+import os
+prompt = os.environ['PROMPT']
+img = generate_sketch_scene(prompt, 720, 1280)
 img.save('hand_sketch_test.png')
 print(f'Saved: hand_sketch_test.png ({img.size[0]}x{img.size[1]})')
-"
+PYEOF
 
       - name: Upload sketch image
         uses: actions/upload-artifact@v4
