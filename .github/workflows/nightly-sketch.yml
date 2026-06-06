@@ -1,17 +1,18 @@
-name: 🎨 Hand-Drawn Sketch
+name: 🎬 Sketch-Story Video
 
 on:
   workflow_dispatch:
     inputs:
-      prompt:
-        description: 'What to draw'
-        required: true
+      script:
+        description: 'Story script (leave blank for built-in pirate story)'
+        required: false
         type: string
+        default: ''
 
 jobs:
-  sketch:
+  story:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 30
 
     steps:
       - uses: actions/checkout@v4
@@ -20,11 +21,13 @@ jobs:
         with:
           python-version: '3.13'
 
-      - name: Install deps
+      - name: Install system deps
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq fonts-dejavu-core fonts-liberation2
-          pip install Pillow numpy python-dotenv openai
+          sudo apt-get install -y -qq fonts-dejavu-core fonts-liberation2 ffmpeg
+
+      - name: Install Python deps
+        run: pip install Pillow numpy moviepy edge-tts python-dotenv openai
 
       - name: Set up LLM env
         run: |
@@ -32,13 +35,25 @@ jobs:
           echo "LLM_API_KEY=${{ secrets.LLM_API_KEY }}" >> .env
           echo "LLM_MODEL=${{ vars.LLM_MODEL || 'moonshotai/kimi-k2.6:free' }}" >> .env
 
-      - name: Generate hand-drawn sketch
-        run: python sketch_pipeline.py "${{ inputs.prompt }}"
+      - name: Write custom script if provided
+        if: inputs.script != ''
+        run: |
+          cat > custom_script.txt << 'SCRIPTEOF'
+          ${{ inputs.script }}
+          SCRIPTEOF
 
-      - name: Upload sketch
+      - name: Generate story video
+        run: |
+          if [ -f custom_script.txt ]; then
+            python story_video.py custom_script.txt
+          else
+            python story_video.py
+          fi
+
+      - name: Upload video
         uses: actions/upload-artifact@v4
         with:
-          name: hand-drawn-sketch
-          path: sketch_*.png
-          retention-days: 7
+          name: sketch-story-video
+          path: output/story_*.mp4
+          retention-days: 30
           if-no-files-found: error
