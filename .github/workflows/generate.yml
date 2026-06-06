@@ -127,6 +127,14 @@ jobs:
           print('HF_API_KEY set=' + ('yes' if os.environ.get('HF_API_KEY') else 'no'))
           print('LLM_API_KEY set=' + ('yes' if os.environ.get('LLM_API_KEY') else 'no'))
           "
+      - name: Write narration file
+        if: inputs.mode == 'narration'
+        env:
+          SCRIPT_TEXT: |
+            ${{ inputs.script_file }}
+        run: |
+          python -c "import os; open('.github_narration.txt','w',encoding='utf-8').write(os.environ.get('SCRIPT_TEXT',''))"
+
       - name: Generate video(s)
         env:
           LLM_PROVIDER: ${{ inputs.llm_provider || 'huggingface' }}
@@ -147,11 +155,10 @@ jobs:
                 python storyboard_video.py "${{ inputs.topic }}"
                 ;;
               narration)
-                if [ -z "${{ inputs.script_file }}" ]; then
+                if [ ! -f .github_narration.txt ]; then
                   echo "Error: script_file input is required for narration mode"
                   exit 1
                 fi
-                python -c "import json,sys; open('.github_narration.txt','w',encoding='utf-8').write(json.loads(sys.argv[1]))" '${{ toJSON(inputs.script_file) }}'
                 TITLE_FLAG=""
                 if [ -n "${{ inputs.custom_title }}" ]; then
                   TITLE_FLAG="--title '${{ inputs.custom_title }}'"
