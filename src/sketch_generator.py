@@ -6,6 +6,7 @@ Handles any topic: landscapes, characters, objects, diagrams, abstract art.
 Built from scratch — no hardcoded pirate/ship/etc. functions."""
 
 import math, random, colorsys, re, json
+import numpy as np
 from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageChops
 from typing import Optional
 import config
