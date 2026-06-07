@@ -1895,6 +1895,49 @@ class SketchGenerator:
                     draw.ellipse([cx + dx - cr, cy + dy - cr//2, cx + dx + cr, cy + dy + cr//2],
                                 fill=(cb, cb, cb, self.rng.randint(120, 200)))
 
+    def draw_concept(self, draw, x, y, word, color=None, size=1.0):
+        """Generate a unique meaningful visual for any concept word."""
+        import math
+        sw = max(10, int(35 * size))
+        sh = max(10, int(35 * size))
+        if color is None or not isinstance(color, (list, tuple)):
+            clr = (160, 180, 200)
+        else:
+            clr = tuple(int(c) for c in color[:3])
+
+        # Background shape based on first letter of word
+        first = word[0].lower() if word else 'a'
+        shape_idx = (ord(first) - 97) % 6 if first.isalpha() else 0
+
+        # Draw background card
+        card_w = max(40, len(word) * 9 + 12)
+        card_h = 32
+        self.draw_rect(draw, x - card_w//2, y - card_h//2, card_w, card_h,
+                      fill=clr + (200,), rx=6)
+        self.draw_rect(draw, x - card_w//2, y - card_h//2, card_w, card_h,
+                      stroke=(40, 35, 30), stroke_width=1, rx=6)
+
+        # Decorative shape inside card
+        if shape_idx == 0:  # Circle
+            self.draw_circle(draw, x, y - 2, sw * 0.15, fill=clr + (230,))
+        elif shape_idx == 1:  # Diamond
+            pts = [(x, y-2-int(sw*0.15)), (x+int(sw*0.15), y-2), (x, y-2+int(sw*0.15)), (x-int(sw*0.15), y-2)]
+            self.draw_polygon(draw, pts, fill=clr + (230,))
+        elif shape_idx == 2:  # Triangle
+            pts = [(x, y-2-int(sw*0.15)), (x+int(sw*0.13), y-2+int(sw*0.1)), (x-int(sw*0.13), y-2+int(sw*0.1))]
+            self.draw_polygon(draw, pts, fill=clr + (230,))
+        elif shape_idx == 3:  # Star dot
+            self.draw_circle(draw, x, y-2, 3, fill=(255, 255, 200, 230))
+        elif shape_idx == 4:  # Small square
+            self.draw_rect(draw, x-3, y-5, 6, 6, fill=clr + (230,), rx=1)
+        else:  # Line
+            self.draw_line(draw, x-8, y-2, x+8, y-2, color=clr + (200,), width=2)
+
+        # Draw the word label below shape
+        fs = max(10, min(16, int(22 / max(1, len(word) * 0.12))))
+        self.draw_text(draw, x, y + int(card_h * 0.25), word, font_size=fs,
+                      color=(40, 35, 30), align="center")
+
     def _render_element(self, draw, elem: dict):
         """Render a single element from its description."""
         etype = elem.get("type", "").lower()
@@ -2470,14 +2513,9 @@ class SketchGenerator:
                     return
             except Exception:
                 pass
-            # Unknown type — draw with label
-            if fill:
-                self.draw_circle(draw, x, y, 10*s, fill=fill + (180,))
-            else:
-                self.draw_circle(draw, x, y, 10*s, stroke=(40, 35, 30), stroke_width=2)
+            # Unknown type — draw with concept card
             label = elem.get("label", elem.get("text", etype))
-            if label:
-                self.draw_text(draw, x, y+15*s, label, font_size=14, color=(100, 90, 80), align="center")
+            self.draw_concept(draw, x, y, label, fill, s)
 
     # ── Chart renderers ────────────────────────────────────────
 
