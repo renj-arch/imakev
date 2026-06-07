@@ -18,6 +18,7 @@ for d in [ASSETS_DIR, BACKGROUNDS_DIR, FONTS_DIR, MUSIC_DIR, OUTPUT_DIR, TEMP_DI
 LLM_PROVIDER = os.getenv("LLM_PROVIDER", "openrouter")
 LLM_MODEL = os.getenv("LLM_MODEL", "openai/gpt-4o-mini")
 LLM_API_KEY = os.getenv("LLM_API_KEY", "")
+LLM_BASE_URL = os.getenv("LLM_BASE_URL", "")
 
 OPENROUTER_BASE = "https://openrouter.ai/api/v1"
 GOOGLE_BASE = "https://generativelanguage.googleapis.com/v1beta/openai/"

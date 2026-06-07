@@ -1380,7 +1380,7 @@ _BIOMES = [
     (["farm", "field", "pasture", "meadow", "grassland", "prairie", "ranch", "barn", "crop", "grain", "wheat", "hay", "orchard", "garden"], "farm", "gradient", [(160, 200, 130), (120, 160, 90)], (80, 120, 50)),
     (["swamp", "marsh", "bog", "fen", "wetland", "bayou", "everglade", "mangrove"], "swamp", "forest", [(100, 140, 80), (60, 90, 50)], (50, 80, 40)),
     (["river", "lake", "pond", "stream", "creek", "brook", "waterfall", "cascade"], "river", "ocean", [(80, 160, 210), (40, 100, 180)], None),
-    (["extinction", "asteroid", "impact", "crater", "meteor", "collision", "explosion", "doomsday", "catastrophe", "devastation", "apocalypse", "annihilated", "obliterated"], "impact", "night", [(50, 30, 20), (30, 15, 10), (10, 5, 3)], (20, 10, 5)),
+    (["extinction", "asteroid", "impact", "crater", "meteor", "collision", "explosion", "doomsday", "catastrophe", "devastation", "apocalypse", "annihilated", "obliterated"], "impact", "gradient", [(120, 90, 70), (80, 60, 50), (50, 35, 25)], (60, 45, 35)),
 ]
 
 def _detect_biome(text: str) -> dict:
@@ -1452,7 +1452,7 @@ def _extract_entities(text: str) -> list:
     found = []
     seen_types = set()
     type_counts = {}  # Allow multiple instances of same type (e.g. 2 humans)
-    MAX_PER_TYPE = {"human": 2, "man": 2, "woman": 2, "child": 2, "animal": 2, "star": 3}
+    MAX_PER_TYPE = {"human": 2, "man": 2, "woman": 2, "child": 2, "animal": 2, "star": 1, "rock": 1, "mountain": 1, "cloud": 1}
     auto_count = 0
     MAX_AUTO = 1
 
@@ -1534,6 +1534,11 @@ def _extract_entities(text: str) -> list:
         ("lamp", "lamp", (255, 220, 100), 3), ("window", "house", (255, 230, 150), 2),
         ("door", "house", (100, 60, 40), 2), ("roof", "house", (140, 60, 40), 2),
         ("street", "path", (80, 80, 90), 2), ("market", "house", (200, 160, 120), 3),
+
+        # ── Impact / Extinction ──
+        ("asteroid", "asteroid", (200, 100, 40), 5), ("crater", "crater", (100, 80, 60), 4),
+        ("skeleton", "skeleton", (220, 200, 180), 4), ("fossil", "skeleton", (200, 180, 160), 4),
+        ("carcass", "skeleton", (160, 140, 120), 3), ("remains", "skeleton", (160, 140, 120), 3),
 
         # ── Fantasy & Mythical ──
         ("dragon", "sea_serpent", (60, 40, 80), 5), ("serpent", "sea_serpent", (40, 100, 60), 4),
@@ -2032,10 +2037,19 @@ def _extract_entities(text: str) -> list:
 
     words = l.split()
     i = 0
+    # Negation triggers: if an entity word is preceded by these, skip it
+    _NEGATION_TRIGGERS = {"before", "without", "no", "not", "never", "nor", "none", "neither", "except", "excluding"}
     while i < len(words):
         word = words[i].strip(".,!?;:'\"()[]{}")
         matched = False
         blocked_by_type = False  # Track if word matched an ENTITY but type was already used
+        # Skip if preceded by negation
+        if i > 0:
+            prev = words[i-1].strip(".,!?;:'\"()[]{}").lower()
+            if prev in _NEGATION_TRIGGERS:
+                matched = True
+                i += 1
+                continue
         # Try bigrams first (longest match)
         if i < len(words) - 1:
             bigram = word + " " + words[i+1].strip(".,!?;:'\"()[]{}")
@@ -2348,6 +2362,7 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
     # ── Detect biome / setting ──
     bg = _detect_biome(text)
     biome_bg_type = bg["type"]
+    mood = _detect_mood(text)
 
     # ── Detect mood ──
     mood = _detect_mood(text)
@@ -2369,14 +2384,37 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
     colors = bg["colors"]
     if mood == "somber":
         colors = [[max(0, c[0]-40), max(0, c[1]-30), max(0, c[2]-20)] for c in colors]
+        bg["type"] = "night"
     elif mood == "hopeful":
         colors = [[min(255, c[0]+30), min(255, c[1]+20), c[2]] for c in colors]
+        bg["type"] = "sunset"
     elif mood == "dramatic":
         colors = [[min(255, c[0]+40), max(0, c[1]-20), max(0, c[2]-20)] for c in colors]
+        bg["horizon"] = 0.50
+    elif mood == "mysterious":
+        colors = [[max(0, c[0]-30), max(0, c[1]-20), min(255, c[2]+40)] for c in colors]
     elif mood == "surprising":
         colors = [[min(255, c[0]+50), c[1], c[2]] for c in colors]
     elif mood == "sad":
         colors = [[max(0, c[0]-20), max(0, c[1]-15), c[2]] for c in colors]
+        bg["horizon"] = 0.50
+    bg["colors"] = colors
+
+    # ── Impact / extinction atmosphere override ──
+    atmosphere = {}
+    if re.search(r'\b(extinction|asteroid|impact|meteor|explosion|catastrophe|apocalypse|annihilated|obliterated)\b', text):
+        atmosphere["fog"] = "ash"
+        atmosphere["particles"] = "ash"
+        atmosphere["glow"] = (180, 60, 20)
+        bg["type"] = "impact"
+        # Dark smoky ground
+        bg["colors"] = [[max(0, c[0]-60), max(0, c[1]-50), max(0, c[2]-40)] for c in bg.get("colors", [(100, 80, 60), (50, 30, 20)])]
+        bg["ground_color"] = (20, 10, 5)
+    # Flood/wetland atmosphere for water creatures
+    if re.search(r'\b(river|lake|swamp|wetland|water)\b', text) and re.search(r'\b(crocodile|fish|amphibian)\b', text):
+        atmosphere["fog"] = "mist"
+        atmosphere["particles"] = "mist"
+        bg["horizon"] = 0.50
 
     # ── Compose elements from entities ──
     # Known entity types for scene-aware placement
@@ -2389,7 +2427,7 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
                     "heart","gear","skull","clock","camera","filter","signal",
                     "movement","discard","awareness","edge","color_swatch","brain",
                     "man","woman","child","circle","arrow","fruit","speech_bubble",
-                    "jar","shelf","crocodile","dinosaur","fish"}
+                    "jar","shelf","crocodile","dinosaur","fish","fern","asteroid","crater","skeleton"}
     # Auto-register common unknown types into known categories
     _AUTO_TYPE_MAP = {
         "door": "building", "gate": "building", "window": "building", "wall": "building",
@@ -2417,7 +2455,7 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
         "road": "path", "street": "path", "trail": "path",
         "pencil": "arrow", "pen": "arrow", "brush": "arrow",
         "flag": "arrow", "banner": "arrow",
-        "asteroid": "star", "meteor": "star", "meteorite": "star",
+        "meteor": "star", "meteorite": "star",
         "ball": "circle", "stone": "rock", "pebble": "rock",
         "stick": "arrow", "branch": "arrow", "log": "rock",
         "bone": "arrow", "horn": "arrow", "antler": "arrow",
@@ -2436,10 +2474,10 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
     synth_entities = [(i, e) for i, e in enumerate(new_synth)]
 
     # ── Layer categories for composition ──
-    SKY = {"sun","moon","star","cloud","bird","eye"}
-    BACK = {"mountain","cliff","hill","water","wave","moon_path"}
+    SKY = {"sun","moon","star","cloud","bird","eye","asteroid"}
+    BACK = {"mountain","cliff","hill","water","wave","moon_path","crater"}
     MID = {"tree","plant","flower","grass","fence","path","rock","totem","anchor","fire","campfire","lamp",
-           "globe","ship","canoe","whale","sea_serpent","jar","shelf","building","house","fish"}
+           "globe","ship","canoe","whale","sea_serpent","jar","shelf","building","house","fish","fern","skeleton"}
     FRONT = {"human","animal","shadow_figure","man","woman","child","hand","face","speech_bubble","crocodile","dinosaur"}
     PROPS = {"book","scroll","compass","crown","key","cross","coin","telescope","heart","gear","skull",
              "clock","camera","filter","signal","arrow","fruit"}
@@ -2524,9 +2562,9 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
             current_types.add("mountain")
     # Prehistoric inference — dinosaurs/crocodiles need ferns and water
     if re.search(r'\b(dinosaur|crocodile|prehistoric|ancient|reptile|reptiles)\b', text):
-        if "plant" not in current_types:
-            known_entities.append((len(known_entities), ("plant", (60, 130, 50), 1)))
-            current_types.add("plant")
+        if "fern" not in current_types and "plant" not in current_types:
+            known_entities.append((len(known_entities), ("fern", (60, 130, 50), 1)))
+            current_types.add("fern")
         if re.search(r'\b(river|lake|water|swamp|wetland|ocean)\b', text) and "water" not in current_types:
             known_entities.append((len(known_entities), ("water", (60, 120, 200), 1)))
             current_types.add("water")
@@ -2552,6 +2590,13 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
     spread = 0.7 if narr_pos == "setup" else (0.5 if narr_pos in ("tension", "climax") else 0.6)
     base_scale = 0.7 if narr_pos == "setup" else (1.2 if narr_pos == "tension" else (1.4 if narr_pos == "climax" else 0.85))
     y_base = 0.55 if narr_pos == "setup" else 0.50
+    # Dramatic narrative adjustments
+    if mood == "dramatic":
+        base_scale *= 1.5
+    elif mood == "mysterious":
+        base_scale *= 1.0
+    elif mood == "hopeful":
+        base_scale *= 1.2
 
     # Detect if scene has at least one character
     has_character = any(t in FRONT for t, _, _ in [e[1] for e in layered])
@@ -2622,6 +2667,8 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
             scale = 0.35 * base_scale
         elif etype == "fish":
             scale = 0.45 * base_scale
+        elif etype == "fern":
+            scale = 0.5 * base_scale
         # Add individual scale variety
         scale *= (0.85 + rng.random() * 0.30)
 
@@ -2699,7 +2746,11 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
     is_night = bg["type"] == "night"
     star_count = 30 if is_night else 0
     # Scene-specific particle effects based on content keywords
-    if re.search(r'\b(rain|storm|thunder|clouds|gloomy)\b', text):
+    if re.search(r'\b(extinction|asteroid|impact|meteor|explosion|catastrophe|apocalypse|annihilated|obliterated)\b', text):
+        particles = "ash"
+        fog = "ash"
+        star_count = 0
+    elif re.search(r'\b(rain|storm|thunder|clouds|gloomy)\b', text):
         particles = "rain"
         fog = True
     elif re.search(r'\b(snow|winter|cold|frost|ice)\b', text):
@@ -2747,64 +2798,97 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
         "visual": {
             "scene_type": "story",
             "bg": {"type": bg["type"], "colors": colors, "horizon": bg.get("horizon", 0.55),
-                   "ground_color": bg.get("ground_color")},
+                    "ground_color": bg.get("ground_color")},
             "elements": elements,
-            "atmosphere": {"particles": particles, "fog": fog, "star_count": star_count},
+            "atmosphere": {"particles": particles, "fog": fog, "star_count": star_count,
+                           "ash_count": 80 if particles == "ash" else 0},
         },
     }
 
 
-def generate_script_from_narration(text: str) -> dict:
-    """Split pre-written narration into scenes. Uses LLM for meaning-aware visuals
-    when available, falls back to keyword-based _infer_visuals()."""
-    paragraphs = [p.strip() for p in re.split(r'\n\s*\n', text) if p.strip()]
+def generate_script_from_narration(text: str, scene_guide: list[str | dict] | None = None) -> dict:
+    """Split pre-written narration into scenes.
+    
+    Args:
+        text: Raw narration text (multi-line story).
+        scene_guide: Optional pre-defined scene descriptions. Each entry is either:
+            - A dict with 'narration' (str) + optional 'visual' (full visual dict), 'mood', 'title'
+            - A string (narration line, visual auto-generated)
+            When provided, narration splitting is skipped — one guide entry = one scene.
+            When a guide entry has a 'visual' dict, it's used directly. Otherwise auto-generated.
+    """
+    if scene_guide:
+        # Use pre-defined scene guide — skip auto-splitting
+        final_scenes = []
+        for entry in scene_guide:
+            if isinstance(entry, str):
+                final_scenes.append(entry.strip())
+            elif isinstance(entry, dict):
+                final_scenes.append(entry.get("narration", "").strip())
+            else:
+                continue
+        final_scenes = [s for s in final_scenes if s]
+        if not final_scenes:
+            # Fallback: parse from text
+            return generate_script_from_narration(text)
+        title = scene_guide[0].get("title", " ".join(final_scenes[0].split()[:6]).rstrip(".,!?")) if isinstance(scene_guide[0], dict) else " ".join(final_scenes[0].split()[:6]).rstrip(".,!?")
+    else:
+        paragraphs = [p.strip() for p in re.split(r'\n\s*\n', text) if p.strip()]
 
-    if len(paragraphs) < 4:
-        sentences = [s.strip() for s in text.replace('?', '.').replace('!', '.').split('.') if s.strip()]
-        sentences = [s + '.' for s in sentences if s]
-        paragraphs = []
-        chunk = []
-        for s in sentences:
-            chunk.append(s)
-            if len(chunk) >= 2:
+        if len(paragraphs) < 4:
+            sentences = [s.strip() for s in text.replace('?', '.').replace('!', '.').split('.') if s.strip()]
+            sentences = [s + '.' for s in sentences if s]
+            paragraphs = []
+            chunk = []
+            for s in sentences:
+                chunk.append(s)
+                if len(chunk) >= 2:
+                    paragraphs.append(' '.join(chunk))
+                    chunk = []
+            if chunk:
                 paragraphs.append(' '.join(chunk))
-                chunk = []
-        if chunk:
-            paragraphs.append(' '.join(chunk))
 
-    if len(paragraphs) < 2:
-        paragraphs = [text]
+        if len(paragraphs) < 2:
+            paragraphs = [text]
 
-    # Merge paragraphs into thematically coherent scenes
-    merged = []
-    buffer = []
-    for p in paragraphs:
-        buffer.append(p)
-        word_count = sum(len(c.split()) for c in buffer)
-        has_sentence_boundary = any(c.rstrip().endswith(('.', '!', '?')) for c in buffer[:-1])
-        if (word_count >= 15 and has_sentence_boundary) or word_count >= 25 or len(buffer) >= 3:
-            merged.append(' '.join(buffer))
-            buffer = []
-    if buffer:
-        tail = ' '.join(buffer)
-        if len(tail.split()) >= 10:
-            merged.append(tail)
-        elif merged:
-            merged[-1] = merged[-1] + ' ' + tail
-        else:
-            merged.append(tail)
+        # Merge paragraphs into thematically coherent scenes
+        merged = []
+        buffer = []
+        for p in paragraphs:
+            buffer.append(p)
+            word_count = sum(len(c.split()) for c in buffer)
+            has_sentence_boundary = any(c.rstrip().endswith(('.', '!', '?')) for c in buffer[:-1])
+            if (word_count >= 15 and has_sentence_boundary) or word_count >= 25 or len(buffer) >= 3:
+                merged.append(' '.join(buffer))
+                buffer = []
+        if buffer:
+            tail = ' '.join(buffer)
+            if len(tail.split()) >= 10:
+                merged.append(tail)
+            elif merged:
+                merged[-1] = merged[-1] + ' ' + tail
+            else:
+                merged.append(tail)
 
-    # Split merged scenes at contrast markers (but/however/yet at sentence boundaries)
-    final_scenes = []
-    for m in merged:
-        parts = re.split(r'(?<=[.])\s+(?=(?:but|however|yet|instead|meanwhile|conversely|nevertheless|nonetheless|although|though|despite|unlike|then|afterward|suddenly)\b)', m, flags=re.IGNORECASE)
-        final_scenes.extend(p.strip() for p in parts if p.strip())
+        # Split merged scenes at contrast markers
+        final_scenes = []
+        for m in merged:
+            parts = re.split(r'(?<=[.])\s+(?=(?:but|however|yet|instead|meanwhile|conversely|nevertheless|nonetheless|although|though|despite|unlike|then|afterward|suddenly)\b)', m, flags=re.IGNORECASE)
+            final_scenes.extend(p.strip() for p in parts if p.strip())
 
-    title_words = final_scenes[0].split()[:6]
-    title = " ".join(title_words).rstrip(".,!?")
+        # Merge tiny splits (< 10 words) back to previous scene
+        merged_final = []
+        for scene in final_scenes:
+            if len(scene.split()) < 10 and merged_final:
+                merged_final[-1] = merged_final[-1] + " " + scene
+            else:
+                merged_final.append(scene)
+        final_scenes = merged_final
+
+        title_words = final_scenes[0].split()[:6]
+        title = " ".join(title_words).rstrip(".,!?")
 
     scenes = []
-    # Track persistent story state across scenes for visual consistency
     story_state = {"bg": None, "recent_entities": [], "scene_num": 0, "saved_positions": {}}
 
     for i, para in enumerate(final_scenes):
@@ -2813,26 +2897,46 @@ def generate_script_from_narration(text: str) -> dict:
         if not raw_prompt:
             continue
 
-        # Try keyword engine first
-        llm_result = _infer_visuals_local(raw_prompt, scene_num, len(final_scenes))
-        if llm_result:
-            elems = llm_result.get("visual", llm_result).get("elements", [])
-            if len(elems) >= 2:
-                visuals = llm_result
-                print(f"  Scene {scene_num}/{len(final_scenes)}: Local visual ✓ ({len(elems)} elems)")
-            else:
-                print(f"  Scene {scene_num}/{len(final_scenes)}: local only {len(elems)} elems, trying LLM...")
-                visuals = _infer_visuals(raw_prompt, scene_num, len(final_scenes))
+        # Check if scene_guide provides explicit visual for this entry
+        scene_guide_visual = None
+        scene_guide_mood = None
+        scene_guide_title = None
+        if scene_guide and i < len(scene_guide):
+            entry = scene_guide[i]
+            if isinstance(entry, dict):
+                scene_guide_visual = entry.get("visual")
+                scene_guide_mood = entry.get("mood")
+                scene_guide_title = entry.get("title")
+
+        if scene_guide_visual:
+            # Use pre-defined visual directly
+            visuals = {
+                "visual": scene_guide_visual,
+                "mood": scene_guide_mood or scene_guide_visual.get("mood", "peaceful"),
+                "title": scene_guide_title or " ".join(raw_prompt.split()[:4]).rstrip(".,!?"),
+            }
+            print(f"  Scene {scene_num}/{len(final_scenes)}: Pre-defined visual ✓ ({len(scene_guide_visual.get('elements', []))} elems)")
         else:
-            print(f"  Scene {scene_num}/{len(final_scenes)}: using keyword fallback")
-            visuals = _infer_visuals(raw_prompt, scene_num, len(final_scenes))
-        _enrich_story_context(visuals, raw_prompt, story_state, scene_num, len(final_scenes))
+            # Auto-generate visual
+            llm_result = _infer_visuals_local(raw_prompt, scene_num, len(final_scenes))
+            if llm_result:
+                elems = llm_result.get("visual", llm_result).get("elements", [])
+                if len(elems) >= 2:
+                    visuals = llm_result
+                    print(f"  Scene {scene_num}/{len(final_scenes)}: Local visual ✓ ({len(elems)} elems)")
+                else:
+                    print(f"  Scene {scene_num}/{len(final_scenes)}: local only {len(elems)} elems, trying LLM...")
+                    visuals = _infer_visuals(raw_prompt, scene_num, len(final_scenes))
+            else:
+                print(f"  Scene {scene_num}/{len(final_scenes)}: using keyword fallback")
+                visuals = _infer_visuals(raw_prompt, scene_num, len(final_scenes))
+            _enrich_story_context(visuals, raw_prompt, story_state, scene_num, len(final_scenes))
 
         scene = {
             "scene_num": scene_num,
-            "title": visuals.get("title", " ".join(raw_prompt.split()[:4]).rstrip(".,!?")),
+            "title": scene_guide_title or visuals.get("title", " ".join(raw_prompt.split()[:4]).rstrip(".,!?")),
             "narration": raw_prompt,
-            "mood": visuals.get("mood", "peaceful"),
+            "mood": scene_guide_mood or visuals.get("mood", "peaceful"),
             "camera": visuals.get("camera"),
             "visual_type": visuals.get("visual", {}).get("scene_type", "story"),
             "visual": visuals.get("visual", visuals),
@@ -3192,15 +3296,20 @@ def _enrich_story_context(visuals, text, state, scene_num, total):
     if state["bg"] and scene_num > 1:
         bg = vis.get("bg", {})
         current_type = bg.get("type", "gradient") if isinstance(bg, dict) else "gradient"
-        if current_type != state["bg"] and scene_num < total:
-            if not re.search(r'\b(sunset|night|ocean|forest|indoor|desert|snow|fire|underwater|space)\b', t):
-                if isinstance(bg, dict):
-                    bg["type"] = state["bg"]
-                    vis["bg"] = bg
+        # Only carry forward when current scene has no specific biome (gradient = default)
+        # and state bg is a persistent type (not a transient atmospheric like "impact")
+        if current_type == "gradient" and scene_num < total and state["bg"] not in ("impact",):
+            if isinstance(bg, dict):
+                bg["type"] = state["bg"]
+                vis["bg"] = bg
     else:
         bg = vis.get("bg", {})
         if isinstance(bg, dict):
-            state["bg"] = bg.get("type", "gradient")
+            # Don't persist transient atmospheric types
+            _store_type = bg.get("type", "gradient")
+            if _store_type in ("impact",):
+                _store_type = "gradient"
+            state["bg"] = _store_type
     visuals["visual"] = vis
 
 

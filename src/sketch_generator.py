@@ -2175,7 +2175,7 @@ class SketchGenerator:
         etype = elem.get("type", "").lower()
         x = int(elem.get("x", 0.5) * self.w)
         y = int(elem.get("y", 0.5) * self.h)
-        s = (elem.get("scale") or elem.get("size") or 1.0) * 5.0
+        s = (elem.get("scale") or elem.get("size") or 1.0)
 
         # Colors
         fill = elem.get("fill", elem.get("fill_color", elem.get("color", None)))

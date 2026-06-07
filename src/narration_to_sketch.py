@@ -49,8 +49,8 @@ def _detect_visual_type(text: str) -> str:
     # Non-story visual types with their keyword triggers
     types = [
         ("timeline",     ["timeline", "over millions of years", "over thousands", "generation after",
-                          "over time", "history", "evolved", "gradually", "era", "epoch",
-                          "ancient", "began", "eventually", "slowly", "century after century",
+                          "over time", "evolved", "gradually", "era", "epoch",
+                          "began", "eventually", "slowly", "century after century",
                           "year after year", "millennium", "over millions"]),
         ("flowchart",    ["leads to", "results in", "because of this", "chain reaction",
                           "step", "stage", "phase", "process", "sequence", "progression",
@@ -83,8 +83,15 @@ def _detect_visual_type(text: str) -> str:
 
 
 def _describe_scene(narration: str) -> dict:
-    """Convert narration to scene description. Detects visual type first,
-    then routes to the appropriate generator."""
+    """Convert narration to scene description using the engine's built-in intelligence.
+    
+    Pipeline (primary → fallback):
+      1. Knowledge base — TF-IDF similarity against 55+ curated scene templates
+      2. Dynamic scene composer — concept extraction + composition, handles ANY topic
+      3. Keyword parser — fast path for common topics
+      4. Legacy SceneComposer
+      5. Generic fallback
+    """
     
     # Detect what kind of visual this narration needs
     visual_type = _detect_visual_type(narration)
@@ -101,39 +108,41 @@ def _describe_scene(narration: str) -> dict:
         except Exception:
             pass
     
-    # Story type: try LLM first for understanding
-    result = _llm_describe(narration)
-    if result:
-        return result
-    # Semantic matching against knowledge base (TF-IDF, generalizes to unseen topics)
+    # PRIMARY: Knowledge base — curated scene templates for known topics.
+    # These produce the richest, most intentional scenes for specific narrations.
     from src.scene_knowledge import semantic_scene
-    result = semantic_scene(narration, threshold=0.12)
+    result = semantic_scene(narration, threshold=0.2)
     if result:
         return result
-    # Fall back to keyword parsing (fast path for known topics)
+    
+    # SECONDARY: Dynamic scene composer — extracts concepts and composes
+    # a scene algorithmically for ANY text. Handles novel topics no template covers.
+    from src.dynamic_scene import compose_dynamic_scene
+    result = compose_dynamic_scene(narration)
+    if result:
+        return result
+    
+    # TERTIARY: Keyword parsing (fast path for common topics)
     result = _keyword_describe(narration)
     if result:
         return result
-    # Fall back to SceneComposer (works for ANY topic)
+    # QUATERNARY: Legacy SceneComposer
     from src.scene_composer import SceneComposer
     composer = SceneComposer()
     result = composer.compose_scene(narration)
     if result:
         return result
-    # Ultimate fallback
+    # ULTIMATE FALLBACK
     return _generic_fallback(narration)
 
 
 def _llm_describe(narration: str) -> dict | None:
-    """Use LLM to convert narration to scene description.
+    """LLM scene generation (disabled — no external API dependency).
     
-    Delegates to the dedicated llm_scene_generator module.
+    The engine is fully self-contained. Intelligence comes from the
+    concept extractor + dynamic scene composer, not external APIs.
     """
-    from src.llm_scene_generator import describe_scene
-    try:
-        return describe_scene(narration)
-    except Exception:
-        return None
+    return None
 
 
 def _keyword_describe(narration: str) -> dict | None:
@@ -154,13 +163,13 @@ def _keyword_describe(narration: str) -> dict | None:
         scene = {
             "bg": {"type": "gradient", "colors": [[200, 220, 240], [160, 200, 230]], "horizon": 0.55, "ground_color": [80, 130, 80]},
             "elements": [
-                {"type": "tree", "x": 0.2, "y": 0.68, "scale": 0.7, "tree_style": "round", "fill": [40, 110, 40]},
-                {"type": "tree", "x": 0.5, "y": 0.7, "scale": 0.9, "tree_style": "pine", "fill": [35, 95, 35]},
-                {"type": "tree", "x": 0.8, "y": 0.69, "scale": 0.75, "tree_style": "round", "fill": [45, 115, 45]},
-                {"type": "glacier", "x": 0.5, "y": 0.4, "scale": 0.5, "fill": [200, 220, 240]},
+                {"type": "tree", "x": 0.2, "y": 0.68, "scale": 3.5, "tree_style": "round", "fill": [40, 110, 40]},
+                {"type": "tree", "x": 0.5, "y": 0.7, "scale": 4.5, "tree_style": "pine", "fill": [35, 95, 35]},
+                {"type": "tree", "x": 0.8, "y": 0.69, "scale": 3.75, "tree_style": "round", "fill": [45, 115, 45]},
+                {"type": "glacier", "x": 0.5, "y": 0.4, "scale": 2.5, "fill": [200, 220, 240]},
                 {"type": "water", "x": 0.05, "y": 0.75, "width": 0.9, "height": 0.08, "fill": [60, 130, 200]},
-                {"type": "bird", "x": 0.4, "y": 0.25, "scale": 0.4},
-                {"type": "bird", "x": 0.6, "y": 0.28, "scale": 0.35},
+                {"type": "bird", "x": 0.4, "y": 0.25, "scale": 2.0},
+                {"type": "bird", "x": 0.6, "y": 0.28, "scale": 1.75},
             ],
             "atmosphere": {"particles": "none", "fog": False},
             "mood": "hopeful"
@@ -176,10 +185,10 @@ def _keyword_describe(narration: str) -> dict | None:
         scene = {
             "bg": {"type": "gradient", "colors": [[120, 190, 230], [90, 150, 200]], "horizon": 0.6, "ground_color": [50, 100, 50]},
             "elements": [
-                {"type": "tree", "x": 0.2, "y": 0.7, "scale": 0.8, "tree_style": "round", "fill": [50, 130, 50]},
-                {"type": "tree", "x": 0.5, "y": 0.72, "scale": 1.0, "tree_style": "round", "fill": [40, 110, 40]},
-                {"type": "tree", "x": 0.8, "y": 0.71, "scale": 0.85, "tree_style": "pine", "fill": [35, 100, 35]},
-                {"type": "dinosaur", "x": 0.5, "y": 0.6, "scale": 0.5, "fill": [80, 110, 70]},
+                {"type": "tree", "x": 0.2, "y": 0.7, "scale": 4.0, "tree_style": "round", "fill": [50, 130, 50]},
+                {"type": "tree", "x": 0.5, "y": 0.72, "scale": 5.0, "tree_style": "round", "fill": [40, 110, 40]},
+                {"type": "tree", "x": 0.8, "y": 0.71, "scale": 4.25, "tree_style": "pine", "fill": [35, 100, 35]},
+                {"type": "dinosaur", "x": 0.5, "y": 0.6, "scale": 2.5, "fill": [80, 110, 70]},
                 {"type": "water", "x": 0.05, "y": 0.78, "width": 0.9, "height": 0.08, "fill": [40, 130, 190]},
                 {"type": "sun", "x": 0.7, "y": 0.15, "radius": 22, "fill": [255, 230, 80]},
             ],
@@ -198,8 +207,8 @@ def _keyword_describe(narration: str) -> dict | None:
             "bg": {"type": "sunset", "colors": [[255, 220, 120], [200, 180, 140], [150, 150, 200], [80, 100, 180]], "horizon": 0.5, "ground_color": [50, 80, 40]},
             "elements": [
                 {"type": "sun", "x": 0.5, "y": 0.05, "radius": 35, "fill": [255, 240, 150]},
-                {"type": "tree", "x": 0.25, "y": 0.7, "scale": 0.7, "tree_style": "round", "fill": [50, 130, 50]},
-                {"type": "tree", "x": 0.75, "y": 0.72, "scale": 0.8, "tree_style": "pine", "fill": [40, 110, 40]},
+                {"type": "tree", "x": 0.25, "y": 0.7, "scale": 3.5, "tree_style": "round", "fill": [50, 130, 50]},
+                {"type": "tree", "x": 0.75, "y": 0.72, "scale": 4.0, "tree_style": "pine", "fill": [40, 110, 40]},
                 {"type": "hill", "x": 0.5, "y": 0.75, "width": 0.7, "height": 0.12, "fill": [60, 120, 60]},
                 {"type": "text", "x": 0.5, "y": 0.12, "text": "ENDLESS DAY", "font_size": 28, "fill": [200, 180, 60]},
             ],
@@ -221,9 +230,9 @@ def _keyword_describe(narration: str) -> dict | None:
         scene = {
             "bg": {"type": "snow", "colors": [[200, 210, 220], [160, 180, 200]], "horizon": 0.5, "ground_color": [180, 190, 200]},
             "elements": [
-                {"type": "iceberg", "x": 0.25, "y": 0.4, "scale": 0.5, "fill": [210, 225, 245]},
-                {"type": "skeleton", "x": 0.5, "y": 0.7, "scale": 0.5, "fill": [200, 180, 150]},
-                {"type": "tree", "x": 0.5, "y": 0.7, "scale": 0.4, "tree_style": "round", "fill": [80, 60, 40]},
+                {"type": "iceberg", "x": 0.25, "y": 0.4, "scale": 2.5, "fill": [210, 225, 245]},
+                {"type": "skeleton", "x": 0.5, "y": 0.7, "scale": 2.5, "fill": [200, 180, 150]},
+                {"type": "tree", "x": 0.5, "y": 0.7, "scale": 2.0, "tree_style": "round", "fill": [80, 60, 40]},
                 {"type": "text", "x": 0.5, "y": 0.1, "text": "LOST FORESTS", "font_size": 26, "fill": [180, 190, 200]},
             ],
             "atmosphere": {"particles": "snow", "fog": True},
@@ -241,7 +250,7 @@ def _keyword_describe(narration: str) -> dict | None:
         scene = {
             "bg": {"type": "space", "colors": [[2, 2, 15], [5, 3, 25]], "horizon": 0.0},
             "elements": [
-                {"type": "globe", "x": 0.5, "y": 0.45, "scale": 1.0, "fill": [80, 140, 200]},
+                {"type": "globe", "x": 0.5, "y": 0.45, "scale": 5.0, "fill": [80, 140, 200]},
                 {"type": "arrow", "x": 0.55, "y": 0.35, "x2": 0.6, "y2": 0.5, "fill": [255, 200, 50]},
                 {"type": "text", "x": 0.5, "y": 0.08, "text": "CONTINENTAL DRIFT", "font_size": 24, "fill": [200, 200, 220]},
                 {"type": "star", "x": 0.2, "y": 0.2, "radius": 2},
@@ -264,8 +273,8 @@ def _keyword_describe(narration: str) -> dict | None:
             "bg": {"type": "ocean", "sky_color": [160, 190, 220], "horizon_color": [100, 150, 200],
                    "horizon": 0.5, "water_color": [20, 60, 130]},
             "elements": [
-                {"type": "iceberg", "x": 0.3, "y": 0.45, "scale": 0.5, "fill": [210, 225, 245]},
-                {"type": "iceberg", "x": 0.7, "y": 0.5, "scale": 0.4, "fill": [200, 220, 240]},
+                {"type": "iceberg", "x": 0.3, "y": 0.45, "scale": 2.5, "fill": [210, 225, 245]},
+                {"type": "iceberg", "x": 0.7, "y": 0.5, "scale": 2.0, "fill": [200, 220, 240]},
                 {"type": "arrow", "x": 0.2, "y": 0.5, "x2": 0.8, "y2": 0.5, "fill": [100, 180, 255]},
                 {"type": "text", "x": 0.5, "y": 0.12, "text": "CIRCUMPOLAR CURRENT", "font_size": 22, "fill": [180, 210, 240]},
             ],
@@ -286,10 +295,10 @@ def _keyword_describe(narration: str) -> dict | None:
         scene = {
             "bg": {"type": "snow", "colors": [[200, 210, 220], [160, 180, 200]], "horizon": 0.5, "ground_color": [180, 190, 200]},
             "elements": [
-                {"type": "glacier", "x": 0.35, "y": 0.45, "scale": 0.6, "fill": [190, 210, 230]},
-                {"type": "glacier", "x": 0.65, "y": 0.5, "scale": 0.5, "fill": [200, 215, 235]},
-                {"type": "tree", "x": 0.2, "y": 0.7, "scale": 0.45, "tree_style": "pine", "fill": [30, 70, 30]},
-                {"type": "tree", "x": 0.7, "y": 0.72, "scale": 0.35, "tree_style": "pine", "fill": [25, 60, 25]},
+                {"type": "glacier", "x": 0.35, "y": 0.45, "scale": 3.0, "fill": [190, 210, 230]},
+                {"type": "glacier", "x": 0.65, "y": 0.5, "scale": 2.5, "fill": [200, 215, 235]},
+                {"type": "tree", "x": 0.2, "y": 0.7, "scale": 2.25, "tree_style": "pine", "fill": [30, 70, 30]},
+                {"type": "tree", "x": 0.7, "y": 0.72, "scale": 1.75, "tree_style": "pine", "fill": [25, 60, 25]},
                 {"type": "text", "x": 0.5, "y": 0.1, "text": "THE LONG FREEZE", "font_size": 26, "fill": [160, 180, 200]},
             ],
             "atmosphere": {"particles": "snow", "fog": True},
@@ -306,9 +315,9 @@ def _keyword_describe(narration: str) -> dict | None:
         scene = {
             "bg": {"type": "snow", "colors": [[190, 200, 215], [150, 170, 195]], "horizon": 0.5, "ground_color": [170, 185, 200]},
             "elements": [
-                {"type": "glacier", "x": 0.5, "y": 0.4, "scale": 0.8, "fill": [190, 210, 235]},
-                {"type": "glacier", "x": 0.2, "y": 0.55, "scale": 0.5, "fill": [200, 215, 240]},
-                {"type": "glacier", "x": 0.8, "y": 0.5, "scale": 0.55, "fill": [195, 210, 230]},
+                {"type": "glacier", "x": 0.5, "y": 0.4, "scale": 4.0, "fill": [190, 210, 235]},
+                {"type": "glacier", "x": 0.2, "y": 0.55, "scale": 2.5, "fill": [200, 215, 240]},
+                {"type": "glacier", "x": 0.8, "y": 0.5, "scale": 2.75, "fill": [195, 210, 230]},
                 {"type": "sun", "x": 0.5, "y": 0.18, "radius": 20, "fill": [255, 250, 220]},
             ],
             "atmosphere": {"particles": "snow", "fog": True},
@@ -325,9 +334,9 @@ def _keyword_describe(narration: str) -> dict | None:
         scene = {
             "bg": {"type": "snow", "colors": [[180, 190, 200], [150, 170, 190]], "horizon": 0.5, "ground_color": [160, 175, 190]},
             "elements": [
-                {"type": "iceberg", "x": 0.3, "y": 0.45, "scale": 0.6, "fill": [200, 215, 235]},
-                {"type": "tree", "x": 0.7, "y": 0.7, "scale": 0.4, "tree_style": "pine", "fill": [20, 50, 20]},
-                {"type": "x_mark", "x": 0.7, "y": 0.7, "scale": 0.4, "fill": [200, 100, 80]},
+                {"type": "iceberg", "x": 0.3, "y": 0.45, "scale": 3.0, "fill": [200, 215, 235]},
+                {"type": "tree", "x": 0.7, "y": 0.7, "scale": 2.0, "tree_style": "pine", "fill": [20, 50, 20]},
+                {"type": "x_mark", "x": 0.7, "y": 0.7, "scale": 2.0, "fill": [200, 100, 80]},
                 {"type": "text", "x": 0.5, "y": 0.1, "text": "THE LAST FOREST", "font_size": 26, "fill": [150, 170, 190]},
             ],
             "atmosphere": {"particles": "snow", "fog": True},
@@ -347,11 +356,11 @@ def _keyword_describe(narration: str) -> dict | None:
         scene = {
             "bg": {"type": "snow", "colors": [[200, 210, 225], [170, 190, 210]], "horizon": 0.5, "ground_color": [185, 200, 215]},
             "elements": [
-                {"type": "glacier", "x": 0.25, "y": 0.4, "scale": 0.55, "fill": [200, 220, 240]},
-                {"type": "glacier", "x": 0.75, "y": 0.45, "scale": 0.5, "fill": [210, 225, 245]},
-                {"type": "skeleton", "x": 0.5, "y": 0.72, "scale": 0.45, "fill": [200, 180, 150]},
-                {"type": "tree", "x": 0.3, "y": 0.7, "scale": 0.35, "tree_style": "round", "fill": [60, 40, 30]},
-                {"type": "tree", "x": 0.7, "y": 0.72, "scale": 0.3, "tree_style": "pine", "fill": [50, 35, 25]},
+                {"type": "glacier", "x": 0.25, "y": 0.4, "scale": 2.75, "fill": [200, 220, 240]},
+                {"type": "glacier", "x": 0.75, "y": 0.45, "scale": 2.5, "fill": [210, 225, 245]},
+                {"type": "skeleton", "x": 0.5, "y": 0.72, "scale": 2.25, "fill": [200, 180, 150]},
+                {"type": "tree", "x": 0.3, "y": 0.7, "scale": 1.75, "tree_style": "round", "fill": [60, 40, 30]},
+                {"type": "tree", "x": 0.7, "y": 0.72, "scale": 1.5, "tree_style": "pine", "fill": [50, 35, 25]},
                 {"type": "text", "x": 0.5, "y": 0.08, "text": "BENEATH THE ICE", "font_size": 24, "fill": [180, 200, 220]},
             ],
             "atmosphere": {"particles": "snow", "fog": True},
@@ -369,15 +378,15 @@ def _keyword_describe(narration: str) -> dict | None:
         scene = {
             "bg": {"type": "snow", "colors": [[220, 230, 240], [180, 200, 220]], "horizon": 0.5, "ground_color": [200, 210, 220]},
             "elements": [
-                {"type": "glacier", "x": 0.3, "y": 0.5, "scale": 0.7, "fill": [200, 220, 240]},
-                {"type": "glacier", "x": 0.7, "y": 0.55, "scale": 0.5, "fill": [210, 225, 245]},
-                {"type": "cloud", "x": 0.5, "y": 0.2, "scale": 0.6, "fill": [230, 235, 240]},
+                {"type": "glacier", "x": 0.3, "y": 0.5, "scale": 3.5, "fill": [200, 220, 240]},
+                {"type": "glacier", "x": 0.7, "y": 0.55, "scale": 2.5, "fill": [210, 225, 245]},
+                {"type": "cloud", "x": 0.5, "y": 0.2, "scale": 3.0, "fill": [230, 235, 240]},
             ],
             "atmosphere": {"particles": "snow", "fog": True},
             "mood": "mysterious"
         }
         if any(w in n for w in ("memory", "hidden", "beneath", "under", "clues", "evidence", "fossil")):
-            scene["elements"].append({"type": "skeleton", "x": 0.5, "y": 0.72, "scale": 0.4, "fill": [220, 200, 180]})
+            scene["elements"].append({"type": "skeleton", "x": 0.5, "y": 0.72, "scale": 2.0, "fill": [220, 200, 180]})
             scene["mood"] = "mysterious"
         scenes.append(scene)
 
@@ -399,7 +408,7 @@ def _keyword_describe(narration: str) -> dict | None:
                 {"type": "star", "x": 0.8, "y": 0.3, "radius": 2, "fill": [255, 200, 200]},
                 {"type": "star", "x": 0.15, "y": 0.5, "radius": 1.5, "fill": [200, 255, 200]},
                 {"type": "star", "x": 0.9, "y": 0.6, "radius": 2, "fill": [255, 255, 255]},
-                {"type": "astronaut", "x": 0.5, "y": 0.4, "scale": 0.7, "fill": [220, 220, 240]},
+                {"type": "astronaut", "x": 0.5, "y": 0.4, "scale": 3.5, "fill": [220, 220, 240]},
             ],
             "atmosphere": {"particles": "stars", "star_count": 60, "fog": False},
             "mood": "epic"
@@ -466,8 +475,8 @@ def _keyword_describe(narration: str) -> dict | None:
         if any(w in n for w in ("robot", "robotics", "automation", "AI",
                                  "artificial intelligence", "machine")):
             scene["elements"] = [
-                {"type": "human", "x": 0.35, "y": 0.5, "scale": 0.9, "fill": [150, 150, 160]},
-                {"type": "gear", "x": 0.65, "y": 0.45, "scale": 1.0, "fill": [180, 180, 200]},
+                {"type": "human", "x": 0.35, "y": 0.5, "scale": 4.5, "fill": [150, 150, 160]},
+                {"type": "gear", "x": 0.65, "y": 0.45, "scale": 5.0, "fill": [180, 180, 200]},
                 {"type": "circle", "x": 0.35, "y": 0.35, "radius": 4, "fill": [100, 200, 255]},
                 {"type": "circle", "x": 0.35, "y": 0.35, "radius": 2, "fill": [255, 255, 255]},
                 {"type": "text", "x": 0.5, "y": 0.08, "text": "ARTIFICIAL INTELLIGENCE", "font_size": 22, "fill": [100, 200, 230]},
@@ -493,7 +502,7 @@ def _keyword_describe(narration: str) -> dict | None:
         scene = {
             "bg": {"type": "indoor", "colors": [[235, 230, 220], [220, 215, 205]], "horizon": 0.6, "ground_color": [200, 195, 185]},
             "elements": [
-                {"type": "heart", "x": 0.3, "y": 0.4, "scale": 0.9, "fill": [200, 60, 60]},
+                {"type": "heart", "x": 0.3, "y": 0.4, "scale": 4.5, "fill": [200, 60, 60]},
                 {"type": "dna", "x": 0.7, "y": 0.45, "width": 80, "height": 120, "fill": [60, 120, 200]},
                 {"type": "text", "x": 0.5, "y": 0.08, "text": "HUMAN BODY", "font_size": 28, "fill": [60, 60, 80]},
             ],
@@ -515,7 +524,7 @@ def _keyword_describe(narration: str) -> dict | None:
         if any(w in n for w in ("heart", "pumping blood", "heart beats",
                                  "blood vessel", "heart pumps")):
             scene["elements"] = [
-                {"type": "heart", "x": 0.5, "y": 0.4, "scale": 1.3, "fill": [220, 50, 50]},
+                {"type": "heart", "x": 0.5, "y": 0.4, "scale": 6.5, "fill": [220, 50, 50]},
                 {"type": "line", "x1": 0.35, "y1": 0.45, "x2": 0.2, "y2": 0.6, "fill": [200, 50, 50], "stroke_width": 3},
                 {"type": "line", "x1": 0.65, "y1": 0.45, "x2": 0.8, "y2": 0.6, "fill": [50, 100, 200], "stroke_width": 3},
                 {"type": "circle", "x": 0.2, "y": 0.6, "radius": 3, "fill": [220, 60, 60]},
@@ -549,8 +558,8 @@ def _keyword_describe(narration: str) -> dict | None:
         scene = {
             "bg": {"type": "gradient", "colors": [[100, 100, 120], [60, 60, 80]], "horizon": 0.5, "ground_color": [40, 40, 50]},
             "elements": [
-                {"type": "cloud", "x": 0.25, "y": 0.2, "scale": 0.9, "fill": [60, 60, 80]},
-                {"type": "cloud", "x": 0.75, "y": 0.15, "scale": 0.8, "fill": [50, 50, 70]},
+                {"type": "cloud", "x": 0.25, "y": 0.2, "scale": 4.5, "fill": [60, 60, 80]},
+                {"type": "cloud", "x": 0.75, "y": 0.15, "scale": 4.0, "fill": [50, 50, 70]},
                 {"type": "line", "x1": 0.3, "y1": 0.2, "x2": 0.3, "y2": 0.45, "fill": [255, 220, 50], "stroke_width": 4},
                 {"type": "line", "x1": 0.7, "y1": 0.15, "x2": 0.7, "y2": 0.35, "fill": [255, 220, 50], "stroke_width": 3},
                 {"type": "line", "x1": 0.28, "y1": 0.35, "x2": 0.32, "y2": 0.35, "fill": [255, 220, 50], "stroke_width": 2},
@@ -567,7 +576,7 @@ def _keyword_describe(narration: str) -> dict | None:
                 {"type": "mountain", "x": 0.5, "y": 0.55, "width": 0.5, "height": 0.35, "fill": [80, 50, 35]},
                 {"type": "circle", "x": 0.5, "y": 0.25, "radius": 12, "fill": [255, 150, 30]},
                 {"type": "circle", "x": 0.5, "y": 0.25, "radius": 8, "fill": [255, 200, 50]},
-                {"type": "fire", "x": 0.5, "y": 0.55, "scale": 1.0, "fill": [255, 100, 20]},
+                {"type": "fire", "x": 0.5, "y": 0.55, "scale": 5.0, "fill": [255, 100, 20]},
                 {"type": "text", "x": 0.5, "y": 0.08, "text": "VOLCANIC ERUPTION", "font_size": 26, "fill": [255, 180, 100]},
             ]
         if any(w in n for w in ("hurricane", "tornado", "cyclone", "typhoon",
@@ -576,8 +585,8 @@ def _keyword_describe(narration: str) -> dict | None:
                 {"type": "ellipse", "x": 0.5, "y": 0.4, "width": 160, "height": 100, "fill": [80, 80, 100, 40], "stroke": [150, 150, 180], "stroke_width": 2},
                 {"type": "ellipse", "x": 0.5, "y": 0.4, "width": 100, "height": 60, "fill": [60, 60, 80, 60], "stroke": [200, 200, 220], "stroke_width": 1},
                 {"type": "ellipse", "x": 0.5, "y": 0.4, "width": 40, "height": 25, "fill": [200, 200, 220]},
-                {"type": "cloud", "x": 0.3, "y": 0.15, "scale": 0.7, "fill": [50, 50, 70]},
-                {"type": "cloud", "x": 0.7, "y": 0.18, "scale": 0.6, "fill": [50, 50, 70]},
+                {"type": "cloud", "x": 0.3, "y": 0.15, "scale": 3.5, "fill": [50, 50, 70]},
+                {"type": "cloud", "x": 0.7, "y": 0.18, "scale": 3.0, "fill": [50, 50, 70]},
                 {"type": "text", "x": 0.5, "y": 0.08, "text": "HURRICANE", "font_size": 26, "fill": [200, 200, 220]},
             ]
         scenes.append(scene)
@@ -599,8 +608,8 @@ def _keyword_describe(narration: str) -> dict | None:
         scene = {
             "bg": {"type": "gradient", "colors": [[200, 180, 150], [160, 140, 110]], "horizon": 0.5, "ground_color": [140, 120, 90]},
             "elements": [
-                {"type": "building", "x": 0.3, "y": 0.45, "scale": 0.7, "fill": [180, 160, 130]},
-                {"type": "building", "x": 0.7, "y": 0.48, "scale": 0.5, "fill": [170, 150, 120]},
+                {"type": "building", "x": 0.3, "y": 0.45, "scale": 3.5, "fill": [180, 160, 130]},
+                {"type": "building", "x": 0.7, "y": 0.48, "scale": 2.5, "fill": [170, 150, 120]},
                 {"type": "sun", "x": 0.8, "y": 0.12, "radius": 18, "fill": [255, 220, 120]},
                 {"type": "text", "x": 0.5, "y": 0.08, "text": "ANCIENT WORLD", "font_size": 26, "fill": [80, 60, 40]},
             ],
@@ -618,19 +627,19 @@ def _keyword_describe(narration: str) -> dict | None:
         if any(w in n for w in ("roman", "roman empire", "caesar", "colosseum")):
             scene["bg"] = {"type": "gradient", "colors": [[210, 190, 160], [170, 150, 120]], "horizon": 0.5, "ground_color": [150, 130, 100]}
             scene["elements"] = [
-                {"type": "building", "x": 0.25, "y": 0.4, "scale": 0.8, "fill": [190, 170, 140]},
-                {"type": "building", "x": 0.55, "y": 0.42, "scale": 0.6, "fill": [180, 160, 130]},
-                {"type": "building", "x": 0.75, "y": 0.45, "scale": 0.5, "fill": [170, 150, 120]},
-                {"type": "flag", "x": 0.3, "y": 0.15, "scale": 0.6, "fill": [200, 50, 50]},
+                {"type": "building", "x": 0.25, "y": 0.4, "scale": 4.0, "fill": [190, 170, 140]},
+                {"type": "building", "x": 0.55, "y": 0.42, "scale": 3.0, "fill": [180, 160, 130]},
+                {"type": "building", "x": 0.75, "y": 0.45, "scale": 2.5, "fill": [170, 150, 120]},
+                {"type": "flag", "x": 0.3, "y": 0.15, "scale": 3.0, "fill": [200, 50, 50]},
                 {"type": "text", "x": 0.5, "y": 0.08, "text": "ROMAN EMPIRE", "font_size": 26, "fill": [120, 90, 60]},
             ]
         if any(w in n for w in ("industrial revolution", "steam engine", "factory", "industrial")):
             scene["bg"] = {"type": "gradient", "colors": [[150, 140, 130], [100, 90, 80]], "horizon": 0.5, "ground_color": [80, 70, 60]}
             scene["elements"] = [
-                {"type": "building", "x": 0.3, "y": 0.4, "scale": 0.7, "fill": [120, 100, 80]},
-                {"type": "building", "x": 0.65, "y": 0.42, "scale": 0.6, "fill": [110, 90, 70]},
-                {"type": "fire", "x": 0.3, "y": 0.25, "scale": 0.8, "fill": [255, 150, 50]},
-                {"type": "fire", "x": 0.65, "y": 0.28, "scale": 0.6, "fill": [255, 150, 50]},
+                {"type": "building", "x": 0.3, "y": 0.4, "scale": 3.5, "fill": [120, 100, 80]},
+                {"type": "building", "x": 0.65, "y": 0.42, "scale": 3.0, "fill": [110, 90, 70]},
+                {"type": "fire", "x": 0.3, "y": 0.25, "scale": 4.0, "fill": [255, 150, 50]},
+                {"type": "fire", "x": 0.65, "y": 0.28, "scale": 3.0, "fill": [255, 150, 50]},
                 {"type": "text", "x": 0.5, "y": 0.08, "text": "INDUSTRIAL REVOLUTION", "font_size": 24, "fill": [200, 180, 150]},
             ]
         scenes.append(scene)
@@ -662,10 +671,10 @@ def _keyword_describe(narration: str) -> dict | None:
         if any(w in n for w in ("evolution", "natural selection", "species evolve")):
             scene["bg"] = {"type": "gradient", "colors": [[200, 220, 200], [140, 180, 150]], "horizon": 0.5, "ground_color": [100, 140, 100]}
             scene["elements"] = [
-                {"type": "animal", "x": 0.2, "y": 0.55, "scale": 0.5, "fill": [120, 100, 80]},
-                {"type": "animal", "x": 0.4, "y": 0.53, "scale": 0.6, "fill": [100, 80, 60]},
-                {"type": "animal", "x": 0.6, "y": 0.5, "scale": 0.7, "fill": [80, 70, 50]},
-                {"type": "animal", "x": 0.8, "y": 0.48, "scale": 0.8, "fill": [60, 50, 40]},
+                {"type": "animal", "x": 0.2, "y": 0.55, "scale": 2.5, "fill": [120, 100, 80]},
+                {"type": "animal", "x": 0.4, "y": 0.53, "scale": 3.0, "fill": [100, 80, 60]},
+                {"type": "animal", "x": 0.6, "y": 0.5, "scale": 3.5, "fill": [80, 70, 50]},
+                {"type": "animal", "x": 0.8, "y": 0.48, "scale": 4.0, "fill": [60, 50, 40]},
                 {"type": "arrow", "x": 0.25, "y": 0.5, "x2": 0.35, "y2": 0.5, "fill": [100, 100, 100]},
                 {"type": "arrow", "x": 0.45, "y": 0.48, "x2": 0.55, "y2": 0.48, "fill": [100, 100, 100]},
                 {"type": "arrow", "x": 0.65, "y": 0.45, "x2": 0.75, "y2": 0.45, "fill": [100, 100, 100]},
@@ -696,31 +705,31 @@ def _keyword_describe(narration: str) -> dict | None:
         scene = {
             "bg": bg,
             "elements": [
-                {"type": "wave", "x": 0.2, "y": 0.45, "scale": 0.6, "fill": [40, 100, 180]},
-                {"type": "wave", "x": 0.6, "y": 0.48, "scale": 0.5, "fill": [40, 100, 180]},
-                {"type": "ship", "x": 0.5, "y": 0.35, "scale": 0.5, "fill": [100, 80, 60]},
-                {"type": "bird", "x": 0.3, "y": 0.15, "scale": 0.3},
-                {"type": "bird", "x": 0.6, "y": 0.18, "scale": 0.25},
+                {"type": "wave", "x": 0.2, "y": 0.45, "scale": 3.0, "fill": [40, 100, 180]},
+                {"type": "wave", "x": 0.6, "y": 0.48, "scale": 2.5, "fill": [40, 100, 180]},
+                {"type": "ship", "x": 0.5, "y": 0.35, "scale": 2.5, "fill": [100, 80, 60]},
+                {"type": "bird", "x": 0.3, "y": 0.15, "scale": 1.5},
+                {"type": "bird", "x": 0.6, "y": 0.18, "scale": 1.25},
             ],
             "atmosphere": {"particles": "none", "fog": False},
             "mood": "peaceful"
         }
         if any(w in n for w in ("pirate", "shipwreck", "sunken", "treasure")):
             scene["elements"] = [
-                {"type": "ship", "x": 0.5, "y": 0.35, "scale": 0.5, "fill": [80, 50, 30]},
-                {"type": "wave", "x": 0.3, "y": 0.4, "scale": 0.7, "fill": [30, 60, 120]},
-                {"type": "wave", "x": 0.7, "y": 0.42, "scale": 0.6, "fill": [30, 60, 120]},
-                {"type": "cloud", "x": 0.5, "y": 0.12, "scale": 0.8, "fill": [100, 100, 120]},
+                {"type": "ship", "x": 0.5, "y": 0.35, "scale": 2.5, "fill": [80, 50, 30]},
+                {"type": "wave", "x": 0.3, "y": 0.4, "scale": 3.5, "fill": [30, 60, 120]},
+                {"type": "wave", "x": 0.7, "y": 0.42, "scale": 3.0, "fill": [30, 60, 120]},
+                {"type": "cloud", "x": 0.5, "y": 0.12, "scale": 4.0, "fill": [100, 100, 120]},
                 {"type": "text", "x": 0.5, "y": 0.08, "text": "PIRATE SHIP", "font_size": 28, "fill": [40, 40, 60]},
             ]
             scene["mood"] = "dramatic"
         if any(w in n for w in ("deep sea", "underwater", "coral", "jellyfish", "octopus")):
             scene["elements"] = [
-                {"type": "fish", "x": 0.3, "y": 0.4, "scale": 0.6, "fill": [200, 150, 80]},
-                {"type": "fish", "x": 0.7, "y": 0.5, "scale": 0.5, "fill": [80, 150, 200]},
-                {"type": "fish", "x": 0.5, "y": 0.6, "scale": 0.4, "fill": [200, 80, 80]},
-                {"type": "flower", "x": 0.2, "y": 0.7, "scale": 0.5, "fill": [200, 100, 150]},
-                {"type": "flower", "x": 0.8, "y": 0.68, "scale": 0.4, "fill": [150, 200, 100]},
+                {"type": "fish", "x": 0.3, "y": 0.4, "scale": 3.0, "fill": [200, 150, 80]},
+                {"type": "fish", "x": 0.7, "y": 0.5, "scale": 2.5, "fill": [80, 150, 200]},
+                {"type": "fish", "x": 0.5, "y": 0.6, "scale": 2.0, "fill": [200, 80, 80]},
+                {"type": "flower", "x": 0.2, "y": 0.7, "scale": 2.5, "fill": [200, 100, 150]},
+                {"type": "flower", "x": 0.8, "y": 0.68, "scale": 2.0, "fill": [150, 200, 100]},
                 {"type": "text", "x": 0.5, "y": 0.08, "text": "UNDER THE SEA", "font_size": 26, "fill": [100, 180, 220]},
             ]
             scene["mood"] = "mysterious"
@@ -735,9 +744,9 @@ def _keyword_describe(narration: str) -> dict | None:
         scene = {
             "bg": {"type": "gradient", "colors": [[180, 210, 200], [120, 170, 150]], "horizon": 0.6, "ground_color": [60, 100, 50]},
             "elements": [
-                {"type": "animal", "x": 0.4, "y": 0.65, "scale": 0.7, "fill": [130, 100, 70]},
+                {"type": "animal", "x": 0.4, "y": 0.65, "scale": 3.5, "fill": [130, 100, 70]},
                 {"type": "water", "x": 0.05, "y": 0.72, "width": 0.9, "height": 0.1, "fill": [60, 130, 180]},
-                {"type": "tree", "x": 0.8, "y": 0.74, "scale": 0.6, "tree_style": "round", "fill": [50, 120, 50]},
+                {"type": "tree", "x": 0.8, "y": 0.74, "scale": 3.0, "tree_style": "round", "fill": [50, 120, 50]},
             ],
             "atmosphere": {"particles": "none", "fog": False},
             "mood": "peaceful"
@@ -753,19 +762,19 @@ def _keyword_describe(narration: str) -> dict | None:
             "bg": {"type": "ocean", "sky_color": [180, 210, 240], "horizon_color": [120, 170, 220],
                    "horizon": 0.5, "water_color": [30, 70, 150]},
             "elements": [
-                {"type": "whale", "x": 0.5, "y": 0.5, "scale": 0.8, "fill": [60, 70, 100]},
+                {"type": "whale", "x": 0.5, "y": 0.5, "scale": 4.0, "fill": [60, 70, 100]},
             ],
             "atmosphere": {"particles": "none", "fog": False},
             "mood": "epic" if any(w in n for w in ("largest", "giant", "biggest", "enormous", "ocean giant")) else "peaceful"
         }
         if any(w in n for w in ("skeleton", "bone", "bones", "pelvic", "fossil", "hidden")):
-            scene["elements"].append({"type": "skeleton", "x": 0.5, "y": 0.65, "scale": 0.6, "fill": [220, 200, 180]})
+            scene["elements"].append({"type": "skeleton", "x": 0.5, "y": 0.65, "scale": 3.0, "fill": [220, 200, 180]})
             scene["mood"] = "mysterious"
         if any(w in n for w in ("walk on land", "walked on land", "walk across", "four legs on land",
                                  "walking on the ground", "on land and", "lived on land",
                                  "move on land", "on land but")):
             scene["elements"] = [
-                {"type": "animal", "x": 0.4, "y": 0.65, "scale": 0.7, "fill": [100, 80, 60]},
+                {"type": "animal", "x": 0.4, "y": 0.65, "scale": 3.5, "fill": [100, 80, 60]},
                 {"type": "water", "x": 0.05, "y": 0.7, "width": 0.9, "height": 0.15, "fill": [60, 120, 200]},
             ]
             scene["bg"] = {"type": "gradient", "colors": [[180, 210, 240], [100, 160, 200]], "horizon": 0.6, "ground_color": [60, 90, 50]}
@@ -786,7 +795,7 @@ def _keyword_describe(narration: str) -> dict | None:
             "bg": {"type": "ocean", "sky_color": [180, 210, 240], "horizon_color": [120, 170, 220],
                    "horizon": 0.5, "water_color": [30, 70, 150]},
             "elements": [
-                {"type": "whale", "x": 0.5, "y": 0.5, "scale": 0.8, "fill": [60, 70, 100]},
+                {"type": "whale", "x": 0.5, "y": 0.5, "scale": 4.0, "fill": [60, 70, 100]},
             ],
             "atmosphere": {"particles": "none", "fog": False},
             "mood": "epic"
@@ -805,8 +814,8 @@ def _keyword_describe(narration: str) -> dict | None:
             "bg": {"type": "ocean", "sky_color": [80, 100, 130], "horizon_color": [60, 80, 110],
                    "horizon": 0.5, "water_color": [20, 50, 100]},
             "elements": [
-                {"type": "whale", "x": 0.5, "y": 0.45, "scale": 0.7, "fill": [60, 70, 100]},
-                {"type": "skeleton", "x": 0.5, "y": 0.65, "scale": 0.6, "fill": [220, 200, 180]},
+                {"type": "whale", "x": 0.5, "y": 0.45, "scale": 3.5, "fill": [60, 70, 100]},
+                {"type": "skeleton", "x": 0.5, "y": 0.65, "scale": 3.0, "fill": [220, 200, 180]},
                 {"type": "text", "x": 0.5, "y": 0.12, "text": "HIDDEN EVIDENCE", "font_size": 24, "fill": [200, 200, 220]},
             ],
             "atmosphere": {"particles": "none", "fog": True},
@@ -820,13 +829,13 @@ def _keyword_describe(narration: str) -> dict | None:
             "bg": {"type": "ocean", "sky_color": [180, 210, 240], "horizon_color": [120, 170, 220],
                    "horizon": 0.5, "water_color": [30, 70, 150]},
             "elements": [
-                {"type": "ship", "x": 0.5, "y": 0.55, "scale": 1.0, "fill": [80, 60, 40], "sail_color": [220, 210, 190]},
+                {"type": "ship", "x": 0.5, "y": 0.55, "scale": 5.0, "fill": [80, 60, 40], "sail_color": [220, 210, 190]},
             ],
             "atmosphere": {"particles": "none", "fog": False},
             "mood": "dramatic" if any(w in n for w in ("storm", "danger", "battle", "war", "attack")) else "peaceful"
         }
         if "pirate" in n:
-            scene["elements"].append({"type": "human", "x": 0.35, "y": 0.5, "scale": 0.7, "fill": [100, 60, 40]})
+            scene["elements"].append({"type": "human", "x": 0.35, "y": 0.5, "scale": 3.5, "fill": [100, 60, 40]})
         if any(w in n for w in ("storm", "dark", "thunder")):
             scene["atmosphere"]["fog"] = True
             scene["bg"]["sky_color"] = [100, 100, 120]
@@ -845,7 +854,7 @@ def _keyword_describe(narration: str) -> dict | None:
         scene = {
             "bg": {"type": "gradient", "colors": [[180, 210, 240], [120, 170, 220]], "horizon": 0.6, "ground_color": [40, 80, 60]},
             "elements": [
-                {"type": "animal", "x": 0.4, "y": 0.65, "scale": 0.7, "fill": [100, 80, 60]},
+                {"type": "animal", "x": 0.4, "y": 0.65, "scale": 3.5, "fill": [100, 80, 60]},
                 {"type": "water", "x": 0.05, "y": 0.72, "width": 0.9, "height": 0.12, "fill": [60, 120, 200]},
                 {"type": "text", "x": 0.5, "y": 0.1, "text": "EVOLUTION", "font_size": 28, "fill": [60, 60, 80]},
             ],
@@ -853,7 +862,7 @@ def _keyword_describe(narration: str) -> dict | None:
             "mood": "epic"
         }
         if any(w in n for w in ("tail", "tails", "flipper", "flippers", "fin", "fins")):
-            scene["elements"].append({"type": "whale", "x": 0.65, "y": 0.5, "scale": 0.6, "fill": [60, 70, 100]})
+            scene["elements"].append({"type": "whale", "x": 0.65, "y": 0.5, "scale": 3.0, "fill": [60, 70, 100]})
         scenes.append(scene)
 
     # Mountain / Hill / Valley
@@ -862,7 +871,7 @@ def _keyword_describe(narration: str) -> dict | None:
             "bg": {"type": "gradient", "colors": [[180, 200, 220], [100, 150, 200]], "horizon": 0.55, "ground_color": [50, 80, 40]},
             "elements": [
                 {"type": "mountain", "x": 0.5, "y": 0.65, "width": 0.5, "height": 0.3, "fill": [100, 110, 140], "snow": "snow" in n or True},
-                {"type": "tree", "x": 0.2, "y": 0.72, "scale": 0.7, "tree_style": "pine", "fill": [30, 80, 30]},
+                {"type": "tree", "x": 0.2, "y": 0.72, "scale": 3.5, "tree_style": "pine", "fill": [30, 80, 30]},
             ],
             "atmosphere": {"particles": "none", "fog": False},
             "mood": "epic"
@@ -877,11 +886,28 @@ def _keyword_describe(narration: str) -> dict | None:
         scene = {
             "bg": {"type": "gradient", "colors": [[100, 160, 100], [40, 80, 40]], "horizon": 0.7, "ground_color": [30, 60, 30]},
             "elements": [
-                {"type": "tree", "x": 0.2, "y": 0.7, "scale": 0.8, "tree_style": "round", "fill": [40, 100, 40]},
-                {"type": "tree", "x": 0.5, "y": 0.72, "scale": 1.0, "tree_style": "pine", "fill": [30, 80, 30]},
-                {"type": "tree", "x": 0.8, "y": 0.7, "scale": 0.7, "tree_style": "round", "fill": [50, 110, 50]},
+                {"type": "tree", "x": 0.2, "y": 0.7, "scale": 4.0, "tree_style": "round", "fill": [40, 100, 40]},
+                {"type": "tree", "x": 0.5, "y": 0.72, "scale": 5.0, "tree_style": "pine", "fill": [30, 80, 30]},
+                {"type": "tree", "x": 0.8, "y": 0.7, "scale": 3.5, "tree_style": "round", "fill": [50, 110, 50]},
             ],
             "atmosphere": {"particles": "none", "fog": True},
+            "mood": "mysterious"
+        }
+        scenes.append(scene)
+
+    # Eclipse / Solar Eclipse
+    if any(w in n for w in ("eclipse", "solar eclipse", "lunar eclipse")):
+        scene = {
+            "bg": {"type": "gradient", "colors": [[60, 60, 90], [20, 15, 40]], "horizon": 0.6, "ground_color": [30, 35, 40]},
+            "elements": [
+                {"type": "sun", "x": 0.5, "y": 0.35, "radius": 30, "fill": [80, 80, 80]},
+                {"type": "moon", "x": 0.5, "y": 0.35, "radius": 16, "fill": [200, 200, 220]},
+                {"type": "circle", "x": 0.5, "y": 0.35, "radius": 60, "fill": [200, 200, 220, 15], "stroke": [255, 255, 200, 30], "stroke_width": 1},
+                {"type": "star", "x": 0.2, "y": 0.1, "radius": 2},
+                {"type": "star", "x": 0.8, "y": 0.15, "radius": 1.5},
+                {"type": "star", "x": 0.35, "y": 0.05, "radius": 1},
+            ],
+            "atmosphere": {"particles": "stars", "fog": False, "star_count": 30},
             "mood": "mysterious"
         }
         scenes.append(scene)
@@ -906,8 +932,8 @@ def _keyword_describe(narration: str) -> dict | None:
             "bg": {"type": "sunset", "colors": [[200, 100, 60], [180, 80, 80], [100, 50, 80], [40, 50, 30]]},
             "elements": [
                 {"type": "sun", "x": 0.5, "y": 0.35, "radius": 28, "fill": [255, 200, 50]},
-                {"type": "cloud", "x": 0.3, "y": 0.2, "scale": 0.5},
-                {"type": "cloud", "x": 0.7, "y": 0.25, "scale": 0.4},
+                {"type": "cloud", "x": 0.3, "y": 0.2, "scale": 2.5},
+                {"type": "cloud", "x": 0.7, "y": 0.25, "scale": 2.0},
             ],
             "atmosphere": {"particles": "none", "fog": False},
             "mood": "peaceful"
@@ -919,8 +945,8 @@ def _keyword_describe(narration: str) -> dict | None:
         scene = {
             "bg": {"type": "gradient", "colors": [[200, 210, 220], [160, 170, 190]], "horizon": 0.55, "ground_color": [60, 80, 50]},
             "elements": [
-                {"type": "house", "x": 0.5, "y": 0.7, "scale": 1.0, "fill": [180, 150, 120], "roof_color": [150, 50, 40]},
-                {"type": "tree", "x": 0.25, "y": 0.72, "scale": 0.7, "tree_style": "round", "fill": [50, 120, 50]},
+                {"type": "house", "x": 0.5, "y": 0.7, "scale": 5.0, "fill": [180, 150, 120], "roof_color": [150, 50, 40]},
+                {"type": "tree", "x": 0.25, "y": 0.72, "scale": 3.5, "tree_style": "round", "fill": [50, 120, 50]},
             ],
             "atmosphere": {"particles": "none", "fog": False},
             "mood": "peaceful"
@@ -956,7 +982,7 @@ def _keyword_describe(narration: str) -> dict | None:
         scene = {
             "bg": {"type": "gradient", "colors": [[200, 210, 230], [140, 160, 200]], "horizon": 0.6, "ground_color": [60, 90, 50]},
             "elements": [
-                {"type": "human", "x": 0.5, "y": 0.55, "scale": 1.2, "fill": c},
+                {"type": "human", "x": 0.5, "y": 0.55, "scale": 6.0, "fill": c},
             ],
             "atmosphere": {"particles": "none", "fog": False},
             "mood": "peaceful"
@@ -982,8 +1008,8 @@ def _generic_fallback(narration: str) -> dict:
                "horizon": 0.6, "ground_color": [60, 90, 50]},
         "elements": [
             {"type": "hill", "x": 0.5, "y": 0.7, "width": 0.5, "height": 0.15, "fill": [60, 120, 60]},
-            {"type": "tree", "x": 0.3, "y": 0.72, "scale": 0.8, "tree_style": "round", "fill": [50, 120, 50]},
-            {"type": "cloud", "x": 0.5, "y": 0.2, "scale": 0.6},
+            {"type": "tree", "x": 0.3, "y": 0.72, "scale": 4.0, "tree_style": "round", "fill": [50, 120, 50]},
+            {"type": "cloud", "x": 0.5, "y": 0.2, "scale": 3.0},
             {"type": "text", "x": 0.5, "y": 0.08, "text": narration[:40].upper(), "font_size": 28, "fill": [40, 35, 30]},
         ],
         "atmosphere": {"particles": "none", "fog": False},

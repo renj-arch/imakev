@@ -33,6 +33,8 @@ def _generate_openai(prompt: str, temperature: float = 0.8, max_tokens: int = 30
         base, key, model = config.OPENROUTER_BASE, config.LLM_API_KEY, config.LLM_MODEL
     elif config.LLM_PROVIDER == "huggingface":
         base, key, model = config.HF_BASE, config.HF_API_KEY, config.HF_MODEL
+    elif config.LLM_BASE_URL:
+        base, key, model = config.LLM_BASE_URL, config.LLM_API_KEY, config.LLM_MODEL
     else:
         base, key, model = None, config.LLM_API_KEY, config.LLM_MODEL
     client = OpenAI(api_key=key, base_url=base, timeout=120)

@@ -58,12 +58,12 @@ def _get_font(size=36):
         return ImageFont.load_default()
 
 def generate_scene_image(title: str, narration: str, scene_idx: int) -> Image.Image:
-    """Generate a hand-drawn sketch with title text embedded."""
-    from sketch_pipeline import _keyword_parse, render_scene, ImageFilter as PILFilter
+    """Generate a full-color procedural illustration with title text embedded."""
+    from src.narration_to_sketch import sketch_from_narration
 
-    # Generate sketch from narration keywords
-    data = _keyword_parse(narration + " " + title)
-    img = render_scene(data, W, H)
+    # Generate scene from narration (uses SceneComposer offline, no API needed)
+    prompt = f"{title}: {narration}"
+    img = sketch_from_narration(prompt, width=W, height=H, seed=scene_idx)
 
     # Convert to RGBA for overlay
     img = img.convert("RGBA")
@@ -181,7 +181,7 @@ def build_story_video(scenes: list[dict], output_path: str):
     temp_dir.mkdir(exist_ok=True)
 
     # Step 1: Generate scene images with text overlays
-    print(f"\n[1/4] Drawing {len(scenes)} hand-drawn scenes with text...")
+    print(f"\n[1/4] Drawing {len(scenes)} full-color illustration scenes with text...")
     scene_images = []
     for i, scene in enumerate(scenes):
         print(f"  Scene {i+1}: {scene['title'][:40]}")
