@@ -2654,7 +2654,7 @@ def build_video(script_data: dict, output_path: str):
         print(f"  Scene {i+1}: {scene.get('title','')[:30]} [{scene.get('mood','')}] ({sd:.1f}s)")
         frames = render_scene_frames(scene, sd)
         tl = timeline[i]
-        scene_data.append({"frames": frames, "duration": sd, "timeline": tl, "narration": scene["narration"]})
+        scene_data.append({"frames": frames, "duration": sd, "timeline": tl})
         total_frames += len(frames)
         print(f"    -> {len(frames)} frames")
 
@@ -2751,39 +2751,7 @@ def build_video(script_data: dict, output_path: str):
             cd.text((x, lh_base), d, font=f, fill=(255, 255, 255) if wi != cw else (255, 220, 80))
             x += ww
 
-        # ── Typewriter narration overlay (cinematic lower-third) ──
-        narration_text = active.get("narration", "")
-        if narration_text:
-            seg_start = active["start"]
-            seg_end = active["end"]
-            seg_progress = (t - seg_start) / max(seg_end - seg_start, 0.01)
-            char_count = int(len(narration_text) * max(0, seg_progress - 0.03) / 0.97)
-            if char_count > 0 and char_count <= len(narration_text):
-                typed = narration_text[:char_count]
-                # Split into lines for wrapping
-                ftw = _font(20)
-                line_h = 30
-                max_w = W - 120
-                lines = []
-                for word in typed.split():
-                    if not lines:
-                        lines.append(word)
-                    else:
-                        test = lines[-1] + " " + word
-                        tw = cd.textbbox((0, 0), test, font=ftw)
-                        if tw[2] - tw[0] > max_w:
-                            lines.append(word)
-                        else:
-                            lines[-1] = test
-                bar_h = len(lines) * line_h + 16
-                bar_w = min(max(cd.textbbox((0, 0), l, font=ftw)[2] - cd.textbbox((0, 0), l, font=ftw)[0] for l in lines) + 40, W - 40)
-                bx = (W - bar_w) // 2
-                by = H - 230 - (len(lines) - 1) * 12
-                cd.rounded_rectangle([bx, by, bx + bar_w, by + bar_h], radius=8, fill=(0, 0, 0, 160))
-                for li, line in enumerate(lines):
-                    lx = bx + 20
-                    ly = by + 8 + li * line_h
-                    cd.text((lx, ly), line, font=ftw, fill=(255, 255, 230))
+
         return np.array(cap)
 
     clip = VideoClip(make_frame, duration=vdur)
