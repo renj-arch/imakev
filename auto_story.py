@@ -1466,6 +1466,8 @@ def _extract_entities(text: str) -> list:
         ("shark", "shark", (80, 85, 95), 4), ("dolphin", "fish", (100, 140, 180), 3),
         ("jellyfish", "fish", (200, 100, 200), 3), ("turtle", "animal", (80, 140, 60), 3),
         ("crab", "animal", (200, 120, 80), 3), ("lobster", "animal", (200, 80, 60), 3),
+        ("crocodile", "animal", (60, 130, 50), 5), ("alligator", "animal", (60, 120, 50), 5),
+        ("croc", "animal", (60, 130, 50), 4),
         ("starfish", "fish", (220, 150, 80), 3), ("coral", "fish", (200, 120, 160), 3),
         ("seaweed", "plant", (60, 140, 60), 2), ("kelp", "plant", (50, 130, 50), 2),
         ("wave", "wave", (40, 100, 200), 4), ("surf", "wave", (60, 120, 220), 3),
@@ -2136,7 +2138,11 @@ def _extract_entities(text: str) -> list:
                             'precious','valuable','worthless','meaningless',
                             'simple','simply','ordinary','extraordinary',
                             'beautiful','ugly','pretty','lovely','wonderful','terrible',
-                            'strange','strangely','weird','odd','unusual',}
+                             'strange','strangely','weird','odd','unusual',
+                             'ancient','old','exactly','special','predators',
+                             'survive','survived','survives','survival',
+                             'planet','world','earth','ecosystem','ecosystems',
+                             'advantages','advantage','ability','abilities',}
             w_clean = word.translate(str.maketrans('', '', ".,!?;:'\"()[]{}-_")).lower()
             if (w_clean and len(w_clean) >= 5 and w_clean not in stop_words
                 and not w_clean.isdigit() and not w_clean.startswith('http')):
@@ -2401,6 +2407,7 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
         "road": "path", "street": "path", "trail": "path",
         "pencil": "arrow", "pen": "arrow", "brush": "arrow",
         "flag": "arrow", "banner": "arrow",
+        "asteroid": "star", "meteor": "star", "meteorite": "star",
         "ball": "circle", "stone": "rock", "pebble": "rock",
         "stick": "arrow", "branch": "arrow", "log": "rock",
         "bone": "arrow", "horn": "arrow", "antler": "arrow",

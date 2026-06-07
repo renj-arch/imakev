@@ -1683,8 +1683,9 @@ class SketchGenerator:
             if isinstance(bg, dict):
                 self._render_landscape(draw, bg)
 
-        # ── Elements (all types) ──
-        for elem in desc.get("elements", []):
+        # ── Elements (all types) sorted by z_index ──
+        sorted_elems = sorted(desc.get("elements", []), key=lambda e: e.get("z_index", 2))
+        for elem in sorted_elems:
             self._render_element(draw, elem)
 
         # ── Post-processing ──
