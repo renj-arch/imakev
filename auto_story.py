@@ -1919,6 +1919,101 @@ def _extract_entities(text: str) -> list:
         ("centimeter", "key", (180, 160, 100), 2),
         ("centimeters", "key", (180, 160, 100), 2),
 
+        # ── Action keywords ──
+        ("find", "hand", (200, 180, 160), 3),
+        ("found", "hand", (200, 180, 160), 3),
+        ("finds", "hand", (200, 180, 160), 3),
+        ("raise", "hand", (200, 180, 160), 3),
+        ("raises", "hand", (200, 180, 160), 3),
+        ("raised", "hand", (200, 180, 160), 3),
+        ("walk", "human", (140, 120, 100), 3),
+        ("walks", "human", (140, 120, 100), 3),
+        ("walked", "human", (140, 120, 100), 3),
+        ("put", "hand", (200, 180, 160), 2),
+        ("picks", "hand", (200, 180, 160), 3),
+
+        # ── Migrated from global _ENTITY_MAP ──
+        ("alien", "alien", (160, 140, 120), 3),
+        ("alien_creature", "alien_creature", (160, 140, 120), 3),
+        ("amphibian", "animal", (120, 100, 80), 3),
+        ("angel", "angel", (160, 140, 120), 3),
+        ("astronaut", "astronaut", (160, 140, 120), 3),
+        ("atom", "atom", (160, 140, 120), 3),
+        ("aurora", "aurora", (160, 140, 120), 3),
+        ("bicycle", "bicycle", (160, 140, 120), 3),
+        ("bread", "bread", (160, 140, 120), 3),
+        ("car", "car", (160, 140, 120), 3),
+        ("cat", "cat", (160, 140, 120), 3),
+        ("cave", "cave", (160, 140, 120), 3),
+        ("chariot", "chariot", (160, 140, 120), 3),
+        ("clothing", "clothing", (160, 140, 120), 3),
+        ("crustacean", "animal", (120, 100, 80), 3),
+        ("crystal", "crystal", (160, 140, 120), 3),
+        ("cup", "cup", (160, 140, 120), 3),
+        ("dragonfly", "dragonfly", (160, 140, 120), 3),
+        ("dwarf", "dwarf", (160, 140, 120), 3),
+        ("fruit", "fruit", (220, 180, 80), 3),
+        ("furniture", "furniture", (160, 140, 120), 3),
+        ("geyser", "geyser", (160, 140, 120), 3),
+        ("globe", "globe", (80, 160, 180), 3),
+        ("gravestone", "gravestone", (160, 140, 120), 3),
+        ("guitar", "guitar", (160, 140, 120), 3),
+        ("hat", "hat", (160, 140, 120), 3),
+        ("hourglass", "hourglass", (180, 160, 140), 3),
+        ("infinity", "infinity", (160, 140, 120), 3),
+        ("jewelry", "jewelry", (160, 140, 120), 3),
+        ("kitchen", "kitchen", (160, 140, 120), 3),
+        ("mammal", "animal", (120, 100, 80), 3),
+        ("microphone", "microphone", (160, 140, 120), 3),
+        ("mirror", "mirror", (160, 140, 120), 3),
+        ("mollusk", "animal", (120, 100, 80), 3),
+        ("motorcycle", "motorcycle", (160, 140, 120), 3),
+        ("mouse", "mouse", (160, 140, 120), 3),
+        ("path", "path", (140, 120, 80), 3),
+        ("phone", "phone", (160, 140, 120), 3),
+        ("plane", "plane", (160, 140, 120), 3),
+        ("pottery", "pottery", (160, 140, 120), 3),
+        ("predictable", "star", (200, 200, 180), 2),
+        ("puzzle", "puzzle", (160, 140, 120), 3),
+        ("question", "question", (160, 140, 120), 3),
+        ("satellite", "satellite", (160, 140, 120), 3),
+        ("shoe", "shoe", (160, 140, 120), 3),
+        ("spaceship", "spaceship", (160, 140, 120), 3),
+        ("spider", "spider", (160, 140, 120), 3),
+        ("tank", "tank", (160, 140, 120), 3),
+        ("target", "target", (160, 140, 120), 3),
+        ("telescope", "telescope", (100, 140, 180), 3),
+        ("train", "train", (160, 140, 120), 3),
+        ("treasure_chest", "treasure_chest", (160, 140, 120), 3),
+        ("troll", "troll", (160, 140, 120), 3),
+        ("ufo", "ufo", (160, 140, 120), 3),
+        ("volcano", "volcano", (160, 140, 120), 3),
+        ("waterfall", "waterfall", (160, 140, 120), 3),
+
+        # ── Story-related nouns ──
+        ("story", "book", (180, 150, 120), 3),
+        ("stories", "book", (180, 150, 120), 3),
+        ("tale", "book", (180, 150, 120), 3),
+        ("tales", "book", (180, 150, 120), 3),
+
+        # ── Additional common action verbs ──
+        ("buy", "hand", (200, 180, 160), 2),
+        ("bought", "hand", (200, 180, 160), 3),
+        ("buys", "hand", (200, 180, 160), 2),
+        ("buying", "hand", (200, 180, 160), 2),
+        ("follow", "arrow", (160, 140, 100), 3),
+        ("follows", "arrow", (160, 140, 100), 3),
+        ("followed", "arrow", (160, 140, 100), 3),
+        ("following", "arrow", (160, 140, 100), 3),
+        ("realize", "eye", (200, 180, 200), 3),
+        ("realizes", "eye", (200, 180, 200), 3),
+        ("realized", "eye", (200, 180, 200), 3),
+        ("leave", "arrow", (160, 140, 100), 2),
+        ("leaves", "arrow", (160, 140, 100), 3),
+        ("left", "arrow", (160, 140, 100), 3),
+        ("begin", "star", (200, 200, 220), 3),
+        ("begins", "star", (200, 200, 220), 3),
+        ("began", "star", (200, 200, 220), 3),
     ]
 
     words = l.split()
@@ -2001,8 +2096,16 @@ def _extract_entities(text: str) -> list:
                            'couldnt','wouldnt','shouldnt','mustnt',
                            'thats','whats','whos','theres','theyre','youre',
                           'keep','kept','hold','held','write','wrote','written',
-                          'stand','stood','hear','heard','let','say','said','show',
-                          'shown','showed','mean','meant','need','call','try'}
+                           'stand','stood','hear','heard','let','say','said','show',
+                           'shown','showed','mean','meant','need','call','try',
+                           'showing','shows','showed','perfectly','later','never',
+                           'everything','nothing','something','always','often',
+                           'usually','maybe','perhaps','almost','quite','rather',
+                           'everyone','nobody','somebody','anyone',
+                           'useful','useless','helpful','remember','remembers',
+                           'remembered','forget','forgets','forgot','forgotten',
+                           'someday','sometime','sometimes','somewhere',
+                           'passed','passes','passing','pass',}
             w_clean = word.translate(str.maketrans('', '', ".,!?;:'\"()[]{}-_")).lower()
             if (w_clean and len(w_clean) >= 5 and w_clean not in stop_words
                 and not w_clean.isdigit() and not w_clean.startswith('http')):
@@ -2261,11 +2364,47 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
                     "scroll","compass","crown","key","cross","coin","telescope",
                     "heart","gear","skull","clock","camera","filter","signal",
                     "movement","discard","awareness","edge","color_swatch","brain",
-                    "man","woman","child","circle","arrow","fruit"}
+                    "man","woman","child","circle","arrow","fruit","speech_bubble"}
+    # Auto-register common unknown types into known categories
+    _AUTO_TYPE_MAP = {
+        "door": "building", "gate": "building", "window": "building", "wall": "building",
+        "boat": "ship", "raft": "ship", "sail": "ship",
+        "sword": "arrow", "spear": "arrow", "knife": "arrow", "axe": "arrow",
+        "shield": "circle", "ring": "circle", "wheel": "circle",
+        "bucket": "circle", "pot": "circle", "cup": "circle", "bowl": "circle",
+        "cave": "building", "tunnel": "building", "bridge": "building",
+        "bag": "rock", "backpack": "rock", "box": "rock", "chest": "rock",
+        "crown": "star", "hat": "star", "helmet": "star",
+        "hill": "mountain", "dune": "mountain",
+        "forest": "tree", "bush": "plant", "vine": "plant",
+        "ocean": "water", "lake": "water", "river": "water", "sea": "water", "rain": "water",
+        "feather": "bird", "wing": "bird", "nest": "bird",
+        "leg": "hand", "arm": "hand", "foot": "hand",
+        "snow": "cloud", "fog": "cloud", "mist": "cloud",
+        "crystal": "star", "gem": "star", "diamond": "star",
+        "bottle": "rock", "vase": "rock", "jar": "rock",
+        "table": "rock", "chair": "rock", "bed": "rock", "bench": "rock",
+        "road": "path", "street": "path", "trail": "path",
+        "pencil": "arrow", "pen": "arrow", "brush": "arrow",
+        "flag": "arrow", "banner": "arrow",
+        "ball": "circle", "stone": "rock", "pebble": "rock",
+        "stick": "arrow", "branch": "arrow", "log": "rock",
+        "bone": "arrow", "horn": "arrow", "antler": "arrow",
+    }
+    new_known = []
+    new_synth = []
+    for i, (etype, ecolor, weight) in enumerate(entities):
+        if etype in _KNOWN_TYPES:
+            new_known.append((etype, ecolor, weight))
+        elif etype in _AUTO_TYPE_MAP:
+            mapped = _AUTO_TYPE_MAP[etype]
+            new_known.append((mapped, ecolor, weight))
+        else:
+            new_synth.append((etype, ecolor, weight))
+    known_entities = [(i, e) for i, e in enumerate(new_known)]
+    synth_entities = [(i, e) for i, e in enumerate(new_synth)]
+
     elements = []
-    # Pass 1: position known scene entities
-    known_entities = [(i, e) for i, e in enumerate(entities) if e[0] in _KNOWN_TYPES]
-    synth_entities = [(i, e) for i, e in enumerate(entities) if e[0] not in _KNOWN_TYPES]
     for i, (etype, ecolor, _) in known_entities:
         n = len(known_entities)
         # Anti-overlap positioning: spread elements across frame
@@ -2397,6 +2536,21 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
     camera_map = {"setup": None, "build": "ken_burns_in", "tension": "dolly_in",
                   "climax": "ken_burns_in", "resolution": "pan_left", "neutral": "ken_burns_in"}
     camera = camera_map.get(narr_pos, "ken_burns_in")
+    # Action-driven camera variety
+    if re.search(r'\b(climb|climbs|climbed|climbing)\b', text):
+        camera = "pan_up"
+    elif re.search(r'\b(throw|throws|threw|throwing|launch|launches|launched)\b', text):
+        camera = "dolly_out"
+    elif re.search(r'\b(water|watered|plant|planted|grow|grows|grew)\b', text):
+        camera = "ken_burns_in"
+    elif re.search(r'\b(run|runs|ran|running|walk|walked|follow|followed)\b', text):
+        camera = "pan_right"
+    elif re.search(r'\b(cry|cries|cried|sad|sorrow|grief)\b', text):
+        camera = "dolly_in"
+    elif re.search(r'\b(sit|sits|sat|sitting|sleep|sleeps|slept|rest)\b', text):
+        camera = "ken_burns_in"
+    elif re.search(r'\b(fight|fights|fought|battle|war)\b', text):
+        camera = "shake"
 
     return {
         "title": title,
@@ -2439,7 +2593,8 @@ def generate_script_from_narration(text: str) -> dict:
     for p in paragraphs:
         buffer.append(p)
         word_count = sum(len(c.split()) for c in buffer)
-        if word_count >= 15 or len(buffer) >= 2:
+        has_sentence_boundary = any(c.rstrip().endswith(('.', '!', '?')) for c in buffer[:-1])
+        if (word_count >= 15 and has_sentence_boundary) or word_count >= 25 or len(buffer) >= 3:
             merged.append(' '.join(buffer))
             buffer = []
     if buffer:
@@ -2454,7 +2609,7 @@ def generate_script_from_narration(text: str) -> dict:
     # Split merged scenes at contrast markers (but/however/yet at sentence boundaries)
     final_scenes = []
     for m in merged:
-        parts = re.split(r'(?<=[.])\s+(?=(?:but|however|yet|instead|meanwhile|conversely|nevertheless|nonetheless|although|though|despite|unlike)\b)', m, flags=re.IGNORECASE)
+        parts = re.split(r'(?<=[.])\s+(?=(?:but|however|yet|instead|meanwhile|conversely|nevertheless|nonetheless|although|though|despite|unlike|then|afterward|suddenly)\b)', m, flags=re.IGNORECASE)
         final_scenes.extend(p.strip() for p in parts if p.strip())
 
     title_words = final_scenes[0].split()[:6]
@@ -2462,7 +2617,7 @@ def generate_script_from_narration(text: str) -> dict:
 
     scenes = []
     # Track persistent story state across scenes for visual consistency
-    story_state = {"bg": None, "recent_entities": [], "scene_num": 0}
+    story_state = {"bg": None, "recent_entities": [], "scene_num": 0, "saved_positions": {}}
 
     for i, para in enumerate(final_scenes):
         scene_num = i + 1
@@ -2470,11 +2625,16 @@ def generate_script_from_narration(text: str) -> dict:
         if not raw_prompt:
             continue
 
-        # Try LLM first for meaning-aware visuals
+        # Try keyword engine first
         llm_result = _infer_visuals_local(raw_prompt, scene_num, len(final_scenes))
         if llm_result:
-            visuals = llm_result
-            print(f"  Scene {scene_num}/{len(final_scenes)}: Local visual ✓")
+            elems = llm_result.get("visual", llm_result).get("elements", [])
+            if len(elems) >= 2:
+                visuals = llm_result
+                print(f"  Scene {scene_num}/{len(final_scenes)}: Local visual ✓ ({len(elems)} elems)")
+            else:
+                print(f"  Scene {scene_num}/{len(final_scenes)}: local only {len(elems)} elems, trying LLM...")
+                visuals = _infer_visuals(raw_prompt, scene_num, len(final_scenes))
         else:
             print(f"  Scene {scene_num}/{len(final_scenes)}: using keyword fallback")
             visuals = _infer_visuals(raw_prompt, scene_num, len(final_scenes))
@@ -2560,7 +2720,280 @@ def _enrich_story_context(visuals, text, state, scene_num, total):
         elif e["type"] == "child" and scene_num > total * 0.5:
             e["scale"] = e.get("scale", 1.0) * 1.3
 
-    vis["elements"] = kept[:6]
+    # ── Restore action-repositioned objects from previous scene ──
+    # When an element was moved by an action (e.g. "rock was put down"),
+    # restore only its position so it carries forward. Scale is managed
+    # by progressive scaling above.
+    saved_pos = state.get("saved_positions", {})
+    for e in kept:
+        etype = e["type"]
+        if etype in saved_pos:
+            e["x"] = saved_pos[etype]["x"]
+            e["y"] = saved_pos[etype]["y"]
+    state["saved_positions"] = {}  # Reset for current scene
+    placed_objs = set()  # Track objects modified by current scene's actions
+
+    must_keep = set()
+
+    # ── Action-driven spatial relationships ──
+    # Verbs connect elements — applies to kept (includes persisted entities)
+    placed = set()
+
+    def _a_find(etype):
+        for i, e in enumerate(kept):
+            if e["type"] == etype and i not in placed:
+                return i, e
+        return None, None
+
+    def _a_find_near(x, y, avoid_types=set()):
+        best, best_d = None, 999
+        for i, e in enumerate(kept):
+            if i in placed or e["type"] in avoid_types:
+                continue
+            d = (e.get("x", 0.5) - x)**2 + (e.get("y", 0.5) - y)**2
+            if d < best_d:
+                best_d, best = d, i
+        return best
+
+    def _apply_action(handlers):
+        for pattern, fn in handlers:
+            if re.search(pattern, t):
+                fn()
+                return True
+        return False
+
+    act_handlers = []
+
+    def _act_pick():
+        hi, hand = _a_find("hand")
+        if hi is None: return
+        obj_i = _a_find_near(hand.get("x", 0.5), hand.get("y", 0.5), avoid_types={"man", "human", "child", "hand"})
+        if obj_i is None: return
+        ox = kept[obj_i].get("x", 0.5)
+        oy = kept[obj_i].get("y", 0.55)
+        hand["x"] = min(max(ox + 0.06, 0.05), 0.85); hand["y"] = min(max(oy - 0.05, 0.05), 0.85); placed.add(hi)
+        must_keep.add(kept[obj_i]["type"]); must_keep.add("hand")
+        mi, man_e = _a_find("man")
+        if mi is not None: man_e["x"] = min(max(ox - 0.10, 0.05), 0.85); man_e["y"] = min(oy, 0.80); placed.add(mi); must_keep.add("man")
+    act_handlers.append((r'\bpick(?:ed|s|es|ing)?\s+(?:\w+\s+){0,2}up\b', _act_pick))
+
+    def _act_putdown():
+        for i, e in enumerate(kept):
+            if e["type"] in ("rock", "key") and i not in placed:
+                e["y"] = 0.72; e["x"] = 0.5; placed.add(i)
+                must_keep.add(e["type"])
+        hi, hand = _a_find("hand")
+        if hi is not None: hand["x"] = 0.3; hand["y"] = 0.5; placed.add(hi); must_keep.add("hand")
+    act_handlers.append((r'\bput\s+(?:it\s+)?down\b', _act_putdown))
+
+    def _act_dialogue():
+        ci, child = _a_find("child")
+        mi, man_e = _a_find("man")
+        if ci is not None and mi is not None:
+            child["x"] = 0.30; child["y"] = 0.50; placed.add(ci); must_keep.add("child")
+            man_e["x"] = 0.55; man_e["y"] = 0.50; placed.add(mi); must_keep.add("man")
+            # Add speech bubble for the asker
+            if re.search(r'\b(child|boy|girl)\b', t):
+                kept.append({"type": "speech_bubble", "x": 0.25, "y": 0.30, "scale": 0.6, "fill": [255, 255, 200]})
+            elif re.search(r'\b(man|father|king)\b', t):
+                kept.append({"type": "speech_bubble", "x": 0.60, "y": 0.30, "scale": 0.6, "fill": [200, 230, 255]})
+        elif ci is not None:
+            mi2, human_e = _a_find("human")
+            if mi2 is not None:
+                child["x"] = 0.30; child["y"] = 0.50; placed.add(ci); must_keep.add("child")
+                human_e["x"] = 0.55; human_e["y"] = 0.50; placed.add(mi2); must_keep.add("human")
+                kept.append({"type": "speech_bubble", "x": 0.25, "y": 0.30, "scale": 0.6, "fill": [255, 255, 200]})
+    act_handlers.append((r'\b(ask|asked|asks|asking|say|says|said|tell|tells|told|reply|replied|answers|answered|whisper|whispered|shout|shouted|call|called)\b', _act_dialogue))
+
+    def _act_stop():
+        hi, hand = _a_find("hand")
+        if hi is not None: hand["x"] = 0.25; hand["y"] = 0.60; placed.add(hi); must_keep.add("hand")
+    act_handlers.append((r'\b(stop|stopped|stops)\b', _act_stop))
+
+    def _act_raise():
+        hi, hand = _a_find("hand")
+        if hi is None: return
+        mi, man_e = _a_find("man")
+        if mi is not None:
+            hand["x"] = man_e.get("x", 0.5)
+            hand["y"] = man_e.get("y", 0.35) - 0.08
+            placed.add(hi); must_keep.add("hand")
+        else:
+            hand["y"] = 0.25
+            placed.add(hi); must_keep.add("hand")
+    act_handlers.append((r'\b(rais(?:e|ed|es|ing))\b', _act_raise))
+
+    def _act_carry():
+        hi, hand = _a_find("hand")
+        if hi is None: return
+        obj_i = _a_find_near(hand.get("x", 0.5), hand.get("y", 0.5), avoid_types={"man", "human", "child", "hand"})
+        if obj_i is None: return
+        ox = kept[obj_i].get("x", 0.5)
+        oy = kept[obj_i].get("y", 0.55)
+        hand["x"] = min(max(ox + 0.04, 0.05), 0.85); hand["y"] = min(max(oy - 0.06, 0.05), 0.85); placed.add(hi)
+        must_keep.add(kept[obj_i]["type"]); must_keep.add("hand")
+        mi, man_e = _a_find("man")
+        if mi is not None: man_e["x"] = min(max(ox + 0.12, 0.05), 0.85); man_e["y"] = min(oy, 0.80); placed.add(mi); must_keep.add("man")
+    act_handlers.append((r'\bcarr(?:y|ied|ying|ies)\b', _act_carry))
+
+    def _act_plant():
+        hi, hand = _a_find("hand")
+        if hi is None: return
+        ti, tree = _a_find("tree")
+        if ti is not None:
+            hand["x"] = tree.get("x", 0.5) + 0.08; hand["y"] = tree.get("y", 0.55) - 0.04
+            placed.add(hi); must_keep.add("hand")
+        else:
+            pi, plant = _a_find("plant")
+            if pi is not None:
+                hand["x"] = plant.get("x", 0.5) + 0.08; hand["y"] = plant.get("y", 0.55) - 0.04
+                placed.add(hi); must_keep.add("hand")
+    act_handlers.append((r'\b(plant|planted|plants|planting)\b', _act_plant))
+
+    def _act_water():
+        wi, water = _a_find("water")
+        if wi is None: return
+        ti, target = _a_find("tree")
+        if ti is None: ti, target = _a_find("plant")
+        if ti is not None:
+            water["x"] = target.get("x", 0.5) + 0.05; water["y"] = target.get("y", 0.55)
+            placed.add(wi); must_keep.add("water")
+    act_handlers.append((r'\b(water|watered|waters|watering)\b', _act_water))
+
+    def _act_find():
+        hi, hand = _a_find("hand")
+        if hi is None: return
+        obj_i = _a_find_near(hand.get("x", 0.5), hand.get("y", 0.5), avoid_types={"man", "human", "child", "hand"})
+        if obj_i is None: return
+        ox = kept[obj_i].get("x", 0.5)
+        oy = kept[obj_i].get("y", 0.55)
+        hand["x"] = min(max(ox - 0.08, 0.05), 0.85); hand["y"] = min(max(oy - 0.04, 0.05), 0.85); placed.add(hi)
+        must_keep.add(kept[obj_i]["type"]); must_keep.add("hand")
+        mi, man_e = _a_find("man")
+        if mi is not None: man_e["x"] = min(max(ox - 0.20, 0.05), 0.85); man_e["y"] = min(oy, 0.80); placed.add(mi); must_keep.add("man")
+    act_handlers.append((r'\b(find|found|finds)\b', _act_find))
+
+    def _act_walk():
+        mi, man_e = _a_find("man")
+        if mi is not None: man_e["x"] = 0.5; man_e["y"] = 0.55; placed.add(mi); must_keep.add("man")
+    act_handlers.append((r'\b(walk|walked|walks|walking)\b', _act_walk))
+
+    # ── Additional action handlers ──
+
+    # climb → man/tree moves upward
+    def _act_climb():
+        mi, man_e = _a_find("man")
+        if mi is not None:
+            man_e["x"] = 0.5; man_e["y"] = 0.20; placed.add(mi); must_keep.add("man")
+        else:
+            ci, child_e = _a_find("child")
+            if ci is not None: child_e["x"] = 0.5; child_e["y"] = 0.20; placed.add(ci); must_keep.add("child")
+    act_handlers.append((r'\b(climb|climbs|climbed|climbing)\b', _act_climb))
+
+    # throw → hand goes back then forward, object flies away
+    def _act_throw():
+        hi, hand = _a_find("hand")
+        if hi is not None:
+            hand["x"] = 0.7; hand["y"] = 0.35; placed.add(hi); must_keep.add("hand")
+        mi, man_e = _a_find("man")
+        if mi is not None: man_e["x"] = 0.4; man_e["y"] = 0.55; placed.add(mi); must_keep.add("man")
+        # Move nearest non-character object far right (flying away)
+        obj_i = _a_find_near(0.5, 0.5, avoid_types={"man", "human", "child", "hand"})
+        if obj_i is not None: kept[obj_i]["x"] = 0.85; kept[obj_i]["y"] = 0.20; must_keep.add(kept[obj_i]["type"])
+    act_handlers.append((r'\b(throw|throws|threw|throwing)\b', _act_throw))
+
+    # push → man behind object, both shift
+    def _act_push():
+        mi, man_e = _a_find("man")
+        if mi is None: return
+        obj_i = _a_find_near(man_e.get("x", 0.5), man_e.get("y", 0.5) + 0.05, avoid_types={"man", "human", "child", "hand"})
+        if obj_i is not None:
+            kept[obj_i]["x"] = min(kept[obj_i].get("x", 0.5) + 0.15, 0.85); must_keep.add(kept[obj_i]["type"])
+            man_e["x"] = kept[obj_i].get("x", 0.5) - 0.15; man_e["y"] = kept[obj_i].get("y", 0.55)
+            placed.add(mi); must_keep.add("man")
+    act_handlers.append((r'\b(push|pushes|pushed|pushing)\b', _act_push))
+
+    # sit → man/child lowers y
+    def _act_sit():
+        mi, man_e = _a_find("man")
+        if mi is not None: man_e["y"] = 0.70; man_e["x"] = 0.5; placed.add(mi); must_keep.add("man")
+        ci, child_e = _a_find("child")
+        if ci is not None: child_e["y"] = 0.72; child_e["x"] = 0.45; placed.add(ci); must_keep.add("child")
+    act_handlers.append((r'\b(sit|sits|sat|sitting)\b', _act_sit))
+
+    # laugh → man rocks side to side (offset x slightly)
+    def _act_laugh():
+        mi, man_e = _a_find("man")
+        if mi is not None:
+            man_e["x"] = 0.5; man_e["y"] = 0.50; placed.add(mi); must_keep.add("man")
+        hi, hand = _a_find("hand")
+        if hi is not None: hand["x"] = 0.55; hand["y"] = 0.40; placed.add(hi); must_keep.add("hand")
+    act_handlers.append((r'\b(laugh|laughs|laughed|laughing)\b', _act_laugh))
+
+    # drink → hand near mouth, object near hand
+    def _act_drink():
+        hi, hand = _a_find("hand")
+        if hi is not None: hand["x"] = 0.5; hand["y"] = 0.35; placed.add(hi); must_keep.add("hand")
+        mi, man_e = _a_find("man")
+        if mi is not None: man_e["x"] = 0.5; man_e["y"] = 0.55; placed.add(mi); must_keep.add("man")
+        obj_i = _a_find_near(0.5, 0.35, avoid_types={"man", "human", "child", "hand"})
+        if obj_i is not None: kept[obj_i]["x"] = 0.55; kept[obj_i]["y"] = 0.30; must_keep.add(kept[obj_i]["type"])
+    act_handlers.append((r'\b(drink|drinks|drank|drinking)\b', _act_drink))
+
+    # eat → hand near mouth, object shrinks
+    def _act_eat():
+        hi, hand = _a_find("hand")
+        if hi is not None: hand["x"] = 0.5; hand["y"] = 0.35; placed.add(hi); must_keep.add("hand")
+        mi, man_e = _a_find("man")
+        if mi is not None: man_e["x"] = 0.5; man_e["y"] = 0.55; placed.add(mi); must_keep.add("man")
+        obj_i = _a_find_near(0.5, 0.35, avoid_types={"man", "human", "child", "hand"})
+        if obj_i is not None:
+            kept[obj_i]["x"] = 0.52; kept[obj_i]["y"] = 0.30
+            kept[obj_i]["scale"] = kept[obj_i].get("scale", 1.0) * 0.5
+            must_keep.add(kept[obj_i]["type"])
+    act_handlers.append((r'\b(eat|eats|ate|eating)\b', _act_eat))
+
+    # cry → hand to face, man hunched
+    def _act_cry():
+        mi, man_e = _a_find("man")
+        if mi is not None: man_e["x"] = 0.5; man_e["y"] = 0.58; placed.add(mi); must_keep.add("man")
+        hi, hand = _a_find("hand")
+        if hi is not None: hand["x"] = 0.5; hand["y"] = 0.42; placed.add(hi); must_keep.add("hand")
+    act_handlers.append((r'\b(cry|cries|cried|crying)\b', _act_cry))
+
+    # open → door/building splits, hand reaches
+    def _act_open():
+        hi, hand = _a_find("hand")
+        if hi is not None: hand["x"] = 0.45; hand["y"] = 0.35; placed.add(hi); must_keep.add("hand")
+        # Find nearest door-like object (building, house, circle)
+        for i, e in enumerate(kept):
+            if e["type"] in ("building", "house", "circle") and i not in placed:
+                e["x"] = 0.5; e["y"] = 0.38; placed.add(i); must_keep.add(e["type"])
+                break
+    act_handlers.append((r'\b(open|opens|opened|opening)\b', _act_open))
+
+    _apply_action(act_handlers)
+
+    # ── Save positions of action-modified objects for next scene ──
+    # After the current scene's action repositioned elements, record their
+    # positions so the engine remembers "rock was put down" across scenes.
+    action_modified = set()
+    for i, e in enumerate(kept):
+        if i in placed:
+            action_modified.add(e["type"])
+    for etype in action_modified:
+        el = next((e for e in kept if e["type"] == etype), None)
+        if el:
+            state["saved_positions"][etype] = {"x": el["x"], "y": el["y"]}
+
+    # ── Trim to cap but keep elements that actions depend on ──
+    cap = 6
+    if len(kept) > cap:
+        # Move must_keep elements to the front
+        kept.sort(key=lambda e: (0 if e["type"] in must_keep else 1))
+        kept = kept[:cap]
+
+    vis["elements"] = kept
 
     # ── Update story state for persistence ──
     state["entity_history"] = state.get("entity_history", [])
