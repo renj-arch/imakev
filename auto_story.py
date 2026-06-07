@@ -1505,6 +1505,10 @@ def _extract_entities(text: str) -> list:
 
         # ── City & Urban ──
         ("skyscraper", "building", (120, 130, 150), 4), ("tower", "building", (100, 110, 130), 3),
+        ("town", "building", (140, 130, 120), 3), ("city", "building", (130, 120, 110), 3),
+        ("village", "building", (160, 150, 130), 3),
+        ("shop", "building", (180, 140, 100), 3), ("store", "building", (170, 150, 110), 3),
+        ("inn", "building", (160, 120, 80), 3), ("tavern", "building", (140, 100, 70), 3),
         ("bridge", "building", (100, 80, 60), 3), ("church", "building", (180, 160, 140), 3),
         ("castle", "building", (140, 120, 100), 4), ("temple", "building", (200, 180, 150), 4),
         ("lamp", "lamp", (255, 220, 100), 3), ("window", "house", (255, 230, 150), 2),
@@ -2104,8 +2108,24 @@ def _extract_entities(text: str) -> list:
                            'everyone','nobody','somebody','anyone',
                            'useful','useless','helpful','remember','remembers',
                            'remembered','forget','forgets','forgot','forgotten',
-                           'someday','sometime','sometimes','somewhere',
-                           'passed','passes','passing','pass',}
+                            'someday','sometime','sometimes','somewhere',
+                            'passed','passes','passing','pass',
+                            'products','product','item','items','goods','object','objects',
+                            'things','stuff','belongings','possessions','baggage',
+                            'sold','selling','buys','buying','purchased','purchase',
+                            'labeled','label','labels','mark','marks','marked',
+                            'jar','jars','container','containers','bottle','bottles',
+                            'reminding','reminds','reminded','notice','notices','noticed',
+                            'eventually','finally','ultimately',
+                            'quiet','quietly','silent','silence','peaceful','peace',
+                            'calm','calmly','gentle','gently','soft','softly',
+                            'summer','spring','winter','autumn','season','seasonal',
+                            'morning','evening','afternoon','midnight','dawn','dusk',
+                            'today','yesterday','tomorrow','day','night','week','month','year',
+                            'precious','valuable','worthless','meaningless',
+                            'simple','simply','ordinary','extraordinary',
+                            'beautiful','ugly','pretty','lovely','wonderful','terrible',
+                            'strange','strangely','weird','odd','unusual',}
             w_clean = word.translate(str.maketrans('', '', ".,!?;:'\"()[]{}-_")).lower()
             if (w_clean and len(w_clean) >= 5 and w_clean not in stop_words
                 and not w_clean.isdigit() and not w_clean.startswith('http')):
@@ -2368,6 +2388,8 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
     # Auto-register common unknown types into known categories
     _AUTO_TYPE_MAP = {
         "door": "building", "gate": "building", "window": "building", "wall": "building",
+        "town": "building", "city": "building", "village": "building", "castle": "building", "tower": "building",
+        "shop": "building", "store": "building", "market": "building", "inn": "building", "tavern": "building",
         "boat": "ship", "raft": "ship", "sail": "ship",
         "sword": "arrow", "spear": "arrow", "knife": "arrow", "axe": "arrow",
         "shield": "circle", "ring": "circle", "wheel": "circle",
