@@ -1516,8 +1516,10 @@ def _extract_entities(text: str) -> list:
 
         # ── Human & Social ──
         ("human", "human", (80, 60, 120), 3), ("person", "human", (80, 60, 120), 3),
-        ("man", "human", (70, 50, 100), 3), ("woman", "human", (100, 80, 130), 3),
-        ("child", "human", (120, 110, 130), 3), ("people", "human", (80, 60, 120), 3),
+        ("man", "man", (70, 50, 100), 3), ("woman", "woman", (100, 80, 130), 3),
+        ("child", "child", (120, 110, 130), 3), ("children", "child", (120, 110, 130), 3),
+        ("baby", "child", (200, 180, 190), 3), ("toddler", "child", (190, 180, 170), 3),
+        ("people", "human", (80, 60, 120), 3),
         ("crowd", "human", (80, 70, 110), 3), ("hunter", "human", (60, 40, 80), 4),
         ("warrior", "human", (80, 50, 60), 3), ("king", "human", (120, 80, 60), 3),
         ("queen", "human", (140, 100, 120), 3), ("baby", "human", (200, 180, 190), 3),
@@ -1596,7 +1598,7 @@ def _extract_entities(text: str) -> list:
         ("survivors", "human", (120, 140, 100), 4),
 
         # ── Biology & Life Cycle ──
-        ("female", "human", (140, 100, 120), 4), ("male", "human", (70, 50, 100), 4),
+        ("female", "woman", (140, 100, 120), 4), ("male", "man", (70, 50, 100), 4),
         ("dominant", "human", (120, 60, 40), 3), ("breed", "human", (100, 80, 60), 3),
         ("breeding", "human", (100, 80, 60), 3), ("reproduce", "human", (100, 80, 60), 3),
         ("reproduction", "human", (100, 80, 60), 3), ("mate", "human", (100, 80, 60), 3),

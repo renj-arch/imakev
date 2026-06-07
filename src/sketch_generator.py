@@ -455,96 +455,238 @@ class SketchGenerator:
             self.draw_circle(draw, hx, hy, self.rng.uniform(1, 3),
                              fill=(255, 255, 255, self.rng.randint(40, 100)))
 
-    def draw_human(self, draw, x, y, size=1.0, color=(80, 60, 120), skin_color=(235, 200, 175)):
-        """Draw a detailed human figure with clothing, face features, and shading."""
+    def draw_human(self, draw, x, y, size=1.0, color=(80, 60, 120), skin_color=(235, 200, 175), gender="neutral"):
+        """Draw a human figure with distinct man/woman/child/neutral silhouettes."""
         s = size
         skin = tuple(skin_color[:3])
         cloth = tuple(color[:3])
+        is_child = (gender == "child")
+        is_woman = (gender == "woman")
+        is_man = (gender == "man")
+        is_neutral = (not is_child and not is_woman and not is_man)
+        bs = s * (0.65 if is_child else 1.0)
 
-        # ── Shadow under feet ──
-        self.draw_shadow_circle(draw, x, y + 22*s, 12*s, offset=(3, 3), blur_radius=5, color=(0, 0, 0, 50))
+        # ── Proportions ──
+        head_r = (9.5 if is_child else 10 if is_woman else 11.5) * bs
+        neck_y = y - (36 if is_child else 38) * bs
+        body_h = (28 if is_child else 36) * bs
+        torso_top = y - body_h
 
-        head_r = 11 * s
-        neck_y = y - 38 * s
+        # ── Shadow ──
+        self.draw_shadow_circle(draw, x, y + 2*bs, head_r * 1.2, offset=(3, 3), blur_radius=5, color=(0, 0, 0, 35))
 
-        # ── Legs with shading ──
-        leg_color = self._darken(cloth, 20)
-        for side, lx in [(-1, x-4*s), (1, x+4*s)]:
-            leg_pts = [(lx, y+3*s), (lx + side*4*s, y+22*s),
-                       (lx + side*3*s + 2, y+22*s), (lx+2, y+3*s)]
-            self.draw_shadow(draw, leg_pts, offset=(2, 2), blur_radius=2, color=(0, 0, 0, 40))
-            self.fill_gradient_polygon(draw, leg_pts, leg_color, self._darken(leg_color, 15),
+        # ── Legs ──
+        if is_woman:
+            # Legs closer together
+            leg_color = self._lighten(cloth, 10)
+            for side, lx in [(-1, x-2*bs), (1, x+2*bs)]:
+                leg_pts = [(lx, y+6*bs), (lx + side*2*bs, y+30*bs),
+                           (lx + side*1*bs, y+32*bs), (lx-1, y+6*bs)]
+                self.draw_shadow(draw, leg_pts, offset=(2, 2), blur_radius=2, color=(0, 0, 0, 25))
+                self.fill_gradient_polygon(draw, leg_pts, leg_color, self._darken(leg_color, 15),
+                                           stroke=(40, 35, 30, 150), stroke_width=1)
+                # Heel hint
+                self.draw_polygon(draw, [(lx + side*2*bs, y+30*bs), (lx + side*4*bs, y+32*bs),
+                                        (lx + side*3*bs, y+33*bs), (lx + side*1*bs, y+31*bs)],
+                                 fill=(45, 35, 30, 220))
+        else:
+            leg_color = self._darken(cloth, 20)
+            spread = (5 if is_man else 4) * bs
+            for side, lx in [(-1, x-spread), (1, x+spread)]:
+                leg_len = (28 if is_child else 30) * bs
+                leg_pts = [(lx, y+4*bs), (lx + side*4*bs, y+leg_len),
+                           (lx + side*3*bs, y+leg_len+2*bs), (lx-1, y+4*bs)]
+                self.draw_shadow(draw, leg_pts, offset=(2, 2), blur_radius=2, color=(0, 0, 0, 25))
+                self.fill_gradient_polygon(draw, leg_pts, leg_color, self._darken(leg_color, 15),
+                                           stroke=(40, 35, 30, 150), stroke_width=1)
+                shoe = [(lx + side*4*bs, y+leg_len-2*bs), (lx + side*7*bs, y+leg_len+2*bs),
+                        (lx + side*5*bs, y+leg_len+3*bs), (lx + side*2*bs, y+leg_len)]
+                self.draw_polygon(draw, shoe, fill=(45, 35, 30, 220), stroke=(30, 25, 20, 180), stroke_width=1)
+
+        # ── Torso ──
+        if is_woman:
+            # Hourglass: narrow waist, wider hips
+            waist_w = 8 * bs
+            hip_w = 12 * bs
+            bust_y = torso_top + 6 * bs
+            waist_y = y - 2 * bs
+            hip_y = y + 6 * bs
+
+            # Upper torso (ribcage to waist)
+            torso_pts = [(x - waist_w//2, waist_y),
+                         (x - waist_w//2, bust_y),
+                         (x + waist_w//2, bust_y),
+                         (x + waist_w//2, waist_y)]
+            self.draw_shadow(draw, torso_pts, offset=(2, 3), blur_radius=3, color=(0, 0, 0, 25))
+            self.fill_gradient_polygon(draw, torso_pts, self._lighten(cloth, 10), cloth,
                                        stroke=(40, 35, 30, 150), stroke_width=1)
-            # Boot
-            boot_pts = [(lx + side*4*s, y+20*s), (lx + side*6*s, y+24*s),
-                       (lx + side*5*s, y+25*s), (lx + side*3*s, y+22*s)]
-            self.draw_polygon(draw, boot_pts, fill=(45, 35, 30, 220), stroke=(30, 25, 20, 180), stroke_width=1)
 
-        # ── Body (torso) ──
-        torso_w = 10 * s
-        torso_top = y - 28 * s
-        torso_bot = y + 3 * s
-        torso_pts = [(x - torso_w//2, torso_bot), (x - torso_w//2, torso_top),
-                     (x + torso_w//2, torso_top), (x + torso_w//2, torso_bot)]
-        self.draw_shadow(draw, torso_pts, offset=(2, 3), blur_radius=3, color=(0, 0, 0, 40))
-        self.fill_gradient_rect(draw, x - torso_w//2, torso_top, torso_w, torso_bot - torso_top,
-                                self._lighten(cloth, 10), self._darken(cloth, 20))
+            # Bust curve
+            bust_c = self._lighten(cloth, 15)
+            for side in [-1, 1]:
+                self.draw_arc(draw, x + side * waist_w//3, bust_y + 2*bs, waist_w//3, 0, 180,
+                              color=bust_c, width=int(2*bs))
 
-        # Belt
-        belt_y = y - 5 * s
-        self.draw_rect(draw, x - torso_w//2 - 1, belt_y, torso_w + 2, int(3*s),
-                       fill=(50, 40, 30, 220))
+            # Dress / hips (waist to midthigh)
+            dress_pts = [(x - waist_w//2, waist_y),
+                         (x - hip_w//2, hip_y),
+                         (x + hip_w//2, hip_y),
+                         (x + waist_w//2, waist_y)]
+            self.draw_shadow(draw, dress_pts, offset=(2, 3), blur_radius=3, color=(0, 0, 0, 25))
+            self.fill_gradient_polygon(draw, dress_pts, cloth, self._darken(cloth, 10),
+                                       stroke=(40, 35, 30, 150), stroke_width=1)
+
+            # Dress hem detail
+            hem_color = self._lighten(cloth, 20)
+            self.draw_line(draw, x - hip_w//2, hip_y, x + hip_w//2, hip_y,
+                          color=hem_color + (180,), width=2)
+
+            # Collar / neckline
+            self.draw_arc(draw, x, bust_y, waist_w//2, 180, 360,
+                          color=self._darken(cloth, 15), width=int(2*bs))
+
+        elif is_man:
+            # V-shape: broad chest, narrow waist
+            chest_w = 14 * bs
+            waist_w = 9 * bs
+            chest_y = torso_top + 2 * bs
+            waist_y = y
+
+            for side in [-1, 1]:
+                pts = [(x, chest_y),
+                       (x + side * chest_w//2, chest_y + 2*bs),
+                       (x + side * waist_w//2, waist_y),
+                       (x, waist_y)]
+                self.draw_shadow(draw, pts, offset=(2, 3), blur_radius=3, color=(0, 0, 0, 25))
+                self.fill_gradient_polygon(draw, pts, self._lighten(cloth, 10), self._darken(cloth, 15),
+                                           stroke=(40, 35, 30, 150), stroke_width=1)
+
+            # Belt
+            self.draw_rect(draw, x - waist_w//2 - 1, waist_y - 3*bs, waist_w + 2, int(3*bs),
+                          fill=(50, 40, 30, 200))
+
+        else:
+            # Neutral / child: simple rectangle torso
+            tw = (10 if is_neutral else 9) * bs
+            torso_pts = [(x - tw//2, y), (x - tw//2, torso_top),
+                         (x + tw//2, torso_top), (x + tw//2, y)]
+            self.draw_shadow(draw, torso_pts, offset=(2, 3), blur_radius=3, color=(0, 0, 0, 25))
+            self.fill_gradient_rect(draw, x - tw//2, torso_top, tw, y - torso_top,
+                                    self._lighten(cloth, 10), self._darken(cloth, 20))
 
         # ── Arms ──
         arm_color = self._darken(cloth, 10)
-        for side in [-1, 1]:
-            ax = x + side * (torso_w//2 + 1)
-            # Upper arm
-            self.draw_line(draw, x + side * 5*s, y - 22*s, x + side * 10*s, y - 8*s,
-                           color=arm_color, width=int(3.5*s))
-            if side == -1:
-                # Hand / forearm
-                hx = x - 10*s
-                hy = y - 6*s
-                self.draw_circle(draw, hx, hy, 3*s, fill=skin + (220,), stroke=(40, 35, 30, 180), stroke_width=1)
-            else:
-                # Arm resting
-                self.draw_line(draw, x + 10*s, y - 8*s, x + 8*s, y + 3*s,
-                               color=arm_color, width=int(3*s))
-                self.draw_circle(draw, x + 8*s, y + 4*s, 3*s, fill=skin + (220,), stroke=(40, 35, 30, 180), stroke_width=1)
+        if is_woman:
+            # One arm on hip, one down
+            for side in [-1, 1]:
+                if side == -1:
+                    # Arm on hip
+                    pts = [(x + side * 6*bs, torso_top + 6*bs),
+                           (x + side * 8*bs, torso_top + 14*bs),
+                           (x + side * 4*bs, y + 4*bs)]
+                else:
+                    # Arm down
+                    pts = [(x + side * 6*bs, torso_top + 6*bs),
+                           (x + side * 8*bs, torso_top + 16*bs),
+                           (x + side * 7*bs, y + 8*bs)]
+                self.draw_line(draw, int(pts[0][0]), int(pts[0][1]), int(pts[1][0]), int(pts[1][1]),
+                              color=arm_color, width=int(3*bs))
+                self.draw_line(draw, int(pts[1][0]), int(pts[1][1]), int(pts[2][0]), int(pts[2][1]),
+                              color=arm_color, width=int(2.5*bs))
+                self.draw_circle(draw, int(pts[2][0]), int(pts[2][1]), 2*bs,
+                                fill=skin + (220,), stroke=(40, 35, 30, 150), stroke_width=1)
+        else:
+            for side in [-1, 1]:
+                shoulder_off = (7 if is_man else 5) * bs
+                elbow_x = x + side * (shoulder_off + 3*bs)
+                hand_x = elbow_x + side * 3*bs
+                hand_y = y + (6 if is_child else 10) * bs
+                pts = [(x + side * shoulder_off, torso_top + 4*bs),
+                       (elbow_x, torso_top + 14*bs),
+                       (hand_x, hand_y)]
+                self.draw_line(draw, int(pts[0][0]), int(pts[0][1]), int(pts[1][0]), int(pts[1][1]),
+                              color=arm_color, width=int(3.5*bs))
+                self.draw_line(draw, int(pts[1][0]), int(pts[1][1]), int(pts[2][0]), int(pts[2][1]),
+                              color=arm_color, width=int(3*bs))
+                self.draw_circle(draw, int(pts[2][0]), int(pts[2][1]), 2.5*bs,
+                                fill=skin + (220,), stroke=(40, 35, 30, 150), stroke_width=1)
 
         # ── Head ──
-        self.draw_shadow_circle(draw, x, neck_y + 2, head_r, offset=(2, 2), blur_radius=3, color=(0, 0, 0, 40))
-        # Head fill with gradient
-        self.fill_gradient_polygon(draw,
-            [(x - head_r, neck_y), (x + head_r, neck_y),
-             (x + head_r, neck_y - head_r*2), (x - head_r, neck_y - head_r*2)],
-            self._lighten(skin, 10), self._darken(skin, 15))
+        self.draw_shadow_circle(draw, x, neck_y + 2, head_r, offset=(2, 2), blur_radius=3, color=(0, 0, 0, 25))
+        head_pts = [(x - head_r, neck_y), (x + head_r, neck_y),
+                    (x + head_r, neck_y - head_r*2), (x - head_r, neck_y - head_r*2)]
+        self.fill_gradient_polygon(draw, head_pts, self._lighten(skin, 10), self._darken(skin, 15))
         self.draw_circle(draw, x, neck_y, head_r, fill=None,
-                         stroke=(40, 35, 30, 180), stroke_width=2)
+                         stroke=(40, 35, 30, 170), stroke_width=2)
 
         # ── Hair ──
-        hair_color = (50, 40, 30)
-        self.draw_arc(draw, x, neck_y - head_r * 0.7, head_r * 0.85, 200, 340,
-                      color=hair_color, width=int(4*s))
-        self.draw_circle(draw, x, neck_y - head_r + 2, head_r * 0.7, fill=hair_color + (200,))
+        if is_woman:
+            # Shoulder-length hair framing face
+            hair_c = (60, 30, 20)
+            # Hair on top
+            self.draw_circle(draw, x, neck_y - head_r + 1, head_r * 0.8, fill=hair_c + (220,))
+            # Hair sides - flowing down past chin
+            for side in [-1, 1]:
+                self.draw_arc(draw, x + side * head_r * 0.65, neck_y + 3*bs, head_r * 0.45, 0, 180,
+                              color=hair_c, width=int(4*bs))
+            # Hair bottom
+            self.draw_arc(draw, x, neck_y + head_r * 0.2, head_r * 0.5, 0, 180,
+                          color=hair_c, width=int(3*bs))
+        elif is_man:
+            # Short cropped hair
+            hair_c = (40, 35, 25)
+            self.draw_circle(draw, x, neck_y - head_r + 1, head_r * 0.78, fill=hair_c + (220,))
+            self.draw_arc(draw, x, neck_y - head_r * 0.5, head_r * 0.8, 190, 350,
+                          color=hair_c, width=int(3*bs))
+        else:
+            hair_c = (80, 60, 40) if is_child else (50, 40, 30)
+            self.draw_circle(draw, x, neck_y - head_r + 2, head_r * 0.72, fill=hair_c + (200,))
 
         # ── Face features ──
+        eye_r = (2.2 if is_child else 1.6) * bs
+        eye_y = neck_y - (4 if is_child else 3) * bs
+        eye_spread = (4 if is_child else 3.5) * bs
+
         # Eyes
-        self.draw_circle(draw, x - 3.5*s, neck_y - 3*s, 1.8*s, fill=(30, 25, 20, 200))
-        self.draw_circle(draw, x + 3.5*s, neck_y - 3*s, 1.8*s, fill=(30, 25, 20, 200))
-        # Eye shine
-        self.draw_circle(draw, x - 3*s, neck_y - 4*s, 0.7*s, fill=(255, 255, 255, 180))
-        self.draw_circle(draw, x + 4*s, neck_y - 4*s, 0.7*s, fill=(255, 255, 255, 180))
+        self.draw_circle(draw, x - eye_spread, eye_y, eye_r, fill=(30, 25, 20, 200))
+        self.draw_circle(draw, x + eye_spread, eye_y, eye_r, fill=(30, 25, 20, 200))
+        self.draw_circle(draw, x - eye_spread + 0.5*bs, eye_y - 0.5*bs, eye_r*0.4, fill=(255, 255, 255, 160))
+        self.draw_circle(draw, x + eye_spread + 0.5*bs, eye_y - 0.5*bs, eye_r*0.4, fill=(255, 255, 255, 160))
+
+        # Eyelashes (woman only)
+        if is_woman:
+            for side in [-1, 1]:
+                lash_x = x + side * (eye_spread + eye_r + 1*bs)
+                self.draw_line(draw, int(lash_x), int(eye_y - 2*bs), int(lash_x + side*1*bs), int(eye_y - 4*bs),
+                              color=(30, 25, 20, 150), width=1)
+                self.draw_line(draw, int(lash_x), int(eye_y - 1*bs), int(lash_x + side*1.5*bs), int(eye_y - 3*bs),
+                              color=(30, 25, 20, 150), width=1)
+
         # Nose
-        self.draw_line(draw, x, neck_y - 1.5*s, x, neck_y + 1.5*s, color=(40, 35, 30, 120), width=1)
-        # Mouth
-        self.draw_arc(draw, x, neck_y + 3*s, 3*s, 200, 340, color=(140, 80, 60, 180), width=int(s+1))
-        # Eyebrows
-        self.draw_line(draw, x - 5*s, neck_y - 6.5*s, x - 1.5*s, neck_y - 6*s,
-                       color=hair_color + (150,), width=int(s+1))
-        self.draw_line(draw, x + 5*s, neck_y - 6.5*s, x + 1.5*s, neck_y - 6*s,
-                       color=hair_color + (150,), width=int(s+1))
+        nose_len = (2 if is_child else 1.5) * bs
+        self.draw_line(draw, x, eye_y + eye_r, x, eye_y + eye_r + nose_len,
+                      color=(40, 35, 30, 120), width=1)
+
+        # Mouth / smile
+        if is_child:
+            # Bigger smile
+            self.draw_arc(draw, x, neck_y + 4*bs, 4*bs, 200, 340, color=(160, 80, 60, 180), width=2)
+        elif is_woman:
+            # Fuller lips
+            lip_y = neck_y + (4 if is_child else 3) * bs
+            self.draw_arc(draw, x, lip_y, 3*bs, 200, 340, color=(160, 80, 70, 200), width=int(bs+1))
+        elif is_man:
+            # Straight mouth
+            self.draw_line(draw, x - 2*bs, neck_y + 3*bs, x + 2*bs, neck_y + 3*bs,
+                          color=(100, 60, 50, 180), width=2)
+
+        # Eyebrows (man only - stronger)
+        if is_man:
+            brow_c = (40, 35, 25, 160)
+            self.draw_line(draw, x - 5*bs, neck_y - 6.5*bs, x - 1.5*bs, neck_y - 6*bs,
+                          color=brow_c, width=int(bs+1))
+            self.draw_line(draw, x + 5*bs, neck_y - 6.5*bs, x + 1.5*bs, neck_y - 6*bs,
+                          color=brow_c, width=int(bs+1))
 
     def draw_house(self, draw, x, y, size=1.0, color=(180, 150, 120), roof_color=(150, 50, 40)):
         """Draw a detailed house with texture, windows, door, and shadows."""
@@ -1772,10 +1914,22 @@ class SketchGenerator:
             c = fill or (60, 120, 200)
             self.draw_water(draw, x, y, w, h, c)
 
-        elif etype in ("human", "person", "man", "woman", "figure"):
+        elif etype in ("human", "person", "figure", "people"):
             c = fill or (80, 60, 120)
             skin = _tc(elem.get("skin_color", (235, 200, 175))) or (235, 200, 175)
-            self.draw_human(draw, x, y, s, c, skin)
+            self.draw_human(draw, x, y, s, c, skin, gender="neutral")
+        elif etype == "man":
+            c = fill or (70, 50, 100)
+            skin = _tc(elem.get("skin_color", (235, 200, 175))) or (235, 200, 175)
+            self.draw_human(draw, x, y, s, c, skin, gender="man")
+        elif etype == "woman":
+            c = fill or (140, 80, 120)
+            skin = _tc(elem.get("skin_color", (230, 190, 170))) or (230, 190, 170)
+            self.draw_human(draw, x, y, s, c, skin, gender="woman")
+        elif etype == "child":
+            c = fill or (100, 140, 180)
+            skin = _tc(elem.get("skin_color", (240, 210, 190))) or (240, 210, 190)
+            self.draw_human(draw, x, y, s * 0.65, c, skin, gender="child")
 
         elif etype == "house":
             c = fill or (180, 150, 120)
