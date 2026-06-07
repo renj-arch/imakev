@@ -1470,7 +1470,7 @@ def _extract_entities(text: str) -> list:
         ("seaweed", "plant", (60, 140, 60), 2), ("kelp", "plant", (50, 130, 50), 2),
         ("wave", "wave", (40, 100, 200), 4), ("surf", "wave", (60, 120, 220), 3),
         ("ocean", "wave", (30, 80, 180), 3), ("sea", "wave", (40, 90, 190), 3),
-        ("deep", "water", (20, 60, 140), 4), ("mysterious", "star", (180, 160, 220), 4),
+        ("deep", "water", (20, 60, 140), 4),
         ("barely", "water", (140, 160, 200), 2), ("bottom", "water", (40, 60, 120), 3),
         ("river", "water", (50, 130, 200), 3),
 
@@ -1509,9 +1509,9 @@ def _extract_entities(text: str) -> list:
         ("skyscraper", "building", (120, 130, 150), 4), ("tower", "building", (100, 110, 130), 3),
         ("town", "building", (140, 130, 120), 3), ("city", "building", (130, 120, 110), 3),
         ("village", "building", (160, 150, 130), 3),
-        ("shop", "building", (180, 140, 100), 3), ("store", "building", (170, 150, 110), 3),
-        ("inn", "building", (160, 120, 80), 3), ("tavern", "building", (140, 100, 70), 3),
-        ("bakery", "building", (190, 160, 110), 3), ("cafe", "building", (160, 130, 90), 3),
+        ("shop", "house", (180, 140, 100), 3), ("store", "house", (170, 150, 110), 3),
+        ("inn", "house", (160, 120, 80), 3), ("tavern", "house", (140, 100, 70), 3),
+        ("bakery", "house", (190, 160, 110), 3), ("cafe", "house", (160, 130, 90), 3),
         ("sign", "arrow", (180, 140, 100), 2), ("bell", "circle", (200, 190, 160), 2),
         ("dusk", "star", (180, 120, 80), 3), ("golden", "star", (255, 200, 80), 3),
         ("shelf", "rock", (150, 120, 90), 2), ("counter", "rock", (140, 110, 80), 2),
@@ -1908,8 +1908,7 @@ def _extract_entities(text: str) -> list:
         ("metaphorically", "eye", (200, 180, 200), 3), ("literal", "eye", (200, 200, 220), 3),
         ("literally", "eye", (200, 200, 220), 3), ("completely", "circle", (200, 200, 220), 2),
         ("total", "circle", (200, 200, 220), 2), ("fully", "circle", (200, 200, 220), 2),
-        ("somehow", "star", (255, 240, 200), 2), ("cause", "star", (255, 240, 200), 2),
-        ("reason", "star", (255, 240, 200), 2), ("purpose", "star", (255, 240, 200), 2),
+        ("somehow", "star", (255, 240, 200), 2),
         ("meeting", "human", (100, 100, 120), 3), ("meetings", "human", (100, 100, 120), 3),
         ("election", "human", (120, 80, 60), 4), ("elections", "human", (120, 80, 60), 4),
         ("vote", "human", (120, 80, 60), 3), ("voting", "human", (120, 80, 60), 3),
@@ -2017,13 +2016,14 @@ def _extract_entities(text: str) -> list:
         ("following", "arrow", (160, 140, 100), 3),
         ("realize", "eye", (200, 180, 200), 3),
         ("realizes", "eye", (200, 180, 200), 3),
-        ("realized", "eye", (200, 180, 200), 3),
         ("leave", "arrow", (160, 140, 100), 2),
         ("leaves", "arrow", (160, 140, 100), 3),
         ("left", "arrow", (160, 140, 100), 3),
         ("begin", "star", (200, 200, 220), 3),
         ("begins", "star", (200, 200, 220), 3),
         ("began", "star", (200, 200, 220), 3),
+        ("jar", "jar", (200, 210, 220), 4), ("jars", "jar", (200, 210, 220), 4),
+        ("shelf", "shelf", (120, 90, 60), 3), ("shelves", "shelf", (120, 90, 60), 3),
     ]
 
     words = l.split()
@@ -2125,8 +2125,11 @@ def _extract_entities(text: str) -> list:
                             'jar','jars','container','containers','bottle','bottles',
                             'reminding','reminds','reminded','notice','notices','noticed',
                             'eventually','finally','ultimately',
-                            'quiet','quietly','silent','silence','peaceful','peace',
+                             'quiet','quietly','silent','silence','peaceful','peace',
                             'calm','calmly','gentle','gently','soft','softly',
+                            'mysterious','mystery','somehow','realized','realizes',
+                            'realizing','realise','realised','realises',
+                            'owner','owners','owns','owned',
                             'summer','spring','winter','autumn','season','seasonal',
                             'morning','evening','afternoon','midnight','dawn','dusk',
                             'today','yesterday','tomorrow','day','night','week','month','year',
@@ -2254,8 +2257,8 @@ def _reposition_semantically(elements: list, text: str):
         "heart": ["heart", "love", "passion", "feel", "emotion"],
         "crown": ["crown", "king", "queen", "royal", "ruler"],
         "lamp": ["lamp", "light", "illuminate", "bright"],
-        "star": ["mysterious", "magic", "wonder", "dream", "hope", "mystery"],
-        "eye": ["see", "saw", "seen", "watch", "notice", "realize", "realized"],
+        "star": ["magic", "wonder", "dream", "hope"],
+        "eye": ["see", "saw", "seen", "watch", "notice"],
         "arrow": ["follow", "journey", "path", "direction", "travel"],
     }
     for i, e in enumerate(elements):
@@ -2369,13 +2372,14 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
                     "scroll","compass","crown","key","cross","coin","telescope",
                     "heart","gear","skull","clock","camera","filter","signal",
                     "movement","discard","awareness","edge","color_swatch","brain",
-                    "man","woman","child","circle","arrow","fruit","speech_bubble"}
+                    "man","woman","child","circle","arrow","fruit","speech_bubble",
+                    "jar","shelf"}
     # Auto-register common unknown types into known categories
     _AUTO_TYPE_MAP = {
         "door": "building", "gate": "building", "window": "building", "wall": "building",
         "town": "building", "city": "building", "village": "building", "castle": "building", "tower": "building",
-        "shop": "building", "store": "building", "market": "building", "inn": "building", "tavern": "building",
-        "bakery": "building", "cafe": "building", "bookstore": "building", "library": "building", "gallery": "building",
+        "shop": "house", "store": "house", "market": "house", "inn": "house", "tavern": "house",
+        "bakery": "house", "cafe": "house", "bookstore": "house", "library": "house", "gallery": "house",
         "street": "path", "road": "path", "cobblestone": "path", "lane": "path",
         "boat": "ship", "raft": "ship", "sail": "ship",
         "sword": "arrow", "spear": "arrow", "knife": "arrow", "axe": "arrow",
@@ -2416,9 +2420,9 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
 
     # ── Layer categories for composition ──
     SKY = {"sun","moon","star","cloud","bird","eye"}
-    BACK = {"mountain","cliff","hill","building","house","water","wave","moon_path"}
+    BACK = {"mountain","cliff","hill","water","wave","moon_path"}
     MID = {"tree","plant","flower","grass","fence","path","rock","totem","anchor","fire","campfire","lamp",
-           "globe","ship","canoe","whale","sea_serpent"}
+           "globe","ship","canoe","whale","sea_serpent","jar","shelf","building","house"}
     FRONT = {"human","animal","shadow_figure","man","woman","child","hand","face","speech_bubble"}
     PROPS = {"book","scroll","compass","crown","key","cross","coin","telescope","heart","gear","skull",
              "clock","camera","filter","signal","arrow","fruit"}
@@ -2430,9 +2434,9 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
         if "human" not in current_types and "man" not in current_types and "woman" not in current_types and "child" not in current_types:
             known_entities.append((len(known_entities), ("human", (180, 160, 140), 1)))
             current_types.add("human")
-        if "building" not in current_types and "house" not in current_types:
-            known_entities.append((len(known_entities), ("building", (120, 100, 80), 1)))
-            current_types.add("building")
+        if "house" not in current_types and "building" not in current_types:
+            known_entities.append((len(known_entities), ("house", (160, 130, 100), 1)))
+            current_types.add("house")
         if "lamp" not in current_types and re.search(r'\b(light|lamp|glow|golden|warm)\b', text):
             known_entities.append((len(known_entities), ("lamp", (255, 200, 100), 1)))
             current_types.add("lamp")
@@ -2450,6 +2454,9 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
         elif "lamp" not in current_types:
             known_entities.append((len(known_entities), ("lamp", (200, 180, 150), 1)))
             current_types.add("lamp")
+        if "shelf" not in current_types and ("jar" in text.lower() or re.search(r'\b(shelf|display|counter|interior)\b', text)):
+            known_entities.append((len(known_entities), ("shelf", (120, 90, 60), 1)))
+            current_types.add("shelf")
     if re.search(r'\b(forest|woods|jungle|wilderness)\b', text) and scene_type == "story":
         if "building" not in current_types and "house" not in current_types:
             known_entities.append((len(known_entities), ("building", (120, 100, 80), 1)))
@@ -2544,15 +2551,15 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
                 px, py = 0.50, 0.45
             elif has_character and n == 2:
                 # Two elements: one left, one right — facing off
-                if idx == 0: px, py = 0.25, 0.52
-                else: px, py = 0.60, 0.52
+                if idx == 0: px, py = 0.25, 0.62
+                else: px, py = 0.60, 0.62
             elif has_character:
                 # Multiple: spread with focus
                 px = 0.12 + (idx % 4) * 0.22
-                py = 0.50 + (idx // 4) * 0.06
+                py = 0.62 + (idx // 4) * 0.04
             else:
                 px = 0.18 + (idx % 3) * 0.30
-                py = 0.50
+                py = 0.62
 
         # Apply jitter and spread
         px = _clamp(px + jitter_x * spread)
@@ -2565,18 +2572,25 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
         elif etype in ("star", "bird", "flower", "eye", "coin"):
             scale = 0.6 * base_scale
         elif etype in ("sun", "moon"):
-            scale = 0.9 * base_scale
+            scale = 0.25 * base_scale
         elif etype in ("human", "shadow_figure", "animal", "man", "woman", "child"):
             scale = 0.8 * base_scale
+        elif etype in ("house", "building"):
+            scale = 0.45 * base_scale
         elif etype == "speech_bubble":
             scale = 0.5
+        elif etype == "jar":
+            scale = 0.5 * base_scale
+        elif etype == "shelf":
+            scale = 0.35 * base_scale
         # Add individual scale variety
         scale *= (0.85 + rng.random() * 0.30)
 
         elements.append({
             "type": etype, "x": px, "y": py,
             "scale": round(scale, 3),
-            "fill": list(ecolor) if isinstance(ecolor, tuple) else ecolor
+            "fill": list(ecolor) if isinstance(ecolor, tuple) else ecolor,
+            "z_index": layer
         })
 
     # Pass 2: position auto-synthesized concept words as floating cards
@@ -2599,7 +2613,8 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
         elements.append({
             "type": etype, "x": min(px, 0.9), "y": min(py, 0.9),
             "scale": round(0.6 * base_scale, 3),
-            "fill": list(ecolor) if isinstance(ecolor, tuple) else ecolor
+            "fill": list(ecolor) if isinstance(ecolor, tuple) else ecolor,
+            "z_index": 4
         })
 
     # ── Semantic repositioning: arrange elements to tell a visual story ──

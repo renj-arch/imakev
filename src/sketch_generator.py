@@ -2257,6 +2257,12 @@ class SketchGenerator:
         elif etype in ("moon_path", "moonlight_path", "moon_reflection"):
             self.draw_moon_path(draw, x, y, s, fill or (200, 210, 230))
 
+        elif etype == "jar":
+            self.draw_jar(draw, x, y, s, fill or (200, 210, 220))
+
+        elif etype == "shelf":
+            self.draw_shelf(draw, x, y, s, fill or (120, 90, 60))
+
         elif etype in ("island", "isle"):
             r = 15*s
             self.draw_circle(draw, x, y, r, fill=(180,200,100,200), stroke=(100,140,60,180), stroke_width=2)
@@ -3437,6 +3443,78 @@ class SketchGenerator:
             if ca > 30:
                 self.draw_ellipse(draw, int(x - cw // 2), cy, int(cw), max(int(2 * s), 1),
                                 fill=(255, 255, 250, max(ca, 20)))
+
+    def draw_jar(self, draw, x, y, size=1.0, color=(200, 210, 220)):
+        """Draw a glass jar with warm inner glow."""
+        s = max(size * 25, 15)
+        neck_w = s * 0.3
+        neck_h = s * 0.2
+        body_w = s * 0.8
+        body_h = s * 0.9
+        cx = x
+        cy = y
+        base = tuple(min(c + 40, 255) for c in color[:3])
+        glow = tuple(min(c + 80, 255) for c in color[:3])
+
+        # Inner glow (warm light inside)
+        self.draw_ellipse(draw, cx - body_w * 0.3, cy - body_h * 0.8,
+                         body_w * 0.6, body_h * 0.6,
+                         fill=glow + (60,))
+
+        # Jar body (semi-transparent glass)
+        body_points = [
+            (cx - neck_w * 0.5, cy - body_h * 0.3),
+            (cx - body_w * 0.5, cy - body_h * 0.1),
+            (cx - body_w * 0.5, cy + body_h * 0.4),
+            (cx - body_w * 0.3, cy + body_h * 0.5),
+            (cx + body_w * 0.3, cy + body_h * 0.5),
+            (cx + body_w * 0.5, cy + body_h * 0.4),
+            (cx + body_w * 0.5, cy - body_h * 0.1),
+            (cx + neck_w * 0.5, cy - body_h * 0.3),
+        ]
+        self.draw_polygon(draw, body_points, fill=color[:3] + (80,), stroke=(255, 255, 255, 60), stroke_width=1)
+
+        # Neck
+        neck_points = [
+            (cx - neck_w * 0.4, cy - body_h * 0.3),
+            (cx - neck_w * 0.6, cy - body_h * 0.45),
+            (cx - neck_w * 0.5, cy - body_h * 0.55),
+            (cx + neck_w * 0.5, cy - body_h * 0.55),
+            (cx + neck_w * 0.6, cy - body_h * 0.45),
+            (cx + neck_w * 0.4, cy - body_h * 0.3),
+        ]
+        self.draw_polygon(draw, neck_points, fill=color[:3] + (60,), stroke=(255, 255, 255, 40), stroke_width=1)
+
+        # Lid
+        self.draw_rect(draw, cx - neck_w * 0.5, cy - body_h * 0.55,
+                      neck_w, neck_h * 0.3,
+                      fill=(160, 140, 100, 180))
+
+        # Glass highlight
+        self.draw_ellipse(draw, cx - body_w * 0.35, cy - body_h * 0.2,
+                         body_w * 0.12, body_h * 0.3,
+                         fill=(255, 255, 255, 30))
+
+    def draw_shelf(self, draw, x, y, size=1.0, color=(120, 90, 60)):
+        """Draw a wooden shelf."""
+        s = max(size * 40, 20)
+        w = s * 1.2
+        h = s * 0.12
+        cx = x
+        cy = y
+        base = tuple(color[:3])
+
+        # Shelf top (lighter)
+        self.draw_rect(draw, cx - w / 2, cy - h / 2, w, h * 0.6,
+                      fill=self._lighten(base, 20))
+
+        # Shelf front (darker)
+        self.draw_rect(draw, cx - w / 2, cy, w, h * 0.5,
+                      fill=self._darken(base, 30))
+
+        # Shadow below
+        self.draw_rect(draw, cx - w / 2 + 4, cy + h * 0.3, w - 8, h * 0.2,
+                      fill=(0, 0, 0, 30))
 
     def _post_process(self, canvas: Image.Image, mood: str = "", style: dict = {}) -> Image.Image:
         """Apply final touches: rectangular vignette, grain, lighting."""
