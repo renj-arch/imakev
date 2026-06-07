@@ -38,9 +38,6 @@ jobs:
 
       - name: Set up .env
         run: |
-          echo "LLM_PROVIDER=${{ vars.LLM_PROVIDER || 'openrouter' }}" >> .env
-          echo "LLM_API_KEY=${{ secrets.LLM_API_KEY }}" >> .env
-          echo "LLM_MODEL=${{ vars.LLM_MODEL || 'moonshotai/kimi-k2.6:free' }}" >> .env
           echo "TTS_PROVIDER=edge" >> .env
           echo "VIDEO_WIDTH=720" >> .env
           echo "VIDEO_HEIGHT=1280" >> .env
