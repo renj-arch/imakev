@@ -430,9 +430,107 @@ class SceneComposer:
         ],
     }
 
+    # ── Marine mammals (whales, dolphins — separate from generic fish) ──
+    MARINE_MAMMALS = {
+        "whale": [
+            "whale", "whales", "whale's", "blue whale", "humpback", "sperm whale",
+            "orca", "killer whale", "minke", "right whale", "bowhead",
+            "beluga", "narwhal", "pilot whale",
+            "cetacean", "cetaceans",
+        ],
+        "dolphin": [
+            "dolphin", "dolphins", "porpoise", "bottlenose",
+        ],
+        "walking_whale": [
+            "ambulocetus", "pakicetus", "basilosaurus", "dorudon",
+            "walking whale", "ancient whale", "early whale", "first whale",
+            "whale ancestor", "proto-whale", "primitive whale",
+            "rodhocetus", "maiacetus", "kutchicetus",
+        ],
+    }
+
+    # ── Anatomy / body parts ──
+    ANATOMY = {
+        "skeleton": [
+            "skeleton", "skeletal", "bone", "bones", "pelvic", "pelvis",
+            "pelvic bone", "pelvic bones", "rib", "ribs", "ribcage",
+            "skull", "vertebra", "vertebrae", "spine", "backbone",
+            "fossil", "fossils", "fossilized", "fossil record",
+            "remnant", "remnants", "hind leg", "hind legs",
+            "hindlimb", "hind limbs", "vestigial",
+        ],
+        "flipper": [
+            "flipper", "flippers", "fin", "fins", "paddle", "paddles",
+            "forelimb", "forelimbs", "front leg", "front legs",
+        ],
+        "blowhole": [
+            "blowhole", "blowholes", "nostril", "nostrils",
+            "breathe air", "surface", "spout",
+        ],
+        "tail": [
+            "tail", "tails", "tail fluke", "fluke", "flukes",
+            "caudal", "tail fin",
+        ],
+        "mammal": [
+            "mammal", "mammals", "mammalian", "milk", "nurse",
+            "warm-blooded", "warm blooded", "fur", "hair",
+            "breathe air", "lungs", "live birth", "offspring",
+        ],
+    }
+
+    # ── Polar / Antarctica / Ice ──
+    POLAR = {
+        "glacier": [
+            "glacier", "glaciers", "glacial", "ice sheet", "ice sheets", "ice shelf",
+            "iceberg", "icebergs", "ice cap", "ice caps", "polar ice",
+            "frozen continent", "endless ice", "world of ice", "continent of ice",
+            "wilderness of ice", "frozen wilderness",
+        ],
+        "iceberg": [
+            "iceberg", "icebergs", "ice floe", "ice flow", "pack ice",
+            "floating ice", "frozen ocean", "ice chunks",
+        ],
+        "tundra": [
+            "tundra", "barren", "frozen desert", "frozen wasteland",
+            "permafrost", "cold desert", "frost", "frosty",
+        ],
+        "antarctica": [
+            "antarctica", "antarctic", "south pole", "southernmost",
+            "polar region", "south polar", "southern continent",
+        ],
+    }
+
+    # ── Evolution / prehistory / time ──
+    PREHISTORY = {
+        "evolution": [
+            "evolution", "evolve", "evolved", "evolving", "evolutionary",
+            "natural selection", "adaptation", "adapt", "adapted",
+            "mutation", "mutations", "genetic", "generation", "generations",
+            "species", "speciation", "descendant", "descendants",
+            "ancestor", "ancestors", "ancestral", "common ancestor",
+            "transitional", "transition", "intermediate",
+            "darwin", "origin of species",
+        ],
+        "prehistoric": [
+            "prehistoric", "ancient", "million years", "million-year",
+            "50 million", "fifty million", "era", "epoch",
+            "eocene", "oligocene", "miocene", "pliocene", "pleistocene",
+            "mesozoic", "cenozoic", "paleocene",
+            "early mammal", "early mammals", "primitive mammal",
+            "land mammal", "terrestrial",
+        ],
+        "timeline": [
+            "timeline", "time", "years", "era", "age", "ages",
+            "past", "history", "origin", "beginning",
+            "long ago", "once upon a time",
+        ],
+    }
+
     # ── Mood detection ──
     MOOD_KEYWORDS = {
         "dramatic": [
+            "dramatic", "ice takes control", "cooling accelerated",
+            "ice advanced", "powerful current", "moat", "barrier",
             "war", "battle", "fight", "warrior", "attack", "explosion", "crash",
             "storm", "danger", "enemy", "invade", "destroy", "death", "kill",
             "blood", "fire", "burn", "explode", "battle", "conflict",
@@ -478,6 +576,9 @@ class SceneComposer:
             "colossal", "massive", "titanic", "enormous",
             "god", "goddess", "divine", "celestial", "mythology",
             "saga", "chronicle", "history", "age", "era",
+            "evolution", "evolve", "evolved", "million years",
+            "prehistoric", "ancestor", "ancestors", "origin",
+            "largest", "biggest", "greatest", "ruling",
         ],
         "mysterious": [
             "mystery", "mysterious", "secret", "hidden", "unknown",
@@ -491,6 +592,9 @@ class SceneComposer:
             "riddle", "puzzle", "enigma", "cryptic", "code",
             "oracle", "prophecy", "vision", "dream", "trance",
             "monster", "creature", "beast", "alien", "unknown",
+            "secret hidden inside", "remnant", "remnants", "vestigial",
+            "evidence", "clue", "clues", "trace", "traces",
+            "whisper", "memory", "fossilized",
         ],
         "peaceful": [
             "peace", "peaceful", "calm", "quiet", "silent", "still",
@@ -686,6 +790,28 @@ class SceneComposer:
         combined = topic + " " + scene_title
         found = []
 
+        # Marine mammals (highest priority for whale topics)
+        for etype, keywords in self.MARINE_MAMMALS.items():
+            if any(w in combined for w in keywords):
+                found.append((etype, 15))
+                break
+
+        # Anatomy / body parts
+        for etype, keywords in self.ANATOMY.items():
+            if any(w in combined for w in keywords):
+                found.append((etype, 12))
+
+        # Prehistory / evolution
+        for etype, keywords in self.PREHISTORY.items():
+            if any(w in combined for w in keywords):
+                found.append((etype, 11))
+
+        # Polar / Antarctica (high priority for icy texts)
+        for etype, keywords in self.POLAR.items():
+            if any(w in combined for w in keywords):
+                found.append((etype, 14))
+                break
+
         # People
         for etype, keywords in self.PEOPLE.items():
             if any(w in combined for w in keywords):
@@ -733,6 +859,11 @@ class SceneComposer:
                 elements.append(self._make_landscape("mountain", mood))
                 placed.add("mountain")
 
+        # Check for combined concepts unique to antarctica/fossils
+        has_antarctica = any(c[0] == "antarctica" for c in concepts)
+        has_fossil = any(c[0] == "skeleton" for c in concepts)
+        has_tectonic = "tectonic" in st.lower() or any(w in st.lower() for w in ("tectonic", "continental drift", "plates drift"))
+
         for etype, weight in sorted(concepts, key=lambda x: -x[1]):
             if etype in placed:
                 # Allow multiple trees, clouds, stars
@@ -756,6 +887,51 @@ class SceneComposer:
             elif etype == "bird":
                 e = self._make_bird(mood)
                 elements.append(e); placed.add("bird")
+
+            elif etype == "whale":
+                if env in ("ocean", "underwater", "any"):
+                    elements.append(self._make_whale(mood))
+                    placed.add("whale")
+
+            elif etype == "dolphin":
+                if env in ("ocean", "underwater", "any"):
+                    elements.append(self._make_fish())
+                    placed.add("dolphin")
+
+            elif etype == "walking_whale":
+                elements.append({"type": "crocodile", "x": 0.5, "y": 0.65, "scale": 0.8,
+                                  "fill": [80, 120, 70], "stroke": [50, 90, 40]})
+                elements.append({"type": "water", "x": 0.05, "y": 0.7, "width": 0.9, "height": 0.15, "fill": [60, 120, 200]})
+                placed.add("walking_whale"); placed.add("water")
+
+            elif etype == "skeleton":
+                elements.append(self._make_skeleton(mood))
+                placed.add("skeleton")
+
+            elif etype == "flipper":
+                if env in ("ocean", "underwater", "any"):
+                    elements.append(self._make_whale(mood))
+                    placed.add("whale")
+
+            elif etype in ("blowhole", "tail", "mammal"):
+                if env in ("ocean", "underwater", "any"):
+                    elements.append(self._make_whale(mood))
+                    placed.add("whale")
+                else:
+                    elements.append({"type": "animal", "x": 0.5, "y": 0.62, "scale": 0.7, "fill": [80, 100, 120]})
+                    placed.add("animal")
+
+            elif etype == "evolution":
+                elements.append({"type": "text", "x": 0.5, "y": 0.15, "text": "EVOLUTION",
+                                  "font_size": 32, "fill": [200, 180, 60]})
+                elements.append({"type": "arrow", "x": 0.3, "y": 0.5, "x2": 0.7, "y2": 0.5,
+                                  "stroke": [200, 180, 60], "stroke_width": 3})
+                placed.add("evolution"); placed.add("text")
+
+            elif etype in ("prehistoric", "timeline"):
+                elements.append({"type": "text", "x": 0.5, "y": 0.12, "text": etype.upper(),
+                                  "font_size": 28, "fill": [160, 140, 100]})
+                placed.add("text")
 
             elif etype == "fish":
                 if env == "underwater" or env == "ocean":
@@ -814,11 +990,41 @@ class SceneComposer:
                 elements.append(e); placed.add("vehicle")
 
             elif etype in ("cannon", "flag", "path", "throne", "chest", "book", "lamp",
-                          "bell", "cross", "furniture", "food", "tool", "pottery"):
+                           "bell", "cross", "furniture", "food", "tool", "pottery"):
                 e = self._make_object(etype, mood)
                 if e:
                     elements.append(e)
                     placed.add(etype)
+
+            elif etype == "glacier":
+                if env in ("snow", "gradient", "ocean"):
+                    elements.append({"type": "glacier", "x": 0.35, "y": 0.45, "scale": 0.6, "fill": [190, 210, 230]})
+                    if self.rng.random() < 0.5:
+                        elements.append({"type": "glacier", "x": 0.7, "y": 0.5, "scale": 0.5, "fill": [200, 215, 235]})
+                    placed.add("glacier")
+
+            elif etype == "iceberg":
+                if env in ("snow", "ocean", "gradient"):
+                    elements.append({"type": "iceberg", "x": 0.3, "y": 0.45, "scale": 0.5, "fill": [210, 225, 245]})
+                    placed.add("iceberg")
+
+            elif etype == "tundra":
+                elements.append({"type": "hill", "x": 0.5, "y": 0.72, "width": 0.7, "height": 0.08, "fill": [160, 180, 190]})
+                placed.add("tundra")
+
+            elif etype == "antarctica":
+                if has_fossil and "skeleton" not in placed:
+                    elements.append({"type": "skeleton", "x": 0.5, "y": 0.72, "scale": 0.45, "fill": [200, 180, 150]})
+                    placed.add("skeleton")
+                if env == "snow" and "glacier" not in placed:
+                    elements.append({"type": "glacier", "x": 0.5, "y": 0.45, "scale": 0.6, "fill": [190, 210, 230]})
+                    placed.add("glacier")
+
+        # Combined Antarctica-specific scenes
+        if has_antarctica and env == "snow" and len(elements) < 3:
+            if "glacier" not in placed and "mountain" in placed:
+                elements.append({"type": "glacier", "x": 0.5, "y": 0.45, "scale": 0.6, "fill": [190, 210, 230]})
+                placed.add("glacier")
 
         # Add text label
         if "text" in placed or any(c[0] in ("text", "label") for c in concepts):
@@ -851,9 +1057,23 @@ class SceneComposer:
                 {"type": "star", "x": 0.2, "y": 0.15, "radius": 2, "fill": [255, 255, 200]},
                 {"type": "star", "x": 0.8, "y": 0.3, "radius": 1.5, "fill": [255, 255, 200]},
             ]
-        elif env == "ocean":
+        elif env == "snow":
             fillers += [
-                {"type": "ship", "x": 0.5, "y": 0.55, "scale": 0.8, "fill": [80, 60, 40], "sail_color": [220, 210, 190]},
+                {"type": "glacier", "x": 0.3, "y": 0.45, "scale": 0.5, "fill": [200, 220, 240]},
+                {"type": "cloud", "x": 0.5, "y": 0.2, "scale": 0.6, "fill": [230, 235, 240]},
+            ]
+
+        elif env == "ocean":
+            if self.rng.random() < 0.5:
+                fillers += [
+                    {"type": "whale", "x": self.rng.uniform(0.3, 0.6), "y": self.rng.uniform(0.45, 0.55),
+                     "scale": self.rng.uniform(0.5, 0.8), "fill": [60, 70, 100]},
+                ]
+            else:
+                fillers += [
+                    {"type": "ship", "x": 0.5, "y": 0.55, "scale": 0.8, "fill": [80, 60, 40], "sail_color": [220, 210, 190]},
+                ]
+            fillers += [
                 {"type": "cloud", "x": 0.3, "y": 0.15, "scale": 0.5},
             ]
         elif env == "forest":
@@ -912,6 +1132,19 @@ class SceneComposer:
     def _make_bird(self, mood: str) -> dict:
         return {"type": "bird", "x": self.rng.uniform(0.3, 0.7), "y": self.rng.uniform(0.2, 0.35),
                 "scale": self.rng.uniform(0.5, 0.8), "fill": [60, 50, 40]}
+
+    def _make_whale(self, mood: str = "peaceful") -> dict:
+        x = self.rng.uniform(0.3, 0.6)
+        c = [60, 70, 100]
+        if mood == "epic": c = [50, 60, 120]
+        elif mood == "somber": c = [50, 55, 70]
+        elif mood == "hopeful": c = [80, 110, 150]
+        return {"type": "whale", "x": x, "y": self.rng.uniform(0.45, 0.55),
+                "scale": self.rng.uniform(0.5, 0.9), "fill": c}
+
+    def _make_skeleton(self, mood: str = "mysterious") -> dict:
+        return {"type": "skeleton", "x": 0.5, "y": 0.55, "scale": 0.8,
+                "fill": [220, 200, 180]}
 
     def _make_fish(self) -> dict:
         return {"type": "fish", "x": self.rng.uniform(0.3, 0.7), "y": self.rng.uniform(0.4, 0.6),

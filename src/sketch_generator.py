@@ -878,6 +878,40 @@ class SketchGenerator:
             if sr > 1.5:
                 self.draw_circle(draw, sx, sy, sr * 3, fill=(brightness, brightness, brightness, 20))
 
+    def _draw_ash_particles(self, draw, count=80):
+        """Draw ash/soot particles drifting down — dark, varied sizes."""
+        for _ in range(count):
+            ax = self.rng.randint(0, self.w)
+            ay = self.rng.randint(0, self.h)
+            ar = self.rng.uniform(1, 4)
+            shade = self.rng.randint(20, 80)
+            alpha = self.rng.randint(30, 120)
+            self.draw_circle(draw, ax, ay, ar, fill=(shade, shade, shade, alpha))
+
+    def _draw_mist(self, draw):
+        """Draw low-lying mist over the ground."""
+        for _ in range(30):
+            mx = self.rng.randint(0, self.w)
+            my = self.rng.randint(int(self.h * 0.45), self.h)
+            mw = self.rng.randint(60, 200)
+            mh = self.rng.randint(15, 40)
+            alpha = self.rng.randint(15, 45)
+            self.draw_ellipse(draw, mx, my, mw, mh, fill=(200, 210, 220, alpha))
+
+    def _draw_sunbeams(self, draw):
+        """Draw warm sunbeams slanting down."""
+        for _ in range(8):
+            bx = self.rng.randint(0, self.w)
+            beam_w = self.rng.randint(20, 60)
+            beam_h = self.rng.randint(self.h // 3, self.h)
+            alpha = self.rng.randint(8, 20)
+            x1 = bx - beam_w // 2
+            y1 = 0
+            x2 = bx + beam_w // 2
+            y2 = beam_h
+            draw.polygon([(x1, y1), (x2, y1), (x2, y2), (x1, y2)],
+                         fill=(255, 240, 200, alpha))
+
     def draw_ship(self, draw, x, y, s=1.0, hull_color=(80, 60, 40), sail_color=(220, 210, 190)):
         """Draw a detailed sailing ship with hull, masts, rigging, and sails."""
         hc = tuple(hull_color[:3])
@@ -1311,6 +1345,109 @@ class SketchGenerator:
                            fill=c + (200,), stroke=self._darken(c, 20) + (150,), stroke_width=1)
         # Top leaf cluster
         self.draw_circle(draw, x, y - 8*s, 3*s, fill=self._lighten(c, 20) + (200,))
+
+    def draw_fern(self, draw, x, y, size=1.0, color=(60, 130, 50)):
+        """Draw a prehistoric fern / cycad."""
+        s = size; c = tuple(color[:3])
+        # Stem
+        self.draw_line(draw, x, y, x, y - 12*s, color=(40, 90, 30), width=int(2*s))
+        # Fronds (curving outward)
+        for side, offset in [(-1, -2), (1, 2)]:
+            for i in range(4):
+                fy = y - (2 + i * 3) * s
+                tip_x = x + side * (6 + i * 2) * s
+                tip_y = fy - 2*s
+                self.draw_line(draw, x, fy, tip_x, tip_y, color=c, width=int(1.5*s))
+                # Leaflets along frond
+                for j in range(3):
+                    lx = x + side * (2 + j * 2) * s
+                    ly = fy - (j * 0.5) * s
+                    self.draw_line(draw, lx, ly, lx + side * 2*s, ly - 2*s, color=self._lighten(c, 15), width=int(1*s))
+        # Central curled frond
+        self.draw_arc(draw, x, y - 14*s, 4*s, 180, 360, color=(50, 110, 40), width=int(2*s))
+
+    def draw_asteroid(self, draw, x, y, size=1.0, color=(200, 100, 40)):
+        """Draw a fiery asteroid streaking across the sky."""
+        s = size; c = tuple(color[:3])
+        self.draw_shadow_circle(draw, x, y + 2, 10*s, offset=(3, 3), blur_radius=5, color=(0, 0, 0, 60))
+        # Fire trail
+        for t in range(5):
+            tx = x - (6 + t * 5)*s
+            ty = y - t*2*s
+            tr = (5 - t)*1.5*s
+            alpha = 80 - t*15
+            self.draw_circle(draw, tx, ty, tr, fill=(255, 160, 40, alpha))
+        # Main body (irregular rock)
+        pts = [(x - 8*s, y), (x - 4*s, y - 8*s), (x + 4*s, y - 6*s), (x + 8*s, y - 2*s), (x + 2*s, y + 6*s), (x - 6*s, y + 4*s)]
+        self.draw_polygon(draw, pts, fill=(120, 90, 60, 230), stroke=(60, 45, 30, 200), stroke_width=2)
+        # Fire glow around edges
+        self.draw_circle(draw, x - 2*s, y + 2*s, 6*s, fill=(255, 120, 30, 40))
+        # Cracks
+        self.draw_line(draw, x - 2*s, y - 4*s, x + 3*s, y - 2*s, color=(60, 45, 30), width=1)
+        self.draw_line(draw, x - 3*s, y + 2*s, x + 2*s, y + 3*s, color=(60, 45, 30), width=1)
+
+    def draw_crater(self, draw, x, y, size=1.0, color=(100, 80, 60)):
+        """Draw an impact crater on the ground."""
+        s = size; c = tuple(color[:3])
+        r = 20*s
+        # Outer rim (shadow)
+        self.draw_shadow_circle(draw, x, y + 2, r, offset=(2, 2), blur_radius=4, color=(0, 0, 0, 50))
+        # Outer rim (raised edge)
+        pts = []
+        for a in range(0, 370, 15):
+            rad = math.radians(a)
+            px = x + int(math.cos(rad) * (r + 2*s))
+            py = y + int(math.sin(rad) * (r*0.5 + s))
+            pts.append((px, py))
+        if pts:
+            self.draw_polygon(draw, pts, fill=self._darken(c, 10) + (220,), stroke=self._darken(c, 25) + (180,), stroke_width=2)
+        # Inner depression (darker)
+        inner_r = r * 0.6
+        pts_inner = []
+        for a in range(0, 370, 15):
+            rad = math.radians(a)
+            px = x + int(math.cos(rad) * inner_r)
+            py = y + 2 + int(math.sin(rad) * inner_r * 0.4)
+            pts_inner.append((px, py))
+        if pts_inner:
+            self.draw_polygon(draw, pts_inner, fill=(50, 40, 30, 250), stroke=(30, 25, 20, 180), stroke_width=1)
+        # Center crack
+        self.draw_line(draw, x - 6*s, y + 4*s, x + 5*s, y + 6*s, color=(25, 20, 15), width=2)
+        self.draw_line(draw, x - 3*s, y + 2*s, x + 2*s, y + 8*s, color=(25, 20, 15), width=1)
+
+    def draw_skeleton(self, draw, x, y, size=1.0, color=(220, 200, 180)):
+        """Draw a fossilized skeleton (large bones)."""
+        s = size; c = tuple(color[:3])
+        # Shadow
+        self.draw_shadow_circle(draw, x, y + 3, 10*s, offset=(2, 2), blur_radius=3, color=(0, 0, 0, 30))
+        # Skull
+        skull_pts = [(x - 5*s, y - 2*s), (x + 6*s, y - 4*s), (x + 10*s, y), (x + 8*s, y + 3*s), (x + 2*s, y + 4*s), (x - 4*s, y + 2*s)]
+        self.draw_polygon(draw, skull_pts, fill=c + (220,), stroke=self._darken(c, 20) + (180,), stroke_width=2)
+        # Eye socket
+        self.draw_circle(draw, x + 3*s, y - 1, 2.5*s, fill=(60, 55, 50, 230))
+        # Jaw line
+        self.draw_line(draw, x - 3*s, y + 2*s, x + 8*s, y + 2*s, color=self._darken(c, 15), width=int(1.5*s))
+        # Teeth
+        for tx in range(int(x + 2*s), int(x + 8*s), 2):
+            self.draw_line(draw, tx, y + 1, tx, y + 3*s, color=(240, 235, 225), width=1)
+        # Spine (vertebrae)
+        vx = x - 6*s
+        for v in range(5):
+            v_px = vx - v * 3*s
+            vy_off = 1 if v % 2 == 0 else -1
+            self.draw_circle(draw, v_px, y - vy_off, 1.5*s, fill=c + (220,), stroke=self._darken(c, 20) + (180,), stroke_width=1)
+            self.draw_line(draw, v_px, y - 3*s, v_px, y + 2*s, color=self._darken(c, 10), width=1)
+        # Ribs (curved)
+        for r_idx in range(4):
+            rx = x - 4*s - r_idx * 2*s
+            self.draw_arc(draw, rx, y - 3*s, 4*s, 200, 340, color=self._darken(c, 10), width=int(1.5*s))
+        # Tail bones
+        tx2 = x - 18*s
+        for t in range(4):
+            self.draw_circle(draw, tx2 - t*2*s, y + t*s, s, fill=c + (200,), stroke=self._darken(c, 20) + (150,), stroke_width=1)
+        # Leg bones (long)
+        self.draw_line(draw, x - 2*s, y + 3*s, x - 4*s, y + 10*s, color=self._darken(c, 10), width=int(2*s))
+        self.draw_line(draw, x + 4*s, y + 3*s, x + 3*s, y + 10*s, color=self._darken(c, 10), width=int(2*s))
 
     def draw_fruit(self, draw, x, y, size=1.0, color=(255, 150, 50)):
         """Draw a simple fruit."""
@@ -1760,6 +1897,14 @@ class SketchGenerator:
             atmos = desc.get("atmosphere", {})
             if atmos.get("particles") == "stars" or bg_type == "night":
                 self.draw_stars(draw, count=atmos.get("star_count", 60))
+            elif atmos.get("particles") == "ash":
+                self._draw_ash_particles(draw, count=atmos.get("ash_count", 80))
+            elif atmos.get("particles") == "mist":
+                self._draw_mist(draw)
+            elif atmos.get("particles") == "sunbeams":
+                self._draw_sunbeams(draw)
+            elif atmos.get("particles") == "sparkles":
+                self.draw_stars(draw, count=atmos.get("star_count", 30))
 
             # ── Landscape features (mountains, ground, trees, clouds) ──
             if isinstance(bg, dict):
@@ -1769,6 +1914,10 @@ class SketchGenerator:
         sorted_elems = sorted(desc.get("elements", []), key=lambda e: e.get("z_index", 2))
         for elem in sorted_elems:
             self._render_element(draw, elem)
+
+        # ── Ash/smoke overlay ──
+        if atmos.get("fog") == "ash":
+            draw.rectangle([0, 0, self.w, self.h], fill=(30, 20, 10, 60))
 
         # ── Post-processing ──
         canvas = self._post_process(canvas, desc.get("mood", ""), desc.get("style", {}))
@@ -2241,6 +2390,18 @@ class SketchGenerator:
             c = fill or (100, 80, 60)
             self.draw_animal(draw, x, y, s, c)
 
+        elif etype == "asteroid":
+            c = fill or (200, 100, 40)
+            self.draw_asteroid(draw, x, y, s, c)
+
+        elif etype == "crater":
+            c = fill or (100, 80, 60)
+            self.draw_crater(draw, x, y, s, c)
+
+        elif etype == "skeleton":
+            c = fill or (220, 200, 180)
+            self.draw_skeleton(draw, x, y, s, c)
+
         elif etype == "crocodile":
             c = fill or (60, 130, 50)
             self.draw_crocodile(draw, x, y, s, c)
@@ -2264,6 +2425,10 @@ class SketchGenerator:
         elif etype == "plant":
             c = fill or (50, 120, 50)
             self.draw_plant(draw, x, y, s, c)
+
+        elif etype == "fern":
+            c = fill or (60, 130, 50)
+            self.draw_fern(draw, x, y, s, c)
 
         elif etype == "fruit":
             c = fill or (255, 150, 50)
@@ -2341,6 +2506,12 @@ class SketchGenerator:
 
         elif etype in ("compass_rose", "wind_rose"):
             self.draw_compass_rose(draw, x, y, s, fill or (180, 160, 120))
+
+        elif etype in ("glacier", "glaciers"):
+            self.draw_glacier(draw, x, y, s, fill or (200, 220, 240))
+
+        elif etype in ("iceberg", "icebergs"):
+            self.draw_iceberg(draw, x, y, s, fill or (210, 225, 245))
 
         elif etype in ("shadow_figure", "silhouette", "shadow_man"):
             self.draw_shadow_figure(draw, x, y, s, fill or (20, 25, 30))
@@ -3535,6 +3706,62 @@ class SketchGenerator:
                 self.draw_ellipse(draw, int(x - cw // 2), cy, int(cw), max(int(2 * s), 1),
                                 fill=(255, 255, 250, max(ca, 20)))
 
+    def draw_glacier(self, draw, x, y, size=1.0, color=(200, 220, 240)):
+        """Draw a jagged glacier / ice cliff."""
+        s = size * 30
+        cx, cy = x, y
+        pts = []
+        segments = 8
+        for i in range(segments + 1):
+            angle = -math.pi * (0.3 + 0.4 * i / segments)
+            r = s * (0.7 + self.rng.random() * 0.3)
+            px = cx + int(r * math.cos(angle))
+            py = cy + int(r * math.sin(angle))
+            if i == 0 or i == segments:
+                py = cy + int(s * 1.1)
+            pts.append((px, py))
+        self.draw_polygon(draw, pts, fill=color, stroke=(180, 200, 220, 200), stroke_width=2)
+
+        # Snow cap / highlight
+        cap = []
+        for i in range(segments // 2 + 1):
+            angle = -math.pi * (0.3 + 0.4 * i / segments)
+            r = s * (0.5 + self.rng.random() * 0.15)
+            px = cx + int(r * math.cos(angle))
+            py = cy + int(r * math.sin(angle))
+            cap.append((px, py))
+        if len(cap) > 2:
+            self.draw_polygon(draw, cap, fill=(230, 240, 255, 180), stroke=None)
+
+    def draw_iceberg(self, draw, x, y, size=1.0, color=(210, 225, 245)):
+        """Draw a floating iceberg with underwater portion."""
+        s = size * 25
+        cx, cy = x, y
+        top = []
+        segs = 6
+        for i in range(segs + 1):
+            angle = -math.pi * (0.25 + 0.5 * i / segs)
+            r = s * (0.6 + self.rng.random() * 0.4)
+            px = cx + int(r * math.cos(angle))
+            py = cy + int(r * math.sin(angle)) - int(s * 0.3)
+            if i == 0 or i == segs:
+                py = cy + int(s * 0.1)
+            top.append((px, py))
+        self.draw_polygon(draw, top, fill=(230, 240, 255), stroke=(190, 210, 230, 180), stroke_width=1)
+
+        # Underwater portion (darker)
+        under = []
+        for i in range(segs + 1):
+            angle = math.pi * (0.25 + 0.5 * i / segs)
+            r = s * (0.7 + self.rng.random() * 0.5)
+            px = cx + int(r * math.cos(angle))
+            py = cy + int(r * math.sin(angle)) + int(s * 0.4)
+            if i == 0 or i == segs:
+                py = cy + int(s * 0.1)
+            under.append((px, py))
+        if len(under) > 2:
+            self.draw_polygon(draw, under, fill=(160, 190, 215, 180), stroke=None)
+
     def draw_jar(self, draw, x, y, size=1.0, color=(200, 210, 220)):
         """Draw a glass jar with warm inner glow."""
         s = max(size * 25, 15)
@@ -3609,7 +3836,7 @@ class SketchGenerator:
 
     def _post_process(self, canvas: Image.Image, mood: str = "", style: dict = {}) -> Image.Image:
         """Apply final touches: rectangular vignette, grain, lighting."""
-        grain_intensity = style.get("grain", 0.12)
+        grain_intensity = style.get("grain", 0.04)
         draw = ImageDraw.Draw(canvas, "RGBA")
 
         # ── Rectangular vignette (darkens edges, full-frame) ──
@@ -3640,10 +3867,11 @@ class SketchGenerator:
         # ── Atmospheric haze ──
         if mood == "mysterious" or mood == "somber":
             fog_alpha = 25 if mood == "mysterious" else 40
-            draw.rectangle([0, 0, self.w, self.h], fill=(200, 210, 220, fog_alpha))
+            haze = Image.new("RGBA", (self.w, self.h), (200, 210, 220, fog_alpha))
+            canvas = Image.alpha_composite(canvas, haze)
 
-        # Slight smoothing
-        canvas = canvas.filter(ImageFilter.SMOOTH_MORE)
+        # Light sharpen for cleaner look (instead of blur)
+        canvas = canvas.filter(ImageFilter.UnsharpMask(radius=1, percent=80, threshold=2))
 
         return canvas
 
@@ -3667,78 +3895,11 @@ def llm_generate_scene(prompt: str) -> dict:
     """Use LLM to generate a structured scene description from a text prompt.
 
     Returns a dict describing background, elements, mood, etc.
+    Delegates to the dedicated llm_scene_generator module.
+    Falls back to a generic landscape if LLM is unavailable.
     """
-    from src.script_generator import _generate
-
-    system = """You are a visual artist and scene composer. You create beautiful, full-color illustrations.
-You output ONLY valid JSON. You describe every visual detail with specific colors and positions."""
-
-    user_prompt = f"""Create a beautiful full-color illustration for: "{prompt}"
-
-Output a JSON scene description with this exact structure:
-{{
-  "bg": {{
-    "type": "gradient|night|ocean|indoor|solid|sunset",
-    "colors": [[R,G,B], [R,G,B], ...],
-    "horizon": 0.0-1.0 or null,
-    "ground_color": [R,G,B] or null
-  }},
-  "elements": [
-    {{
-      "type": "mountain|tree|cloud|water|human|house|hill|sun|moon|star|circle|rect|polygon|line|text|label|ship|building|cannon|flag|x_mark|arrow|grass|path|bird|animal|fish|flower|fire|cave|volcano|wave|canoe|whale|shark|sea_serpent|totem|anchor|compass|globe|cliff|compass_rose|shadow_figure|moon_path",
-      "x": 0.0-1.0,
-      "y": 0.0-1.0,
-      "scale": 0.5-2.0 or null,
-      "fill": [R,G,B] or null,
-      "stroke": [R,G,B] or null,
-      "text": "text content" or null,
-      "font_size": 14-60 or null,
-      "width": 0.0-1.0 or null,
-      "height": 0.0-1.0 or null,
-      "radius": 0.0-1.0 or null,
-      "label": "what this is" or null
-    }}
-  ],
-  "atmosphere": {{
-    "particles": "stars|rain|snow|none",
-    "fog": true|false
-  }},
-  "mood": "peaceful|dramatic|somber|hopeful|epic|mysterious"
-}}
-
-RULES:
-- Choose background type and colors that match the scene's mood and setting
-- Place 3-8 elements to create a complete, beautiful composition
-- Use rich, harmonious colors (provide exact [R,G,B] values)
-- For text elements, use "text" type with "text" field and "font_size"
-- For mountains: include "snow": true/false
-- For trees: include "tree_style": "round|pine|palm"
-- For ships: include "sail_color": [R,G,B]
-- For buildings: include "window_color": [R,G,B]
-- x,y coordinates are 0-1 on a portrait canvas (720x1280)
-
-Respond with ONLY the JSON object, no other text."""
-
-    fallback = {
-        "bg": {"type": "gradient", "colors": [[200, 210, 230], [140, 160, 200]], "horizon": 0.6, "ground_color": [60, 90, 50]},
-        "elements": [
-            {"type": "hill", "x": 0.3, "y": 0.7, "width": 0.5, "height": 0.15, "fill": [60, 120, 60]},
-            {"type": "tree", "x": 0.3, "y": 0.72, "scale": 0.8, "tree_style": "round", "fill": [50, 120, 50]},
-            {"type": "cloud", "x": 0.5, "y": 0.2, "scale": 0.8},
-            {"type": "text", "x": 0.5, "y": 0.08, "text": prompt.upper(), "font_size": 32},
-        ],
-        "atmosphere": {"particles": "none", "fog": False},
-        "mood": "peaceful"
-    }
-
-    try:
-        raw = _generate(user_prompt, temperature=0.8, max_tokens=3000, system=system)
-        raw = re.sub(r'^```(?:json)?\s*', '', raw.strip())
-        raw = re.sub(r'\s*```$', '', raw)
-        data = json.loads(raw)
-        if "bg" in data or "elements" in data:
-            return data
-    except Exception as e:
-        print(f"  LLM scene generation error: {e}")
-
-    return fallback
+    from src.llm_scene_generator import describe_scene, _fallback_scene
+    result = describe_scene(prompt)
+    if result:
+        return result
+    return _fallback_scene(prompt)
