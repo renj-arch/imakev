@@ -1732,6 +1732,15 @@ def _extract_entities(text: str) -> list:
         ("blurry", "cloud", (180, 180, 200), 3), ("blurred", "cloud", (180, 180, 200), 3),
         ("swim", "fish", (100, 160, 200), 3), ("swims", "fish", (100, 160, 200), 3),
         ("fly", "bird", (100, 140, 180), 3), ("flies", "bird", (100, 140, 180), 3),
+        ("brick", "rock", (180, 100, 60), 4), ("bricks", "rock", (180, 100, 60), 4),
+        ("heavy", "rock", (140, 80, 50), 3), ("painful", "fire", (200, 60, 40), 3),
+        ("exhausting", "human", (120, 100, 80), 3), ("pick", "hand", (200, 180, 160), 3),
+        ("picked", "hand", (200, 180, 160), 3), ("carry", "hand", (200, 180, 160), 3),
+        ("carries", "hand", (200, 180, 160), 3), ("carried", "hand", (200, 180, 160), 3),
+        ("carrying", "hand", (200, 180, 160), 3), ("ask", "hand", (200, 180, 160), 3),
+        ("asked", "hand", (200, 180, 160), 3), ("asks", "hand", (200, 180, 160), 3),
+        ("stop", "hand", (200, 100, 80), 3), ("stopped", "hand", (200, 100, 80), 3),
+        ("stops", "hand", (200, 100, 80), 3),
         ("grown", "tree", (80, 140, 60), 2), ("grows", "tree", (80, 140, 60), 2),
         ("grow", "tree", (80, 140, 60), 2), ("grew", "tree", (80, 140, 60), 2),
         ("shade", "tree", (80, 140, 60), 2), ("shadow", "shadow_figure", (40, 40, 50), 3),
@@ -2522,7 +2531,7 @@ def _enrich_story_context(visuals, text, state, scene_num, total):
     # ── Inject persistent story entities from previous scenes ──
     if scene_num > 1 and state.get("entity_history"):
         prev_types = set(state["entity_history"][-1])
-        persistent_types = {"tree", "man", "woman", "child", "house", "human", "animal"}
+        persistent_types = {"tree", "man", "woman", "child", "house", "human", "animal", "rock"}
         missing = (prev_types & persistent_types) - kept_types
         nudge = 0.05
         for etype in missing:
@@ -2536,16 +2545,22 @@ def _enrich_story_context(visuals, text, state, scene_num, total):
                     nudge += 0.04
                     break
 
-    # ── Progressive entity scaling (e.g. tree grows across scenes) ──
+    # ── Progressive entity scaling ──
     story_arc = scene_num / max(total, 1)
     for e in kept:
         if e["type"] == "tree":
-            # Absolute scale target: small sapling → mighty tree
             e["scale"] = 0.8 + story_arc * 1.8
+        elif e["type"] == "rock":
+            # Brick gets heavier (bigger scale) from mid-story then drops in final scene
+            if scene_num >= total * 0.6 and scene_num < total:
+                e["scale"] = e.get("scale", 1.0) * 1.4
+            elif scene_num == total:
+                e["scale"] = e.get("scale", 1.0) * 0.5  # Put it down
+            e["y"] = min(e.get("y", 0.6) + 0.02, 0.75)  # Sinks lower as it gets heavy
         elif e["type"] == "child" and scene_num > total * 0.5:
             e["scale"] = e.get("scale", 1.0) * 1.3
 
-    vis["elements"] = kept[:5]
+    vis["elements"] = kept[:6]
 
     # ── Update story state for persistence ──
     state["entity_history"] = state.get("entity_history", [])
