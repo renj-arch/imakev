@@ -1838,7 +1838,7 @@ def _infer_visuals_llm(narration: str, scene_num: int, total: int) -> dict | Non
 
         # Scale varies by type
         scale = 1.0
-        if etype in ("mountain", "cliff", "whale", "sea_serpent", "wave"):
+        if etype in ("mountain", "cliff", "whale", "sea_serpent", "wave", "globe"):
             scale = 1.3
         elif etype in ("star", "bird", "flower", "eye", "coin"):
             scale = 0.7

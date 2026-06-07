@@ -1341,15 +1341,18 @@ class SketchGenerator:
 
     def draw_globe(self, draw, x, y, size=1.0, color=(100, 150, 200)):
         s = size; c = tuple(color[:3])
-        r = 10*s
+        r = 24*s
         self.draw_shadow_circle(draw, x, y+r, r, offset=(3,2), blur_radius=4, color=(0,0,0,40))
         self.draw_circle(draw, x, y, r, fill=c+(200,), stroke=self._darken(c,20)+(180,), stroke_width=2)
         # Continents blobs
         for ox, oy in [(0.3,0.2), (-0.2,0.1), (0.1,-0.3), (-0.3,-0.1)]:
             self.draw_circle(draw, int(x+ox*r), int(y+oy*r), int(r*0.25), fill=(60,120,80,120))
+        # Latitude/longitude arcs
+        self.draw_arc(draw, x, y, int(r*0.7), 180, 360, color=(255,255,255,40), width=1)
+        self.draw_arc(draw, x, y, int(r*0.5), 0, 180, color=(255,255,255,30), width=1)
         # Stand
-        self.draw_rect(draw, x-2*s, y+r, 4*s, 6*s, fill=(80,70,60,200), stroke=(50,45,40), stroke_width=1)
-        self.draw_rect(draw, x-5*s, y+6*s, 10*s, 2*s, fill=(80,70,60,200), stroke=(50,45,40), stroke_width=1)
+        self.draw_rect(draw, x-2*s, y+r, 4*s, int(6*s), fill=(80,70,60,200), stroke=(50,45,40,180), stroke_width=1)
+        self.draw_rect(draw, x-5*s, y+r+int(6*s), int(10*s), int(3*s), fill=(80,70,60,200), stroke=(50,45,40,180), stroke_width=1)
 
     def draw_quill(self, draw, x, y, size=1.0, color=(220, 200, 180)):
         s = size; c = tuple(color[:3])
