@@ -2006,7 +2006,7 @@ def _extract_entities(text: str) -> list:
         i += 1
 
     found.sort(key=lambda x: -x[2])
-    return found[:7]
+    return found[:4]
 
 def _compose_narrative_position(scene_num: int, total: int) -> str:
     """Determine narrative position: setup, build, tension, climax, resolution."""
@@ -2483,16 +2483,16 @@ def _enrich_story_context(visuals, text, state, scene_num, total):
     vis = visuals.get("visual", {})
     elements = vis.get("elements", [])
 
-    # Keep structural/chart elements and limit entity elements to 4 most relevant
+    # Story scenes: keep only 3 most relevant elements for clean composition
+    scene_type = vis.get("scene_type", "story")
+    max_elems = 5 if scene_type != "story" else 3
     kept = []
     priority = []
     for i, elem in enumerate(elements):
         etype = elem.get("type", "")
-        if etype in ("text", "bar_chart", "pie_chart", "line_graph", "cycle_diagram", "venn_diagram", "comparison", "step_diagram", "network_diagram", "tree_diagram", "histogram", "scatter_plot"):
+        if scene_type != "story" and etype in ("text", "bar_chart", "pie_chart", "line_graph", "cycle_diagram", "venn_diagram", "comparison", "step_diagram", "network_diagram", "tree_diagram", "histogram", "scatter_plot"):
             kept.append(elem)
-        elif etype in ("human", "doctor", "scientist"):
-            priority.append((0, elem))
-        elif etype == "map":
+        elif etype in ("human", "animal"):
             priority.append((0, elem))
         elif elem.get("label", "") and len(elem["label"]) > 2:
             if elem["label"].lower() in t:
@@ -2503,8 +2503,9 @@ def _enrich_story_context(visuals, text, state, scene_num, total):
             priority.append((2, elem))
 
     priority.sort(key=lambda x: x[0])
-    kept.extend(e[1] for e in priority[:max(5, 8 - len(kept))])
-    vis["elements"] = kept[:8]
+    slot = max_elems - len(kept)
+    kept.extend(e[1] for e in priority[:slot])
+    vis["elements"] = kept[:max_elems]
 
     # Background consistency: carry same bg type forward unless text strongly suggests change
     if state["bg"] and scene_num > 1:
