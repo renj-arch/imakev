@@ -506,8 +506,8 @@ class SketchGenerator:
         # ── Torso ──
         if is_woman:
             # Hourglass: narrow waist, wider hips
-            waist_w = 8 * bs
-            hip_w = 12 * bs
+            waist_w = 7 * bs
+            hip_w = 14 * bs
             bust_y = torso_top + 6 * bs
             waist_y = y - 2 * bs
             hip_y = y + 6 * bs
@@ -524,8 +524,10 @@ class SketchGenerator:
             # Bust curve
             bust_c = self._lighten(cloth, 15)
             for side in [-1, 1]:
-                self.draw_arc(draw, x + side * waist_w//3, bust_y + 2*bs, waist_w//3, 0, 180,
+                self.draw_arc(draw, x + side * waist_w//2, bust_y + bs, waist_w//3, 0, 180,
                               color=bust_c, width=int(2*bs))
+                self.draw_arc(draw, x + side * waist_w//2, bust_y, waist_w//3, 0, 180,
+                              color=self._darken(cloth, 5) + (60,), width=1)
 
             # Dress / hips (waist to midthigh)
             dress_pts = [(x - waist_w//2, waist_y),
@@ -540,10 +542,6 @@ class SketchGenerator:
             hem_color = self._lighten(cloth, 20)
             self.draw_line(draw, x - hip_w//2, hip_y, x + hip_w//2, hip_y,
                           color=hem_color + (180,), width=2)
-
-            # Collar / neckline
-            self.draw_arc(draw, x, bust_y, waist_w//2, 180, 360,
-                          color=self._darken(cloth, 15), width=int(2*bs))
 
         elif is_man:
             # V-shape: broad chest, narrow waist
@@ -621,17 +619,21 @@ class SketchGenerator:
 
         # ── Hair ──
         if is_woman:
-            # Shoulder-length hair framing face
+            # Long flowing hair
             hair_c = (60, 30, 20)
             # Hair on top
             self.draw_circle(draw, x, neck_y - head_r + 1, head_r * 0.8, fill=hair_c + (220,))
-            # Hair sides - flowing down past chin
+            # Hair flowing down sides (multiple strands)
             for side in [-1, 1]:
-                self.draw_arc(draw, x + side * head_r * 0.65, neck_y + 3*bs, head_r * 0.45, 0, 180,
-                              color=hair_c, width=int(4*bs))
-            # Hair bottom
-            self.draw_arc(draw, x, neck_y + head_r * 0.2, head_r * 0.5, 0, 180,
-                          color=hair_c, width=int(3*bs))
+                base_x = x + side * head_r * 0.85
+                for strand in range(3):
+                    offset = strand * 0.15 - 0.15
+                    sx = base_x
+                    ex = x + side * head_r * (0.7 + offset)
+                    ey = neck_y + head_r * (0.8 + strand * 0.1)
+                    self.draw_line(draw, sx, neck_y - head_r * 0.3, ex, ey,
+                                   color=hair_c, width=int((3 - strand) * bs))
+
         elif is_man:
             # Short cropped hair
             hair_c = (40, 35, 25)
@@ -1785,6 +1787,24 @@ class SketchGenerator:
                 if shimmer_alpha > 0:
                     draw.line([(0, shimmer_y), (self.w, shimmer_y)], fill=(255, 220, 180, shimmer_alpha))
 
+        elif bg_type == "sky":
+            colors = [(0, self._tc(bg.get("colors", [(80, 150, 220)])[0], (80, 150, 220))),
+                      (0.3, self._tc(bg.get("colors", [(120, 180, 235)])[1%len(bg.get("colors",[1]))], (120, 180, 235))),
+                      (0.6, self._tc(bg.get("colors", [(180, 210, 245)])[min(2,len(bg.get("colors",[1,2,3]))-1)], (180, 210, 245))),
+                      (1, self._tc(bg.get("colors", [(220, 235, 250)])[min(3,len(bg.get("colors",[1,2,3,4]))-1)], (220, 235, 250)))]
+            self.bg_gradient(draw, colors)
+            # Light clouds scattered across sky
+            for i in range(4):
+                cx = self.w * (0.15 + i * 0.2 + self.rng.random() * 0.08)
+                cy = self.h * (0.1 + self.rng.random() * 0.25)
+                cr = 30 + self.rng.random() * 40
+                for j in range(3):
+                    ox = self.rng.random() * cr * 0.8 - cr * 0.4
+                    oy = self.rng.random() * cr * 0.3
+                    alpha = 40 + self.rng.random() * 30
+                    draw.ellipse([int(cx+ox-cr), int(cy+oy-cr//2), int(cx+ox+cr), int(cy+oy+cr//2)],
+                                 fill=(255, 255, 255, int(alpha)))
+
     def _render_landscape(self, draw, bg: dict):
         """Draw landscape features (mountains, ground detail, vegetation) on top of background."""
         bg_type = bg.get("type", "gradient")
@@ -1792,7 +1812,7 @@ class SketchGenerator:
         horizon = bg.get("horizon", 0.55)
         horizon_y = int(self.h * horizon)
 
-        if bg_type in ("indoor", "solid", "ocean", "desert", "arctic"):
+        if bg_type in ("indoor", "solid", "ocean", "desert", "arctic", "sky"):
             return
 
         if len(colors) >= 2:

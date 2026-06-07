@@ -1356,7 +1356,7 @@ def _infer_visuals(text: str, scene_num: int, total: int) -> dict:
 # Biome signatures: (keyword, biome_name, bg_type, base_colors, ground_color)
 _BIOMES = [
     (["desert", "sand", "dune", "arid", "cactus", "scorpion", "lizard", "coyote", "vulture", "sun-baked", "cracked earth", "dry", "dust", "blazing", "sahara", "gobi", "mirage", "oasis", "nomad", "camel"], "desert", "sunset", [(220, 160, 80), (190, 120, 60), (160, 90, 40)], (140, 100, 50)),
-    (["ocean", "sea", "deep", "wave", "shore", "beach", "tide", "surf", "coast", "marine", "underwater", "coral", "reef", "dolphin", "whale", "jellyfish", "anemone", "gills", "fins", "aquatic", "submarine", "nautical", "sailor", "mariner", "lighthouse", "anchor", "sail"], "ocean", "ocean", [(40, 100, 200), (20, 60, 150)], None),
+    (["ocean", "oceans", "sea", "seas", "deep", "wave", "waves", "shore", "beach", "tide", "surf", "coast", "marine", "underwater", "coral", "reef", "dolphin", "whale", "jellyfish", "anemone", "gills", "fins", "aquatic", "submarine", "nautical", "sailor", "mariner", "lighthouse", "anchor", "sail"], "ocean", "ocean", [(40, 100, 200), (20, 60, 150)], None),
     (["night", "midnight", "moon", "star", "darkness", "shadow", "eclipse", "constellation", "aurora", "twilight"], "night", "night", [(5, 3, 25), (15, 10, 40), (30, 25, 60)], (10, 8, 25)),
     (["sunset", "dusk", "dawn", "sunrise", "golden", "evening", "twilight", "afterglow"], "sunset", "sunset", [(230, 120, 70), (200, 100, 90), (150, 70, 100), (80, 50, 80)], (50, 40, 30)),
     (["forest", "woods", "jungle", "rainforest", "tree", "canopy", "thicket", "grove", "bush", "shrub", "wilderness"], "forest", "forest", [(120, 160, 80), (60, 100, 50)], (40, 70, 30)),
@@ -1364,6 +1364,7 @@ _BIOMES = [
     (["mountain", "peak", "summit", "cliff", "ridge", "valley", "canyon", "gorge", "rock", "boulder", "stone", "hill", "highland"], "mountain", "gradient", [(140, 160, 200), (110, 130, 170), (80, 100, 130)], (90, 80, 70)),
     (["cave", "cavern", "underground", "subterranean", "grotto", "tunnel", "mine", "dungeon"], "cave", "indoor", [(50, 40, 35), (30, 25, 20)], None),
     (["city", "town", "village", "urban", "street", "building", "skyscraper", "neon", "lantern", "market", "temple", "palace", "castle", "fortress"], "city", "gradient", [(180, 180, 190), (140, 140, 160), (100, 100, 120)], (60, 60, 70)),
+    (["sky", "cloud", "clouds", "flight", "flights", "flying", "soar", "soaring", "aerial", "airborne", "glide", "gliding", "wing", "wings", "bird", "birds", "hawk", "eagle", "falcon", "swift", "swifts", "flock", "flocks", "migration", "migrations", "migrate", "migrates", "migrated", "migrating", "atmosphere", "altitude", "hover", "hovering", "air", "breeze", "wind", "winds", "updraft", "thermals", "soars", "glides", "glided", "soared"], "sky", "sky", [(160, 200, 240), (200, 220, 245), (230, 240, 250)], (120, 180, 210)),
     (["space", "cosmos", "galaxy", "planet", "nebula", "asteroid", "orbit", "satellite", "astronaut", "universe", "solar", "comet"], "space", "night", [(3, 1, 20), (8, 5, 40), (15, 10, 60)], (2, 1, 15)),
     (["farm", "field", "pasture", "meadow", "grassland", "prairie", "ranch", "barn", "crop", "grain", "wheat", "hay", "orchard", "garden"], "farm", "gradient", [(160, 200, 130), (120, 160, 90)], (80, 120, 50)),
     (["swamp", "marsh", "bog", "fen", "wetland", "bayou", "everglade", "mangrove"], "swamp", "forest", [(100, 140, 80), (60, 90, 50)], (50, 80, 40)),
@@ -1372,12 +1373,16 @@ _BIOMES = [
 
 def _detect_biome(text: str) -> dict:
     """Detect environmental setting from text. Returns bg config dict."""
+    import re
     text_lower = text.lower()
     best_score = 0
     best_biome = "gradient"
     best_bg = {"type": "gradient", "colors": [(140, 160, 200), (100, 120, 170)], "horizon": 0.55, "ground_color": (80, 100, 70)}
     for keywords, biome, bg_type, colors, ground in _BIOMES:
-        score = sum(2 if kw in text_lower else 0 for kw in keywords)
+        score = 0
+        for kw in keywords:
+            if re.search(r'\b' + re.escape(kw) + r'\b', text_lower):
+                score += 2
         if score > best_score:
             best_score = score
             best_biome = biome
@@ -1390,6 +1395,10 @@ def _detect_mood(text: str) -> str:
     l = text.lower()
     w = set(l.split())
 
+    # Strip punctuation from words for matching
+    import string as _st
+    w = set(word.strip(_st.punctuation) for word in w)
+
     fear     = {"fear","afraid","terrified","dread","horror","panic","scream","terror","nightmare","paralyzed","flee","cower","tremble","shudder","helpless","vulnerable","exposed","trapped","threat","danger","deadly","fatal","ominous","menace","dreadful","dies","dying","deathly","mortal"}
     hope     = {"hope","brave","courage","light","dawn","survive","survival","discover","explore","journey","future","safe","safety","shelter","home","warm","together","family","guide","lead","peace","triumph","victory","hero","rescue","salvation","miracle","faith","dream","inspire","wonder"}
     mystery  = {"mystery","mysterious","unknown","strange","weird","beyond","distant","fog","mist","hidden","secret","ancient","forgotten","lost","deep","depths","enigma","puzzle","curious","bizarre","uncanny","supernatural","magical","mythical","legend"}
@@ -1397,7 +1406,7 @@ def _detect_mood(text: str) -> str:
     danger   = {"danger","threat","attack","strike","blood","wound","war","battle","fight","enemy","weapon","spear","arrow","sword","kill","death","destroy","crush","savage","brutal","violent","aggressive","predator","hunt","prey","tooth","claw","fang","venom","poison","ambush","pounce","chase"}
     surprise = {"sudden","suddenly","unexpected","shock","stun","startle","blast","explode","burst","erupt","instant","immediately","abrupt","snap","crash","bang","pow","extraordinary","incredible","unbelievable","remarkable","strangest","weirdest","bizarre","freakish","fantastic"}
     sadness  = {"sad","lonely","alone","isolation","isolated","abandon","forlorn","desolate","despair","grief","sorrow","heavy","weary","tired","lost","empty","void","numb","tear","cry","sob","mourn","funeral","grave","tomb","succumb","succumbs","fading","fades","passing"}
-    wonder   = {"wonder","amazing","astonish","extraordinary","marvel","spectacle","magnificent","glorious","sublime","breathtaking","stunning","fascinating","captivating","enchant","thrilling","exquisite","miracle","magical","mythical","fabled","epic","legendary","transform","transformation","metamorphosis","evolution","adapt","remarkable","incredible","unbelievable"}
+    wonder   = {"wonder","amazing","astonish","astonishing","extraordinary","marvel","spectacle","magnificent","glorious","sublime","breathtaking","stunning","fascinating","captivating","enchant","thrilling","exquisite","miracle","magical","mythical","fabled","epic","legendary","transform","transformation","metamorphosis","evolution","adapt","remarkable","incredible","unbelievable"}
 
     scores = [
         ("somber",     len(w & fear) * 1.5 + len(w & sadness) * 1.2),
@@ -1414,7 +1423,11 @@ def _detect_mood(text: str) -> str:
 
 def _extract_entities(text: str) -> list:
     """Extract visual entities from text. Returns list of (type, color) tuples."""
+    import string as _st
     l = text.lower()
+    words = l.split()
+    # Strip punctuation from words for matching
+    words = [w.strip(_st.punctuation) for w in words if w.strip(_st.punctuation)]
     found = []
     seen_types = set()
 
@@ -1443,6 +1456,7 @@ def _extract_entities(text: str) -> list:
         ("starfish", "fish", (220, 150, 80), 3), ("coral", "fish", (200, 120, 160), 3),
         ("seaweed", "plant", (60, 140, 60), 2), ("kelp", "plant", (50, 130, 50), 2),
         ("wave", "wave", (40, 100, 200), 4), ("surf", "wave", (60, 120, 220), 3),
+        ("ocean", "wave", (30, 80, 180), 3), ("sea", "wave", (40, 90, 190), 3),
 
         # ── Forest & Jungle ──
         ("deer", "animal", (160, 120, 80), 4), ("bear", "animal", (100, 70, 50), 4),
@@ -1506,6 +1520,11 @@ def _extract_entities(text: str) -> list:
         ("tornado", "wave", (60, 50, 40), 4), ("sandstorm", "wave", (200, 180, 120), 4),
         ("moonlight", "moon_path", (200, 210, 230), 3), ("sunset", "sun", (255, 180, 80), 3),
         ("dawn", "sun", (255, 200, 120), 3), ("shooting star", "star", (255, 255, 200), 4),
+        ("migration", "arrow", (100, 180, 220), 4), ("migrations", "arrow", (100, 180, 220), 4),
+        ("migrate", "arrow", (100, 180, 220), 4), ("migrates", "arrow", (100, 180, 220), 4),
+        ("migrating", "arrow", (100, 180, 220), 4), ("migratory", "arrow", (100, 180, 220), 4),
+        ("migrated", "arrow", (100, 180, 220), 4), ("migration route", "arrow", (80, 160, 200), 5),
+        ("world", "globe", (80, 160, 200), 4), ("earth", "globe", (60, 140, 180), 4),
 
         # ── Body Parts ──
         ("eye", "eye", (255, 250, 240), 4), ("eyes", "eye", (255, 250, 240), 4),
@@ -1520,6 +1539,9 @@ def _extract_entities(text: str) -> list:
         ("child", "child", (120, 110, 130), 3), ("children", "child", (120, 110, 130), 3),
         ("baby", "child", (200, 180, 190), 3), ("toddler", "child", (190, 180, 170), 3),
         ("people", "human", (80, 60, 120), 3),
+        ("humans", "human", (80, 60, 120), 3),
+        ("scientist", "human", (100, 100, 130), 4), ("scientists", "human", (100, 100, 130), 4),
+        ("individual", "human", (90, 80, 110), 3), ("individuals", "human", (90, 80, 110), 3),
         ("crowd", "human", (80, 70, 110), 3), ("hunter", "human", (60, 40, 80), 4),
         ("warrior", "human", (80, 50, 60), 3), ("king", "human", (120, 80, 60), 3),
         ("queen", "human", (140, 100, 120), 3), ("baby", "human", (200, 180, 190), 3),
@@ -1554,8 +1576,21 @@ def _extract_entities(text: str) -> list:
         ("fire", "fire", (220, 120, 40), 3), ("earth", "hill", (120, 100, 60), 2),
         ("ground", "path", (140, 120, 80), 1), ("sky", "cloud", (180, 200, 220), 2),
         ("air", "cloud", (200, 210, 230), 1), ("wind", "arrow", (180, 200, 220), 2),
-        ("bird", "bird", (60, 50, 40), 3), ("fish", "fish", (200, 180, 100), 3),
+        ("bird", "bird", (60, 50, 40), 3), ("birds", "bird", (60, 50, 40), 3),
+        ("swift", "bird", (50, 55, 60), 4), ("swifts", "bird", (50, 55, 60), 4),
+        ("flock", "bird", (60, 55, 50), 4), ("fish", "fish", (200, 180, 100), 3),
         ("animal", "animal", (100, 80, 60), 2), ("insect", "animal", (80, 120, 60), 2),
+        ("food", "fruit", (220, 180, 80), 3), ("weather", "cloud", (180, 200, 220), 3),
+        ("continents", "globe", (80, 160, 100), 4), ("continent", "globe", (80, 160, 100), 4),
+        ("see", "eye", (200, 200, 220), 3), ("sees", "eye", (200, 200, 220), 3),
+        ("saw", "eye", (200, 200, 220), 3), ("seeing", "eye", (200, 200, 220), 3),
+        ("touch", "hand", (220, 200, 180), 3), ("touches", "hand", (220, 200, 180), 3),
+        ("touching", "hand", (220, 200, 180), 3),
+        ("month", "clock", (180, 180, 160), 3), ("months", "clock", (180, 180, 160), 3),
+        ("opportunity", "star", (255, 220, 80), 4), ("opportunities", "star", (255, 220, 80), 4),
+        ("life", "human", (80, 120, 100), 3), ("live", "human", (80, 120, 100), 2),
+        ("lives", "human", (80, 120, 100), 2), ("nature", "tree", (60, 140, 60), 3),
+        ("wild", "animal", (100, 80, 60), 3), ("wildlife", "animal", (100, 80, 60), 3),
 
         # ── Actions / Events ──
         ("spray", "water", (180, 200, 230), 3), ("sprays", "water", (180, 200, 230), 3),
@@ -1563,6 +1598,16 @@ def _extract_entities(text: str) -> list:
         ("stream", "water", (40, 100, 200), 3), ("flow", "water", (60, 120, 200), 2),
         ("explosion", "fire", (255, 150, 50), 4), ("explode", "fire", (255, 120, 40), 4),
         ("erupt", "fire", (255, 100, 30), 4), ("eruption", "fire", (255, 80, 20), 4),
+        ("tracking", "eye", (180, 200, 220), 4), ("track", "eye", (180, 200, 220), 3),
+        ("tracks", "eye", (180, 200, 220), 3), ("tracked", "eye", (180, 200, 220), 3),
+        ("uncovered", "star", (255, 220, 100), 4), ("discovered", "star", (255, 220, 100), 4),
+        ("discovery", "star", (255, 220, 100), 4), ("discover", "star", (255, 220, 100), 3),
+        ("revealed", "star", (255, 220, 100), 3), ("reveal", "star", (255, 220, 100), 3),
+        ("travel", "arrow", (180, 160, 100), 4), ("travels", "arrow", (180, 160, 100), 4),
+        ("traveled", "arrow", (180, 160, 100), 4), ("traveling", "arrow", (180, 160, 100), 4),
+        ("travelled", "arrow", (180, 160, 100), 4), ("travelling", "arrow", (180, 160, 100), 4),
+        ("journey", "arrow", (180, 160, 120), 4), ("journeys", "arrow", (180, 160, 120), 4),
+        ("route", "arrow", (160, 140, 100), 3),
 
         # ── Colors / Descriptors that add visual meaning ──
         ("red", "fire", (220, 40, 40), 2), ("golden", "sun", (255, 200, 80), 2),
@@ -1592,6 +1637,7 @@ def _extract_entities(text: str) -> list:
         ("unbelievable", "star", (255, 240, 200), 4),         ("remarkable", "star", (255, 240, 200), 3),
         ("magical", "star", (255, 240, 220), 3), ("fantastic", "star", (255, 240, 200), 3),
         ("extraordinary", "sun", (255, 220, 100), 4),
+        ("astonishing", "star", (255, 240, 200), 4), ("astonished", "eye", (240, 230, 220), 4),
         ("welcome", "human", (80, 60, 120), 2), ("introducing", "human", (80, 60, 120), 2),
         ("meet", "human", (80, 60, 120), 2), ("introduces", "human", (80, 60, 120), 2),
         ("hero", "human", (100, 80, 60), 4), ("survivor", "human", (120, 140, 100), 4),
