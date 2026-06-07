@@ -1410,12 +1410,12 @@ def _detect_mood(text: str) -> str:
 
     fear     = {"fear","afraid","terrified","terrifying","dread","horror","panic","scream","terror","nightmare","paralyzed","flee","cower","tremble","shudder","helpless","vulnerable","exposed","trapped","threat","danger","deadly","fatal","ominous","menace","dreadful","dies","dying","deathly","mortal"}
     hope     = {"hope","brave","courage","dawn","survive","survival","discover","explore","journey","future","safe","safety","shelter","home","warm","together","family","guide","lead","peace","triumph","victory","hero","rescue","salvation","miracle","faith","dream","inspire","wonder"}
-    mystery  = {"mystery","mysterious","unknown","strange","weird","beyond","distant","fog","mist","hidden","secret","ancient","forgotten","lost","deep","depths","enigma","puzzle","curious","bizarre","uncanny","supernatural","magical","mythical","legend","perception","perceive","perceived","aware","conscious","consciousness","filter","filters","signal","signals","edge","edges","illusion","unreal","translated","edited","reality","question","questioning","introspection","reflection","contemplate","philosophical"}
+    mystery  = {"mystery","mysterious","unknown","strange","weird","beyond","distant","fog","mist","hidden","secret","ancient","forgotten","lost","deep","depths","enigma","puzzle","curious","bizarre","uncanny","supernatural","magical","mythical","legend","perception","perceive","perceived","aware","conscious","consciousness","filter","filters","signal","signals","edge","edges","illusion","unreal","translated","edited","reality","question","questioning","introspection","reflection","contemplate","philosophical","complicated","complex","paradox","contradiction"}
     peaceful = {"peaceful","calm","quiet","still","gentle","serene","tranquil","beautiful","awe","majestic","vast","endless","reflection","contemplate","gaze","sky","wind","breeze","soft","slow","lazy","stillness","harmony","balance","serenity","meditative"}
     danger   = {"danger","threat","attack","strike","blood","wound","war","battle","fight","enemy","weapon","spear","arrow","sword","kill","death","destroy","crush","savage","brutal","violent","aggressive","predator","hunt","prey","tooth","claw","fang","venom","poison","ambush","pounce","chase","break","breaks","breaking","shatter","shattered","crash","smash"}
     surprise = {"sudden","suddenly","unexpected","shock","stun","startle","blast","explode","burst","erupt","instant","immediately","abrupt","snap","crash","bang","pow","extraordinary","incredible","unbelievable","remarkable","strangest","weirdest","bizarre","freakish","fantastic"}
     sadness  = {"sad","lonely","alone","isolation","isolated","abandon","forlorn","desolate","despair","grief","sorrow","heavy","weary","tired","lost","empty","void","numb","tear","cry","sob","mourn","funeral","grave","tomb","succumb","succumbs","fading","fades","passing","discard","discarded","missing"}
-    wonder   = {"wonder","amazing","astonish","astonishing","extraordinary","marvel","spectacle","magnificent","glorious","sublime","breathtaking","stunning","fascinating","captivating","enchant","thrilling","exquisite","miracle","magical","mythical","fabled","epic","legendary","transform","transformation","metamorphosis","evolution","evolve","evolving","compete","competing","adapt","remarkable","incredible","unbelievable"}
+    wonder   = {"wonder","amazing","astonish","astonishing","extraordinary","marvel","spectacle","magnificent","glorious","sublime","breathtaking","stunning","fascinating","captivating","enchant","thrilling","exquisite","miracle","magical","mythical","fabled","epic","legendary","transform","transformation","metamorphosis","evolution","evolve","evolving","compete","competing","adapt","remarkable","incredible","unbelievable","imagine","imagination","creative"}
 
     scores = [
         ("somber",     len(w & fear) * 1.5 + len(w & sadness) * 1.2),
@@ -1440,7 +1440,7 @@ def _extract_entities(text: str) -> list:
     found = []
     seen_types = set()
     auto_count = 0
-    MAX_AUTO = 5
+    MAX_AUTO = 2
 
     # Entity map sorted by specificity: (word/phrase, element_type, color, weight)
     ENTITIES = [
@@ -1468,6 +1468,9 @@ def _extract_entities(text: str) -> list:
         ("seaweed", "plant", (60, 140, 60), 2), ("kelp", "plant", (50, 130, 50), 2),
         ("wave", "wave", (40, 100, 200), 4), ("surf", "wave", (60, 120, 220), 3),
         ("ocean", "wave", (30, 80, 180), 3), ("sea", "wave", (40, 90, 190), 3),
+        ("deep", "water", (20, 60, 140), 4), ("mysterious", "star", (180, 160, 220), 4),
+        ("barely", "water", (140, 160, 200), 2), ("bottom", "water", (40, 60, 120), 3),
+        ("river", "water", (50, 130, 200), 3),
 
         # ── Forest & Jungle ──
         ("deer", "animal", (160, 120, 80), 4), ("bear", "animal", (100, 70, 50), 4),
@@ -1558,6 +1561,8 @@ def _extract_entities(text: str) -> list:
         ("man", "man", (70, 50, 100), 3), ("woman", "woman", (100, 80, 130), 3),
         ("child", "child", (120, 110, 130), 3), ("children", "child", (120, 110, 130), 3),
         ("baby", "child", (200, 180, 190), 3), ("toddler", "child", (190, 180, 170), 3),
+        ("teenager", "human", (100, 120, 140), 3), ("teen", "human", (100, 120, 140), 3),
+        ("adult", "human", (120, 100, 80), 3), ("adults", "human", (120, 100, 80), 3),
         ("people", "human", (80, 60, 120), 3),
         ("humans", "human", (80, 60, 120), 3),
         ("scientist", "human", (100, 100, 130), 4), ("scientists", "human", (100, 100, 130), 4),
@@ -1701,6 +1706,31 @@ def _extract_entities(text: str) -> list:
         ("touching", "hand", (220, 200, 180), 3),
         ("month", "clock", (180, 180, 160), 3), ("months", "clock", (180, 180, 160), 3),
         ("opportunity", "star", (255, 220, 80), 4), ("opportunities", "star", (255, 220, 80), 4),
+        ("small", "star", (200, 200, 180), 2), ("tiny", "star", (200, 200, 180), 2),
+        ("huge", "mountain", (140, 120, 100), 3), ("large", "mountain", (140, 120, 100), 3),
+        ("tall", "tree", (80, 140, 60), 3), ("wide", "water", (100, 160, 200), 2),
+        ("narrow", "path", (140, 110, 80), 2), ("cold", "water", (160, 200, 230), 3),
+        ("hot", "fire", (240, 160, 40), 3), ("warm", "sun", (255, 200, 100), 3),
+        ("cool", "water", (140, 200, 220), 2), ("build", "hand", (180, 140, 100), 3),
+        ("builds", "hand", (180, 140, 100), 3), ("building", "hand", (180, 140, 100), 3),
+        ("gather", "hand", (180, 160, 120), 3), ("gathers", "hand", (180, 160, 120), 3),
+        ("collected", "hand", (180, 160, 120), 3), ("collecting", "hand", (180, 160, 120), 3),
+        ("nest", "circle", (160, 130, 80), 4), ("leaf", "plant", (80, 180, 60), 3),
+        ("leaves", "plant", (80, 180, 60), 3), ("twig", "rock", (140, 110, 70), 3),
+        ("twigs", "rock", (140, 110, 70), 3), ("branch", "tree", (100, 80, 50), 3),
+        ("branches", "tree", (100, 80, 50), 3), ("root", "tree", (120, 80, 40), 2),
+        ("roots", "tree", (120, 80, 40), 2), ("soil", "hill", (140, 120, 80), 2),
+        ("mud", "hill", (120, 100, 60), 2), ("stone", "rock", (160, 150, 130), 3),
+        ("passes", "clock", (180, 180, 160), 3), ("passing", "clock", (180, 180, 160), 3),
+        ("photograph", "book", (200, 180, 150), 3), ("photographs", "book", (200, 180, 150), 3),
+        ("fade", "cloud", (180, 180, 200), 3), ("fades", "cloud", (180, 180, 200), 3),
+        ("faded", "cloud", (180, 180, 200), 3), ("clear", "sun", (240, 240, 220), 2),
+        ("blurry", "cloud", (180, 180, 200), 3), ("blurred", "cloud", (180, 180, 200), 3),
+        ("swim", "fish", (100, 160, 200), 3), ("swims", "fish", (100, 160, 200), 3),
+        ("fly", "bird", (100, 140, 180), 3), ("flies", "bird", (100, 140, 180), 3),
+        ("grown", "tree", (80, 140, 60), 2), ("grows", "tree", (80, 140, 60), 2),
+        ("grow", "tree", (80, 140, 60), 2), ("grew", "tree", (80, 140, 60), 2),
+        ("ancient", "mountain", (100, 80, 60), 3), ("old", "hourglass", (180, 160, 140), 3),
         ("life", "human", (80, 120, 100), 3), ("live", "human", (80, 120, 100), 2),
         ("lives", "human", (80, 120, 100), 2), ("nature", "tree", (60, 140, 60), 3),
         ("wild", "animal", (100, 80, 60), 3), ("wildlife", "animal", (100, 80, 60), 3),
@@ -1724,6 +1754,14 @@ def _extract_entities(text: str) -> list:
         ("competing", "arrow", (200, 80, 60), 4), ("evolving", "star", (255, 220, 100), 4),
         ("unstoppable", "arrow", (200, 60, 40), 5), ("overflowing", "water", (100, 200, 255), 4),
         ("vitality", "star", (255, 240, 100), 4), ("warning", "eye", (200, 160, 80), 4),
+        ("future", "star", (200, 220, 255), 4), ("memories", "star", (255, 240, 200), 4),
+        ("memory", "star", (255, 240, 200), 4), ("today", "sun", (255, 220, 100), 3),
+        ("somewhere", "globe", (160, 200, 240), 3), ("become", "star", (255, 220, 100), 3),
+        ("becomes", "star", (255, 220, 100), 3), ("becoming", "star", (255, 220, 100), 3),
+        ("surprising", "star", (255, 240, 200), 4), ("surprise", "star", (255, 240, 200), 3),
+        ("ever", "circle", (200, 220, 255), 3), ("met", "human", (100, 80, 100), 3),
+        ("name", "book", (180, 140, 100), 3), ("shares", "hand", (200, 180, 160), 3),
+        ("stranger", "shadow_figure", (60, 50, 60), 3),
         ("unfamiliar", "eye", (200, 180, 200), 3), ("violent", "fire", (200, 50, 30), 4),
         ("violence", "fire", (200, 50, 30), 4), ("changes", "star", (255, 200, 80), 3),
         ("reshapes", "arrow", (200, 80, 40), 4), ("reshape", "arrow", (200, 80, 40), 4),
@@ -1764,7 +1802,7 @@ def _extract_entities(text: str) -> list:
         ("extraordinary", "sun", (255, 220, 100), 4),
         ("astonishing", "star", (255, 240, 200), 4), ("astonished", "eye", (240, 230, 220), 4),
         ("welcome", "human", (80, 60, 120), 2), ("introducing", "human", (80, 60, 120), 2),
-        ("meet", "human", (80, 60, 120), 2), ("introduces", "human", (80, 60, 120), 2),
+        ("meet", "arrow", (160, 140, 200), 2), ("introduces", "human", (80, 60, 120), 2),
         ("hero", "human", (100, 80, 60), 4), ("survivor", "human", (120, 140, 100), 4),
         ("survivors", "human", (120, 140, 100), 4),
 
@@ -1854,6 +1892,19 @@ def _extract_entities(text: str) -> list:
         ("argument", "human", (140, 60, 60), 3), ("arguments", "human", (140, 60, 60), 3),
         ("debate", "human", (140, 80, 60), 3), ("discuss", "human", (100, 80, 100), 3),
         ("discussion", "human", (100, 80, 100), 3),
+        ("gate", "building", (160, 140, 100), 3),
+        ("vault", "building", (140, 120, 100), 4),
+        ("prison", "building", (120, 100, 80), 4),
+        ("secret", "book", (160, 140, 100), 4),
+        ("archive", "book", (180, 160, 130), 4),
+        ("freedom", "bird", (200, 220, 240), 4),
+        ("confinement", "building", (100, 80, 70), 4),
+        ("difference", "arrow", (160, 140, 100), 3),
+        ("sometimes", "clock", (180, 180, 160), 2),
+        ("single", "star", (200, 200, 180), 2),
+        ("centimeter", "key", (180, 160, 100), 2),
+        ("centimeters", "key", (180, 160, 100), 2),
+
     ]
 
     words = l.split()
@@ -1861,42 +1912,49 @@ def _extract_entities(text: str) -> list:
     while i < len(words):
         word = words[i].strip(".,!?;:'\"()[]{}")
         matched = False
+        blocked_by_type = False  # Track if word matched an ENTITY but type was already used
         # Try bigrams first (longest match)
         if i < len(words) - 1:
             bigram = word + " " + words[i+1].strip(".,!?;:'\"()[]{}")
             for phrase, etype, color, weight in ENTITIES:
-                if phrase == bigram and etype not in seen_types:
-                    found.append((etype, color, weight))
-                    seen_types.add(etype)
-                    i += 2
-                    matched = True
-                    break
-        if not matched:
-            for phrase, etype, color, weight in ENTITIES:
-                if ' ' not in phrase and etype not in seen_types:
-                    # Exact match
-                    if phrase == word:
+                if phrase == bigram:
+                    if etype not in seen_types:
                         found.append((etype, color, weight))
                         seen_types.add(etype)
+                        i += 2
                         matched = True
                         break
-                    # Auto-variant: common suffixes
-                    if len(word) >= len(phrase) + 1:
+                    else:
+                        blocked_by_type = True
+        if not matched:
+            for phrase, etype, color, weight in ENTITIES:
+                if ' ' not in phrase:
+                    # Check if this word matches the entity phrase
+                    is_match = False
+                    if phrase == word:
+                        is_match = True
+                    elif len(word) >= len(phrase) + 1:
                         for suf in ('ing', 'es', 'ed', 's'):
                             if phrase + suf == word:
-                                found.append((etype, color, weight))
-                                seen_types.add(etype)
-                                matched = True
+                                is_match = True
                                 break
-                    if not matched and word.endswith('s') and not word.endswith('ss') and phrase == word[:-1]:
-                        found.append((etype, color, weight))
-                        seen_types.add(etype)
-                        matched = True
-                    if not matched and word.endswith('ies') and phrase == word[:-3] + 'y':
-                        found.append((etype, color, weight))
-                        seen_types.add(etype)
-                        matched = True
-        # ── Auto-synthesis for unmatched content words ──
+                    if not is_match and word.endswith('s') and not word.endswith('ss') and phrase == word[:-1]:
+                        is_match = True
+                    if not is_match and word.endswith('ies') and phrase == word[:-3] + 'y':
+                        is_match = True
+
+                    if is_match:
+                        if etype not in seen_types:
+                            found.append((etype, color, weight))
+                            seen_types.add(etype)
+                            matched = True
+                            break
+                        else:
+                            blocked_by_type = True
+        # ── Skip auto-synthesis if word had an entity match but was blocked by seen_types
+        if not matched and blocked_by_type:
+            matched = True  # Prevents auto-synthesis of meaningless text labels
+        # ── Auto-synthesis for truly unmatched content words ──
         if not matched:
             if auto_count >= MAX_AUTO:
                 matched = True  # Prevent adding more auto-synthesized entities
@@ -1912,22 +1970,26 @@ def _extract_entities(text: str) -> list:
                           'every','both','some','any','more','most','other','such',
                           'own','same','here','there','when','where','how','what',
                           'who','which','why','before','after','during','until',
-                          'while','about','above','below','under','over','through',
-                          'between','among','against','without','because','although',
-                          'though','even','still','already','yet','once','up','down',
+                           'while','about','above','below','under','over','through','like',
+                           'between','among','against','without','because','although',
+                           'though','even','still','already','yet','once','up','down',
                           'out','off','away','back','again','well','now','then',
                           'here','there','not','get','got','go','went','gone','come',
                           'came','take','took','make','made','know','knew','think',
                           'thought','see','saw','seen','give','gave','given','find',
                           'found','tell','told','become','became','leave','left',
-                          'feel','felt','put','set','bring','brought','begin','began',
+                            'feel',                           'felt','put','set','bring','brought','begin','began',
+                           'youll','havent','dont','doesnt','didnt','cant','wont',
+                           'wasnt','werent','isnt','arent','hasnt','hadnt',
+                           'couldnt','wouldnt','shouldnt','mustnt',
+                           'thats','whats','whos','theres','theyre','youre',
                           'keep','kept','hold','held','write','wrote','written',
                           'stand','stood','hear','heard','let','say','said','show',
                           'shown','showed','mean','meant','need','call','try'}
             if auto_count >= MAX_AUTO:
                 matched = True  # Prevent adding more auto-synthesized entities
-            w_clean = word.strip(".,!?;:'\"()[]{}-_").lower()
-            if (w_clean and len(w_clean) >= 3 and w_clean not in stop_words
+            w_clean = word.translate(str.maketrans('', '', ".,!?;:'\"()[]{}-_")).lower()
+            if (w_clean and len(w_clean) >= 5 and w_clean not in stop_words
                 and not w_clean.isdigit() and not w_clean.startswith('http')):
                 weight = 2  # Auto-synthesized words get low weight
                 # Generate a deterministic semantic color from the word
@@ -1944,7 +2006,7 @@ def _extract_entities(text: str) -> list:
         i += 1
 
     found.sort(key=lambda x: -x[2])
-    return found
+    return found[:7]
 
 def _compose_narrative_position(scene_num: int, total: int) -> str:
     """Determine narrative position: setup, build, tension, climax, resolution."""
@@ -1962,10 +2024,178 @@ def _compose_narrative_position(scene_num: int, total: int) -> str:
     else:
         return "resolution"
 
+def _detect_scene_type(text: str) -> str:
+    """Classify narration into a visual scene type: story, flowchart, timeline,
+    diagram, map, bar_chart, pie_chart, line_graph, cycle_diagram, venn_diagram,
+    comparison, network_diagram, tree_diagram, histogram, scatter_plot."""
+    t = text.lower()
+    import re as _re
+
+    def kw_count(keywords, text):
+        return sum(1 for w in keywords if _re.search(r'\b' + _re.escape(w) + r'\b', text))
+
+    type_scores = [
+        ("diagram",     ["tilt", "degree", "axis", "orbit", "angle", "direct sunlight",
+                         "how it works", "structure", "anatomy", "labeled"]),
+        ("timeline",    ["timeline", "years ago", "centuries", "generation after generation",
+                         "over thousands", "eventually", "over time", "history", "evolved",
+                         "gradually", "era", "epoch", "age", "period", "ancient", "began"]),
+        ("flowchart",   ["leads to", "results in", "because of this", "chain reaction",
+                         "cycle repeats", "step", "stage", "phase", "process",
+                         "sequence", "progression"]),
+        ("map",         ["across the world", "different cultures", "far away", "region",
+                         "around the globe", "continent", "country", "territory",
+                         "journey", "travel", "migration", "spread"]),
+        ("bar_chart",   ["percent", "percentage", "statistics", "proportion", "fraction",
+                         "majority", "minority", "most of", "half of", "quarter",
+                         "how many", "how much"]),
+        ("pie_chart",   ["share of", "portion", "divide into", "segment", "slice",
+                         "distribution", "breakdown"]),
+        ("line_graph",  ["increase", "decrease", "rise", "fall", "grow", "decline",
+                         "trend", "over time", "over the years", "temperature",
+                         "population", "rate"]),
+        ("cycle_diagram", ["cycle", "repeats", "circular", "loop", "recurring",
+                          "comes back", "turns around", "goes around", "rotates"]),
+        ("venn_diagram", ["both", "in common", "shared", "similarities", "differences",
+                         "compare and contrast", "unlike", "on one hand", "on the other"]),
+        ("comparison",  ["before and after", "compared to", "versus", "rather than",
+                         "instead of", "on the left", "on the right", "between two",
+                         "either way"]),
+        ("network_diagram", ["connected", "linked", "network", "relation", "connection",
+                            "interconnected", "web of", "links to", "nodes"]),
+        ("tree_diagram",   ["classification", "category", "divided into", "branches",
+                           "subgroup", "hierarchy", "descends from", "evolved from"]),
+        ("histogram",   ["distribution", "bell curve", "normal distribution", "frequency",
+                         "range of", "spread of", "concentration"]),
+        ("scatter_plot", ["correlation", "related to", "corresponds with",
+                          "relationship between", "associated with", "plotted"]),
+    ]
+
+    best_type, best_score = "story", 0
+    for stype, kws in type_scores:
+        score = kw_count(kws, t)
+        if score > best_score:
+            best_type, best_score = stype, score
+
+    # Regex patterns for comparison
+    if _re.search(r'\bnot\b\s+\w+\s+\w+\s+\w+\s+\bbut\b', t) or \
+       _re.search(r'\binstead of\b', t) or _re.search(r'\brather than\b', t):
+        comp_score = kw_count(["not", "but", "instead", "rather", "unlike", "versus"], t)
+        if comp_score > best_score:
+            best_type, best_score = "comparison", comp_score
+
+    return best_type
+
+
+def _reposition_semantically(elements: list, text: str):
+    """Reposition elements so related objects group together meaningfully.
+    Detects patterns like 'key opens X', 'difference between A and B'."""
+    t = text.lower()
+    elem_types = [e["type"] for e in elements]
+    placed = set()  # track indices already positioned by semantic rules
+
+    # ── Detect central/theme object ──
+    central_candidates = {
+        "key": ["key", "lock", "unlock", "open", "close"],
+        "book": ["book", "read", "archive", "knowledge", "secret"],
+        "compass": ["compass", "direction", "navigate", "journey"],
+        "heart": ["heart", "love", "passion", "feel"],
+        "crown": ["crown", "king", "queen", "royal", "ruler"],
+        "lamp": ["lamp", "light", "illuminate", "bright"],
+        "clock": ["clock", "time", "hour", "minute", "second"],
+    }
+
+    central_type = None
+    central_idx = None
+    for ctype, keywords in central_candidates.items():
+        if ctype in elem_types and any(kw in t for kw in keywords):
+            central_type = ctype
+            break
+
+    if central_type:
+        for i, e in enumerate(elements):
+            if e["type"] == central_type:
+                e["x"] = 0.5
+                e["y"] = 0.38
+                e["scale"] = e.get("scale", 1.0) * 1.6
+                placed.add(i)
+                central_idx = i
+                break
+
+    # ── "difference between A and B" → A left, B right, bridge center ──
+    if re.search(r'\bdifference\s+between\b', t) or re.search(r'\bversus\b', t):
+        contrast_pairs = [
+            ("bird", "building"),
+            ("sun", "moon"),
+            ("fire", "water"),
+            ("human", "shadow_figure"),
+        ]
+        left_type, right_type = None, None
+        for a, b in contrast_pairs:
+            if a in elem_types and b in elem_types:
+                left_type, right_type = a, b
+                break
+        if left_type and right_type:
+            bridge_idx = 0
+            for i, e in enumerate(elements):
+                if e["type"] == left_type:
+                    e["x"] = 0.22; e["y"] = 0.42
+                    e["scale"] = e.get("scale", 1.0) * 1.3
+                    placed.add(i)
+                elif e["type"] == right_type:
+                    e["x"] = 0.78; e["y"] = 0.42
+                    e["scale"] = e.get("scale", 1.0) * 1.3
+                    placed.add(i)
+                elif e["type"] in ("key", "arrow", "circle"):
+                    bridge_y = 0.48 + bridge_idx * 0.08
+                    e["x"] = 0.5
+                    e["y"] = min(bridge_y, 0.72)
+                    e["scale"] = e.get("scale", 1.0) * 1.15
+                    placed.add(i)
+                    bridge_idx += 1
+
+    # ── "open" pattern: key opens X → position openables around key ──
+    elif central_type == "key" and "open" in t:
+        open_slot = 0
+        for i, e in enumerate(elements):
+            if e["type"] in ("building", "circle", "house") and e["type"] != central_type and i not in placed:
+                if open_slot == 0:
+                    e["x"] = 0.22; e["y"] = 0.55
+                elif open_slot == 1:
+                    e["x"] = 0.78; e["y"] = 0.55
+                else:
+                    e["x"] = 0.5; e["y"] = 0.68
+                e["scale"] = e.get("scale", 1.0) * 0.9
+                placed.add(i)
+                open_slot += 1
+
+    # ── Place remaining elements in a ring around the composition ──
+    ring_positions = [(0.50, 0.10), (0.12, 0.28), (0.88, 0.28),
+                      (0.12, 0.62), (0.88, 0.62), (0.50, 0.78),
+                      (0.12, 0.10), (0.88, 0.10)]
+    ri = 0
+    for i, e in enumerate(elements):
+        if i in placed:
+            continue
+        if ri < len(ring_positions):
+            e["x"] = ring_positions[ri][0]
+            e["y"] = ring_positions[ri][1]
+            e["scale"] = e.get("scale", 1.0) * 0.75
+            ri += 1
+
+
 def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | None:
     """Pure local semantic engine — analyzes narration for mood, biomes, entities.
     Understands narrative arcs. No API calls. Returns visual scene dict."""
     text = narration
+
+    # ── Detect scene type (story / flowchart / timeline / diagram / chart) ──
+    scene_type = _detect_scene_type(text)
+
+    # Non-story types (flowchart, timeline, diagram, map, charts, etc.)
+    # use the specialized element generators in _infer_visuals.
+    if scene_type != "story":
+        return _infer_visuals(narration, scene_num, total)
 
     # ── Detect biome / setting ──
     bg = _detect_biome(text)
@@ -2009,7 +2239,8 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
                     "globe","whale","sea_serpent","ship","canoe","house","book",
                     "scroll","compass","crown","key","cross","coin","telescope",
                     "heart","gear","skull","clock","camera","filter","signal",
-                    "movement","discard","awareness","edge","color_swatch","brain"}
+                    "movement","discard","awareness","edge","color_swatch","brain",
+                    "man","woman","child","circle","arrow","fruit"}
     elements = []
     # Pass 1: position known scene entities
     known_entities = [(i, e) for i, e in enumerate(entities) if e[0] in _KNOWN_TYPES]
@@ -2096,6 +2327,9 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
             "scale": 0.7, "fill": list(ecolor) if isinstance(ecolor, tuple) else ecolor
         })
 
+    # ── Semantic repositioning: arrange elements to tell a visual story ──
+    _reposition_semantically(elements, text)
+
     # ── Narrative arc influences composition ──
     if narr_pos == "setup":
         # Wide establishing shots — fewer, smaller elements, more negative space
@@ -2169,7 +2403,7 @@ def generate_script_from_narration(text: str) -> dict:
         chunk = []
         for s in sentences:
             chunk.append(s)
-            if len(chunk) >= 3:
+            if len(chunk) >= 2:
                 paragraphs.append(' '.join(chunk))
                 chunk = []
         if chunk:
@@ -2178,20 +2412,23 @@ def generate_script_from_narration(text: str) -> dict:
     if len(paragraphs) < 2:
         paragraphs = [text]
 
-    # Merge paragraphs into larger chunks for narrative coherence
+    # Merge paragraphs into thematically coherent scenes
     merged = []
     buffer = []
     for p in paragraphs:
         buffer.append(p)
         word_count = sum(len(c.split()) for c in buffer)
-        if word_count >= 40 or len(buffer) >= 4:
+        if word_count >= 15 or len(buffer) >= 2:
             merged.append(' '.join(buffer))
             buffer = []
     if buffer:
-        if merged:
-            merged[-1] = merged[-1] + ' ' + ' '.join(buffer)
+        tail = ' '.join(buffer)
+        if len(tail.split()) >= 10:
+            merged.append(tail)
+        elif merged:
+            merged[-1] = merged[-1] + ' ' + tail
         else:
-            merged.append(' '.join(buffer))
+            merged.append(tail)
 
     # Split merged scenes at contrast markers (but/however/yet at sentence boundaries)
     final_scenes = []
