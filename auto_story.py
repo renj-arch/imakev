@@ -1356,7 +1356,7 @@ def _infer_visuals(text: str, scene_num: int, total: int) -> dict:
 # Biome signatures: (keyword, biome_name, bg_type, base_colors, ground_color)
 _BIOMES = [
     (["desert", "sand", "dune", "arid", "cactus", "scorpion", "lizard", "coyote", "vulture", "sun-baked", "cracked earth", "dry", "dust", "blazing", "sahara", "gobi", "mirage", "oasis", "nomad", "camel"], "desert", "sunset", [(220, 160, 80), (190, 120, 60), (160, 90, 40)], (140, 100, 50)),
-    (["ocean", "sea", "deep", "wave", "shore", "beach", "tide", "surf", "coast", "marine", "underwater", "coral", "reef", "dolphin", "whale", "jellyfish"], "ocean", "ocean", [(40, 100, 200), (20, 60, 150)], None),
+    (["ocean", "sea", "deep", "wave", "shore", "beach", "tide", "surf", "coast", "marine", "underwater", "coral", "reef", "dolphin", "whale", "jellyfish", "anemone", "gills", "fins", "aquatic", "submarine", "nautical", "sailor", "mariner", "lighthouse", "anchor", "sail"], "ocean", "ocean", [(40, 100, 200), (20, 60, 150)], None),
     (["night", "midnight", "moon", "star", "darkness", "shadow", "eclipse", "constellation", "aurora", "twilight"], "night", "night", [(5, 3, 25), (15, 10, 40), (30, 25, 60)], (10, 8, 25)),
     (["sunset", "dusk", "dawn", "sunrise", "golden", "evening", "twilight", "afterglow"], "sunset", "sunset", [(230, 120, 70), (200, 100, 90), (150, 70, 100), (80, 50, 80)], (50, 40, 30)),
     (["forest", "woods", "jungle", "rainforest", "tree", "canopy", "thicket", "grove", "bush", "shrub", "wilderness"], "forest", "forest", [(120, 160, 80), (60, 100, 50)], (40, 70, 30)),
@@ -1390,14 +1390,14 @@ def _detect_mood(text: str) -> str:
     l = text.lower()
     w = set(l.split())
 
-    fear     = {"fear","afraid","terrified","dread","horror","panic","scream","terror","nightmare","paralyzed","flee","cower","tremble","shudder","helpless","vulnerable","exposed","trapped","threat","danger","deadly","fatal","ominous","menace","dreadful"}
+    fear     = {"fear","afraid","terrified","dread","horror","panic","scream","terror","nightmare","paralyzed","flee","cower","tremble","shudder","helpless","vulnerable","exposed","trapped","threat","danger","deadly","fatal","ominous","menace","dreadful","dies","dying","deathly","mortal"}
     hope     = {"hope","brave","courage","light","dawn","survive","survival","discover","explore","journey","future","safe","safety","shelter","home","warm","together","family","guide","lead","peace","triumph","victory","hero","rescue","salvation","miracle","faith","dream","inspire","wonder"}
     mystery  = {"mystery","mysterious","unknown","strange","weird","beyond","distant","fog","mist","hidden","secret","ancient","forgotten","lost","deep","depths","enigma","puzzle","curious","bizarre","uncanny","supernatural","magical","mythical","legend"}
     peaceful = {"peaceful","calm","quiet","still","gentle","serene","tranquil","beautiful","awe","majestic","vast","endless","reflection","contemplate","gaze","sky","wind","breeze","soft","slow","lazy","stillness","harmony","balance","serenity","meditative"}
     danger   = {"danger","threat","attack","strike","blood","wound","war","battle","fight","enemy","weapon","spear","arrow","sword","kill","death","destroy","crush","savage","brutal","violent","aggressive","predator","hunt","prey","tooth","claw","fang","venom","poison","ambush","pounce","chase"}
     surprise = {"sudden","suddenly","unexpected","shock","stun","startle","blast","explode","burst","erupt","instant","immediately","abrupt","snap","crash","bang","pow","extraordinary","incredible","unbelievable","remarkable","strangest","weirdest","bizarre","freakish","fantastic"}
-    sadness  = {"sad","lonely","alone","isolation","isolated","abandon","forlorn","desolate","despair","grief","sorrow","heavy","weary","tired","lost","empty","void","numb","tear","cry","sob","mourn","funeral","grave","tomb"}
-    wonder   = {"wonder","amazing","astonish","extraordinary","marvel","spectacle","magnificent","glorious","sublime","breathtaking","stunning","fascinating","captivating","enchant","thrilling","exquisite","miracle","magical","mythical","fabled","epic","legendary"}
+    sadness  = {"sad","lonely","alone","isolation","isolated","abandon","forlorn","desolate","despair","grief","sorrow","heavy","weary","tired","lost","empty","void","numb","tear","cry","sob","mourn","funeral","grave","tomb","succumb","succumbs","fading","fades","passing"}
+    wonder   = {"wonder","amazing","astonish","extraordinary","marvel","spectacle","magnificent","glorious","sublime","breathtaking","stunning","fascinating","captivating","enchant","thrilling","exquisite","miracle","magical","mythical","fabled","epic","legendary","transform","transformation","metamorphosis","evolution","adapt","remarkable","incredible","unbelievable"}
 
     scores = [
         ("somber",     len(w & fear) * 1.5 + len(w & sadness) * 1.2),
@@ -1587,12 +1587,100 @@ def _extract_entities(text: str) -> list:
         ("strange", "eye", (200, 180, 200), 3), ("bizarre", "eye", (200, 180, 220), 4),
         ("weird", "eye", (180, 170, 200), 3), ("weirdest", "eye", (200, 180, 220), 4),
         ("crazy", "eye", (240, 200, 200), 3), ("incredible", "star", (255, 240, 200), 4),
-        ("unbelievable", "star", (255, 240, 200), 4), ("remarkable", "star", (255, 240, 200), 3),
+        ("unbelievable", "star", (255, 240, 200), 4),         ("remarkable", "star", (255, 240, 200), 3),
         ("magical", "star", (255, 240, 220), 3), ("fantastic", "star", (255, 240, 200), 3),
+        ("extraordinary", "sun", (255, 220, 100), 4),
         ("welcome", "human", (80, 60, 120), 2), ("introducing", "human", (80, 60, 120), 2),
         ("meet", "human", (80, 60, 120), 2), ("introduces", "human", (80, 60, 120), 2),
         ("hero", "human", (100, 80, 60), 4), ("survivor", "human", (120, 140, 100), 4),
         ("survivors", "human", (120, 140, 100), 4),
+
+        # ── Biology & Life Cycle ──
+        ("female", "human", (140, 100, 120), 4), ("male", "human", (70, 50, 100), 4),
+        ("dominant", "human", (120, 60, 40), 3), ("breed", "human", (100, 80, 60), 3),
+        ("breeding", "human", (100, 80, 60), 3), ("reproduce", "human", (100, 80, 60), 3),
+        ("reproduction", "human", (100, 80, 60), 3), ("mate", "human", (100, 80, 60), 3),
+        ("mating", "human", (100, 80, 60), 3), ("spawn", "water", (180, 200, 220), 3),
+        ("egg", "circle", (240, 220, 180), 3), ("eggs", "circle", (240, 220, 180), 3),
+        ("larva", "animal", (180, 200, 180), 3), ("larvae", "animal", (180, 200, 180), 3),
+        ("tadpole", "animal", (120, 140, 100), 3), ("cocoon", "circle", (160, 140, 100), 3),
+        ("chrysalis", "circle", (140, 120, 80), 3), ("metamorphosis", "eye", (200, 180, 220), 5),
+        ("transform", "star", (255, 240, 200), 4), ("transforms", "star", (255, 240, 200), 4),
+        ("transformation", "star", (255, 240, 200), 4), ("change", "star", (255, 240, 200), 3),
+        ("changes", "star", (255, 240, 200), 3), ("evolve", "star", (255, 240, 200), 4),
+        ("evolution", "star", (255, 240, 200), 4), ("adapt", "star", (255, 240, 200), 3),
+        ("adaptation", "star", (255, 240, 200), 3), ("biology", "eye", (200, 180, 200), 3),
+        ("biological", "eye", (200, 180, 200), 3), ("biologically", "eye", (200, 180, 200), 3),
+        ("hormone", "eye", (200, 100, 150), 4), ("hormones", "eye", (200, 100, 150), 4),
+        ("chemical", "water", (100, 180, 200), 3), ("genetic", "star", (200, 180, 220), 3),
+        ("gene", "star", (200, 180, 220), 3), ("genes", "star", (200, 180, 220), 3),
+        ("dna", "moon_path", (100, 200, 180), 4), ("cell", "circle", (200, 180, 200), 3),
+        ("cells", "circle", (200, 180, 200), 3), ("organ", "eye", (200, 140, 160), 3),
+        ("organs", "eye", (200, 140, 160), 3), ("body", "human", (100, 80, 100), 3),
+        ("skin", "rock", (200, 180, 160), 2), ("scale", "rock", (180, 180, 170), 2),
+        ("scales", "rock", (180, 180, 170), 2), ("fin", "fish", (180, 160, 140), 3),
+        ("fins", "fish", (180, 160, 140), 3), ("tail", "fish", (160, 140, 120), 2),
+        ("gills", "fish", (200, 160, 140), 3), ("anemone", "flower", (200, 100, 160), 4),
+        ("coral", "fish", (200, 120, 160), 3), ("reef", "rock", (160, 180, 200), 4),
+
+        # ── Social / Hierarchy ──
+        ("group", "human", (100, 100, 120), 4), ("community", "human", (100, 100, 120), 4),
+        ("colony", "human", (100, 100, 120), 4), ("tribe", "human", (100, 90, 80), 4),
+        ("clan", "human", (100, 90, 80), 3), ("herd", "animal", (120, 120, 100), 3),
+        ("pack", "animal", (120, 100, 80), 3), ("school", "fish", (140, 160, 180), 3),
+        ("shoal", "fish", (140, 160, 180), 3), ("swarm", "animal", (120, 120, 100), 3),
+        ("hierarchy", "mountain", (120, 100, 80), 5), ("rank", "mountain", (140, 120, 100), 4),
+        ("ranks", "mountain", (140, 120, 100), 4), ("order", "mountain", (120, 110, 100), 3),
+        ("leader", "human", (120, 80, 60), 4), ("leadership", "human", (120, 80, 60), 4),
+        ("queen", "human", (140, 100, 120), 4), ("king", "human", (120, 80, 60), 4),
+        ("alpha", "human", (120, 60, 40), 4), ("beta", "human", (80, 80, 100), 3),
+        ("dominance", "human", (140, 60, 40), 4), ("subordinate", "human", (80, 80, 100), 3),
+        ("territory", "path", (140, 120, 80), 3), ("territorial", "path", (140, 120, 80), 3),
+        ("vacancy", "star", (255, 240, 200), 3), ("vacant", "star", (255, 240, 200), 3),
+        ("position", "mountain", (120, 110, 100), 3), ("promotion", "mountain", (140, 120, 80), 3),
+        ("reorganize", "star", (255, 220, 100), 4), ("reorganizes", "star", (255, 220, 100), 4),
+        ("reorganization", "star", (255, 220, 100), 4), ("restructure", "building", (120, 130, 140), 3),
+
+        # ── Cycle / Time ──
+        ("cycle", "circle", (100, 150, 200), 4), ("cycles", "circle", (100, 150, 200), 4),
+        ("circular", "circle", (100, 150, 200), 3), ("repeat", "circle", (100, 150, 200), 3),
+        ("repeats", "circle", (100, 150, 200), 3), ("loop", "circle", (100, 150, 200), 3),
+        ("continues", "arrow", (160, 140, 100), 2), ("continue", "arrow", (160, 140, 100), 2),
+        ("endless", "circle", (100, 150, 200), 3), ("forever", "circle", (100, 150, 200), 3),
+        ("age", "hourglass", (180, 160, 140), 3), ("aging", "hourglass", (180, 160, 140), 3),
+        ("old", "hourglass", (180, 160, 140), 3), ("time", "clock", (200, 190, 170), 3),
+
+        # ── Death / Mortality ──
+        ("dies", "skull", (200, 190, 180), 4), ("died", "skull", (200, 190, 180), 4),
+        ("death", "skull", (200, 190, 180), 4), ("dead", "skull", (200, 190, 180), 4),
+        ("corpse", "rock", (140, 120, 100), 3), ("carcass", "rock", (140, 120, 100), 3),
+        ("grave", "rock", (120, 100, 80), 3), ("tomb", "rock", (120, 100, 80), 3),
+        ("succumb", "human", (80, 60, 80), 3), ("succumbs", "human", (80, 60, 80), 3),
+
+        # ── Conflict / Competition ──
+        ("rival", "human", (140, 60, 40), 3), ("rivals", "human", (140, 60, 40), 3),
+        ("competition", "human", (140, 80, 40), 3), ("compete", "human", (140, 80, 40), 3),
+        ("contest", "human", (140, 80, 40), 3), ("challenge", "human", (140, 80, 40), 3),
+        ("challenger", "human", (140, 60, 40), 3), ("defend", "hand", (160, 100, 60), 3),
+        ("defense", "hand", (160, 100, 60), 3), ("protect", "hand", (160, 120, 80), 3),
+
+        # ── Abstract Concepts ──
+        ("nature", "tree", (50, 140, 50), 4), ("natural", "tree", (50, 140, 50), 3),
+        ("rule", "book", (180, 160, 140), 3), ("rules", "book", (180, 160, 140), 3),
+        ("law", "book", (180, 160, 140), 3), ("laws", "book", (180, 160, 140), 3),
+        ("order", "book", (180, 160, 140), 3), ("system", "book", (180, 160, 140), 3),
+        ("metaphor", "eye", (200, 180, 200), 3), ("metaphorical", "eye", (200, 180, 200), 3),
+        ("metaphorically", "eye", (200, 180, 200), 3), ("literal", "eye", (200, 200, 220), 3),
+        ("literally", "eye", (200, 200, 220), 3), ("completely", "circle", (200, 200, 220), 2),
+        ("total", "circle", (200, 200, 220), 2), ("fully", "circle", (200, 200, 220), 2),
+        ("somehow", "star", (255, 240, 200), 2), ("cause", "star", (255, 240, 200), 2),
+        ("reason", "star", (255, 240, 200), 2), ("purpose", "star", (255, 240, 200), 2),
+        ("meeting", "human", (100, 100, 120), 3), ("meetings", "human", (100, 100, 120), 3),
+        ("election", "human", (120, 80, 60), 4), ("elections", "human", (120, 80, 60), 4),
+        ("vote", "human", (120, 80, 60), 3), ("voting", "human", (120, 80, 60), 3),
+        ("argument", "human", (140, 60, 60), 3), ("arguments", "human", (140, 60, 60), 3),
+        ("debate", "human", (140, 80, 60), 3), ("discuss", "human", (100, 80, 100), 3),
+        ("discussion", "human", (100, 80, 100), 3),
     ]
 
     words = l.split()
