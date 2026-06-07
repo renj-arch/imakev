@@ -1439,6 +1439,8 @@ def _extract_entities(text: str) -> list:
     words = [w.strip(_st.punctuation) for w in words if w.strip(_st.punctuation)]
     found = []
     seen_types = set()
+    type_counts = {}  # Allow multiple instances of same type (e.g. 2 humans)
+    MAX_PER_TYPE = {"human": 2, "man": 2, "woman": 2, "child": 2, "animal": 2, "star": 3}
     auto_count = 0
     MAX_AUTO = 1
 
@@ -1509,6 +1511,10 @@ def _extract_entities(text: str) -> list:
         ("village", "building", (160, 150, 130), 3),
         ("shop", "building", (180, 140, 100), 3), ("store", "building", (170, 150, 110), 3),
         ("inn", "building", (160, 120, 80), 3), ("tavern", "building", (140, 100, 70), 3),
+        ("bakery", "building", (190, 160, 110), 3), ("cafe", "building", (160, 130, 90), 3),
+        ("sign", "arrow", (180, 140, 100), 2), ("bell", "circle", (200, 190, 160), 2),
+        ("dusk", "star", (180, 120, 80), 3), ("golden", "star", (255, 200, 80), 3),
+        ("shelf", "rock", (150, 120, 90), 2), ("counter", "rock", (140, 110, 80), 2),
         ("bridge", "building", (100, 80, 60), 3), ("church", "building", (180, 160, 140), 3),
         ("castle", "building", (140, 120, 100), 4), ("temple", "building", (200, 180, 150), 4),
         ("lamp", "lamp", (255, 220, 100), 3), ("window", "house", (255, 230, 150), 2),
@@ -2031,9 +2037,10 @@ def _extract_entities(text: str) -> list:
             bigram = word + " " + words[i+1].strip(".,!?;:'\"()[]{}")
             for phrase, etype, color, weight in ENTITIES:
                 if phrase == bigram:
-                    if etype not in seen_types:
+                    max_cnt = MAX_PER_TYPE.get(etype, 1)
+                    if type_counts.get(etype, 0) < max_cnt:
                         found.append((etype, color, weight))
-                        seen_types.add(etype)
+                        type_counts[etype] = type_counts.get(etype, 0) + 1
                         i += 2
                         matched = True
                         break
@@ -2057,9 +2064,10 @@ def _extract_entities(text: str) -> list:
                         is_match = True
 
                     if is_match:
-                        if etype not in seen_types:
+                        max_cnt = MAX_PER_TYPE.get(etype, 1)
+                        if type_counts.get(etype, 0) < max_cnt:
                             found.append((etype, color, weight))
-                            seen_types.add(etype)
+                            type_counts[etype] = type_counts.get(etype, 0) + 1
                             matched = True
                             break
                         else:
@@ -2231,101 +2239,78 @@ def _detect_scene_type(text: str) -> str:
 
 
 def _reposition_semantically(elements: list, text: str):
-    """Reposition elements so related objects group together meaningfully.
-    Detects patterns like 'key opens X', 'difference between A and B'."""
+    """Light-touch semantic tweaking — preserves composition engine's layout
+    but adjusts specific element relationships based on narrative cues."""
     t = text.lower()
     elem_types = [e["type"] for e in elements]
-    placed = set()  # track indices already positioned by semantic rules
+    placed = set()
 
-    # ── Detect central/theme object ──
-    central_candidates = {
-        "key": ["key", "lock", "unlock", "open", "close"],
-        "book": ["book", "read", "archive", "knowledge", "secret"],
-        "compass": ["compass", "direction", "navigate", "journey"],
-        "heart": ["heart", "love", "passion", "feel"],
+    # ── Theme spotlight: gently emphasize thematically relevant elements ──
+    theme_boost = {
+        "clock": ["time", "hour", "minute", "second", "tick"],
+        "key": ["key", "lock", "unlock", "secret"],
+        "book": ["book", "read", "story", "tale", "knowledge"],
+        "compass": ["compass", "direction", "journey", "navigate"],
+        "heart": ["heart", "love", "passion", "feel", "emotion"],
         "crown": ["crown", "king", "queen", "royal", "ruler"],
         "lamp": ["lamp", "light", "illuminate", "bright"],
-        "clock": ["clock", "time", "hour", "minute", "second"],
+        "star": ["mysterious", "magic", "wonder", "dream", "hope", "mystery"],
+        "eye": ["see", "saw", "seen", "watch", "notice", "realize", "realized"],
+        "arrow": ["follow", "journey", "path", "direction", "travel"],
     }
+    for i, e in enumerate(elements):
+        etype = e["type"]
+        if etype in theme_boost and any(kw in t for kw in theme_boost[etype]):
+            if etype == "star" and i == 0:
+                continue  # skip default star if already placed well
+            if "clock" in t and etype == "clock":
+                e["scale"] = e.get("scale", 1.0) * 1.25
+            elif "eye" in t and etype == "eye":
+                e["scale"] = e.get("scale", 1.0) * 1.2
+            elif "mysterious" in t and etype == "star":
+                pass  # already fine
+            else:
+                e["scale"] = e.get("scale", 1.0) * 1.15
 
-    central_type = None
-    central_idx = None
-    for ctype, keywords in central_candidates.items():
-        if ctype in elem_types and any(kw in t for kw in keywords):
-            central_type = ctype
-            break
-
-    if central_type:
-        for i, e in enumerate(elements):
-            if e["type"] == central_type:
-                e["x"] = 0.5
-                e["y"] = 0.38
-                e["scale"] = e.get("scale", 1.0) * 1.6
-                placed.add(i)
-                central_idx = i
-                break
-
-    # ── "difference between A and B" → A left, B right, bridge center ──
+    # ── "difference between A and B" → A left, B right ──
     if re.search(r'\bdifference\s+between\b', t) or re.search(r'\bversus\b', t):
         contrast_pairs = [
-            ("bird", "building"),
-            ("sun", "moon"),
-            ("fire", "water"),
-            ("human", "shadow_figure"),
+            ("bird", "building"), ("sun", "moon"),
+            ("fire", "water"), ("human", "shadow_figure"),
         ]
         left_type, right_type = None, None
         for a, b in contrast_pairs:
             if a in elem_types and b in elem_types:
                 left_type, right_type = a, b
                 break
-        if left_type and right_type:
-            bridge_idx = 0
+        if left_type:
             for i, e in enumerate(elements):
-                if e["type"] == left_type:
-                    e["x"] = 0.22; e["y"] = 0.42
-                    e["scale"] = e.get("scale", 1.0) * 1.3
-                    placed.add(i)
-                elif e["type"] == right_type:
-                    e["x"] = 0.78; e["y"] = 0.42
-                    e["scale"] = e.get("scale", 1.0) * 1.3
-                    placed.add(i)
-                elif e["type"] in ("key", "arrow", "circle"):
-                    bridge_y = 0.48 + bridge_idx * 0.08
-                    e["x"] = 0.5
-                    e["y"] = min(bridge_y, 0.72)
-                    e["scale"] = e.get("scale", 1.0) * 1.15
-                    placed.add(i)
-                    bridge_idx += 1
+                if e["type"] == left_type and i not in placed:
+                    e["x"] = 0.22; placed.add(i)
+                elif e["type"] == right_type and i not in placed:
+                    e["x"] = 0.78; placed.add(i)
 
-    # ── "open" pattern: key opens X → position openables around key ──
-    if central_type == "key" and "open" in t:
-        open_slot = 0
+    # ── "open" → key and building subtly adjust ──
+    if "open" in t and "key" in elem_types:
         for i, e in enumerate(elements):
-            if e["type"] in ("building", "circle", "house") and e["type"] != central_type and i not in placed:
-                if open_slot == 0:
-                    e["x"] = 0.22; e["y"] = 0.55
-                elif open_slot == 1:
-                    e["x"] = 0.78; e["y"] = 0.55
-                else:
-                    e["x"] = 0.5; e["y"] = 0.68
-                e["scale"] = e.get("scale", 1.0) * 0.9
+            if e["type"] == "key" and i not in placed:
+                e["x"] = min(e["x"] + 0.05, 0.85)
+                e["scale"] = e.get("scale", 1.0) * 1.1
                 placed.add(i)
-                open_slot += 1
 
-    # ── Only arrange in a ring when a central theme object exists ──
-    if central_type:
-        ring_positions = [(0.50, 0.10), (0.12, 0.28), (0.88, 0.28),
-                          (0.12, 0.62), (0.88, 0.62), (0.50, 0.78),
-                          (0.12, 0.10), (0.88, 0.10)]
-        ri = 0
-        for i, e in enumerate(elements):
-            if i in placed:
-                continue
-            if ri < len(ring_positions):
-                e["x"] = ring_positions[ri][0]
-                e["y"] = ring_positions[ri][1]
-                e["scale"] = e.get("scale", 1.0) * 0.75
-                ri += 1
+    # ── Character + clock/time: position character looking at clock ──
+    if re.search(r'\b(time|clock|hour)\b', t):
+        has_human = any(e["type"] in ("human", "man", "woman", "child") for e in elements)
+        has_clock = any(e["type"] == "clock" for e in elements)
+        if has_human and has_clock:
+            for e in elements:
+                if e["type"] in ("human", "man", "woman", "child") and id(e) not in placed:
+                    if e.get("x", 0.5) > 0.5:
+                        e["x"] = 0.62
+                    else:
+                        e["x"] = 0.22
+                if e["type"] == "clock" and id(e) not in placed:
+                    e["x"] = 0.50
 
 
 def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | None:
@@ -2390,12 +2375,15 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
         "door": "building", "gate": "building", "window": "building", "wall": "building",
         "town": "building", "city": "building", "village": "building", "castle": "building", "tower": "building",
         "shop": "building", "store": "building", "market": "building", "inn": "building", "tavern": "building",
+        "bakery": "building", "cafe": "building", "bookstore": "building", "library": "building", "gallery": "building",
+        "street": "path", "road": "path", "cobblestone": "path", "lane": "path",
         "boat": "ship", "raft": "ship", "sail": "ship",
         "sword": "arrow", "spear": "arrow", "knife": "arrow", "axe": "arrow",
         "shield": "circle", "ring": "circle", "wheel": "circle",
         "bucket": "circle", "pot": "circle", "cup": "circle", "bowl": "circle",
         "cave": "building", "tunnel": "building", "bridge": "building",
         "bag": "rock", "backpack": "rock", "box": "rock", "chest": "rock",
+        "light": "lamp", "glow": "lamp", "lantern": "lamp", "candle": "lamp", "torch": "lamp",
         "crown": "star", "hat": "star", "helmet": "star",
         "hill": "mountain", "dune": "mountain",
         "forest": "tree", "bush": "plant", "vine": "plant",
@@ -2426,87 +2414,192 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
     known_entities = [(i, e) for i, e in enumerate(new_known)]
     synth_entities = [(i, e) for i, e in enumerate(new_synth)]
 
-    elements = []
-    for i, (etype, ecolor, _) in known_entities:
-        n = len(known_entities)
-        # Anti-overlap positioning: spread elements across frame
-        # Top row: celestial/air elements (y=0.08-0.25)
-        if etype in ("sun", "moon", "star", "cloud", "bird"):
-            col = i % 4
-            px = 0.1 + col * 0.25
-            py = 0.08 + (i // 4) * 0.08
-        # Water elements (fixed bottom position)
-        elif etype in ("water", "wave", "moon_path"):
-            px, py = 0.5, 0.65
-        # Background landscape (mid-ground)
-        elif etype in ("mountain", "cliff", "hill", "building", "house"):
-            col = i % 3
-            px = 0.05 + col * 0.40
-            py = 0.5
-        # Ground-level objects
-        elif etype in ("rock", "totem", "anchor", "fire", "campfire", "lamp"):
-            col = i % 3
-            px = 0.15 + col * 0.35
-            py = 0.6
-        # Characters/animals spread across ground
-        elif etype in ("animal", "human", "shadow_figure", "man", "woman", "child"):
-            step = 1.0 / max(n, 2)
-            px = 0.18 + i * step * 0.6
-            py = 0.55 + (i % 3) * 0.05
-        # Face/body parts (centered)
-        elif etype in ("eye", "hand", "face"):
-            px, py = 0.5, 0.45
-        elif etype in ("path", "fence"):
-            px, py = 0.5, 0.55
-        # Vegetation
-        elif etype in ("plant", "flower", "grass", "tree"):
-            col = i % 4
-            px = 0.05 + col * 0.25
-            py = 0.6 + (i // 4) * 0.06
-        # New known types (camera, filter, etc.) — background layer
-        else:
-            col = i % 3
-            px = 0.1 + col * 0.35
-            py = 0.5 + (i // 3) * 0.08
+    # ── Layer categories for composition ──
+    SKY = {"sun","moon","star","cloud","bird","eye"}
+    BACK = {"mountain","cliff","hill","building","house","water","wave","moon_path"}
+    MID = {"tree","plant","flower","grass","fence","path","rock","totem","anchor","fire","campfire","lamp",
+           "globe","ship","canoe","whale","sea_serpent"}
+    FRONT = {"human","animal","shadow_figure","man","woman","child","hand","face","speech_bubble"}
+    PROPS = {"book","scroll","compass","crown","key","cross","coin","telescope","heart","gear","skull",
+             "clock","camera","filter","signal","arrow","fruit"}
 
-        # Scale varies by type
-        scale = 1.0
+    # ── Scene inference: fill in implied elements ──
+    current_types = {t for t, _, _ in [e[1] for e in known_entities]}
+    # Setting-based inference: if a setting is mentioned, populate common elements
+    if re.search(r'\b(town|city|village|settlement)\b', text) and scene_type == "story":
+        if "human" not in current_types and "man" not in current_types and "woman" not in current_types and "child" not in current_types:
+            known_entities.append((len(known_entities), ("human", (180, 160, 140), 1)))
+            current_types.add("human")
+        if "building" not in current_types and "house" not in current_types:
+            known_entities.append((len(known_entities), ("building", (120, 100, 80), 1)))
+            current_types.add("building")
+        if "lamp" not in current_types and re.search(r'\b(light|lamp|glow|golden|warm)\b', text):
+            known_entities.append((len(known_entities), ("lamp", (255, 200, 100), 1)))
+            current_types.add("lamp")
+    # Shop + town → add ambience elements (street, lamp, second building)
+    if re.search(r'\b(shop|store|market|inn|tavern|bakery|cafe)\b', text) and scene_type == "story":
+        if "human" not in current_types and "man" not in current_types:
+            known_entities.append((len(known_entities), ("human", (180, 140, 100), 1)))
+            current_types.add("human")
+        if "path" not in current_types and re.search(r'\b(street|road|path|cobblestone|lane)\b', text):
+            known_entities.append((len(known_entities), ("path", (140, 120, 100), 1)))
+            current_types.add("path")
+        if "lamp" not in current_types and re.search(r'\b(dusk|evening|golden|warm|light|glow)\b', text):
+            known_entities.append((len(known_entities), ("lamp", (255, 200, 100), 1)))
+            current_types.add("lamp")
+        elif "lamp" not in current_types:
+            known_entities.append((len(known_entities), ("lamp", (200, 180, 150), 1)))
+            current_types.add("lamp")
+    if re.search(r'\b(forest|woods|jungle|wilderness)\b', text) and scene_type == "story":
+        if "building" not in current_types and "house" not in current_types:
+            known_entities.append((len(known_entities), ("building", (120, 100, 80), 1)))
+            current_types.add("building")
+    if re.search(r'\b(forest|woods|jungle|wilderness)\b', text) and scene_type == "story":
+        if "tree" not in current_types and "plant" not in current_types:
+            known_entities.append((len(known_entities), ("tree", (50, 120, 50), 1)))
+            current_types.add("tree")
+        if "animal" not in current_types:
+            known_entities.append((len(known_entities), ("animal", (100, 80, 60), 1)))
+            current_types.add("animal")
+    if re.search(r'\b(ocean|sea|river|lake|beach|shore)\b', text) and scene_type == "story":
+        if "water" not in current_types and "wave" not in current_types:
+            known_entities.append((len(known_entities), ("water", (60, 120, 200), 1)))
+            current_types.add("water")
+        if "bird" not in current_types and "cloud" not in current_types:
+            known_entities.append((len(known_entities), ("bird", (80, 60, 50), 1)))
+            current_types.add("bird")
+    if re.search(r'\b(shop|store|market|inn|tavern)\b', text) and scene_type == "story":
+        if "human" not in current_types and "man" not in current_types:
+            known_entities.append((len(known_entities), ("human", (180, 140, 100), 1)))
+            current_types.add("human")
+    if re.search(r'\b(morning|dawn|sunrise|daybreak)\b', text):
+        if "sun" not in current_types:
+            known_entities.append((len(known_entities), ("sun", (255, 220, 50), 1)))
+            current_types.add("sun")
+    if re.search(r'\b(night|evening|dusk|midnight|dark)\b', text) and "moon" not in current_types and "star" not in current_types:
+        known_entities.append((len(known_entities), ("moon", (200, 200, 220), 1)))
+        current_types.add("moon")
+    if re.search(r'\b(train|wagon|cart|carriage|ride)\b', text) and "arrow" not in current_types:
+        known_entities.append((len(known_entities), ("arrow", (180, 140, 100), 1)))
+        current_types.add("arrow")
+    # Mood-based inference: mysterious → add star
+    if re.search(r'\b(mysterious|magic|enchanted|strange)\b', text) and "star" not in current_types and "moon" not in current_types:
+        known_entities.append((len(known_entities), ("star", (255, 220, 100), 1)))
+        current_types.add("star")
+    # Journey/road inference
+    if re.search(r'\b(journey|travel|road|path|way|walk|walked)\b', text) and "path" not in current_types:
+        known_entities.append((len(known_entities), ("path", (140, 120, 100), 1)))
+        current_types.add("path")
+
+    def _layer_of(t):
+        if t in SKY: return 0
+        if t in BACK: return 1
+        if t in MID: return 2
+        if t in FRONT: return 3
+        return 2
+
+    def _clamp(v, lo=0.05, hi=0.85):
+        return max(lo, min(v, hi))
+
+    # Sort known entities by layer
+    layered = sorted(known_entities, key=lambda x: _layer_of(x[1][0]))
+    elements = []
+    rng = random.Random(hash(text + str(scene_num)) & 0xFFFFFFFF)
+    n = len(layered)
+
+    # Pre-compute composition grid based on count and scene position
+    # Early/wide scenes: elements small and spread; late scenes: tighter, bigger
+    spread = 0.7 if narr_pos == "setup" else (0.5 if narr_pos in ("tension", "climax") else 0.6)
+    base_scale = 0.7 if narr_pos == "setup" else (1.2 if narr_pos == "tension" else (1.4 if narr_pos == "climax" else 0.85))
+    y_base = 0.55 if narr_pos == "setup" else 0.50
+
+    # Detect if scene has at least one character
+    has_character = any(t in FRONT for t, _, _ in [e[1] for e in layered])
+
+    for idx, (i, (etype, ecolor, _)) in enumerate(layered):
+        layer = _layer_of(etype)
+        jitter_x = (rng.random() - 0.5) * 0.12
+        jitter_y = (rng.random() - 0.5) * 0.06
+
+        if layer == 0:  # Sky — scatter diagonally
+            px = 0.08 + (idx * 0.22 + rng.random() * 0.10) % 0.80
+            py = 0.05 + (idx * 0.08 + rng.random() * 0.06) % 0.25
+            if etype == "sun": px, py = 0.75, 0.08
+            elif etype == "moon": px, py = 0.75, 0.08
+        elif layer == 1:  # Background — wide, low
+            col = idx % max(3 - (n > 4), 1)
+            px = 0.08 + col * (0.80 / max(3 - (n > 4), 1))
+            py = 0.42 + rng.random() * 0.10
+            if etype in ("building", "house"): py = 0.40 + rng.random() * 0.12
+        elif layer == 2:  # Midground — ground line
+            if has_character:
+                # Place around the character area
+                px = 0.10 + idx * (0.70 / max(n, 2))
+                py = 0.58 + rng.random() * 0.08
+            else:
+                px = 0.08 + (idx % 3) * 0.30
+                py = 0.55 + rng.random() * 0.10
+        else:  # Foreground — characters and interactive elements
+            if etype in ("hand", "face"):
+                px, py = 0.50, 0.45
+            elif has_character and n == 2:
+                # Two elements: one left, one right — facing off
+                if idx == 0: px, py = 0.25, 0.52
+                else: px, py = 0.60, 0.52
+            elif has_character:
+                # Multiple: spread with focus
+                px = 0.12 + (idx % 4) * 0.22
+                py = 0.50 + (idx // 4) * 0.06
+            else:
+                px = 0.18 + (idx % 3) * 0.30
+                py = 0.50
+
+        # Apply jitter and spread
+        px = _clamp(px + jitter_x * spread)
+        py = _clamp(py + jitter_y * spread)
+
+        # Scale by type and layer
+        scale = base_scale
         if etype in ("mountain", "cliff", "whale", "sea_serpent", "wave", "globe"):
-            scale = 1.3
+            scale = 1.3 * base_scale
         elif etype in ("star", "bird", "flower", "eye", "coin"):
-            scale = 0.7
+            scale = 0.6 * base_scale
         elif etype in ("sun", "moon"):
-            scale = 0.9
+            scale = 0.9 * base_scale
         elif etype in ("human", "shadow_figure", "animal", "man", "woman", "child"):
-            scale = 0.8
+            scale = 0.8 * base_scale
+        elif etype == "speech_bubble":
+            scale = 0.5
+        # Add individual scale variety
+        scale *= (0.85 + rng.random() * 0.30)
 
         elements.append({
-            "type": etype, "x": min(px, 0.85), "y": min(py, 0.85),
-            "scale": scale, "fill": list(ecolor) if isinstance(ecolor, tuple) else ecolor
+            "type": etype, "x": px, "y": py,
+            "scale": round(scale, 3),
+            "fill": list(ecolor) if isinstance(ecolor, tuple) else ecolor
         })
 
     # Pass 2: position auto-synthesized concept words as floating cards
     for j, (orig_i, (etype, ecolor, _)) in enumerate(synth_entities):
-        # Place in a ring around the frame edges
         total = len(synth_entities)
-        angle = (j / max(total, 1)) * 6.283  # Full circle
-        # Distribute around the frame edges, not center
+        angle = (j / max(total, 1)) * 6.283
         margin = 0.08
-        if j % 4 == 0:  # Top edge
+        if j % 4 == 0:
             px = margin + (j // 4 % 5) * 0.2
-            py = margin
-        elif j % 4 == 1:  # Right edge
-            px = 0.88
+            py = margin + rng.random() * 0.03
+        elif j % 4 == 1:
+            px = 0.88 - rng.random() * 0.03
             py = margin + (j // 4 % 6) * 0.13
-        elif j % 4 == 2:  # Bottom edge
+        elif j % 4 == 2:
             px = margin + (j // 4 % 5) * 0.2
-            py = 0.88
-        else:  # Left edge
-            px = margin
+            py = 0.88 - rng.random() * 0.03
+        else:
+            px = margin + rng.random() * 0.03
             py = margin + (j // 4 % 6) * 0.13
         elements.append({
             "type": etype, "x": min(px, 0.9), "y": min(py, 0.9),
-            "scale": 0.7, "fill": list(ecolor) if isinstance(ecolor, tuple) else ecolor
+            "scale": round(0.6 * base_scale, 3),
+            "fill": list(ecolor) if isinstance(ecolor, tuple) else ecolor
         })
 
     # ── Semantic repositioning: arrange elements to tell a visual story ──
@@ -2551,8 +2644,27 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
     # ── Atmosphere ──
     is_night = bg["type"] == "night"
     star_count = 30 if is_night else 0
-    particles = "stars" if is_night else ("none")
-    fog = mood in ("mysterious", "somber", "sad")
+    # Scene-specific particle effects based on content keywords
+    if re.search(r'\b(rain|storm|thunder|clouds|gloomy)\b', text):
+        particles = "rain"
+        fog = True
+    elif re.search(r'\b(snow|winter|cold|frost|ice)\b', text):
+        particles = "snow"
+        fog = False
+    elif re.search(r'\b(mysterious|magic|sparkle|dream|wonder|enchanted)\b', text):
+        particles = "sparkles"
+        star_count = max(star_count, 20)
+        fog = False
+    elif re.search(r'\b(warm|sunny|bright|morning|peaceful|calm)\b', text):
+        particles = "sunbeams"
+        star_count = 0
+        fog = False
+    elif mood in ("mysterious", "somber", "sad"):
+        particles = "stars"
+        fog = True
+    else:
+        particles = "none"
+        fog = False
 
     # ── Camera ──
     camera_map = {"setup": None, "build": "ken_burns_in", "tension": "dolly_in",
@@ -2688,7 +2800,7 @@ def _enrich_story_context(visuals, text, state, scene_num, total):
     scene_type = vis.get("scene_type", "story")
 
     # ── Filter to max elements ──
-    max_elems = 5 if scene_type != "story" else (4 if scene_num == 1 else 3)
+    max_elems = 5 if scene_type != "story" else (6 if scene_num == 1 else 5)
     kept = []
     priority = []
     for i, elem in enumerate(elements):
