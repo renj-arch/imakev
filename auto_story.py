@@ -140,7 +140,9 @@ _ENTITY_MAP = {
     "bird":          {"type":"bird","tags":["bird","crow","raven","eagle","hawk","falcon","vulture","owl","sparrow","finch","pigeon","dove","swallow","swan","duck","goose","turkey","peacock","parrot","macaw","cockatoo","heron","crane","stork","flamingo","penguin","ostrich","robin","bluebird","cardinal","hummingbird","woodpecker","kingfisher","seagull","pelican","albatross","magpie","canary","chicken","hen","rooster","cock","chick","quail","pheasant","grouse","partridge","pigeon","dove","cuckoo","nightingale","lark","thrush","blackbird","starling","oriole","tanager","finch","sparrow","wren","tit","nuthatch","creeper","swift","martin","swallow","pipit","waxwing","shrike","vireo","warbler","bunting","grosbeak","towhee","junco","siskin","redpoll","crossbill","dickcissel","meadowlark","grackle","cowbird"],"y":"sky"},
     "dragonfly":     {"type":"dragonfly","tags":["dragonfly","damselfly"],"y":"sky","special":1},
     "butterfly":     {"type":"butterfly","tags":["butterfly","moth"],"y":"sky"},
-    "mammal":        {"type":"animal","tags":["mammal","deer","wolf","fox","bear","rabbit","squirrel","horse","cattle","cow","bull","calf","ox","sheep","lamb","goat","pig","hog","boar","bison","moose","elk","donkey","mule","llama","alpaca","camel","zebra","giraffe","rhino","rhinoceros","hippo","hippopotamus","elephant","lion","tiger","leopard","panther","jaguar","cheetah","hyena","dog","cat","kitten","puppy","mouse","rat","beaver","otter","hedgehog","bat","kangaroo","koala","sloth","raccoon","skunk","weasel","badger","mole","vole","shrew","opossum","porcupine","armadillo","anteater","monkey","ape","gorilla","chimpanzee","orangutan","gibbon","baboon","mandrill","lemur","panda","bamboo"],"y":"ground"},
+    "mammal":        {"type":"animal","tags":["mammal","deer","wolf","fox","bear","rabbit","squirrel","horse","cattle","cow","bull","calf","ox","sheep","lamb","goat","pig","hog","boar","bison","moose","elk","donkey","mule","llama","alpaca","camel","zebra","giraffe","rhino","rhinoceros","hippo","hippopotamus","elephant","lion","tiger","leopard","panther","jaguar","cheetah","hyena","dog","kitten","puppy","mouse","mice","rat","beaver","otter","hedgehog","bat","kangaroo","koala","sloth","raccoon","skunk","weasel","badger","mole","vole","shrew","opossum","porcupine","armadillo","anteater","monkey","ape","gorilla","chimpanzee","orangutan","gibbon","baboon","mandrill","lemur","panda","bamboo"],"y":"ground"},
+    "cat":           {"type":"cat","tags":["cat","kitten","feline","meow","purr","whisker"],"y":"ground"},
+    "mouse":         {"type":"mouse","tags":["mouse","mice","rodent","pest","vermin","squeak"],"y":"ground"},
     "dinosaur":      {"type":"animal","tags":["dinosaur","t-rex","triceratops","velociraptor","stegosaurus","brontosaurus","pterosaur","plesiosaur","ichthyosaur","ankylosaurus","parasaurolophus","pachycephalosaurus","allosaurus","brachiosaurus","diplodocus","creature","beast","monster"],"y":"ground","scale":1.5},
     "fish":          {"type":"fish","tags":["fish","shark","whale","dolphin","orca","porpoise","seal","walrus","salmon","trout","tuna","bass","perch","carp","catfish","cod","herring","sardine","mackerel","anchovy","eel","ray","skate","flounder","halibut","swordfish","marlin","grouper","snapper","tilapia","aquatic","sea creature","marine"],"y":"water"},
     "reptile":       {"type":"animal","tags":["reptile","lizard","gecko","iguana","chameleon","monitor","komodo","turtle","tortoise","terrapin","crocodile","alligator","caiman","gavial"],"y":"ground"},
@@ -164,7 +166,7 @@ _ENTITY_MAP = {
     "fire":          {"type":"fire","tags":["fire","flame","blaze","campfire","bonfire","burn","burning","ember","spark","volcano","lava","eruption"],"y":"ground"},
     "rock":          {"type":"rock","tags":["rock","stone","boulder","pebble","gravel","canyon","desert","arid","sand","dune"],"y":"ground"},
     # Sky & celestial
-    "sun":           {"type":"sun","tags":["sun","sunlight","sunshine","sunrise","sunset","dawn","dusk","morning","day","daylight","solstice"],"y":"sky"},
+    "sun":           {"type":"sun","tags":["sun","sunlight","sunshine","sunrise","sunset","dawn","dusk","morning","daylight","solstice"],"y":"sky"},
     "moon":          {"type":"moon","tags":["moon","crescent","lunar","full moon","half moon","night"],"y":"sky"},
     "star":          {"type":"star","tags":["star","stars","night sky","constellation","galaxy","universe","celestial","astronomy"],"y":"sky","count":8,"small":1},
     "cloud":         {"type":"cloud","tags":["cloud","clouds","sky","atmosphere","weather","overcast","fog","mist","haze","smoke"],"y":"sky"},
@@ -172,15 +174,15 @@ _ENTITY_MAP = {
     "lightning":     {"type":"lightning","tags":["lightning","thunder","storm","bolt","electrical"],"y":"sky"},
     "rainbow":       {"type":"rainbow","tags":["rainbow","arc","prism"],"y":"sky"},
     # Structures
-    "building":      {"type":"building","tags":["house","hut","cabin","building","structure","temple","pyramid","monument","palace","castle","fort","wall","city","village","town","settlement","civilization"],"y":"ground"},
+    "building":      {"type":"building","tags":["house","home","hut","cabin","building","structure","temple","pyramid","monument","palace","castle","fort","wall","city","village","town","settlement","civilization"],"y":"ground"},
     "tent":          {"type":"tent","tags":["tent","camp","campsite","shelter","teepee","nomad"],"y":"ground"},
     "bridge":        {"type":"bridge","tags":["bridge","crossing","causeway","overpass"],"y":"ground"},
-    "path":          {"type":"path","tags":["path","trail","road","track","route","way","walkway","walk","walking","street"],"y":"ground"},
+    "path":          {"type":"path","tags":["path","trail","road","walkway","walk","walking","street"],"y":"ground"},
     # Objects
     "boat":          {"type":"ship","tags":["boat","ship","sail","vessel","canoe","raft","ark","voyage","explore","navigation"],"y":"water"},
     "book":          {"type":"book","tags":["book","scroll","manuscript","document","papyrus","knowledge","story","tale","record"],"y":"ground"},
     "compass":       {"type":"compass","tags":["compass","astrolabe","sextant","navigation","direction"],"y":"ground"},
-    "globe":         {"type":"globe","tags":["globe","earth","world","planet","sphere","orb"],"y":"ground"},
+    "globe":         {"type":"globe","tags":["globe","earth","planet","sphere","orb"],"y":"ground"},
     "crystal":       {"type":"crystal","tags":["crystal","gem","jewel","diamond","ruby","emerald","mineral"],"y":"ground"},
     "tool":          {"type":"tool","tags":["tool","axe","hammer","spear","knife","sword","bow","arrow","weapon","instrument","artifact"],"y":"ground"},
     "pottery":       {"type":"pottery","tags":["pot","pottery","vase","jar","bowl","urn","amphora","container"],"y":"ground"},
@@ -189,14 +191,14 @@ _ENTITY_MAP = {
     "torch":         {"type":"torch","tags":["torch","lantern","lamp","candle","light","illuminate","glow"],"y":"ground"},
     # Abstract - silence, shadow, sound, time
     "shadow":        {"type":"shadow","tags":["shadow","darkness","shade","gloom","eclipse","dark","darken"],"y":"sky","special":1},
-    "sound":         {"type":"sound_wave","tags":["sound","hear","buzzing","noise","roar","cry","whisper","echo","silence","quiet","loud"],"y":"air","special":1},
-    "wind":          {"type":"wind","tags":["wind","breeze","gust","air","atmosphere","breathe","breath","warm","heavy","humid"],"y":"air"},
+    "sound":         {"type":"sound_wave","tags":["sound","hear","buzzing","noise","roar","cry","whisper","echo","quiet","loud"],"y":"air","special":1},
+    "wind":          {"type":"wind","tags":["wind","breeze","gust","atmosphere","breathe","breath","warm","heavy","humid"],"y":"air"},
     # Emotional / narrative scene types
-    "warning":       {"type":"warning","tags":["warning","omen","bad omen","portend","fear","terrify","afraid","scared","feared","danger","threat"],"y":"sky","special":1},
-    "question":      {"type":"question","tags":["nobody knows","no one knows","don't know","unknown","mystery","mysterious","strange","why","wonder","curious","puzzl","confus"],"y":"air","special":1},
+    "warning":       {"type":"warning","tags":["warning","omen","bad omen","portend","danger","threat"],"y":"sky","special":1},
+    "question":      {"type":"question","tags":["nobody knows","no one knows","don't know","unknown","mystery","mysterious","wonder","curious","puzzl","confus"],"y":"air","special":1},
     "predictable":   {"type":"predictable","tags":["predictable","familiar","exactly where","yesterday","same","always","routine","ordinary","normal","expected"],"y":"sky","special":1},
-    "alien":         {"type":"alien","tags":["feels alien","strange","unfamiliar","foreign","otherworldly","different","bizarre","weird","surreal"],"y":"ground","special":1},
-    "silence":       {"type":"silence","tags":["silence","silent","no birds","no mammals","no humans","no dinosaur","no sound","nothing","empty","alone","nobody","disappear","vanish"],"y":"ground","special":1},
+    "alien":         {"type":"alien","tags":["feels alien","unfamiliar","foreign","otherworldly","surreal"],"y":"ground","special":1},
+    "silence":       {"type":"silence","tags":["silence","silent","no birds","no mammals","no humans","no dinosaur","no sound"],"y":"ground","special":1},
     # Vehicles
     "motorcycle":   {"type":"motorcycle","tags":["motorcycle","motorbike","bike","harley","scooter","honda"],"y":"ground"},
     "car":          {"type":"car","tags":["car","automobile","vehicle","truck","lorry","van","jeep","sedan","wagon","bus","taxi"],"y":"ground"},
@@ -240,7 +242,7 @@ _ENTITY_MAP = {
     # Objects
     "bell":         {"type":"bell","tags":["bell","chime","ring","toll","cathedral"],"y":"ground"},
     "mirror":       {"type":"mirror","tags":["mirror","reflection","reflect","glass","looking glass"],"y":"ground"},
-    "mask":         {"type":"mask","tags":["mask","disguise","costume","veil","face","theater"],"y":"ground"},
+    "mask":         {"type":"mask","tags":["mask","disguise","costume","veil","theater"],"y":"ground"},
     # Military
     "tank":         {"type":"tank","tags":["tank","armored","armored vehicle","military vehicle","war machine","battalion"],"y":"ground"},
     "explosion":    {"type":"explosion","tags":["explosion","explode","blast","boom","detonate","burst","bomb","missile","grenade","shell"],"y":"air","special":1},
@@ -250,8 +252,8 @@ _ENTITY_MAP = {
     # Abstract concepts
     "atom":          {"type":"atom","tags":["atom","molecule","nucleus","electron","proton","neutron","particle","microscopic","atomic"],"y":"air"},
     "dna":           {"type":"dna","tags":["dna","gene","genetic","chromosome","helix","heredity","double helix"],"y":"air"},
-    "heart":         {"type":"heart","tags":["heart","cardiac","blood","pump","valentine","love","passion"],"y":"ground"},
-    "infinity":      {"type":"infinity","tags":["infinity","endless","forever","eternal","infinite","boundless","limitless"],"y":"air"},
+    "heart":         {"type":"heart","tags":["heart","cardiac","blood","valentine","love","passion"],"y":"ground"},
+    "infinity":      {"type":"infinity","tags":["infinity","infinite","boundless","limitless"],"y":"air"},
     "target":        {"type":"target","tags":["target","aim","goal","bullseye","focus","concentrate"],"y":"ground"},
     "puzzle":        {"type":"puzzle","tags":["puzzle","mystery","enigma","problem","challenge","riddle","conundrum"],"y":"ground"},
     "scales":        {"type":"scales","tags":["scales","balance","justice","weigh","measure","equal","fair","equality"],"y":"ground"},
@@ -259,7 +261,7 @@ _ENTITY_MAP = {
     "astronaut":     {"type":"astronaut","tags":["astronaut","spaceman","cosmonaut","space traveler","space suit"],"y":"ground"},
     "spaceship":     {"type":"spaceship","tags":["spaceship","starship","spacecraft","rocket","ship","space travel"],"y":"sky"},
     # Objects
-    "hourglass":     {"type":"hourglass","tags":["hourglass","sand","timer","time","countdown"],"y":"ground"},
+    "hourglass":     {"type":"hourglass","tags":["hourglass","sand","timer","countdown"],"y":"ground"},
     "treasure_chest":{"type":"treasure_chest","tags":["treasure chest","treasure","chest","gold","loot","booty","fortune","riches","wealth"],"y":"ground"},
     "gravestone":    {"type":"gravestone","tags":["grave","gravestone","tombstone","tomb","burial","cemetery","death","dead","mortality"],"y":"ground"},
     # Clothing
@@ -271,6 +273,11 @@ _ENTITY_MAP = {
     "furniture":     {"type":"furniture","tags":["furniture","table","chair","desk","bench","stool","cabinet","chest","drawer","shelf","bed","couch","sofa","seat","throne","cradle","crib","hammock","wardrobe","dresser","nightstand","coffee table"],"y":"ground"},
     # Kitchen
     "kitchen":       {"type":"kitchen","tags":["kitchen","pot","pan","skillet","kettle","pitcher","jug","bottle","flask","bowl","plate","dish","cup","mug","glass","goblet","chalice","utensil","fork","spoon","knife","spatula","ladle","strainer","colander","grater","peeler","whisk","rolling pin","cutting board","knife","cleaver","cooking","baking","roast","stew","soup","stove","oven","fireplace","hearth"],"y":"ground"},
+    # Sports & recreation
+    "ball":          {"type":"ball","tags":["ball","football","soccer","basketball","volleyball","baseball","tennis","cricket","sports","game","playground","play","playing"],"y":"ground"},
+    # Devices
+    "telescope":     {"type":"telescope","tags":["telescope","binocular","binoculars","spyglass","magnify","stargaze","lookout"],"y":"ground"},
+    "window":        {"type":"window","tags":["window","pane","glass","view","porthole"],"y":"ground"},
 }
 
 _ACTION_MAP = {
@@ -284,6 +291,7 @@ _ACTION_MAP = {
     "disappear":{"tags":["disappear","vanish","fade","gone","hidden","hide","conceal","obscure"],"effect":"fade_out"},
     "watch":  {"tags":["watch","watching","look","looking","gaze","stare","observe","study","examine"],"effect":"watching_pose","camera":"ken_burns_in"},
     "point":  {"tags":["point","pointing","indicate","gesture","signal","show","direction","direct"],"effect":"pointing_pose"},
+    "play":   {"tags":["play","playing","kick","throw","catch","hit","chase","sport","game","practice"],"effect":"run_pose"},
 }
 
 _POSITION_ZONES = {
@@ -294,21 +302,60 @@ _POSITION_ZONES = {
     "water":   {"y_range": (0.68, 0.82), "size": 0.9},
 }
 
+def _tag_match(tag, text):
+    """Match tag with optional regular plural suffix (s, es)."""
+    if tag.endswith('s') or tag.endswith('es'):
+        return re.search(rf'\b{re.escape(tag)}\b', text)
+    return re.search(rf'\b{re.escape(tag)}(?:s|es)?\b', text)
+
+
 def _extract_entities(text):
-    """Extract ALL known entities from narration text, with multiplicities."""
+    """Extract relevant entities from narration text, limited to top 5 by relevance."""
     t = text.lower()
     found = {}
     for key, info in _ENTITY_MAP.items():
         for tag in info["tags"]:
-            if re.search(rf'\b{re.escape(tag)}\b', t):
+            if _tag_match(tag, t):
+                # Skip if tag appears to be a proper name (preceded by title, with optional middle word)
+                if re.search(
+                    rf'\b(?:dr|mr|mrs|ms|prof|capt|sgt|sir|lady|lord|queen|king|prince|princess)\.?\s+(?:\w+\s+)?{re.escape(tag)}\b',
+                    t,
+                ):
+                    continue
                 count = info.get("count", 1)
-                if any(w in t for w in ["all","many","every","dozen","hundred","thousand","million","billion","countless","numerous","several"]):
+                if any(re.search(rf'\b{w}\b', t) for w in ["all","many","every","dozen","hundred","thousand","million","billion","countless","numerous","several"]):
                     count = max(count, info.get("count", 1) * 2)
                 if key in ("crowd","people","population","tribe","clan","family","civilization","culture","society","nation","public","group"):
                     count = max(count, 4)
                 found[key] = {"info": info, "count": count}
                 break
-    return found
+
+    # Score entities by relevance and keep top 5
+    scored = []
+    for key, data in found.items():
+        info = data["info"]
+        matching_tags = sum(1 for tag in info["tags"] if _tag_match(tag, t))
+        total_tags = len(info["tags"])
+        score = matching_tags / max(total_tags, 1)
+
+        # Human entity: increase count for distinct role words
+        if key == "human":
+            role_words = ["man","woman","child","boy","girl","baby","elder","parent","mother","father","son","daughter","brother","sister","friend","enemy","stranger","teacher","student","doctor","nurse","soldier","king","queen","prince","princess","hero","villain","witness","explorer","pilgrim","merchant","artist","musician","poet","writer","scholar"]
+            matching_roles = sum(1 for w in role_words if re.search(rf'\b{w}\b', t))
+            if matching_roles > 1:
+                data["count"] = max(data["count"], matching_roles)
+
+        # Bonus if entity name or key appears literally in text
+        if re.search(rf'\b{re.escape(key.replace("_", " "))}\b', t):
+            score += 1.0
+        # Penalize if matched only by a short generic tag (≤4 chars)
+        short_tag_matches = sum(1 for tag in info["tags"] if len(tag) <= 4 and _tag_match(tag, t))
+        if short_tag_matches > 0 and matching_tags == 1:
+            score -= 0.5
+        scored.append((key, data, score))
+
+    scored.sort(key=lambda x: -x[2])
+    return {key: data for key, data, score in scored[:5]}
 
 def _detect_actions(text):
     """Detect actions from narration text."""
@@ -384,6 +431,16 @@ def _gen_entity_elements(key, info, count, rng, text):
             elems.append({"type":"ship","x":x,"y":0.55,"scale":round(sc*0.8,1),"fill":[110,75,45]})
         elif etype == "animal":
             elems.append({"type":"animal","x":x,"y":y,"scale":round(sc*0.8,1),"fill":c})
+        elif etype == "cat":
+            sc2 = sc * 0.6
+            elems.append({"type":"ellipse","x":x,"y":y-0.01,"width":int(20*sc2),"height":int(14*sc2),"fill":list(c)+[220],"stroke":[c[0]-20,c[1]-20,c[2]-20,180],"stroke_width":1})
+            elems.append({"type":"circle","x":x+0.015,"y":y-0.03,"radius":int(7*sc2),"fill":list(c)+[220]})
+            elems.append({"type":"polygon","points":[[round(x+0.035,2),round(y-0.03,2)],[round(x+0.045,2),round(y-0.045,2)],[round(x+0.04,2),round(y-0.02,2)]],"fill":[c[0],c[1],c[2],200]})
+            elems.append({"type":"polygon","points":[[round(x-0.005,2),round(y-0.03,2)],[round(x-0.015,2),round(y-0.045,2)],[round(x-0.01,2),round(y-0.02,2)]],"fill":[c[0],c[1],c[2],200]})
+            elems.append({"type":"line","x":x+0.002,"y":y+0.025,"x2":x+0.04,"y2":y+0.015,"stroke":[c[0]-20,c[1]-20,c[2]-20,180],"stroke_width":1})
+            elems.append({"type":"line","x":x+0.035,"y":y+0.025,"x2":x+0.04,"y2":y+0.015,"stroke":[c[0]-20,c[1]-20,c[2]-20,180],"stroke_width":1})
+            elems.append({"type":"circle","x":x+0.018,"y":y-0.032,"radius":1,"fill":[40,180,40,200]})
+            elems.append({"type":"circle","x":x+0.025,"y":y-0.032,"radius":1,"fill":[40,180,40,200]})
         elif etype == "flower":
             elems.append({"type":"flower","x":x,"y":round(rng.uniform(0.60,0.75),2),"scale":round(sc*0.5,1),"fill":[200+rng.randint(0,55),60+rng.randint(0,60),140+rng.randint(0,60)]})
         elif etype == "cave":
@@ -614,6 +671,14 @@ def _gen_entity_elements(key, info, count, rng, text):
         elif etype == "kitchen":
             elems.append({"type":"ellipse","x":x-0.015,"y":y,"width":int(14*sc),"height":int(12*sc),"fill":list(c)+[200]})
             elems.append({"type":"rect","x":x+0.01,"y":y-0.01,"width":int(18*sc),"height":int(22*sc),"fill":[c[0]+20,c[1]+20,c[2]+20,200],"rx":2})
+        elif etype == "ball":
+            elems.append({"type":"circle","x":x,"y":y,"radius":int(14*sc),"fill":[c[0] or 220,c[1] or 180,c[2] or 60,220],"stroke":[80,60,40,180],"stroke_width":2})
+        elif etype == "telescope":
+            elems.append({"type":"telescope","x":x,"y":y,"scale":round(sc*0.9,1),"fill":[c[0] or 120,c[1] or 80,c[2] or 60]})
+        elif etype == "window":
+            elems.append({"type":"rect","x":x,"y":y,"width":int(22*sc),"height":int(28*sc),"fill":[200,220,255,180],"stroke":[100,120,140,200],"stroke_width":2,"rx":2})
+            elems.append({"type":"line","x":x,"y":y-0.015,"x2":x,"y2":y+0.015,"stroke":[100,120,140,150],"stroke_width":1})
+            elems.append({"type":"line","x":x-0.012,"y":y,"x2":x+0.012,"y2":y,"stroke":[100,120,140,150],"stroke_width":1})
         else:
             elems.append({"type":"ellipse","x":x,"y":y,"width":int(30*sc),"height":int(20*sc),"fill":list(c)+[180]})
     return elems
@@ -885,10 +950,54 @@ def _compose_story_scene(t, phase, rng, density):
     if actions:
         elements = _apply_action_effects(actions, elements, rng)
 
-    # 3. Add ambient fill if scene feels bare
+    # 3. Apply scene layout adjustments based on action context
+    _adjust_scene_layout(elements, actions, t, rng)
+
+    # 4. Add ambient fill if scene feels bare
     _add_ambient_elements(elements, phase, rng)
 
     return elements
+
+
+def _adjust_scene_layout(elements, actions, text, rng):
+    """Reposition elements so the scene looks coherent for the action context.
+    
+    When action words suggest interaction between entities (e.g. playing, watching),
+    adjust positions to create a meaningful composition instead of random scatter."""
+    if not actions:
+        return
+
+    action_names = [a["name"] for a in actions]
+    humans = [e for e in elements if e.get("type") == "human"]
+    balls = [e for e in elements if e.get("type") == "circle" and 10 < e.get("radius", 0) < 20]
+    buildings = [e for e in elements if e.get("type") == "building"]
+    telescopes = [e for e in elements if e.get("type") == "telescope"]
+
+    # Playing: group humans together, put ball among them
+    if "playing" in text.split() or "football" in text.split() or any(a in ("play", "walk", "run", "gather") for a in action_names):
+        if humans:
+            group_x = 0.30
+            for i, h in enumerate(humans):
+                h["x"] = round(group_x + i * 0.15, 2)
+                h["y"] = round(0.62 + rng.uniform(-0.04, 0.04), 2)
+            if balls:
+                mid = len(humans) // 2
+                bx = humans[mid]["x"] if mid < len(humans) else 0.40
+                by = 0.60
+                balls[0]["x"] = round(bx + 0.05, 2)
+                balls[0]["y"] = round(by, 2)
+
+    # Watching: place watcher near building, orient toward action
+    if any(a == "watch" for a in action_names):
+        if humans and telescopes:
+            watcher = humans[-1]
+            watcher["x"] = 0.78
+            watcher["y"] = 0.50
+            telescopes[0]["x"] = 0.83
+            telescopes[0]["y"] = 0.48
+        if buildings:
+            buildings[0]["x"] = 0.82
+            buildings[0]["y"] = 0.52
 
 
 def _infer_visuals(text: str, scene_num: int, total: int) -> dict:
@@ -1048,6 +1157,13 @@ def _infer_visuals(text: str, scene_num: int, total: int) -> dict:
         score = kw_count(kws, t)
         if score > best_score:
             best_type, best_score = stype, score
+
+    # Regex-based pattern detection for types not easily captured by keywords
+    if re.search(r'\bnot\b\s+\w+\s+\w+\s+\w+\s+\bbut\b', t) or re.search(r'\binstead of\b', t) or re.search(r'\brather than\b', t):
+        comp_score = kw_count(["not", "but", "instead", "rather", "unlike", "versus"], t)
+        if comp_score > best_score:
+            best_type, best_score = "comparison", comp_score
+
     scene_type = best_type
 
     # ── Generate elements appropriate to scene type ──
@@ -1231,8 +1347,439 @@ def _infer_visuals(text: str, scene_num: int, total: int) -> dict:
     }
 
 
+# ──────────────────────────────────────────────────────
+# LOCAL SEMANTIC ENGINE — Pure Python, zero API calls
+# Comprehensive entity map (300+), biome detection,
+# narrative arc awareness, multi-word phrase matching.
+# ──────────────────────────────────────────────────────
+
+# Biome signatures: (keyword, biome_name, bg_type, base_colors, ground_color)
+_BIOMES = [
+    (["desert", "sand", "dune", "arid", "cactus", "scorpion", "lizard", "coyote", "vulture", "sun-baked", "cracked earth", "dry", "dust", "blazing", "sahara", "gobi", "mirage", "oasis", "nomad", "camel"], "desert", "sunset", [(220, 160, 80), (190, 120, 60), (160, 90, 40)], (140, 100, 50)),
+    (["ocean", "sea", "deep", "wave", "shore", "beach", "tide", "surf", "coast", "marine", "underwater", "coral", "reef", "dolphin", "whale", "jellyfish"], "ocean", "ocean", [(40, 100, 200), (20, 60, 150)], None),
+    (["night", "midnight", "moon", "star", "darkness", "shadow", "eclipse", "constellation", "aurora", "twilight"], "night", "night", [(5, 3, 25), (15, 10, 40), (30, 25, 60)], (10, 8, 25)),
+    (["sunset", "dusk", "dawn", "sunrise", "golden", "evening", "twilight", "afterglow"], "sunset", "sunset", [(230, 120, 70), (200, 100, 90), (150, 70, 100), (80, 50, 80)], (50, 40, 30)),
+    (["forest", "woods", "jungle", "rainforest", "tree", "canopy", "thicket", "grove", "bush", "shrub", "wilderness"], "forest", "forest", [(120, 160, 80), (60, 100, 50)], (40, 70, 30)),
+    (["snow", "ice", "arctic", "antarctic", "tundra", "glacier", "frozen", "blizzard", "winter", "cold", "frost", "hail", "north"], "arctic", "gradient", [(200, 215, 230), (180, 195, 210), (160, 175, 190)], (200, 210, 220)),
+    (["mountain", "peak", "summit", "cliff", "ridge", "valley", "canyon", "gorge", "rock", "boulder", "stone", "hill", "highland"], "mountain", "gradient", [(140, 160, 200), (110, 130, 170), (80, 100, 130)], (90, 80, 70)),
+    (["cave", "cavern", "underground", "subterranean", "grotto", "tunnel", "mine", "dungeon"], "cave", "indoor", [(50, 40, 35), (30, 25, 20)], None),
+    (["city", "town", "village", "urban", "street", "building", "skyscraper", "neon", "lantern", "market", "temple", "palace", "castle", "fortress"], "city", "gradient", [(180, 180, 190), (140, 140, 160), (100, 100, 120)], (60, 60, 70)),
+    (["space", "cosmos", "galaxy", "planet", "nebula", "asteroid", "orbit", "satellite", "astronaut", "universe", "solar", "comet"], "space", "night", [(3, 1, 20), (8, 5, 40), (15, 10, 60)], (2, 1, 15)),
+    (["farm", "field", "pasture", "meadow", "grassland", "prairie", "ranch", "barn", "crop", "grain", "wheat", "hay", "orchard", "garden"], "farm", "gradient", [(160, 200, 130), (120, 160, 90)], (80, 120, 50)),
+    (["swamp", "marsh", "bog", "fen", "wetland", "bayou", "everglade", "mangrove"], "swamp", "forest", [(100, 140, 80), (60, 90, 50)], (50, 80, 40)),
+    (["river", "lake", "pond", "stream", "creek", "brook", "waterfall", "cascade"], "river", "ocean", [(80, 160, 210), (40, 100, 180)], None),
+]
+
+def _detect_biome(text: str) -> dict:
+    """Detect environmental setting from text. Returns bg config dict."""
+    text_lower = text.lower()
+    best_score = 0
+    best_biome = "gradient"
+    best_bg = {"type": "gradient", "colors": [(140, 160, 200), (100, 120, 170)], "horizon": 0.55, "ground_color": (80, 100, 70)}
+    for keywords, biome, bg_type, colors, ground in _BIOMES:
+        score = sum(2 if kw in text_lower else 0 for kw in keywords)
+        if score > best_score:
+            best_score = score
+            best_biome = biome
+            horizon = 0.6 if biome in ("desert", "farm", "arctic") else 0.55
+            best_bg = {"type": bg_type, "colors": [list(c) for c in colors], "horizon": horizon, "ground_color": list(ground) if ground else None}
+    return best_bg
+
+def _detect_mood(text: str) -> str:
+    """Detect emotional tone from text using expanded word sets."""
+    l = text.lower()
+    w = set(l.split())
+
+    fear     = {"fear","afraid","terrified","dread","horror","panic","scream","terror","nightmare","paralyzed","flee","cower","tremble","shudder","helpless","vulnerable","exposed","trapped","threat","danger","deadly","fatal","ominous","menace","dreadful"}
+    hope     = {"hope","brave","courage","light","dawn","survive","survival","discover","explore","journey","future","safe","safety","shelter","home","warm","together","family","guide","lead","peace","triumph","victory","hero","rescue","salvation","miracle","faith","dream","inspire","wonder"}
+    mystery  = {"mystery","mysterious","unknown","strange","weird","beyond","distant","fog","mist","hidden","secret","ancient","forgotten","lost","deep","depths","enigma","puzzle","curious","bizarre","uncanny","supernatural","magical","mythical","legend"}
+    peaceful = {"peaceful","calm","quiet","still","gentle","serene","tranquil","beautiful","awe","majestic","vast","endless","reflection","contemplate","gaze","sky","wind","breeze","soft","slow","lazy","stillness","harmony","balance","serenity","meditative"}
+    danger   = {"danger","threat","attack","strike","blood","wound","war","battle","fight","enemy","weapon","spear","arrow","sword","kill","death","destroy","crush","savage","brutal","violent","aggressive","predator","hunt","prey","tooth","claw","fang","venom","poison","ambush","pounce","chase"}
+    surprise = {"sudden","suddenly","unexpected","shock","stun","startle","blast","explode","burst","erupt","instant","immediately","abrupt","snap","crash","bang","pow","extraordinary","incredible","unbelievable","remarkable","strangest","weirdest","bizarre","freakish","fantastic"}
+    sadness  = {"sad","lonely","alone","isolation","isolated","abandon","forlorn","desolate","despair","grief","sorrow","heavy","weary","tired","lost","empty","void","numb","tear","cry","sob","mourn","funeral","grave","tomb"}
+    wonder   = {"wonder","amazing","astonish","extraordinary","marvel","spectacle","magnificent","glorious","sublime","breathtaking","stunning","fascinating","captivating","enchant","thrilling","exquisite","miracle","magical","mythical","fabled","epic","legendary"}
+
+    scores = [
+        ("somber",     len(w & fear) * 1.5 + len(w & sadness) * 1.2),
+        ("hopeful",    len(w & hope) * 1.5 + len(w & wonder) * 0.8),
+        ("mysterious", len(w & mystery) * 1.3 + len(w & surprise) * 0.5),
+        ("peaceful",   len(w & peaceful) * 1.5),
+        ("dramatic",   len(w & danger) * 1.5 + len(w & fear) * 0.8),
+        ("surprising", len(w & surprise) * 1.5),
+        ("sad",        len(w & sadness) * 1.5),
+        ("wonder",     len(w & wonder) * 1.5 + len(w & peaceful) * 0.5),
+    ]
+    best = max(scores, key=lambda x: x[1])
+    return best[0] if best[1] > 0 else "mysterious"
+
+def _extract_entities(text: str) -> list:
+    """Extract visual entities from text. Returns list of (type, color) tuples."""
+    l = text.lower()
+    found = []
+    seen_types = set()
+
+    # Entity map sorted by specificity: (word/phrase, element_type, color, weight)
+    ENTITIES = [
+        # ── Desert & Arid ──
+        ("lizard", "animal", (130, 160, 70), 3), ("horned lizard", "animal", (140, 170, 80), 5),
+        ("chameleon", "animal", (100, 180, 80), 3), ("gecko", "animal", (150, 180, 70), 3),
+        ("iguana", "animal", (120, 160, 90), 3), ("scorpion", "animal", (180, 120, 40), 4),
+        ("camel", "animal", (160, 130, 90), 4), ("coyote", "animal", (160, 140, 100), 4),
+        ("fox", "animal", (200, 120, 60), 4), ("vulture", "bird", (80, 60, 50), 4),
+        ("hawk", "bird", (60, 50, 40), 3), ("eagle", "bird", (50, 45, 35), 3),
+        ("rattlesnake", "animal", (160, 130, 70), 4), ("snake", "animal", (140, 160, 80), 3),
+        ("tortoise", "animal", (120, 140, 70), 3), ("armadillo", "animal", (150, 130, 100), 3),
+        ("cactus", "plant", (60, 140, 40), 4), ("agave", "plant", (80, 140, 60), 3),
+        ("yucca", "plant", (90, 150, 70), 3), ("palm", "tree", (60, 120, 40), 3),
+        ("dune", "hill", (200, 170, 120), 3), ("sand", "hill", (210, 190, 150), 2),
+        ("rock", "rock", (160, 140, 120), 3), ("boulder", "rock", (140, 130, 110), 3),
+        ("cracked", "path", (160, 140, 110), 2), ("dry", "path", (180, 160, 130), 1),
+
+        # ── Ocean & Aquatic ──
+        ("whale", "whale", (60, 70, 100), 4), ("orca", "whale", (40, 45, 60), 4),
+        ("shark", "shark", (80, 85, 95), 4), ("dolphin", "fish", (100, 140, 180), 3),
+        ("jellyfish", "fish", (200, 100, 200), 3), ("turtle", "animal", (80, 140, 60), 3),
+        ("crab", "animal", (200, 120, 80), 3), ("lobster", "animal", (200, 80, 60), 3),
+        ("starfish", "fish", (220, 150, 80), 3), ("coral", "fish", (200, 120, 160), 3),
+        ("seaweed", "plant", (60, 140, 60), 2), ("kelp", "plant", (50, 130, 50), 2),
+        ("wave", "wave", (40, 100, 200), 4), ("surf", "wave", (60, 120, 220), 3),
+
+        # ── Forest & Jungle ──
+        ("deer", "animal", (160, 120, 80), 4), ("bear", "animal", (100, 70, 50), 4),
+        ("wolf", "animal", (120, 110, 100), 4), ("moose", "animal", (130, 100, 70), 4),
+        ("rabbit", "animal", (180, 160, 140), 3), ("squirrel", "animal", (160, 120, 80), 3),
+        ("owl", "bird", (140, 120, 100), 4), ("woodpecker", "bird", (200, 60, 40), 3),
+        ("butterfly", "flower", (255, 200, 100), 3), ("firefly", "star", (255, 240, 100), 3),
+        ("mushroom", "flower", (220, 180, 160), 3), ("fern", "plant", (60, 150, 60), 3),
+        ("moss", "plant", (80, 160, 60), 2), ("vine", "plant", (60, 140, 40), 2),
+        ("log", "rock", (100, 70, 50), 2),
+
+        # ── Mountain & Cliff ──
+        ("cliff", "cliff", (100, 80, 60), 4), ("mountain", "mountain", (100, 90, 80), 4),
+        ("peak", "mountain", (140, 130, 150), 3), ("valley", "hill", (120, 140, 90), 3),
+        ("canyon", "cliff", (180, 130, 70), 4), ("rock", "rock", (160, 140, 120), 3),
+        ("boulder", "rock", (140, 130, 110), 3), ("avalanche", "mountain", (200, 210, 230), 3),
+
+        # ── Arctic & Snow ──
+        ("polar bear", "animal", (230, 230, 220), 5), ("penguin", "animal", (40, 40, 50), 4),
+        ("seal", "animal", (160, 150, 140), 3), ("walrus", "animal", (140, 120, 100), 3),
+        ("arctic fox", "animal", (240, 240, 235), 4), ("snow", "cloud", (240, 245, 250), 3),
+        ("ice", "water", (200, 220, 240), 3), ("glacier", "cliff", (180, 210, 230), 4),
+        ("igloo", "house", (200, 210, 220), 3),
+
+        # ── Farm & Meadow ──
+        ("horse", "animal", (100, 80, 60), 4), ("cow", "animal", (200, 180, 160), 4),
+        ("sheep", "animal", (220, 220, 210), 3), ("goat", "animal", (180, 160, 130), 3),
+        ("pig", "animal", (230, 180, 170), 3), ("chicken", "bird", (220, 200, 180), 3),
+        ("rooster", "bird", (200, 80, 50), 3), ("barn", "house", (160, 60, 40), 4),
+        ("tractor", "compass", (200, 60, 40), 3), ("hay", "plant", (210, 190, 100), 2),
+        ("fence", "fence", (120, 90, 60), 3), ("wheat", "grass", (210, 190, 80), 3),
+
+        # ── City & Urban ──
+        ("skyscraper", "building", (120, 130, 150), 4), ("tower", "building", (100, 110, 130), 3),
+        ("bridge", "building", (100, 80, 60), 3), ("church", "building", (180, 160, 140), 3),
+        ("castle", "building", (140, 120, 100), 4), ("temple", "building", (200, 180, 150), 4),
+        ("lamp", "lamp", (255, 220, 100), 3), ("window", "house", (255, 230, 150), 2),
+        ("door", "house", (100, 60, 40), 2), ("roof", "house", (140, 60, 40), 2),
+        ("street", "path", (80, 80, 90), 2), ("market", "house", (200, 160, 120), 3),
+
+        # ── Fantasy & Mythical ──
+        ("dragon", "sea_serpent", (60, 40, 80), 5), ("serpent", "sea_serpent", (40, 100, 60), 4),
+        ("monster", "sea_serpent", (50, 80, 60), 4), ("leviathan", "sea_serpent", (30, 60, 50), 5),
+        ("sea serpent", "sea_serpent", (40, 100, 60), 5), ("kraken", "sea_serpent", (50, 60, 80), 5),
+        ("unicorn", "animal", (255, 240, 250), 4), ("griffin", "animal", (200, 180, 100), 4),
+        ("phoenix", "bird", (220, 80, 40), 5), ("giant", "human", (100, 120, 100), 4),
+        ("witch", "human", (80, 60, 100), 3), ("wizard", "human", (60, 60, 120), 3),
+        ("fairy", "flower", (220, 200, 255), 3), ("elf", "human", (180, 200, 160), 3),
+        ("mermaid", "human", (180, 200, 220), 4), ("ghost", "cloud", (220, 220, 240), 3),
+        ("vampire", "human", (200, 200, 210), 3), ("zombie", "human", (120, 140, 100), 3),
+        ("skeleton", "human", (220, 210, 190), 3), ("demon", "animal", (80, 40, 40), 4),
+
+        # ── Celestial & Weather ──
+        ("sun", "sun", (255, 200, 80), 4), ("moon", "moon", (220, 220, 200), 4),
+        ("star", "star", (255, 240, 200), 3), ("constellation", "star", (200, 210, 255), 3),
+        ("comet", "star", (255, 220, 100), 3), ("planet", "globe", (100, 150, 200), 3),
+        ("rainbow", "moon_path", (255, 200, 150), 3), ("rain", "water", (100, 150, 200), 2),
+        ("storm", "wave", (30, 60, 120), 3), ("lightning", "fire", (255, 240, 200), 3),
+        ("cloud", "cloud", (200, 200, 210), 3), ("fog", "cloud", (180, 190, 200), 2),
+        ("mist", "cloud", (170, 185, 200), 2), ("hurricane", "wave", (40, 60, 100), 4),
+        ("tornado", "wave", (60, 50, 40), 4), ("sandstorm", "wave", (200, 180, 120), 4),
+        ("moonlight", "moon_path", (200, 210, 230), 3), ("sunset", "sun", (255, 180, 80), 3),
+        ("dawn", "sun", (255, 200, 120), 3), ("shooting star", "star", (255, 255, 200), 4),
+
+        # ── Body Parts ──
+        ("eye", "eye", (255, 250, 240), 4), ("eyes", "eye", (255, 250, 240), 4),
+        ("face", "eye", (235, 200, 175), 3), ("hand", "hand", (235, 200, 175), 3),
+        ("wing", "bird", (200, 180, 160), 3), ("feather", "bird", (220, 210, 200), 2),
+        ("claw", "hand", (180, 160, 130), 3), ("fang", "rock", (240, 240, 235), 3),
+        ("blood", "fire", (180, 30, 20), 4), ("teeth", "rock", (240, 240, 230), 2),
+
+        # ── Human & Social ──
+        ("human", "human", (80, 60, 120), 3), ("person", "human", (80, 60, 120), 3),
+        ("man", "human", (70, 50, 100), 3), ("woman", "human", (100, 80, 130), 3),
+        ("child", "human", (120, 110, 130), 3), ("people", "human", (80, 60, 120), 3),
+        ("crowd", "human", (80, 70, 110), 3), ("hunter", "human", (60, 40, 80), 4),
+        ("warrior", "human", (80, 50, 60), 3), ("king", "human", (120, 80, 60), 3),
+        ("queen", "human", (140, 100, 120), 3), ("baby", "human", (200, 180, 190), 3),
+        ("shadow", "shadow_figure", (20, 25, 30), 4), ("silhouette", "shadow_figure", (20, 25, 30), 4),
+        ("figure", "shadow_figure", (30, 35, 40), 3),
+
+        # ── Structures & Objects ──
+        ("house", "house", (180, 160, 140), 3), ("hut", "house", (160, 140, 100), 3),
+        ("cabin", "house", (120, 80, 50), 3), ("tent", "house", (200, 180, 160), 3),
+        ("ship", "ship", (80, 60, 40), 4), ("boat", "boat", (80, 55, 35), 4),
+        ("canoe", "canoe", (80, 55, 35), 4), ("raft", "canoe", (70, 50, 40), 3),
+        ("sail", "ship", (220, 210, 190), 3), ("anchor", "anchor", (80, 75, 70), 3),
+        ("totem", "totem", (120, 105, 85), 4), ("monolith", "totem", (100, 90, 75), 4),
+        ("pillar", "totem", (140, 130, 110), 3), ("stone", "rock", (160, 150, 130), 3),
+        ("fire", "fire", (220, 120, 40), 4), ("campfire", "fire", (220, 140, 60), 4),
+        ("flame", "fire", (240, 160, 40), 3), ("torch", "fire", (220, 160, 40), 3),
+        ("compass", "compass", (180, 150, 80), 3), ("map", "compass", (220, 200, 160), 3),
+        ("treasure", "star", (255, 220, 50), 3), ("crown", "crown", (220, 180, 50), 3),
+        ("sword", "rock", (180, 180, 190), 3), ("shield", "circle", (140, 80, 60), 3),
+        ("spear", "rock", (160, 140, 100), 3), ("arrow", "arrow", (160, 140, 100), 3),
+        ("bow", "moon_path", (120, 80, 50), 3), ("drum", "circle", (180, 120, 80), 3),
+        ("mask", "eye", (200, 180, 150), 3), ("scroll", "scroll", (220, 200, 170), 3),
+        ("book", "book", (140, 100, 60), 3), ("skull", "skull", (220, 210, 190), 4),
+        ("cross", "cross", (120, 80, 60), 3), ("bell", "circle", (200, 180, 100), 3),
+        ("coin", "star", (220, 190, 60), 2), ("key", "key", (180, 160, 100), 3),
+        ("lamp", "lamp", (255, 220, 100), 3), ("candle", "fire", (255, 200, 100), 3),
+        ("throne", "house", (120, 80, 60), 3), ("altar", "rock", (100, 90, 80), 3),
+
+        # ── Nature Elements (generic) ──
+        ("tree", "tree", (50, 120, 50), 3), ("flower", "flower", (255, 100, 150), 3),
+        ("grass", "grass", (50, 100, 40), 2), ("water", "water", (40, 100, 180), 3),
+        ("fire", "fire", (220, 120, 40), 3), ("earth", "hill", (120, 100, 60), 2),
+        ("ground", "path", (140, 120, 80), 1), ("sky", "cloud", (180, 200, 220), 2),
+        ("air", "cloud", (200, 210, 230), 1), ("wind", "arrow", (180, 200, 220), 2),
+        ("bird", "bird", (60, 50, 40), 3), ("fish", "fish", (200, 180, 100), 3),
+        ("animal", "animal", (100, 80, 60), 2), ("insect", "animal", (80, 120, 60), 2),
+
+        # ── Actions / Events ──
+        ("spray", "water", (180, 200, 230), 3), ("sprays", "water", (180, 200, 230), 3),
+        ("splash", "water", (180, 210, 240), 3), ("drip", "water", (100, 150, 200), 2),
+        ("stream", "water", (40, 100, 200), 3), ("flow", "water", (60, 120, 200), 2),
+        ("explosion", "fire", (255, 150, 50), 4), ("explode", "fire", (255, 120, 40), 4),
+        ("erupt", "fire", (255, 100, 30), 4), ("eruption", "fire", (255, 80, 20), 4),
+
+        # ── Colors / Descriptors that add visual meaning ──
+        ("red", "fire", (220, 40, 40), 2), ("golden", "sun", (255, 200, 80), 2),
+        ("silver", "moon", (200, 210, 220), 2), ("dark", "shadow_figure", (20, 25, 30), 1),
+        ("bright", "sun", (255, 240, 200), 1),         ("pale", "moon", (230, 230, 220), 1),
+        ("shadowy", "shadow_figure", (20, 25, 30), 2),
+
+        # ── Emotional / State words that need visual representation ──
+        ("confused", "eye", (200, 180, 160), 3), ("confusion", "eye", (200, 180, 160), 3),
+        ("shocked", "eye", (240, 230, 220), 4), ("shock", "eye", (240, 230, 220), 3),
+        ("frozen", "human", (60, 60, 80), 3), ("freezes", "human", (60, 60, 80), 3),
+        ("freeze", "human", (60, 60, 80), 3), ("still", "human", (60, 60, 80), 2),
+        ("stunned", "eye", (240, 230, 220), 3), ("surprise", "eye", (240, 230, 210), 3),
+        ("backs", "arrow", (160, 140, 100), 2), ("backing", "arrow", (160, 140, 100), 2),
+        ("retreat", "arrow", (160, 140, 100), 3), ("fleeing", "human", (80, 60, 80), 3),
+        ("runs", "human", (80, 60, 80), 2), ("running", "human", (80, 60, 80), 2),
+        ("waits", "human", (60, 60, 80), 2), ("waiting", "human", (60, 60, 80), 2),
+        ("happens", "star", (255, 240, 200), 3), ("happened", "star", (255, 240, 200), 3),
+        ("occurs", "star", (255, 240, 200), 2), ("occur", "star", (255, 240, 200), 2),
+        ("unexpected", "eye", (240, 230, 220), 4), ("sudden", "star", (255, 240, 200), 3),
+        ("suddenly", "star", (255, 240, 200), 3), ("blast", "fire", (255, 200, 60), 4),
+        ("burst", "fire", (255, 200, 40), 4), ("explosion", "fire", (255, 150, 50), 4),
+        ("erupts", "fire", (255, 100, 30), 4), ("erupted", "fire", (255, 100, 30), 4),
+        ("strange", "eye", (200, 180, 200), 3), ("bizarre", "eye", (200, 180, 220), 4),
+        ("weird", "eye", (180, 170, 200), 3), ("weirdest", "eye", (200, 180, 220), 4),
+        ("crazy", "eye", (240, 200, 200), 3), ("incredible", "star", (255, 240, 200), 4),
+        ("unbelievable", "star", (255, 240, 200), 4), ("remarkable", "star", (255, 240, 200), 3),
+        ("magical", "star", (255, 240, 220), 3), ("fantastic", "star", (255, 240, 200), 3),
+        ("welcome", "human", (80, 60, 120), 2), ("introducing", "human", (80, 60, 120), 2),
+        ("meet", "human", (80, 60, 120), 2), ("introduces", "human", (80, 60, 120), 2),
+        ("hero", "human", (100, 80, 60), 4), ("survivor", "human", (120, 140, 100), 4),
+        ("survivors", "human", (120, 140, 100), 4),
+    ]
+
+    words = l.split()
+    i = 0
+    while i < len(words):
+        word = words[i].strip(".,!?;:'\"()[]{}")
+        matched = False
+        # Try bigrams first (longest match)
+        if i < len(words) - 1:
+            bigram = word + " " + words[i+1].strip(".,!?;:'\"()[]{}")
+            for phrase, etype, color, weight in ENTITIES:
+                if phrase == bigram and etype not in seen_types:
+                    found.append((etype, color, weight))
+                    seen_types.add(etype)
+                    i += 2
+                    matched = True
+                    break
+        if not matched:
+            for phrase, etype, color, weight in ENTITIES:
+                if phrase == word and etype not in seen_types:
+                    found.append((etype, color, weight))
+                    seen_types.add(etype)
+                    matched = True
+                    break
+        i += 1
+
+    found.sort(key=lambda x: -x[2])
+    return found
+
+def _compose_narrative_position(scene_num: int, total: int) -> str:
+    """Determine narrative position: setup, build, tension, climax, resolution."""
+    if total <= 1:
+        return "neutral"
+    rel = scene_num / total
+    if rel <= 0.15:
+        return "setup"
+    elif rel <= 0.40:
+        return "build"
+    elif rel <= 0.60:
+        return "tension"
+    elif rel <= 0.80:
+        return "climax"
+    else:
+        return "resolution"
+
+def _infer_visuals_llm(narration: str, scene_num: int, total: int) -> dict | None:
+    """Pure local semantic engine — analyzes narration for mood, biomes, entities.
+    Understands narrative arcs. No API calls. Returns visual scene dict."""
+    text = narration
+
+    # ── Detect biome / setting ──
+    bg = _detect_biome(text)
+    biome_bg_type = bg["type"]
+
+    # ── Detect mood ──
+    mood = _detect_mood(text)
+
+    # ── Narrative position ──
+    narr_pos = _compose_narrative_position(scene_num, total)
+
+    # ── Extract entities ──
+    entities = _extract_entities(text)
+
+    # ── Build title from top entities ──
+    if entities:
+        title_part = entities[0][0].replace("_", " ").title()
+        title = title_part[:30]
+    else:
+        title = f"Scene {scene_num}"
+
+    # ── Mood color shifts background ──
+    colors = bg["colors"]
+    if mood == "somber":
+        colors = [[max(0, c[0]-40), max(0, c[1]-30), max(0, c[2]-20)] for c in colors]
+    elif mood == "hopeful":
+        colors = [[min(255, c[0]+30), min(255, c[1]+20), c[2]] for c in colors]
+    elif mood == "dramatic":
+        colors = [[min(255, c[0]+40), max(0, c[1]-20), max(0, c[2]-20)] for c in colors]
+    elif mood == "surprising":
+        colors = [[min(255, c[0]+50), c[1], c[2]] for c in colors]
+    elif mood == "sad":
+        colors = [[max(0, c[0]-20), max(0, c[1]-15), c[2]] for c in colors]
+
+    # ── Compose elements from entities ──
+    elements = []
+    center_x = 0.3
+    for i, (etype, ecolor, _) in enumerate(entities):
+        # Position varies by type
+        if etype in ("sun", "moon", "star", "cloud", "bird"):
+            px, py = 0.3 + i * 0.15, 0.12 + i * 0.06
+        elif etype in ("water", "wave", "moon_path"):
+            px, py = 0.5, 0.65
+        elif etype in ("mountain", "cliff", "hill", "building"):
+            px, py = 0.2 + i * 0.2, 0.55
+        elif etype in ("rock", "totem", "anchor", "fire", "campfire", "lamp"):
+            px, py = 0.5, 0.65
+        elif etype in ("animal", "human", "shadow_figure"):
+            px, py = 0.3 + i * 0.15, 0.6
+        elif etype in ("eye", "hand", "face"):
+            px, py = 0.5, 0.45
+        elif etype in ("path", "fence"):
+            px, py = 0.5, 0.55
+        elif etype in ("plant", "flower", "grass", "tree"):
+            px, py = 0.2 + i * 0.25, 0.65
+        else:
+            px, py = 0.3 + i * 0.15, 0.5 + i * 0.08
+
+        # Scale varies by type
+        scale = 1.0
+        if etype in ("mountain", "cliff", "whale", "sea_serpent", "wave"):
+            scale = 1.3
+        elif etype in ("star", "bird", "flower", "eye", "coin"):
+            scale = 0.7
+        elif etype in ("sun", "moon"):
+            scale = 0.9
+        elif etype in ("human", "shadow_figure", "animal"):
+            scale = 0.8
+
+        elements.append({
+            "type": etype, "x": min(px, 0.85), "y": min(py, 0.85),
+            "scale": scale, "fill": list(ecolor) if isinstance(ecolor, tuple) else ecolor
+        })
+
+    # ── Narrative arc influences composition ──
+    if narr_pos == "setup":
+        # Wide establishing shots — fewer, smaller elements, more negative space
+        for e in elements:
+            e["scale"] = e.get("scale", 1.0) * 0.7
+            e["y"] = min(e["y"] + 0.05, 0.85)
+    elif narr_pos == "tension":
+        # Tighter framing, more dramatic
+        for e in elements:
+            e["scale"] = e.get("scale", 1.0) * 1.2
+        if mood in ("dramatic", "mysterious", "surprising"):
+            colors = [[min(255, c[0]+20), max(0, c[1]-15), max(0, c[2]-10)] for c in colors]
+    elif narr_pos == "climax":
+        # Biggest, most dramatic
+        for e in elements:
+            e["scale"] = e.get("scale", 1.0) * 1.4
+    elif narr_pos == "resolution":
+        # Pull back, show the aftermath
+        for e in elements:
+            e["scale"] = e.get("scale", 1.0) * 0.85
+            e["y"] = min(e["y"] + 0.03, 0.85)
+
+    # ── Fallback if no entities found ──
+    if not elements:
+        if "desert" in text.lower() or "sand" in text.lower():
+            elements = [
+                {"type": "hill", "x": 0.5, "y": 0.65, "scale": 1.5, "fill": [200, 170, 120]},
+                {"type": "sun", "x": 0.5, "y": 0.15, "scale": 1.0, "fill": [255, 200, 80]},
+            ]
+        elif "predator" in text.lower() or "hunt" in text.lower():
+            elements = [{"type": "shadow_figure", "x": 0.5, "y": 0.6, "scale": 1.0, "fill": [20, 25, 30]}]
+        elif "blood" in text.lower() or "attack" in text.lower():
+            elements = [{"type": "fire", "x": 0.5, "y": 0.5, "scale": 0.8, "fill": [180, 30, 20]}]
+        else:
+            elements = [{"type": "cloud", "x": 0.5, "y": 0.3, "scale": 1.0, "fill": [200, 210, 220]}]
+
+    # ── Atmosphere ──
+    is_night = bg["type"] == "night"
+    star_count = 30 if is_night else 0
+    particles = "stars" if is_night else ("none")
+    fog = mood in ("mysterious", "somber", "sad")
+
+    # ── Camera ──
+    camera_map = {"setup": None, "build": "ken_burns_in", "tension": "dolly_in",
+                  "climax": "ken_burns_in", "resolution": "pan_left", "neutral": "ken_burns_in"}
+    camera = camera_map.get(narr_pos, "ken_burns_in")
+
+    return {
+        "title": title,
+        "mood": mood,
+        "camera": camera,
+        "visual": {
+            "scene_type": "story",
+            "bg": {"type": bg["type"], "colors": colors, "horizon": bg.get("horizon", 0.55),
+                   "ground_color": bg.get("ground_color")},
+            "elements": elements,
+            "atmosphere": {"particles": particles, "fog": fog, "star_count": star_count},
+        },
+    }
+
+
 def generate_script_from_narration(text: str) -> dict:
-    """Split pre-written narration into scenes. Keyword-based visuals — no LLM needed."""
+    """Split pre-written narration into scenes. Uses LLM for meaning-aware visuals
+    when available, falls back to keyword-based _infer_visuals()."""
     paragraphs = [p.strip() for p in re.split(r'\n\s*\n', text) if p.strip()]
 
     if len(paragraphs) < 4:
@@ -1251,34 +1798,112 @@ def generate_script_from_narration(text: str) -> dict:
     if len(paragraphs) < 2:
         paragraphs = [text]
 
-    title_words = paragraphs[0].split()[:6]
+    # Merge paragraphs into larger chunks for narrative coherence
+    merged = []
+    buffer = []
+    for p in paragraphs:
+        buffer.append(p)
+        word_count = sum(len(c.split()) for c in buffer)
+        if word_count >= 40 or len(buffer) >= 4:
+            merged.append(' '.join(buffer))
+            buffer = []
+    if buffer:
+        if merged:
+            merged[-1] = merged[-1] + ' ' + ' '.join(buffer)
+        else:
+            merged.append(' '.join(buffer))
+
+    # Split merged scenes at contrast markers (but/however/yet at sentence boundaries)
+    final_scenes = []
+    for m in merged:
+        parts = re.split(r'(?<=[.])\s+(?=(?:but|however|yet|instead|meanwhile|conversely|nevertheless|nonetheless|although|though|despite|unlike)\b)', m, flags=re.IGNORECASE)
+        final_scenes.extend(p.strip() for p in parts if p.strip())
+
+    title_words = final_scenes[0].split()[:6]
     title = " ".join(title_words).rstrip(".,!?")
 
     scenes = []
-    for i, para in enumerate(paragraphs):
+    # Track persistent story state across scenes for visual consistency
+    story_state = {"bg": None, "recent_entities": [], "scene_num": 0}
+
+    for i, para in enumerate(final_scenes):
         scene_num = i + 1
         raw_prompt = para.strip()
         if not raw_prompt:
             continue
 
-        visuals = _infer_visuals(raw_prompt, scene_num, len(paragraphs))
+        # Try LLM first for meaning-aware visuals
+        llm_result = _infer_visuals_llm(raw_prompt, scene_num, len(final_scenes))
+        if llm_result:
+            visuals = llm_result
+            print(f"  Scene {scene_num}/{len(final_scenes)}: LLM visual ✓")
+        else:
+            print(f"  Scene {scene_num}/{len(final_scenes)}: using keyword fallback")
+            visuals = _infer_visuals(raw_prompt, scene_num, len(final_scenes))
+        _enrich_story_context(visuals, raw_prompt, story_state, scene_num, len(final_scenes))
 
         scene = {
             "scene_num": scene_num,
-            "title": visuals["title"],
+            "title": visuals.get("title", " ".join(raw_prompt.split()[:4]).rstrip(".,!?")),
             "narration": raw_prompt,
-            "mood": visuals["mood"],
-            "camera": visuals["camera"],
-            "visual_type": visuals["visual_type"],
-            "visual": visuals["visual"],
+            "mood": visuals.get("mood", "peaceful"),
+            "camera": visuals.get("camera"),
+            "visual_type": visuals.get("visual", {}).get("scene_type", "story"),
+            "visual": visuals.get("visual", visuals),
         }
         scenes.append(scene)
         vt = scene["visual_type"]
         elems = len(scene["visual"]["elements"])
-        print(f"  Scene {scene_num}/{len(paragraphs)}: {vt:10s} {scene['mood']} ({elems} elems)")
+        print(f"           {vt:10s} {scene['mood']} ({elems} elems)")
 
     print(f"  Created {len(scenes)} scenes from narration")
     return {"title": title, "scenes": scenes}
+
+
+def _enrich_story_context(visuals, text, state, scene_num, total):
+    """Improve visual coherence by filtering elements and maintaining background consistency."""
+    t = text.lower()
+    vis = visuals.get("visual", {})
+    elements = vis.get("elements", [])
+
+    # Keep structural/chart elements and limit entity elements to 4 most relevant
+    kept = []
+    priority = []
+    for i, elem in enumerate(elements):
+        etype = elem.get("type", "")
+        if etype in ("text", "bar_chart", "pie_chart", "line_graph", "cycle_diagram", "venn_diagram", "comparison", "step_diagram", "network_diagram", "tree_diagram", "histogram", "scatter_plot"):
+            kept.append(elem)
+        elif etype in ("human", "doctor", "scientist"):
+            priority.append((0, elem))
+        elif etype == "map":
+            priority.append((0, elem))
+        elif elem.get("label", "") and len(elem["label"]) > 2:
+            if elem["label"].lower() in t:
+                priority.append((1, elem))
+            else:
+                priority.append((3, elem))
+        else:
+            priority.append((2, elem))
+
+    priority.sort(key=lambda x: x[0])
+    kept.extend(e[1] for e in priority[:max(5, 8 - len(kept))])
+    vis["elements"] = kept[:8]
+
+    # Background consistency: carry same bg type forward unless text strongly suggests change
+    if state["bg"] and scene_num > 1:
+        bg = vis.get("bg", {})
+        current_type = bg.get("type", "gradient") if isinstance(bg, dict) else "gradient"
+        if current_type != state["bg"] and scene_num < total:
+            if not re.search(r'\b(sunset|night|ocean|forest|indoor|desert|snow|fire|underwater|space)\b', t):
+                if isinstance(bg, dict):
+                    bg["type"] = state["bg"]
+                    vis["bg"] = bg
+    else:
+        bg = vis.get("bg", {})
+        if isinstance(bg, dict):
+            state["bg"] = bg.get("type", "gradient")
+    visuals["visual"] = vis
+
 
 
 def _fallback_script(topic: str) -> dict:

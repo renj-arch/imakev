@@ -1614,34 +1614,34 @@ class SketchGenerator:
         elif bg_type == "forest":
             sky = self._tc(bg.get("sky_color"), (180, 200, 180))
             horizon = bg.get("horizon", 0.5)
-            gh = int(self.h * horizon)
-            for y in range(gh):
-                t = y / max(gh, 1)
-                r = int(sky[0] - t * 20)
-                g = int(sky[1] - t * 15)
-                b = int(sky[2] - t * 10)
-                draw.line([(0, y), (self.w, y)], fill=(r, g, b))
-            if bg.get("ground_color"):
-                gc = self._tc(bg["ground_color"], (40, 80, 40))
-                for y in range(gh, self.h):
-                    t = (y - gh) / max(self.h - gh, 1)
-                    r = int(gc[0] + t * 10)
-                    g = int(gc[1] + t * 8)
-                    b = int(gc[2] + t * 5)
-                    draw.line([(0, y), (self.w, y)], fill=(r, g, b))
-            else:
-                for y in range(gh, self.h):
-                    t = (y - gh) / max(self.h - gh, 1)
-                    r = int(40 + t * 20)
-                    g = int(80 + t * 15)
-                    b = int(40 + t * 10)
-                    draw.line([(0, y), (self.w, y)], fill=(r, g, b))
 
         elif bg_type == "sunset":
             colors = [(0, (220, 100, 70)), (0.2, (200, 120, 90)),
                       (0.4, (160, 80, 100)), (0.6, (80, 50, 80)),
                       (1, self._tc(bg.get("ground_color"), (40, 50, 30)))]
             self.bg_gradient(draw, colors)
+
+        elif bg_type == "desert":
+            colors = [(0, self._tc(bg.get("sky_color"), (220, 180, 120))),
+                      (0.4, self._tc(bg.get("horizon_color"), (200, 155, 90))),
+                      (0.5, (190, 140, 80))]
+            self.bg_gradient(draw, colors)
+            horizon = bg.get("horizon", 0.55)
+            gh = int(self.h * horizon)
+            sand_top = self._tc(bg.get("ground_color"), (200, 170, 120))
+            sand_bot = self._tc(bg.get("ground_color"), (170, 140, 90))
+            for y in range(gh, self.h):
+                t = (y - gh) / max(self.h - gh, 1)
+                r = int(sand_top[0] + t * (sand_bot[0] - sand_top[0]))
+                g = int(sand_top[1] + t * (sand_bot[1] - sand_top[1]))
+                b = int(sand_top[2] + t * (sand_bot[2] - sand_top[2]))
+                draw.line([(0, y), (self.w, y)], fill=(r, g, b))
+            # Heat shimmer at horizon
+            for i in range(6):
+                shimmer_y = gh - 3 + i
+                shimmer_alpha = 30 - i * 4
+                if shimmer_alpha > 0:
+                    draw.line([(0, shimmer_y), (self.w, shimmer_y)], fill=(255, 220, 180, shimmer_alpha))
 
     def _render_landscape(self, draw, bg: dict):
         """Draw landscape features (mountains, ground detail, vegetation) on top of background."""
@@ -1650,7 +1650,7 @@ class SketchGenerator:
         horizon = bg.get("horizon", 0.55)
         horizon_y = int(self.h * horizon)
 
-        if bg_type in ("indoor", "solid", "ocean"):
+        if bg_type in ("indoor", "solid", "ocean", "desert", "arctic"):
             return
 
         if len(colors) >= 2:
@@ -1735,7 +1735,7 @@ class SketchGenerator:
         etype = elem.get("type", "").lower()
         x = int(elem.get("x", 0.5) * self.w)
         y = int(elem.get("y", 0.5) * self.h)
-        s = elem.get("scale", elem.get("size", 1.0)) * 5.0
+        s = (elem.get("scale") or elem.get("size") or 1.0) * 5.0
 
         # Colors
         fill = elem.get("fill", elem.get("fill_color", elem.get("color", None)))
@@ -1898,6 +1898,27 @@ class SketchGenerator:
         elif etype == "ship":
             self.draw_ship(draw, x, y, s, fill or (80, 60, 40), _tc(elem.get("sail_color", (220, 210, 190))))
 
+        elif etype == "wave":
+            self.draw_wave(draw, x, y, s, fill or (40, 100, 180))
+
+        elif etype == "canoe":
+            self.draw_canoe(draw, x, y, s, fill or (80, 55, 35))
+
+        elif etype == "whale":
+            self.draw_whale(draw, x, y, s, fill or (60, 70, 100))
+
+        elif etype == "shark":
+            self.draw_shark(draw, x, y, s, fill or (80, 85, 95))
+
+        elif etype == "sea_serpent" or etype == "seaserpent":
+            self.draw_sea_serpent(draw, x, y, s, fill or (40, 100, 60))
+
+        elif etype == "totem" or etype == "monolith":
+            self.draw_totem(draw, x, y, s, fill or (120, 105, 85))
+
+        elif etype == "anchor":
+            self.draw_anchor(draw, x, y, s, fill or (80, 75, 70))
+
         elif etype == "building":
             bw = int(elem.get("width", 0.12) * self.w)
             bh = int(elem.get("height", 0.25) * self.h)
@@ -2004,6 +2025,18 @@ class SketchGenerator:
             self.draw_waterfall(draw, x, y, s, fill or (100, 180, 255))
         elif etype in ("cave", "cavern"):
             self.draw_cave(draw, x, y, s, (fill[:3] if fill else (55, 45, 40)))
+        elif etype in ("cliff", "cliffs", "bluff", "bluffs"):
+            self.draw_cliff(draw, x, y, s, fill or (100, 80, 60))
+
+        elif etype in ("compass_rose", "wind_rose"):
+            self.draw_compass_rose(draw, x, y, s, fill or (180, 160, 120))
+
+        elif etype in ("shadow_figure", "silhouette", "shadow_man"):
+            self.draw_shadow_figure(draw, x, y, s, fill or (20, 25, 30))
+
+        elif etype in ("moon_path", "moonlight_path", "moon_reflection"):
+            self.draw_moon_path(draw, x, y, s, fill or (200, 210, 230))
+
         elif etype in ("island", "isle"):
             r = 15*s
             self.draw_circle(draw, x, y, r, fill=(180,200,100,200), stroke=(100,140,60,180), stroke_width=2)
@@ -2089,10 +2122,22 @@ class SketchGenerator:
                               window_color=_tc(elem.get("window_color", (255, 220, 100))) or (255, 220, 100))
 
         # ── Ship / boat aliases ──
-        elif etype in ("boat", "sailboat", "vessel", "raft", "canoe",
-                       "kayak", "rowboat", "warship", "galleon", "raft"):
+        elif etype in ("boat", "sailboat", "vessel", "raft",
+                        "kayak", "rowboat", "warship", "galleon"):
             self.draw_ship(draw, x, y, s, fill or (80, 60, 40),
                           _tc(elem.get("sail_color", (220, 210, 190))))
+
+        elif etype in ("canoe", "dugout"):
+            self.draw_canoe(draw, x, y, s, fill or (80, 55, 35))
+
+        elif etype in ("shark",):
+            self.draw_shark(draw, x, y, s, fill or (80, 85, 95))
+
+        elif etype in ("whale", "orca"):
+            self.draw_whale(draw, x, y, s, fill or (60, 70, 100))
+
+        elif etype in ("sea_serpent", "seaserpent", "leviathan"):
+            self.draw_sea_serpent(draw, x, y, s, fill or (40, 100, 60))
 
         # ── Weapon aliases ──
         elif etype in ("sword", "dagger", "knife", "blade", "spear",
@@ -2644,6 +2689,540 @@ class SketchGenerator:
             if i > 0:
                 self.draw_line(draw, chart_left, gy, chart_left - 4, gy, color=(100, 95, 90, 100), width=1)
 
+    def draw_wave(self, draw, x, y, size=1.0, color=(40, 100, 180), foam_color=(240, 245, 250)):
+        """Draw a dramatic curling ocean wave with foam, spray, and depth."""
+        s = max(size, 0.3)
+        c = tuple(color[:3])
+        fc = tuple(foam_color[:3])
+
+        # Underwater swirl (deep mass)
+        swirl_pts = []
+        for a in range(0, 220, 6):
+            rad = math.radians(a)
+            rw = 70 * s * (1 - (a / 220) * 0.4)
+            rx = x + math.cos(rad) * rw
+            ry = y - math.sin(rad) * 45 * s + 5 * s - (a / 220) * 20 * s
+            swirl_pts.append((rx, ry))
+        dc = self._darken(c, 50)
+        self.draw_polygon(draw, swirl_pts, fill=dc + (160,), stroke=dc + (200,), stroke_width=1)
+
+        # Wave body (curling shape with more dramatic arc)
+        pts = []
+        for a in range(0, 200, 5):
+            rad = math.radians(a)
+            rx = x + math.cos(rad) * 65 * s
+            ry = y - math.sin(rad) * 45 * s - (a / 200) * 35 * s
+            pts.append((rx, ry))
+        self.draw_polygon(draw, pts, fill=c + (190,), stroke=self._darken(c, 30) + (200,), stroke_width=2)
+
+        # Wave curl (the barrel) with highlight
+        for offset in (0, 3):
+            curl_pts = []
+            for a in range(180, 270, 5):
+                rad = math.radians(a)
+                rx = x + math.cos(rad) * (40 + offset) * s
+                ry = y - math.sin(rad) * (28 + offset) * s + 12 * s
+                curl_pts.append((rx, ry))
+            if curl_pts:
+                alpha = 140 if offset == 0 else 60
+                clr = self._lighten(c, 40) if offset == 0 else (255, 255, 255)
+                self.draw_polygon(draw, curl_pts, fill=clr + (alpha,), stroke=None, stroke_width=0)
+
+        # Foam at crest (thick, layered)
+        for layer in range(3):
+            offset_y = layer * 3
+            for i in range(10 + layer * 2):
+                fx = x + self.rng.randint(-25, 25) * s
+                fy = y - 42 * s + offset_y + self.rng.randint(-4, 4) * s
+                fr = (self.rng.randint(4, 12) - layer * 2) * s
+                fa = self.rng.randint(120 + layer * 30, 200 + layer * 10)
+                self.draw_circle(draw, int(fx), int(fy), max(int(fr), 1), fill=fc + (fa,))
+
+        # Spray droplets (fine mist)
+        for i in range(20):
+            sx = x + self.rng.randint(-35, 35) * s
+            sy = y - 48 * s - self.rng.randint(0, 18) * s
+            sr = self.rng.uniform(0.5, 3.0)
+            sa = self.rng.randint(60, 180)
+            self.draw_circle(draw, int(sx), int(sy), max(int(sr), 1), fill=(255, 255, 255, sa))
+
+        # Water surface base with ripples
+        for row in range(2):
+            wy = int(y + 22 * s + row * 8 * s)
+            self.draw_line(draw, int(x - 75 * s), wy, int(x + 75 * s), wy, color=self._darken(c, 10) + (80 + row * 40,), width=2)
+
+        # Foam trail on surface
+        for i in range(5):
+            ftx = int(x + self.rng.randint(-60, -20) * s)
+            fty = int(y + 22 * s + self.rng.randint(-2, 2) * s)
+            ftw = int(self.rng.randint(6, 14) * s)
+            self.draw_ellipse(draw, ftx, fty, ftw, int(2 * s), fill=fc + (self.rng.randint(60, 120),))
+
+    def draw_canoe(self, draw, x, y, size=1.0, color=(80, 55, 35)):
+        """Draw a primitive dugout canoe with paddlers."""
+        s = size
+        c = tuple(color[:3])
+
+        # Canoe hull (elongated oval)
+        hull_pts = []
+        for a in range(180, 360, 10):
+            rad = math.radians(a)
+            rx = x + math.cos(rad) * 55 * s
+            ry = y + math.sin(rad) * 12 * s
+            hull_pts.append((rx, ry))
+        self.draw_polygon(draw, hull_pts, fill=c + (200,), stroke=self._darken(c, 25) + (180,), stroke_width=2)
+
+        # Interior hollow
+        inner_pts = []
+        for a in range(180, 360, 10):
+            rad = math.radians(a)
+            rx = x + math.cos(rad) * 45 * s
+            ry = y + math.sin(rad) * 8 * s
+            inner_pts.append((rx, ry))
+        self.draw_polygon(draw, inner_pts, fill=self._darken(c, 20) + (150,))
+
+        # Human paddler 1 (forward)
+        self.draw_human(draw, int(x - 15 * s), int(y - 15 * s), size=s * 0.35, color=(60, 50, 80), skin_color=(230, 195, 170))
+
+        # Paddle 1
+        px1 = int(x - 25 * s)
+        py1 = int(y - 20 * s)
+        self.draw_line(draw, px1, py1, px1 - 20 * s, int(y + 15 * s), color=(160, 130, 80, 200), width=3)
+        self.draw_ellipse(draw, px1 - 22 * s, int(y + 10 * s), 8 * s, 6 * s, fill=(160, 130, 80, 180))
+
+        # Human paddler 2 (aft)
+        self.draw_human(draw, int(x + 20 * s), int(y - 15 * s), size=s * 0.35, color=(70, 60, 50), skin_color=(220, 185, 160))
+
+        # Paddle 2
+        px2 = int(x + 30 * s)
+        py2 = int(y - 20 * s)
+        self.draw_line(draw, px2, py2, px2 + 20 * s, int(y + 15 * s), color=(160, 130, 80, 200), width=3)
+        self.draw_ellipse(draw, px2 + 18 * s, int(y + 10 * s), 8 * s, 6 * s, fill=(160, 130, 80, 180))
+
+    def draw_whale(self, draw, x, y, size=1.0, color=(60, 70, 100)):
+        """Draw a breaching whale with water splash, barnacles, and detail."""
+        s = max(size, 0.3)
+        c = tuple(color[:3])
+
+        # Belly (lighter underside)
+        belly_pts = []
+        for a in range(0, 140, 8):
+            rad = math.radians(a)
+            rw = 50 * s * (1 - (a / 180) * 0.3)
+            rx = x + math.cos(rad) * rw
+            ry = y + math.sin(rad) * 18 * s
+            belly_pts.append((rx, ry))
+        belly_c = self._lighten(c, 40)
+        self.draw_polygon(draw, belly_pts, fill=belly_c + (180,), stroke=None, stroke_width=0)
+
+        # Body (dorsal curve)
+        body_pts = []
+        for a in range(0, 180, 6):
+            rad = math.radians(a)
+            rw = 52 * s * (1 - (a / 180) * 0.3)
+            rx = x + math.cos(rad) * rw
+            ry = y - math.sin(rad) * 26 * s
+            body_pts.append((rx, ry))
+        self.draw_polygon(draw, body_pts, fill=c + (200,), stroke=self._darken(c, 20) + (180,), stroke_width=2)
+
+        # Tail flukes (more dramatic spread)
+        tail_x = int(x - 45 * s)
+        tail_y = int(y - 5 * s)
+        fluke_c = self._darken(c, 15)
+        self.draw_polygon(draw, [
+            (tail_x, tail_y),
+            (tail_x - 18 * s, tail_y - 15 * s),
+            (tail_x - 6 * s, tail_y - 4 * s),
+        ], fill=fluke_c + (200,), stroke=self._darken(fluke_c, 20) + (180,), stroke_width=1)
+        self.draw_polygon(draw, [
+            (tail_x, tail_y),
+            (tail_x - 18 * s, tail_y + 15 * s),
+            (tail_x - 6 * s, tail_y + 4 * s),
+        ], fill=fluke_c + (200,), stroke=self._darken(fluke_c, 20) + (180,), stroke_width=1)
+
+        # Dorsal fin
+        df_x = int(x - 15 * s)
+        df_y = int(y - 24 * s)
+        self.draw_polygon(draw, [(df_x, df_y), (df_x - 4 * s, df_y - 8 * s), (df_x + 2 * s, df_y)], fill=c + (200,), stroke=self._darken(c, 20) + (160,), stroke_width=1)
+
+        # Pectoral fin
+        pf_x = int(x + 20 * s)
+        pf_y = int(y + 12 * s)
+        self.draw_polygon(draw, [(pf_x, pf_y), (pf_x - 8 * s, pf_y + 10 * s), (pf_x + 4 * s, pf_y)], fill=self._darken(c, 10) + (180,), stroke=None, stroke_width=0)
+
+        # Eye
+        self.draw_circle(draw, int(x + 32 * s), int(y - 12 * s), 2, fill=(20, 25, 30, 220))
+        # Eye highlight
+        self.draw_circle(draw, int(x + 33 * s), int(y - 13 * s), 1, fill=(200, 210, 230, 150))
+
+        # Blowhole spray (more dramatic)
+        for i in range(8):
+            bx = int(x + 12 * s + self.rng.randint(-6, 6) * s)
+            by = int(y - 30 * s - self.rng.randint(0, 12) * s)
+            br = self.rng.randint(2, 5)
+            self.draw_circle(draw, bx, by, br, fill=(220, 235, 250, self.rng.randint(80, 180)))
+        # Spray arcs
+        for arc_i in range(2):
+            spray_pts = []
+            base_x = int(x + 10 * s + arc_i * 8 * s)
+            base_y = int(y - 28 * s)
+            for t in range(0, 6):
+                tx = base_x + t * 4 * s
+                ty = base_y - (6 - t) * 3 * s
+                spray_pts.append((tx, ty))
+            for i in range(len(spray_pts)-1):
+                self.draw_line(draw, int(spray_pts[i][0]), int(spray_pts[i][1]),
+                              int(spray_pts[i+1][0]), int(spray_pts[i+1][1]),
+                              color=(220, 235, 250, 120), width=1)
+
+        # Splash at waterline
+        for i in range(10):
+            spx = int(x + self.rng.randint(-40, 40) * s)
+            spy = int(y + 22 * s + self.rng.randint(0, 6) * s)
+            spw = self.rng.randint(4, 10) * s
+            sph = 3 * s
+            self.draw_ellipse(draw, spx, spy, spw, max(int(sph), 1), fill=(200, 225, 245, self.rng.randint(80, 160)))
+
+        # Water trail behind tail
+        for i in range(4):
+            tx = int(tail_x - 25 * s - i * 8 * s)
+            ty = int(tail_y + 20 * s + self.rng.randint(-3, 3) * s)
+            tw = int(self.rng.randint(10, 18) * s)
+            self.draw_ellipse(draw, tx, ty, tw, int(2 * s), fill=(200, 225, 245, self.rng.randint(40, 90)))
+
+        # Barnacles on body
+        for _ in range(4):
+            bx = int(x + self.rng.randint(5, 25) * s * (1 if self.rng.random() < 0.5 else -1))
+            by = int(y + self.rng.randint(-15, 15) * s)
+            self.draw_circle(draw, bx, by, self.rng.randint(1, 2), fill=(140, 130, 110, self.rng.randint(100, 180)))
+
+    def draw_shark(self, draw, x, y, size=1.0, color=(80, 85, 95)):
+        """Draw a shark fin cutting through water, with submerged body hint."""
+        s = size
+        c = tuple(color[:3])
+
+        # Dorsal fin
+        fin_pts = []
+        for a in range(30, 150, 8):
+            rad = math.radians(a)
+            rx = x + math.cos(rad) * 18 * s
+            ry = y - math.sin(rad) * 20 * s
+            fin_pts.append((rx, ry))
+        self.draw_polygon(draw, fin_pts, fill=c + (200,), stroke=self._darken(c, 20) + (180,), stroke_width=2)
+
+        # Water disturbance around fin
+        for i in range(5):
+            wx = int(x + self.rng.randint(-20, 20) * s)
+            wy = int(y + self.rng.randint(-3, 3) * s)
+            self.draw_ellipse(draw, wx, wy, self.rng.randint(8, 16) * s, 3 * s, fill=(180, 210, 240, self.rng.randint(60, 120)))
+
+        # Submerged body hint (darker shape below surface)
+        body_pts = []
+        for a in range(0, 180, 10):
+            rad = math.radians(a)
+            rx = x + math.cos(rad) * 35 * s
+            ry = y + math.sin(rad) * 10 * s + 5 * s
+            body_pts.append((rx, ry))
+        self.draw_polygon(draw, body_pts, fill=self._darken(c, 40) + (60,), stroke=None)
+
+    def draw_sea_serpent(self, draw, x, y, size=1.0, color=(40, 100, 60), belly_color=(180, 200, 160)):
+        """Draw a mythical sea serpent — coiled body rising from water."""
+        s = size
+        c = tuple(color[:3])
+        bc = tuple(belly_color[:3])
+
+        # Coils (body loops emerging from water)
+        for i in range(3):
+            coil_y = y - i * 20 * s
+            coil_x = x + i * 8 * s
+            self.draw_ellipse(draw, int(coil_x), int(coil_y), 25 * s - i * 3 * s, 16 * s - i * 2 * s, fill=c + (180,), stroke=self._darken(c, 20) + (160,), stroke_width=2)
+            self.draw_ellipse(draw, int(coil_x + 2 * s), int(coil_y + 2 * s), 10 * s, 8 * s, fill=bc + (120,))
+
+        # Neck rising
+        neck_pts = [
+            (x - 5 * s, y - 55 * s),
+            (x + 5 * s, y - 65 * s),
+            (x - 8 * s, y - 80 * s),
+            (x + 12 * s, y - 85 * s),
+            (x + 3 * s, y - 90 * s),
+        ]
+        self.draw_line(draw, neck_pts[0][0], neck_pts[0][1], neck_pts[-1][0], neck_pts[-1][1], color=c + (180,), width=8)
+        for i in range(len(neck_pts) - 1):
+            self.draw_line(draw, neck_pts[i][0], neck_pts[i][1], neck_pts[i+1][0], neck_pts[i+1][1], color=c + (200,), width=6)
+
+        # Head
+        head_pts = []
+        for a in range(0, 360, 20):
+            rad = math.radians(a)
+            rx = neck_pts[-1][0] + math.cos(rad) * 12 * s
+            ry = neck_pts[-1][1] + math.sin(rad) * 8 * s
+            head_pts.append((rx, ry))
+        self.draw_polygon(draw, head_pts, fill=c + (200,), stroke=self._darken(c, 20) + (180,), stroke_width=2)
+
+        # Eyes (glowing)
+        self.draw_circle(draw, int(neck_pts[-1][0] + 4 * s), int(neck_pts[-1][1] - 3 * s), 2, fill=(255, 200, 50, 220))
+        self.draw_circle(draw, int(neck_pts[-1][0] + 4 * s), int(neck_pts[-1][1] - 3 * s), 4, fill=(200, 255, 100, 60))
+
+        # Forked tongue
+        tx = int(neck_pts[-1][0] + 14 * s)
+        ty = int(neck_pts[-1][1] + 2 * s)
+        self.draw_line(draw, int(neck_pts[-1][0] + 10 * s), int(neck_pts[-1][1] + 2 * s), tx + 8 * s, ty - 4 * s, color=(200, 80, 60, 200), width=2)
+        self.draw_line(draw, int(neck_pts[-1][0] + 10 * s), int(neck_pts[-1][1] + 2 * s), tx + 8 * s, ty + 4 * s, color=(200, 80, 60, 200), width=2)
+
+        # Water splash at base
+        for i in range(6):
+            spx = int(x + self.rng.randint(-20, 20) * s)
+            spy = int(y + 10 * s + self.rng.randint(0, 5) * s)
+            self.draw_ellipse(draw, spx, spy, self.rng.randint(5, 10) * s, 3 * s, fill=(200, 225, 245, self.rng.randint(80, 140)))
+
+    def draw_totem(self, draw, x, y, size=1.0, color=(120, 105, 85)):
+        """Draw an ancient standing stone / monolith / totem pole with carvings."""
+        s = size
+        c = tuple(color[:3])
+
+        # Main pillar
+        pw = 18 * s
+        ph = 80 * s
+        self.draw_rect(draw, int(x - pw), int(y - ph), int(pw * 2), int(ph), fill=c + (200,), stroke=self._darken(c, 20) + (180,), stroke_width=2)
+
+        # Top cap (rounded)
+        cap_pts = []
+        for a in range(0, 180, 10):
+            rad = math.radians(a)
+            rx = x + math.cos(rad) * pw
+            ry = y - ph + math.sin(rad) * 6 * s
+            cap_pts.append((rx, ry))
+        self.draw_polygon(draw, cap_pts, fill=self._lighten(c, 15) + (200,), stroke=self._darken(c, 20) + (180,), stroke_width=2)
+
+        # Carving lines (weathering / ancient symbols)
+        for i in range(3):
+            cy = y - ph + 15 * s + i * 20 * s
+            self.draw_line(draw, int(x - pw + 4 * s), int(cy), int(x + pw - 4 * s), int(cy), color=self._darken(c, 30) + (100,), width=1)
+            # Circle carving
+            self.draw_circle(draw, int(x), int(cy - 5 * s), int(4 * s), fill=None, stroke=self._darken(c, 30) + (80,), stroke_width=1)
+
+        # Base moss/grass
+        for i in range(5):
+            gx = int(x + self.rng.randint(-int(pw), int(pw)))
+            gy = int(y + self.rng.randint(-2, 2))
+            self.draw_line(draw, gx, gy, gx + self.rng.randint(-3, 3), gy - self.rng.randint(4, 8), color=(50 + self.rng.randint(0, 30), 100 + self.rng.randint(0, 30), 40 + self.rng.randint(0, 20), 150), width=1)
+
+    def draw_anchor(self, draw, x, y, size=1.0, color=(80, 75, 70)):
+        """Draw a classic nautical anchor with rope."""
+        s = size
+        c = tuple(color[:3])
+
+        # Main shaft
+        self.draw_line(draw, int(x), int(y - 35 * s), int(x), int(y + 20 * s), color=c + (200,), width=4)
+
+        # Crossbar
+        self.draw_line(draw, int(x - 15 * s), int(y - 28 * s), int(x + 15 * s), int(y - 28 * s), color=c + (200,), width=3)
+
+        # Ring at top
+        self.draw_circle(draw, int(x), int(y - 38 * s), int(4 * s), fill=None, stroke=c + (200,), stroke_width=2)
+
+        # Curved arms
+        arm_pts = []
+        for a in range(20, 160, 10):
+            rad = math.radians(a)
+            rx = x + math.cos(rad) * 22 * s
+            ry = y + 20 * s - math.sin(rad) * 10 * s
+            arm_pts.append((rx, ry))
+        self.draw_line(draw, arm_pts[0][0], arm_pts[0][1], arm_pts[-1][0], arm_pts[-1][1], color=c + (200,), width=3)
+
+        # Flukes (arrow tips at arm ends)
+        fluke_size = 6 * s
+        self.draw_polygon(draw, [
+            (arm_pts[-1][0], arm_pts[-1][1]),
+            (arm_pts[-1][0] + fluke_size, arm_pts[-1][1] - fluke_size),
+            (arm_pts[-1][0] + fluke_size, arm_pts[-1][1] + fluke_size),
+        ], fill=c + (200,))
+        self.draw_polygon(draw, [
+            (arm_pts[0][0], arm_pts[0][1]),
+            (arm_pts[0][0] - fluke_size, arm_pts[0][1] - fluke_size),
+            (arm_pts[0][0] - fluke_size, arm_pts[0][1] + fluke_size),
+        ], fill=c + (200,))
+
+        # Rope coiled on crossbar
+        rope_color = (160, 140, 100)
+        for i in range(3):
+            rx = int(x - 12 * s + i * 12 * s)
+            ry = int(y - 26 * s + i * 2 * s)
+            self.draw_circle(draw, rx, ry, int(2 * s), fill=rope_color + (200,))
+
+    def draw_cliff(self, draw, x, y, size=1.0, color=(100, 80, 60)):
+        """Draw a dramatic sea cliff with jagged edges, grass top, and erosion lines."""
+        s = max(size, 0.3)
+        c = tuple(color[:3])
+        w = int(120 * s)
+        h = int(180 * s)
+        left = int(x)
+        top = int(y - h)
+
+        # Cliff body (jagged polygon)
+        cliff_pts = [(left, int(y))]
+        segments = 10
+        for i in range(segments + 1):
+            t = i / segments
+            cx = left + w * t + self.rng.randint(-8, 8) * s
+            cy = top + h * (1 - t * 0.9) + self.rng.randint(-10, 10) * s * (1 - t)
+            cliff_pts.append((cx, cy))
+        cliff_pts.append((left + w, int(y)))
+        self.draw_polygon(draw, cliff_pts, fill=c + (220,), stroke=self._darken(c, 25) + (200,), stroke_width=2)
+
+        # Erosion lines / cracks
+        for _ in range(5):
+            ex1 = left + self.rng.randint(10, w - 10) * s
+            ey1 = top + self.rng.randint(20, h - 30) * s
+            ex2 = ex1 + self.rng.randint(-10, 10) * s
+            ey2 = ey1 + self.rng.randint(15, 30) * s
+            self.draw_line(draw, int(ex1), int(ey1), int(ex2), int(ey2),
+                          color=self._darken(c, 30) + (120,), width=1)
+
+        # Ledge highlights
+        for _ in range(3):
+            lx = left + self.rng.randint(5, w - 5) * s
+            ly = top + self.rng.randint(40, h - 40) * s
+            lw = self.rng.randint(8, 20) * s
+            self.draw_line(draw, int(lx), int(ly), int(lx + lw), int(ly),
+                          color=self._lighten(c, 30) + (80,), width=1)
+
+        # Grass on top
+        grass_c = (50, 90, 40)
+        for _ in range(8):
+            gx = left + self.rng.randint(5, w - 5) * s
+            gy = top + self.rng.randint(-3, 3) * s
+            gh = self.rng.randint(6, 14) * s
+            self.draw_line(draw, int(gx), int(gy), int(gx + self.rng.randint(-3, 3) * s), int(gy - gh),
+                          color=grass_c + (self.rng.randint(150, 210),), width=1)
+
+        # Wave crash at cliff base
+        foam_c = (240, 245, 250)
+        for i in range(6):
+            fx = left + self.rng.randint(5, w - 5) * s
+            fy = int(y - self.rng.randint(0, 8) * s)
+            fr = self.rng.randint(3, 8) * s
+            self.draw_circle(draw, int(fx), int(fy), max(int(fr), 1),
+                            fill=foam_c + (self.rng.randint(80, 160),))
+
+    def draw_compass_rose(self, draw, x, y, size=1.0, color=(180, 160, 120)):
+        """Draw a compass rose / wind rose for navigation charts."""
+        s = max(size, 0.3)
+        c = tuple(color[:3])
+
+        # Outer ring
+        outer_r = int(30 * s)
+        inner_r = int(26 * s)
+        draw.ellipse([x - outer_r, y - outer_r, x + outer_r, y + outer_r],
+                     fill=None, outline=c + (200,), width=2)
+        draw.ellipse([x - inner_r, y - inner_r, x + inner_r, y + inner_r],
+                     fill=None, outline=c + (120,), width=1)
+
+        # Cardinal points (N, S, E, W)
+        directions = [(0, -1, "N", (200, 60, 60)), (0, 1, "S", c),
+                      (1, 0, "E", c), (-1, 0, "W", c)]
+        for dx, dy, label, lc in directions:
+            tip = (int(x + dx * outer_r), int(y + dy * outer_r))
+            base1 = (int(x + dx * 8 * s - dy * 8 * s), int(y + dy * 8 * s + dx * 8 * s))
+            base2 = (int(x + dx * 8 * s + dy * 8 * s), int(y + dy * 8 * s - dx * 8 * s))
+            self.draw_polygon(draw, [tip, base1, base2], fill=lc + (200,),
+                            stroke=self._darken(lc, 20) + (180,), stroke_width=1)
+            # Label
+            lx = int(x + dx * (outer_r + 12))
+            ly = int(y + dy * (outer_r + 12))
+            draw.text((lx, ly), label, fill=c + (200,),
+                     font=self._get_font(12 * s) if hasattr(self, '_get_font') else None,
+                     anchor="mm")
+
+        # Intercardinal points
+        for dx, dy in [(0.707, -0.707), (0.707, 0.707), (-0.707, -0.707), (-0.707, 0.707)]:
+            tip = (int(x + dx * outer_r), int(y + dy * outer_r))
+            base1 = (int(x + dx * 5 * s - dy * 5 * s), int(y + dy * 5 * s + dx * 5 * s))
+            base2 = (int(x + dx * 5 * s + dy * 5 * s), int(y + dy * 5 * s - dx * 5 * s))
+            self.draw_polygon(draw, [tip, base1, base2], fill=self._lighten(c, 30) + (160,), stroke=None, stroke_width=0)
+
+        # Center dot
+        self.draw_circle(draw, x, y, 3, fill=c + (220,))
+
+    def draw_shadow_figure(self, draw, x, y, size=1.0, color=(20, 25, 30)):
+        """Draw a dramatic silhouette/shadow figure - backlit, mysterious."""
+        s = max(size, 0.3)
+        c = tuple(color[:3])
+
+        # Head
+        head_r = int(8 * s)
+        self.draw_circle(draw, x, int(y - 40 * s), head_r, fill=c + (220,))
+
+        # Body
+        body_pts = [
+            (x - 12 * s, int(y - 32 * s)),
+            (x + 12 * s, int(y - 32 * s)),
+            (x + 14 * s, int(y)),
+            (x - 14 * s, int(y)),
+        ]
+        self.draw_polygon(draw, body_pts, fill=c + (220,), stroke=None, stroke_width=0)
+
+        # Arms (dramatic outstretched pose)
+        # Left arm
+        arm_pts = [(x - 10 * s, int(y - 26 * s)),
+                   (x - 28 * s, int(y - 32 * s)),
+                   (x - 32 * s, int(y - 28 * s))]
+        self.draw_polygon(draw, arm_pts, fill=c + (220,), stroke=None, stroke_width=0)
+        # Right arm
+        arm_pts2 = [(x + 10 * s, int(y - 26 * s)),
+                    (x + 28 * s, int(y - 32 * s)),
+                    (x + 32 * s, int(y - 28 * s))]
+        self.draw_polygon(draw, arm_pts2, fill=c + (220,), stroke=None, stroke_width=0)
+
+        # Legs
+        leg_len = 20 * s
+        self.draw_polygon(draw, [
+            (x - 6 * s, int(y)),
+            (x + 2 * s, int(y)),
+            (x + 4 * s, int(y + leg_len)),
+            (x - 8 * s, int(y + leg_len)),
+        ], fill=c + (220,), stroke=None, stroke_width=0)
+        self.draw_polygon(draw, [
+            (x - 2 * s, int(y)),
+            (x + 6 * s, int(y)),
+            (x + 8 * s, int(y + leg_len)),
+            (x - 4 * s, int(y + leg_len)),
+        ], fill=c + (220,), stroke=None, stroke_width=0)
+
+        # Rim light (subtle glow on one side)
+        glow_pts = [(x + 12 * s, int(y - 28 * s)),
+                    (x + 14 * s, int(y - 20 * s)),
+                    (x + 12 * s, int(y))]
+        self.draw_polygon(draw, glow_pts, fill=(255, 220, 150, 40), stroke=None, stroke_width=0)
+
+    def draw_moon_path(self, draw, x, y, size=1.0, color=(200, 210, 230)):
+        """Draw moonlight reflection path on water - shimmering, ethereal."""
+        s = max(size, 0.3)
+        c = tuple(color[:3])
+        path_width = int(40 * s)
+        path_height = int(100 * s)
+        left = int(x - path_width // 2)
+
+        # Layered shimmer columns
+        for col in range(7):
+            cx = left + col * (path_width // 7)
+            base_alpha = 100 - col * 10
+            for row in range(12):
+                ry = int(y + row * (path_height // 12))
+                rw = self.rng.randint(3, 8) * s
+                ra = self.rng.randint(max(0, base_alpha - 40), base_alpha)
+                self.draw_ellipse(draw, int(cx - rw // 2), ry, int(rw), max(int(2 * s), 1),
+                                fill=self._lighten(c, self.rng.randint(0, 20)) + (ra,))
+
+        # Bright center path
+        for row in range(10):
+            cy = int(y + row * (path_height // 10))
+            cw = self.rng.randint(6, 14) * s
+            ca = self.rng.randint(100, 200) - row * 5
+            if ca > 30:
+                self.draw_ellipse(draw, int(x - cw // 2), cy, int(cw), max(int(2 * s), 1),
+                                fill=(255, 255, 250, max(ca, 20)))
+
     def _post_process(self, canvas: Image.Image, mood: str = "", style: dict = {}) -> Image.Image:
         """Apply final touches: rectangular vignette, grain, lighting."""
         grain_intensity = style.get("grain", 0.12)
@@ -2722,7 +3301,7 @@ Output a JSON scene description with this exact structure:
   }},
   "elements": [
     {{
-      "type": "mountain|tree|cloud|water|human|house|hill|sun|moon|star|circle|rect|polygon|line|text|label|ship|building|cannon|flag|x_mark|arrow|grass|path",
+      "type": "mountain|tree|cloud|water|human|house|hill|sun|moon|star|circle|rect|polygon|line|text|label|ship|building|cannon|flag|x_mark|arrow|grass|path|bird|animal|fish|flower|fire|cave|volcano|wave|canoe|whale|shark|sea_serpent|totem|anchor|compass|globe|cliff|compass_rose|shadow_figure|moon_path",
       "x": 0.0-1.0,
       "y": 0.0-1.0,
       "scale": 0.5-2.0 or null,

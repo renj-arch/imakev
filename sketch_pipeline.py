@@ -146,6 +146,176 @@ def draw_fence(draw, x, y, w, h, s=1.0):
     _stroke(draw, [(x, y-h*0.4), (x+w, y-h*0.4)], w=2, color=(70,55,35), amp=0.5)
     _stroke(draw, [(x, y-h*0.7), (x+w, y-h*0.7)], w=2, color=(70,55,35), amp=0.5)
 
+def draw_wave(draw, cx, cy, s, color=(40, 100, 180)):
+    """Hand-drawn curling wave with foam."""
+    for layer in range(3):
+        pts = []
+        for i in range(12):
+            t = i / 11
+            px = cx - 60*s + t * 120*s
+            py = cy - math.sin(t * 6.28 * 1.5 + layer) * 15*s - layer * 8*s
+            pts.append((px, py))
+        _stroke(draw, pts, w=3-layer, color=(*[c-20*layer for c in color], 180-layer*30), amp=1.5)
+    # Foam dots
+    for _ in range(10):
+        fx = cx + rng.randint(-40, 40)*s
+        fy = cy - 25*s + rng.randint(-5, 5)*s
+        _circle(draw, fx, fy, rng.randint(3, 6)*s, fill_c=(240, 245, 250, rng.randint(100, 200)), line_c=None)
+    # Spray
+    for _ in range(8):
+        sx = cx + rng.randint(-30, 30)*s
+        sy = cy - 35*s - rng.randint(0, 10)*s
+        _circle(draw, sx, sy, rng.randint(1, 3), fill_c=(255, 255, 255, rng.randint(80, 150)), line_c=None)
+
+def draw_canoe(draw, cx, cy, s, color=(80, 55, 35)):
+    """Primitive dugout canoe with paddlers."""
+    hull = [(cx-50*s, cy), (cx-40*s, cy-12*s), (cx, cy-15*s), (cx+40*s, cy-12*s), (cx+50*s, cy)]
+    _fill(draw, hull, (*color, 150), amp=1.5)
+    _stroke(draw, hull+[hull[0]], w=3, color=(*[c-15 for c in color], 200), amp=1.2)
+    # Hollow
+    inner = [(cx-42*s, cy-2*s), (cx-35*s, cy-10*s), (cx, cy-12*s), (cx+35*s, cy-10*s), (cx+42*s, cy-2*s)]
+    _fill(draw, inner, color, amp=1)
+    # Paddler 1
+    draw_human(draw, cx-18*s, cy-18*s, s*0.4, shirt=(60, 50, 80))
+    # Paddle
+    _stroke(draw, [(cx-25*s, cy-22*s), (cx-40*s, cy+5*s)], w=2.5, color=(160, 130, 80), amp=1)
+    _fill(draw, [(cx-42*s, cy+3*s), (cx-38*s, cy+8*s), (cx-40*s, cy+8*s)], (160, 130, 80, 180), amp=1)
+    # Paddler 2
+    draw_human(draw, cx+22*s, cy-18*s, s*0.4, shirt=(70, 60, 50))
+    _stroke(draw, [(cx+30*s, cy-22*s), (cx+45*s, cy+5*s)], w=2.5, color=(160, 130, 80), amp=1)
+    _fill(draw, [(cx+43*s, cy+3*s), (cx+47*s, cy+8*s), (cx+45*s, cy+8*s)], (160, 130, 80, 180), amp=1)
+
+def draw_whale(draw, cx, cy, s, color=(60, 70, 100)):
+    """Hand-drawn whale breaching."""
+    body = [(cx-45*s, cy-5*s), (cx-30*s, cy-22*s), (cx, cy-28*s), (cx+30*s, cy-22*s), (cx+40*s, cy-5*s)]
+    _fill(draw, body, (*color, 180), amp=2)
+    _stroke(draw, body+[body[0]], w=2.5, color=(*[c-15 for c in color], 200), amp=1.5)
+    # Tail
+    _stroke(draw, [(cx-42*s, cy-5*s), (cx-55*s, cy-20*s), (cx-50*s, cy-8*s)], w=2.5, color=color, amp=1.5)
+    _stroke(draw, [(cx-42*s, cy-5*s), (cx-55*s, cy+10*s), (cx-50*s, cy-2*s)], w=2.5, color=color, amp=1.5)
+    # Eye
+    _circle(draw, cx+25*s, cy-15*s, 2, fill_c=(20, 25, 30), line_c=None)
+    # Spray
+    for _ in range(5):
+        _circle(draw, cx+5*s+rng.randint(-3,3)*s, cy-32*s-rng.randint(0,6)*s, rng.randint(2,4), fill_c=(200, 230, 250, rng.randint(80, 160)), line_c=None)
+
+def draw_shark(draw, cx, cy, s, color=(80, 85, 95)):
+    """Hand-drawn shark fin."""
+    fin = [(cx-10*s, cy+5*s), (cx, cy-25*s), (cx+10*s, cy+5*s)]
+    _fill(draw, fin, (*color, 200), amp=1.5)
+    _stroke(draw, fin+[fin[0]], w=2, color=(*[c-20 for c in color], 200), amp=1)
+    # Water ripples
+    for i in range(3):
+        rx = cx + rng.randint(-15, 15)*s
+        ry = cy + 3*s + i*4*s
+        _stroke(draw, [(rx-10*s, ry), (rx+10*s, ry)], w=1, color=(100, 150, 200, 80), amp=0.5)
+
+def draw_sea_serpent(draw, cx, cy, s, color=(40, 100, 60)):
+    """Hand-drawn sea serpent — coils and head."""
+    for i in range(3):
+        coil_cx = cx + i*6*s
+        coil_cy = cy - i*15*s
+        _circle(draw, coil_cx, coil_cy, 12*s-i*2*s, fill_c=(*color, 150-i*30), line_c=(*[c-10 for c in color], 200-i*30))
+    # Neck
+    _stroke(draw, [(cx+5*s, cy-45*s), (cx+8*s, cy-60*s), (cx+15*s, cy-70*s)], w=5, color=(*color, 200), amp=1.5)
+    # Head
+    head_cx, head_cy = cx+15*s, cy-70*s
+    _circle(draw, head_cx, head_cy, 10*s, fill_c=(*color, 200), line_c=(*[c-10 for c in color], 200))
+    # Eyes
+    _circle(draw, head_cx+5*s, head_cy-3*s, 2, fill_c=(255, 200, 50), line_c=None)
+    # Tongue
+    _stroke(draw, [(head_cx+8*s, head_cy+2*s), (head_cx+18*s, head_cy-2*s)], w=1.5, color=(200, 80, 60), amp=0.5)
+    _stroke(draw, [(head_cx+8*s, head_cy+2*s), (head_cx+18*s, head_cy+6*s)], w=1.5, color=(200, 80, 60), amp=0.5)
+
+def draw_totem(draw, cx, cy, s, color=(120, 105, 85)):
+    """Hand-drawn standing stone / monolith."""
+    pw = 15*s
+    ph = 70*s
+    pillar = [(cx-pw, cy), (cx-pw, cy-ph), (cx+pw, cy-ph), (cx+pw, cy)]
+    _fill(draw, pillar, (*color, 180), amp=2)
+    _stroke(draw, pillar+[pillar[0]], w=3, color=(*[c-20 for c in color], 200), amp=1.5)
+    # Carvings
+    for i in range(3):
+        cy_carv = cy-ph+15*s+i*18*s
+        _stroke(draw, [(cx-pw+4*s, cy_carv), (cx+pw-4*s, cy_carv)], w=1.5, color=(*[c-30 for c in color], 100), amp=0.5)
+        _circle(draw, cx, cy_carv-4*s, 3*s, fill_c=None, line_c=(*[c-30 for c in color], 80))
+
+def draw_anchor(draw, cx, cy, s, color=(80, 75, 70)):
+    """Hand-drawn nautical anchor."""
+    _stroke(draw, [(cx, cy-30*s), (cx, cy+20*s)], w=4, color=(*color, 200), amp=0.8)
+    _stroke(draw, [(cx-12*s, cy-22*s), (cx+12*s, cy-22*s)], w=3, color=(*color, 200), amp=0.8)
+    _circle(draw, cx, cy-34*s, 4*s, fill_c=None, line_c=(*color, 200))
+    # Curved arms
+    pts = []
+    for a in range(30, 150, 10):
+        rad = math.radians(a)
+        pts.append((cx+math.cos(rad)*18*s, cy+18*s-math.sin(rad)*8*s))
+    _stroke(draw, pts, w=3, color=(*color, 200), amp=1)
+    # Flukes
+    _fill(draw, [(pts[-1][0], pts[-1][1]), (pts[-1][0]+5*s, pts[-1][1]-5*s), (pts[-1][0]+5*s, pts[-1][1]+5*s)], (*color, 200), amp=1)
+    _fill(draw, [(pts[0][0], pts[0][1]), (pts[0][0]-5*s, pts[0][1]-5*s), (pts[0][0]-5*s, pts[0][1]+5*s)], (*color, 200), amp=1)
+
+def draw_cliff(draw, cx, cy, s, color=(100, 80, 60)):
+    c = color
+    w, h = int(100*s), int(150*s)
+    pts = [(cx, cy)]
+    for i in range(9):
+        t = i / 8
+        pts.append((cx + w*t + rng.randint(-6,6)*s, cy - h*(1-t*0.9) + rng.randint(-8,8)*s*(1-t)))
+    pts.append((cx+w, cy))
+    _fill(draw, pts, (*c, 200), amp=2)
+    _stroke(draw, pts+[pts[0]], w=2.5, color=(*[v-20 for v in c],200), amp=1.5)
+    for _ in range(4):
+        _stroke(draw, [(cx+rng.randint(10,w-10)*s, cy-h+rng.randint(20,h-20)*s),
+                        (cx+rng.randint(10,w-10)*s, cy-h+rng.randint(40,h-10)*s)],
+                w=1.5, color=(*[v-30 for v in c],100), amp=1)
+    for _ in range(5):
+        _circle(draw, cx+rng.randint(5,w-5)*s, int(cy-h+rng.randint(-2,5)*s),
+                rng.randint(3,7)*s, fill_c=(240,245,250,rng.randint(80,150)), line_c=None)
+
+def draw_compass_rose(draw, cx, cy, s, color=(180, 160, 120)):
+    c = color
+    r = int(28*s)
+    _circle(draw, cx, cy, r, fill_c=None, line_c=(*c,200))
+    _circle(draw, cx, cy, int(24*s), fill_c=None, line_c=(*c,100))
+    for dx, dy, label, lc in [(0,-1,"N",(200,60,60)),(0,1,"S",c),(1,0,"E",c),(-1,0,"W",c)]:
+        tip = (int(cx+dx*r), int(cy+dy*r))
+        b1 = (int(cx+dx*6*s-dy*6*s), int(cy+dy*6*s+dx*6*s))
+        b2 = (int(cx+dx*6*s+dy*6*s), int(cy+dy*6*s-dx*6*s))
+        _fill(draw, [tip, b1, b2], (*lc,200), amp=1)
+        _stroke(draw, [tip, b1, b2, tip], w=1.5, color=(*[v-20 for v in lc],200), amp=1)
+    for dx, dy in [(0.707,-0.707),(0.707,0.707),(-0.707,-0.707),(-0.707,0.707)]:
+        tip = (int(cx+dx*r), int(cy+dy*r))
+        b1 = (int(cx+dx*4*s-dy*4*s), int(cy+dy*4*s+dx*4*s))
+        b2 = (int(cx+dx*4*s+dy*4*s), int(cy+dy*4*s-dx*4*s))
+        _fill(draw, [tip, b1, b2], (*[v+30 for v in c],160), amp=1)
+    _circle(draw, cx, cy, 3, fill_c=(*c,220), line_c=None)
+
+def draw_shadow_figure(draw, cx, cy, s, color=(20, 25, 30)):
+    c = color
+    hr = int(7*s)
+    _circle(draw, cx, int(cy-38*s), hr, fill_c=(*c,200), line_c=None)
+    body = [(cx-10*s, cy-30*s), (cx+10*s, cy-30*s), (cx+12*s, cy), (cx-12*s, cy)]
+    _fill(draw, body, (*c,200), amp=1)
+    arm1 = [(cx-8*s, cy-24*s), (cx-24*s, cy-28*s), (cx-28*s, cy-24*s)]
+    _fill(draw, arm1, (*c,200), amp=1)
+    arm2 = [(cx+8*s, cy-24*s), (cx+24*s, cy-28*s), (cx+28*s, cy-24*s)]
+    _fill(draw, arm2, (*c,200), amp=1)
+    leg1 = [(cx-5*s, cy), (cx+2*s, cy), (cx+3*s, cy+18*s), (cx-6*s, cy+18*s)]
+    _fill(draw, leg1, (*c,200), amp=1)
+    leg2 = [(cx-1*s, cy), (cx+5*s, cy), (cx+6*s, cy+18*s), (cx-3*s, cy+18*s)]
+    _fill(draw, leg2, (*c,200), amp=1)
+    _fill(draw, [(cx+11*s, cy-26*s), (cx+12*s, cy-18*s), (cx+11*s, cy)], (255,220,150,30), amp=0)
+
+def draw_moon_path(draw, cx, cy, s, color=(200, 210, 230)):
+    c = color
+    for col in range(5):
+        cx2 = cx - 15*s + col * 7*s
+        for row in range(8):
+            ry = cy + row * 10*s
+            rw = rng.randint(3, 6) * s
+            _circle(draw, int(cx2), int(ry), max(int(rw//2), 1), fill_c=(*[v+10 for v in c], rng.randint(60, 140)), line_c=None)
+
 def draw_road(draw, x, y, w, h):
     for i in range(int(h)):
         t = i/h
@@ -290,6 +460,13 @@ OBJECT_RENDERERS = {
     "fire": draw_fire,
     "human": draw_human, "person": draw_human, "man": draw_human, "woman": draw_human,
     "horse": draw_horse, "dog": draw_dog, "cat": draw_cat,
+    "wave": draw_wave, "canoe": draw_canoe, "whale": draw_whale, "shark": draw_shark,
+    "sea_serpent": draw_sea_serpent, "seaserpent": draw_sea_serpent,
+    "totem": draw_totem, "monolith": draw_totem, "anchor": draw_anchor,
+    "cliff": lambda d,cx,cy,s: draw_cliff(d, cx, cy, s),
+    "compass_rose": lambda d,cx,cy,s: draw_compass_rose(d, cx, cy, s),
+    "shadow_figure": lambda d,cx,cy,s: draw_shadow_figure(d, cx, cy, s),
+    "moon_path": lambda d,cx,cy,s: draw_moon_path(d, cx, cy, s),
 }
 
 OBJECT_KEYWORDS = {
@@ -310,6 +487,17 @@ OBJECT_KEYWORDS = {
     "fire": "fire", "campfire": "fire",
     "human": "human", "person": "human", "man": "human", "woman": "human", "people": "human",
     "riding": "human",
+    "wave": "wave", "waves": "wave", "storm": "wave", "surf": "wave",
+    "canoe": "canoe", "raft": "canoe", "dugout": "canoe",
+    "whale": "whale",
+    "shark": "shark",
+    "sea_serpent": "sea_serpent", "monster": "sea_serpent", "serpent": "sea_serpent", "leviathan": "sea_serpent",
+    "totem": "totem", "monolith": "totem", "standing stone": "totem", "pillar": "totem",
+    "anchor": "anchor",
+    "cliff": "cliff", "cliffs": "cliff", "bluff": "cliff",
+    "compass": "compass_rose", "compass rose": "compass_rose", "wind rose": "compass_rose",
+    "shadow": "shadow_figure", "silhouette": "shadow_figure",
+    "moonlight": "moon_path", "moon path": "moon_path", "reflection": "moon_path",
 }
 
 def _keyword_parse(prompt: str) -> dict:
@@ -340,6 +528,14 @@ def _keyword_parse(prompt: str) -> dict:
         elif obj["name"] in ("mountain", "tree"): oy = 0.5; size = 1.2
         elif obj["name"] in ("sun", "moon", "star", "cloud"): oy = 0.15 + (i*0.1)
         elif obj["name"] == "bird": oy = 0.2
+        elif obj["name"] in ("wave",): oy = 0.35; size = 1.2
+        elif obj["name"] in ("canoe",): oy = 0.60; size = 0.9
+        elif obj["name"] in ("anchor",): oy = 0.50
+        elif obj["name"] in ("totem", "monolith"): oy = 0.55; size = 1.0
+        elif obj["name"] in ("cliff",): oy = 0.55; size = 1.0
+        elif obj["name"] in ("compass_rose",): oy = 0.35; size = 0.8
+        elif obj["name"] in ("shadow_figure",): oy = 0.55; size = 0.9
+        elif obj["name"] in ("moon_path",): oy = 0.50
         objects.append({"name": obj["name"], "x": ox, "y": oy, "size": size})
     # Background
     bg = []
