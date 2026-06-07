@@ -143,7 +143,7 @@ _ENTITY_MAP = {
     "mammal":        {"type":"animal","tags":["mammal","deer","wolf","fox","bear","rabbit","squirrel","horse","cattle","cow","bull","calf","ox","sheep","lamb","goat","pig","hog","boar","bison","moose","elk","donkey","mule","llama","alpaca","camel","zebra","giraffe","rhino","rhinoceros","hippo","hippopotamus","elephant","lion","tiger","leopard","panther","jaguar","cheetah","hyena","dog","kitten","puppy","mouse","mice","rat","beaver","otter","hedgehog","bat","kangaroo","koala","sloth","raccoon","skunk","weasel","badger","mole","vole","shrew","opossum","porcupine","armadillo","anteater","monkey","ape","gorilla","chimpanzee","orangutan","gibbon","baboon","mandrill","lemur","panda","bamboo"],"y":"ground"},
     "cat":           {"type":"cat","tags":["cat","kitten","feline","meow","purr","whisker"],"y":"ground"},
     "mouse":         {"type":"mouse","tags":["mouse","mice","rodent","pest","vermin","squeak"],"y":"ground"},
-    "dinosaur":      {"type":"animal","tags":["dinosaur","t-rex","triceratops","velociraptor","stegosaurus","brontosaurus","pterosaur","plesiosaur","ichthyosaur","ankylosaurus","parasaurolophus","pachycephalosaurus","allosaurus","brachiosaurus","diplodocus","creature","beast","monster"],"y":"ground","scale":1.5},
+    "dinosaur":      {"type":"dinosaur","tags":["dinosaur","t-rex","triceratops","velociraptor","stegosaurus","brontosaurus","pterosaur","plesiosaur","ichthyosaur","ankylosaurus","parasaurolophus","pachycephalosaurus","allosaurus","brachiosaurus","diplodocus","creature","beast","monster"],"y":"ground","scale":1.5},
     "fish":          {"type":"fish","tags":["fish","shark","whale","dolphin","orca","porpoise","seal","walrus","salmon","trout","tuna","bass","perch","carp","catfish","cod","herring","sardine","mackerel","anchovy","eel","ray","skate","flounder","halibut","swordfish","marlin","grouper","snapper","tilapia","aquatic","sea creature","marine"],"y":"water"},
     "reptile":       {"type":"animal","tags":["reptile","lizard","gecko","iguana","chameleon","monitor","komodo","turtle","tortoise","terrapin","crocodile","alligator","caiman","gavial"],"y":"ground"},
     "amphibian":     {"type":"animal","tags":["amphibian","frog","toad","salamander","newt","axolotl","caecilian"],"y":"ground"},
@@ -930,6 +930,17 @@ def _compose_story_scene(t, phase, rng, density):
     action effects and adds ambient fill. Never produces empty scenes."""
     text_lower = t  # already lowercased by caller
     entities = _extract_entities(t)
+    # Convert list format from _extract_entities into dict format expected by this function
+    if isinstance(entities, list):
+        from collections import Counter
+        type_counts = Counter(e[0] for e in entities)
+        entities = {
+            f"elem_{i}": {
+                "info": {"type": e[0], "tags": [e[0]], "y": "ground" if e[0] not in ("sun","moon","star","cloud","bird") else "sky", "scale": 1.0},
+                "count": type_counts.get(e[0], 1)
+            }
+            for i, e in enumerate(entities)
+        }
     actions = _detect_actions(t)
     elements = []
 
@@ -1155,13 +1166,13 @@ def _infer_visuals(text: str, scene_num: int, total: int) -> dict:
     best_type, best_score = "story", 0
     for stype, kws in type_scores:
         score = kw_count(kws, t)
-        if score > best_score:
+        if score >= 3 and score > best_score:
             best_type, best_score = stype, score
 
     # Regex-based pattern detection for types not easily captured by keywords
     if re.search(r'\bnot\b\s+\w+\s+\w+\s+\w+\s+\bbut\b', t) or re.search(r'\binstead of\b', t) or re.search(r'\brather than\b', t):
         comp_score = kw_count(["not", "but", "instead", "rather", "unlike", "versus"], t)
-        if comp_score > best_score:
+        if comp_score >= 3 and comp_score > best_score:
             best_type, best_score = "comparison", comp_score
 
     scene_type = best_type
@@ -1369,6 +1380,7 @@ _BIOMES = [
     (["farm", "field", "pasture", "meadow", "grassland", "prairie", "ranch", "barn", "crop", "grain", "wheat", "hay", "orchard", "garden"], "farm", "gradient", [(160, 200, 130), (120, 160, 90)], (80, 120, 50)),
     (["swamp", "marsh", "bog", "fen", "wetland", "bayou", "everglade", "mangrove"], "swamp", "forest", [(100, 140, 80), (60, 90, 50)], (50, 80, 40)),
     (["river", "lake", "pond", "stream", "creek", "brook", "waterfall", "cascade"], "river", "ocean", [(80, 160, 210), (40, 100, 180)], None),
+    (["extinction", "asteroid", "impact", "crater", "meteor", "collision", "explosion", "doomsday", "catastrophe", "devastation", "apocalypse", "annihilated", "obliterated"], "impact", "night", [(50, 30, 20), (30, 15, 10), (10, 5, 3)], (20, 10, 5)),
 ]
 
 def _detect_biome(text: str) -> dict:
@@ -1466,8 +1478,8 @@ def _extract_entities(text: str) -> list:
         ("shark", "shark", (80, 85, 95), 4), ("dolphin", "fish", (100, 140, 180), 3),
         ("jellyfish", "fish", (200, 100, 200), 3), ("turtle", "animal", (80, 140, 60), 3),
         ("crab", "animal", (200, 120, 80), 3), ("lobster", "animal", (200, 80, 60), 3),
-        ("crocodile", "animal", (60, 130, 50), 5), ("alligator", "animal", (60, 120, 50), 5),
-        ("croc", "animal", (60, 130, 50), 4),
+        ("crocodile", "crocodile", (60, 130, 50), 5), ("alligator", "crocodile", (60, 120, 50), 5),
+        ("croc", "crocodile", (60, 130, 50), 4),
         ("starfish", "fish", (220, 150, 80), 3), ("coral", "fish", (200, 120, 160), 3),
         ("seaweed", "plant", (60, 140, 60), 2), ("kelp", "plant", (50, 130, 50), 2),
         ("wave", "wave", (40, 100, 200), 4), ("surf", "wave", (60, 120, 220), 3),
@@ -1538,7 +1550,7 @@ def _extract_entities(text: str) -> list:
         # ── Celestial & Weather ──
         ("sun", "sun", (255, 200, 80), 4), ("moon", "moon", (220, 220, 200), 4),
         ("star", "star", (255, 240, 200), 3), ("constellation", "star", (200, 210, 255), 3),
-        ("comet", "star", (255, 220, 100), 3), ("planet", "globe", (100, 150, 200), 3),
+        ("comet", "star", (255, 220, 100), 3),
         ("rainbow", "moon_path", (255, 200, 150), 3), ("rain", "water", (100, 150, 200), 2),
         ("storm", "wave", (30, 60, 120), 3), ("lightning", "fire", (255, 240, 200), 3),
         ("cloud", "cloud", (200, 200, 210), 3), ("fog", "cloud", (180, 190, 200), 2),
@@ -1550,7 +1562,6 @@ def _extract_entities(text: str) -> list:
         ("migrate", "arrow", (100, 180, 220), 4), ("migrates", "arrow", (100, 180, 220), 4),
         ("migrating", "arrow", (100, 180, 220), 4), ("migratory", "arrow", (100, 180, 220), 4),
         ("migrated", "arrow", (100, 180, 220), 4), ("migration route", "arrow", (80, 160, 200), 5),
-        ("world", "globe", (80, 160, 200), 4), ("earth", "globe", (60, 140, 180), 4),
 
         # ── Body Parts ──
         ("eye", "eye", (255, 250, 240), 4), ("eyes", "eye", (255, 250, 240), 4),
@@ -1702,7 +1713,7 @@ def _extract_entities(text: str) -> list:
         ("tree", "tree", (50, 120, 50), 3), ("flower", "flower", (255, 100, 150), 3),
         ("grass", "grass", (50, 100, 40), 2), ("plant", "plant", (50, 120, 50), 3),
         ("plants", "plant", (50, 120, 50), 3), ("water", "water", (40, 100, 180), 3),
-        ("fire", "fire", (220, 120, 40), 3), ("earth", "hill", (120, 100, 60), 2),
+        ("fire", "fire", (220, 120, 40), 3),
         ("ground", "path", (140, 120, 80), 1), ("sky", "cloud", (180, 200, 220), 2),
         ("air", "cloud", (200, 210, 230), 1), ("wind", "arrow", (180, 200, 220), 2),
         ("bird", "bird", (60, 50, 40), 3), ("birds", "bird", (60, 50, 40), 3),
@@ -1710,20 +1721,14 @@ def _extract_entities(text: str) -> list:
         ("flock", "bird", (60, 55, 50), 4), ("pterosaur", "bird", (80, 60, 50), 5),
         ("flying reptile", "bird", (80, 60, 50), 5), ("flying reptiles", "bird", (80, 60, 50), 5), ("fish", "fish", (200, 180, 100), 3),
         ("animal", "animal", (100, 80, 60), 2), ("insect", "animal", (80, 120, 60), 2),
-        ("food", "fruit", (220, 180, 80), 3), ("weather", "cloud", (180, 200, 220), 3),
-        ("continents", "globe", (80, 160, 100), 4), ("continent", "globe", (80, 160, 100), 4),
-        ("see", "eye", (200, 200, 220), 3), ("sees", "eye", (200, 200, 220), 3),
-        ("saw", "eye", (200, 200, 220), 3), ("seeing", "eye", (200, 200, 220), 3),
+        ("weather", "cloud", (180, 200, 220), 3),
         ("touch", "hand", (220, 200, 180), 3), ("touches", "hand", (220, 200, 180), 3),
         ("touching", "hand", (220, 200, 180), 3),
-        ("month", "clock", (180, 180, 160), 3), ("months", "clock", (180, 180, 160), 3),
         ("traveler", "human", (140, 120, 100), 3), ("travelers", "human", (140, 120, 100), 3),
         ("rest", "human", (130, 110, 90), 2), ("rested", "human", (130, 110, 90), 2),
         ("resting", "human", (130, 110, 90), 2), ("rests", "human", (130, 110, 90), 2),
-        ("year", "clock", (180, 180, 160), 3), ("years", "clock", (180, 180, 160), 3),
         ("opportunity", "star", (255, 220, 80), 4), ("opportunities", "star", (255, 220, 80), 4),
         ("small", "star", (200, 200, 180), 2), ("tiny", "star", (200, 200, 180), 2),
-        ("huge", "mountain", (140, 120, 100), 3), ("large", "mountain", (140, 120, 100), 3),
         ("tall", "tree", (80, 140, 60), 3), ("wide", "water", (100, 160, 200), 2),
         ("narrow", "path", (140, 110, 80), 2), ("cold", "water", (160, 200, 230), 3),
         ("hot", "fire", (240, 160, 40), 3), ("warm", "sun", (255, 200, 100), 3),
@@ -1737,7 +1742,6 @@ def _extract_entities(text: str) -> list:
         ("branches", "tree", (100, 80, 50), 3), ("root", "tree", (120, 80, 40), 2),
         ("roots", "tree", (120, 80, 40), 2), ("soil", "hill", (140, 120, 80), 2),
         ("mud", "hill", (120, 100, 60), 2), ("stone", "rock", (160, 150, 130), 3),
-        ("passes", "clock", (180, 180, 160), 3), ("passing", "clock", (180, 180, 160), 3),
         ("photograph", "book", (200, 180, 150), 3), ("photographs", "book", (200, 180, 150), 3),
         ("fade", "cloud", (180, 180, 200), 3), ("fades", "cloud", (180, 180, 200), 3),
         ("faded", "cloud", (180, 180, 200), 3), ("clear", "sun", (240, 240, 220), 2),
@@ -1756,13 +1760,12 @@ def _extract_entities(text: str) -> list:
         ("grown", "tree", (80, 140, 60), 2), ("grows", "tree", (80, 140, 60), 2),
         ("grow", "tree", (80, 140, 60), 2), ("grew", "tree", (80, 140, 60), 2),
         ("shade", "tree", (80, 140, 60), 2), ("shadow", "shadow_figure", (40, 40, 50), 3),
-        ("ancient", "mountain", (100, 80, 60), 3), ("old", "hourglass", (180, 160, 140), 3),
         ("life", "human", (80, 120, 100), 3), ("live", "human", (80, 120, 100), 2),
         ("lives", "human", (80, 120, 100), 2), ("nature", "tree", (60, 140, 60), 3),
         ("wild", "animal", (100, 80, 60), 3), ("wildlife", "animal", (100, 80, 60), 3),
         ("creature", "animal", (120, 140, 100), 4), ("creatures", "animal", (120, 140, 100), 4),
         ("reptile", "animal", (100, 120, 80), 3), ("reptiles", "animal", (100, 120, 80), 3),
-        ("dinosaur", "animal", (80, 100, 60), 5),
+        ("dinosaur", "dinosaur", (80, 100, 60), 5),
         ("alive", "human", (80, 120, 100), 3),
 
         # ── Actions / Events ──
@@ -1885,7 +1888,6 @@ def _extract_entities(text: str) -> list:
         ("continues", "arrow", (160, 140, 100), 2), ("continue", "arrow", (160, 140, 100), 2),
         ("endless", "circle", (100, 150, 200), 3), ("forever", "circle", (100, 150, 200), 3),
         ("age", "hourglass", (180, 160, 140), 3), ("aging", "hourglass", (180, 160, 140), 3),
-        ("old", "hourglass", (180, 160, 140), 3), ("time", "clock", (200, 190, 170), 3),
 
         # ── Death / Mortality ──
         ("dies", "skull", (200, 190, 180), 4), ("died", "skull", (200, 190, 180), 4),
@@ -2142,9 +2144,17 @@ def _extract_entities(text: str) -> list:
                              'ancient','old','exactly','special','predators',
                              'survive','survived','survives','survival',
                              'planet','world','earth','ecosystem','ecosystems',
-                             'advantages','advantage','ability','abilities',}
+                             'advantages','advantage','ability','abilities',
+                             'sixtysix','opportunists','flexibility',
+                             'efficiency','adaptability','catastrophe',
+                             'generations',}
             w_clean = word.translate(str.maketrans('', '', ".,!?;:'\"()[]{}-_")).lower()
-            if (w_clean and len(w_clean) >= 5 and w_clean not in stop_words
+            # Skip auto-synthesis for hyphenated words (Sixty-six → sixtysix)
+            if '-' in word:
+                matched = True
+                i += 1
+                continue
+            if (w_clean and len(w_clean) >= 8 and w_clean not in stop_words
                 and not w_clean.isdigit() and not w_clean.startswith('http')):
                 weight = 2  # Auto-synthesized words get low weight
                 # Generate a deterministic semantic color from the word
@@ -2379,7 +2389,7 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
                     "heart","gear","skull","clock","camera","filter","signal",
                     "movement","discard","awareness","edge","color_swatch","brain",
                     "man","woman","child","circle","arrow","fruit","speech_bubble",
-                    "jar","shelf"}
+                    "jar","shelf","crocodile","dinosaur","fish"}
     # Auto-register common unknown types into known categories
     _AUTO_TYPE_MAP = {
         "door": "building", "gate": "building", "window": "building", "wall": "building",
@@ -2429,8 +2439,8 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
     SKY = {"sun","moon","star","cloud","bird","eye"}
     BACK = {"mountain","cliff","hill","water","wave","moon_path"}
     MID = {"tree","plant","flower","grass","fence","path","rock","totem","anchor","fire","campfire","lamp",
-           "globe","ship","canoe","whale","sea_serpent","jar","shelf","building","house"}
-    FRONT = {"human","animal","shadow_figure","man","woman","child","hand","face","speech_bubble"}
+           "globe","ship","canoe","whale","sea_serpent","jar","shelf","building","house","fish"}
+    FRONT = {"human","animal","shadow_figure","man","woman","child","hand","face","speech_bubble","crocodile","dinosaur"}
     PROPS = {"book","scroll","compass","crown","key","cross","coin","telescope","heart","gear","skull",
              "clock","camera","filter","signal","arrow","fruit"}
 
@@ -2504,6 +2514,22 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
     if re.search(r'\b(journey|travel|road|path|way|walk|walked)\b', text) and "path" not in current_types:
         known_entities.append((len(known_entities), ("path", (140, 120, 100), 1)))
         current_types.add("path")
+    # Extinction/disaster inference — add fire and dark atmosphere
+    if re.search(r'\b(extinction|asteroid|explosion|disappeared|collapsed|starved|destroyed|catastrophe)\b', text):
+        if "fire" not in current_types:
+            known_entities.append((len(known_entities), ("fire", (220, 100, 40), 1)))
+            current_types.add("fire")
+        if "mountain" not in current_types:
+            known_entities.append((len(known_entities), ("mountain", (80, 70, 60), 1)))
+            current_types.add("mountain")
+    # Prehistoric inference — dinosaurs/crocodiles need ferns and water
+    if re.search(r'\b(dinosaur|crocodile|prehistoric|ancient|reptile|reptiles)\b', text):
+        if "plant" not in current_types:
+            known_entities.append((len(known_entities), ("plant", (60, 130, 50), 1)))
+            current_types.add("plant")
+        if re.search(r'\b(river|lake|water|swamp|wetland|ocean)\b', text) and "water" not in current_types:
+            known_entities.append((len(known_entities), ("water", (60, 120, 200), 1)))
+            current_types.add("water")
 
     def _layer_of(t):
         if t in SKY: return 0
@@ -2582,6 +2608,10 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
             scale = 0.25 * base_scale
         elif etype in ("human", "shadow_figure", "animal", "man", "woman", "child"):
             scale = 0.8 * base_scale
+        elif etype in ("crocodile",):
+            scale = 0.9 * base_scale
+        elif etype in ("dinosaur",):
+            scale = 1.0 * base_scale
         elif etype in ("house", "building"):
             scale = 0.45 * base_scale
         elif etype == "speech_bubble":
@@ -2590,6 +2620,8 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
             scale = 0.5 * base_scale
         elif etype == "shelf":
             scale = 0.35 * base_scale
+        elif etype == "fish":
+            scale = 0.45 * base_scale
         # Add individual scale variety
         scale *= (0.85 + rng.random() * 0.30)
 

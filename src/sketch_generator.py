@@ -1155,6 +1155,88 @@ class SketchGenerator:
         tx = x - body_w//2 - 3*s
         self.draw_line(draw, tx, y-body_h+3*s, tx-5*s, y-body_h-5*s, color=self._darken(c, 10), width=int(2*s))
 
+    def draw_crocodile(self, draw, x, y, size=1.0, color=(60, 130, 50)):
+        """Draw a crocodile — long body, snout, tail, bumpy back."""
+        s = size
+        c = tuple(color[:3])
+        # Shadow
+        self.draw_shadow_circle(draw, x, y + 3, 16*s, offset=(2, 2), blur_radius=3, color=(0, 0, 0, 30))
+        # Tail (curved)
+        tail_pts = [(x - 18*s, y - 3*s), (x - 28*s, y - 8*s), (x - 30*s, y - 6*s),
+                    (x - 28*s, y - 4*s), (x - 18*s, y - 1*s)]
+        self.draw_polygon(draw, tail_pts, fill=self._darken(c, 10) + (220,),
+                          stroke=self._darken(c, 20) + (180,), stroke_width=1)
+        # Body
+        body_pts = [(x - 18*s, y - 3*s), (x + 12*s, y - 5*s), (x + 14*s, y),
+                    (x + 12*s, y + 2*s), (x - 18*s, y + 1*s)]
+        self.draw_polygon(draw, body_pts, fill=c + (220,),
+                          stroke=self._darken(c, 15) + (180,), stroke_width=1)
+        # Bumpy back (scutes)
+        for bx in range(int(x - 15*s), int(x + 10*s), 4):
+            bh = 2*s if (bx - x) % 8 < 4 else 3*s
+            self.draw_polygon(draw, [(bx, y - 4*s), (bx + 2*s, y - 4*s - bh), (bx + 4*s, y - 4*s)],
+                              fill=self._darken(c, 20) + (200,))
+        # Legs (short)
+        leg_color = self._darken(c, 15)
+        for lx, lsign in [(-12*s, -1), (8*s, -1), (-6*s, 1), (10*s, 1)]:
+            self.draw_line(draw, x + lx, y + 1*s, x + lx + lsign*2*s, y + 4*s,
+                           color=leg_color, width=int(2*s))
+        # Head (long snout)
+        head_pts = [(x + 12*s, y - 5*s), (x + 24*s, y - 6*s), (x + 28*s, y - 4*s),
+                    (x + 26*s, y - 1*s), (x + 12*s, y + 2*s)]
+        self.draw_polygon(draw, head_pts, fill=self._lighten(c, 10) + (220,),
+                          stroke=self._darken(c, 15) + (180,), stroke_width=1)
+        # Eye ridge
+        self.draw_circle(draw, x + 14*s, y - 6*s, 3*s, fill=self._lighten(c, 15) + (220,),
+                         stroke=self._darken(c, 15) + (180,), stroke_width=1)
+        # Eye
+        self.draw_circle(draw, x + 14*s, y - 6*s, 1.5*s, fill=(200, 180, 60, 220))
+        # Teeth (small triangles in jaw)
+        for tx2 in range(int(x + 18*s), int(x + 26*s), 3):
+            self.draw_polygon(draw, [(tx2, y - 1*s), (tx2 + 1*s, y + 1*s), (tx2 + 2*s, y - 1*s)],
+                              fill=(240, 240, 230, 200))
+        # Nostril
+        self.draw_circle(draw, x + 27*s, y - 4*s, 1*s, fill=(30, 30, 30, 180))
+
+    def draw_dinosaur(self, draw, x, y, size=1.0, color=(80, 100, 60)):
+        """Draw a sauropod dinosaur — large body, long neck, tail, four legs."""
+        s = size
+        c = tuple(color[:3])
+        # Shadow
+        self.draw_shadow_circle(draw, x, y + 4, 18*s, offset=(3, 3), blur_radius=4, color=(0, 0, 0, 30))
+        # Tail
+        tail_pts = [(x - 16*s, y - 4*s), (x - 26*s, y - 12*s), (x - 28*s, y - 10*s),
+                    (x - 24*s, y - 6*s), (x - 16*s, y - 2*s)]
+        self.draw_polygon(draw, tail_pts, fill=self._darken(c, 10) + (220,),
+                          stroke=self._darken(c, 20) + (180,), stroke_width=1)
+        # Body
+        body_pts = [(x - 14*s, y - 4*s), (x - 2*s, y - 14*s), (x + 6*s, y - 14*s),
+                    (x + 12*s, y - 6*s), (x + 10*s, y), (x - 14*s, y - 1*s)]
+        self.draw_polygon(draw, body_pts, fill=c + (220,),
+                          stroke=self._darken(c, 15) + (180,), stroke_width=1)
+        # Neck (long, curved up)
+        neck_pts = [(x + 6*s, y - 14*s), (x + 12*s, y - 22*s), (x + 10*s, y - 28*s),
+                    (x + 6*s, y - 28*s), (x + 4*s, y - 22*s), (x + 2*s, y - 14*s)]
+        self.draw_polygon(draw, neck_pts, fill=self._lighten(c, 5) + (220,),
+                          stroke=self._darken(c, 15) + (180,), stroke_width=1)
+        # Head (small)
+        head_pts = [(x + 10*s, y - 28*s), (x + 18*s, y - 30*s), (x + 20*s, y - 28*s),
+                    (x + 18*s, y - 26*s), (x + 6*s, y - 26*s)]
+        self.draw_polygon(draw, head_pts, fill=self._lighten(c, 10) + (220,),
+                          stroke=self._darken(c, 15) + (180,), stroke_width=1)
+        # Eye
+        self.draw_circle(draw, x + 12*s, y - 29*s, 1.5*s, fill=(200, 180, 60, 220))
+        # Legs (thick, column-like)
+        leg_color = self._darken(c, 15)
+        for lx in [-10*s, -2*s, 2*s, 8*s]:
+            lw = 3*s
+            self.draw_rect(draw, x + lx - lw//2, y, lw, 5*s,
+                          fill=leg_color + (220,), stroke=self._darken(leg_color, 15) + (180,), stroke_width=1)
+        # Toes
+        for lx in [-10*s, -2*s, 2*s, 8*s]:
+            for tx3 in range(-1, 2):
+                self.draw_circle(draw, x + lx + tx3*1.5*s, y + 5*s, 1*s, fill=(180, 170, 150, 200))
+
     def draw_bird(self, draw, x, y, size=1.0, color=(60, 50, 40)):
         """Draw a bird in flight or perched."""
         s = size
@@ -2158,6 +2240,14 @@ class SketchGenerator:
         elif etype == "animal":
             c = fill or (100, 80, 60)
             self.draw_animal(draw, x, y, s, c)
+
+        elif etype == "crocodile":
+            c = fill or (60, 130, 50)
+            self.draw_crocodile(draw, x, y, s, c)
+
+        elif etype == "dinosaur":
+            c = fill or (80, 100, 60)
+            self.draw_dinosaur(draw, x, y, s, c)
 
         elif etype == "bird":
             c = fill or (60, 50, 40)
