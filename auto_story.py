@@ -1440,7 +1440,7 @@ def _extract_entities(text: str) -> list:
     found = []
     seen_types = set()
     auto_count = 0
-    MAX_AUTO = 2
+    MAX_AUTO = 1
 
     # Entity map sorted by specificity: (word/phrase, element_type, color, weight)
     ENTITIES = [
@@ -1705,6 +1705,7 @@ def _extract_entities(text: str) -> list:
         ("touch", "hand", (220, 200, 180), 3), ("touches", "hand", (220, 200, 180), 3),
         ("touching", "hand", (220, 200, 180), 3),
         ("month", "clock", (180, 180, 160), 3), ("months", "clock", (180, 180, 160), 3),
+        ("year", "clock", (180, 180, 160), 3), ("years", "clock", (180, 180, 160), 3),
         ("opportunity", "star", (255, 220, 80), 4), ("opportunities", "star", (255, 220, 80), 4),
         ("small", "star", (200, 200, 180), 2), ("tiny", "star", (200, 200, 180), 2),
         ("huge", "mountain", (140, 120, 100), 3), ("large", "mountain", (140, 120, 100), 3),
@@ -1957,7 +1958,9 @@ def _extract_entities(text: str) -> list:
         # ── Auto-synthesis for truly unmatched content words ──
         if not matched:
             if auto_count >= MAX_AUTO:
-                matched = True  # Prevent adding more auto-synthesized entities
+                matched = True
+                i += 1
+                continue  # Skip auto-synthesis for this word
             # Skip function words, short words, and common verbs
             stop_words = {'the','a','an','is','are','was','were','be','been','being',
                           'have','has','had','do','does','did','will','would','could',
@@ -1978,7 +1981,7 @@ def _extract_entities(text: str) -> list:
                           'came','take','took','make','made','know','knew','think',
                           'thought','see','saw','seen','give','gave','given','find',
                           'found','tell','told','become','became','leave','left',
-                            'feel',                           'felt','put','set','bring','brought','begin','began',
+                           'feel','felt','put','set','bring','brought','begin','began',
                            'youll','havent','dont','doesnt','didnt','cant','wont',
                            'wasnt','werent','isnt','arent','hasnt','hadnt',
                            'couldnt','wouldnt','shouldnt','mustnt',
@@ -1986,8 +1989,6 @@ def _extract_entities(text: str) -> list:
                           'keep','kept','hold','held','write','wrote','written',
                           'stand','stood','hear','heard','let','say','said','show',
                           'shown','showed','mean','meant','need','call','try'}
-            if auto_count >= MAX_AUTO:
-                matched = True  # Prevent adding more auto-synthesized entities
             w_clean = word.translate(str.maketrans('', '', ".,!?;:'\"()[]{}-_")).lower()
             if (w_clean and len(w_clean) >= 5 and w_clean not in stop_words
                 and not w_clean.isdigit() and not w_clean.startswith('http')):
@@ -2077,6 +2078,11 @@ def _detect_scene_type(text: str) -> str:
         if score > best_score:
             best_type, best_score = stype, score
 
+    # Require at least 2 keyword matches for non-story types
+    # to avoid false positives from single-word triggers like "spread"
+    if best_type != "story" and best_score < 2:
+        best_type, best_score = "story", 0
+
     # Regex patterns for comparison
     if _re.search(r'\bnot\b\s+\w+\s+\w+\s+\w+\s+\bbut\b', t) or \
        _re.search(r'\binstead of\b', t) or _re.search(r'\brather than\b', t):
@@ -2155,7 +2161,7 @@ def _reposition_semantically(elements: list, text: str):
                     bridge_idx += 1
 
     # ── "open" pattern: key opens X → position openables around key ──
-    elif central_type == "key" and "open" in t:
+    if central_type == "key" and "open" in t:
         open_slot = 0
         for i, e in enumerate(elements):
             if e["type"] in ("building", "circle", "house") and e["type"] != central_type and i not in placed:
@@ -2169,19 +2175,20 @@ def _reposition_semantically(elements: list, text: str):
                 placed.add(i)
                 open_slot += 1
 
-    # ── Place remaining elements in a ring around the composition ──
-    ring_positions = [(0.50, 0.10), (0.12, 0.28), (0.88, 0.28),
-                      (0.12, 0.62), (0.88, 0.62), (0.50, 0.78),
-                      (0.12, 0.10), (0.88, 0.10)]
-    ri = 0
-    for i, e in enumerate(elements):
-        if i in placed:
-            continue
-        if ri < len(ring_positions):
-            e["x"] = ring_positions[ri][0]
-            e["y"] = ring_positions[ri][1]
-            e["scale"] = e.get("scale", 1.0) * 0.75
-            ri += 1
+    # ── Only arrange in a ring when a central theme object exists ──
+    if central_type:
+        ring_positions = [(0.50, 0.10), (0.12, 0.28), (0.88, 0.28),
+                          (0.12, 0.62), (0.88, 0.62), (0.50, 0.78),
+                          (0.12, 0.10), (0.88, 0.10)]
+        ri = 0
+        for i, e in enumerate(elements):
+            if i in placed:
+                continue
+            if ri < len(ring_positions):
+                e["x"] = ring_positions[ri][0]
+                e["y"] = ring_positions[ri][1]
+                e["scale"] = e.get("scale", 1.0) * 0.75
+                ri += 1
 
 
 def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | None:
