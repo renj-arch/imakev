@@ -1705,6 +1705,9 @@ def _extract_entities(text: str) -> list:
         ("touch", "hand", (220, 200, 180), 3), ("touches", "hand", (220, 200, 180), 3),
         ("touching", "hand", (220, 200, 180), 3),
         ("month", "clock", (180, 180, 160), 3), ("months", "clock", (180, 180, 160), 3),
+        ("traveler", "human", (140, 120, 100), 3), ("travelers", "human", (140, 120, 100), 3),
+        ("rest", "human", (130, 110, 90), 2), ("rested", "human", (130, 110, 90), 2),
+        ("resting", "human", (130, 110, 90), 2), ("rests", "human", (130, 110, 90), 2),
         ("year", "clock", (180, 180, 160), 3), ("years", "clock", (180, 180, 160), 3),
         ("opportunity", "star", (255, 220, 80), 4), ("opportunities", "star", (255, 220, 80), 4),
         ("small", "star", (200, 200, 180), 2), ("tiny", "star", (200, 200, 180), 2),
@@ -1731,6 +1734,7 @@ def _extract_entities(text: str) -> list:
         ("fly", "bird", (100, 140, 180), 3), ("flies", "bird", (100, 140, 180), 3),
         ("grown", "tree", (80, 140, 60), 2), ("grows", "tree", (80, 140, 60), 2),
         ("grow", "tree", (80, 140, 60), 2), ("grew", "tree", (80, 140, 60), 2),
+        ("shade", "tree", (80, 140, 60), 2), ("shadow", "shadow_figure", (40, 40, 50), 3),
         ("ancient", "mountain", (100, 80, 60), 3), ("old", "hourglass", (180, 160, 140), 3),
         ("life", "human", (80, 120, 100), 3), ("live", "human", (80, 120, 100), 2),
         ("lives", "human", (80, 120, 100), 2), ("nature", "tree", (60, 140, 60), 3),
@@ -1976,7 +1980,8 @@ def _extract_entities(text: str) -> list:
                            'while','about','above','below','under','over','through','like',
                            'between','among','against','without','because','although',
                            'though','even','still','already','yet','once','up','down',
-                          'out','off','away','back','again','well','now','then',
+                           'beneath','underneath','above','across','inside','outside',
+                           'out','off','away','back','again','well','now','then',
                           'here','there','not','get','got','go','went','gone','come',
                           'came','take','took','make','made','know','knew','think',
                           'thought','see','saw','seen','give','gave','given','find',
@@ -2264,9 +2269,9 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
         elif etype in ("water", "wave", "moon_path"):
             px, py = 0.5, 0.65
         # Background landscape (mid-ground)
-        elif etype in ("mountain", "cliff", "hill", "building"):
+        elif etype in ("mountain", "cliff", "hill", "building", "house"):
             col = i % 3
-            px = 0.1 + col * 0.35
+            px = 0.05 + col * 0.40
             py = 0.5
         # Ground-level objects
         elif etype in ("rock", "totem", "anchor", "fire", "campfire", "lamp"):
@@ -2274,9 +2279,9 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
             px = 0.15 + col * 0.35
             py = 0.6
         # Characters/animals spread across ground
-        elif etype in ("animal", "human", "shadow_figure"):
+        elif etype in ("animal", "human", "shadow_figure", "man", "woman", "child"):
             step = 1.0 / max(n, 2)
-            px = 0.1 + i * step * 0.7
+            px = 0.18 + i * step * 0.6
             py = 0.55 + (i % 3) * 0.05
         # Face/body parts (centered)
         elif etype in ("eye", "hand", "face"):
@@ -2302,7 +2307,7 @@ def _infer_visuals_local(narration: str, scene_num: int, total: int) -> dict | N
             scale = 0.7
         elif etype in ("sun", "moon"):
             scale = 0.9
-        elif etype in ("human", "shadow_figure", "animal"):
+        elif etype in ("human", "shadow_figure", "animal", "man", "woman", "child"):
             scale = 0.8
 
         elements.append({
@@ -2489,17 +2494,17 @@ def _enrich_story_context(visuals, text, state, scene_num, total):
     t = text.lower()
     vis = visuals.get("visual", {})
     elements = vis.get("elements", [])
-
-    # Story scenes: keep only 3 most relevant elements for clean composition
     scene_type = vis.get("scene_type", "story")
-    max_elems = 5 if scene_type != "story" else 3
+
+    # ── Filter to max elements ──
+    max_elems = 5 if scene_type != "story" else (4 if scene_num == 1 else 3)
     kept = []
     priority = []
     for i, elem in enumerate(elements):
         etype = elem.get("type", "")
         if scene_type != "story" and etype in ("text", "bar_chart", "pie_chart", "line_graph", "cycle_diagram", "venn_diagram", "comparison", "step_diagram", "network_diagram", "tree_diagram", "histogram", "scatter_plot"):
             kept.append(elem)
-        elif etype in ("human", "animal"):
+        elif etype in ("human", "animal", "man", "woman", "child"):
             priority.append((0, elem))
         elif elem.get("label", "") and len(elem["label"]) > 2:
             if elem["label"].lower() in t:
@@ -2508,11 +2513,44 @@ def _enrich_story_context(visuals, text, state, scene_num, total):
                 priority.append((3, elem))
         else:
             priority.append((2, elem))
-
     priority.sort(key=lambda x: x[0])
     slot = max_elems - len(kept)
     kept.extend(e[1] for e in priority[:slot])
-    vis["elements"] = kept[:max_elems]
+    kept = kept[:max_elems]
+    kept_types = {e["type"] for e in kept}
+
+    # ── Inject persistent story entities from previous scenes ──
+    if scene_num > 1 and state.get("entity_history"):
+        prev_types = set(state["entity_history"][-1])
+        persistent_types = {"tree", "man", "woman", "child", "house", "human", "animal"}
+        missing = (prev_types & persistent_types) - kept_types
+        nudge = 0.05
+        for etype in missing:
+            for prev_elem in state.get("prev_elements", []):
+                if prev_elem.get("type") == etype:
+                    clone = dict(prev_elem)
+                    clone["x"] = min(clone.get("x", 0.5) + nudge, 0.85)
+                    clone["y"] = min(clone.get("y", 0.5) - nudge * 0.5, 0.75)
+                    kept.append(clone)
+                    kept_types.add(etype)
+                    nudge += 0.04
+                    break
+
+    # ── Progressive entity scaling (e.g. tree grows across scenes) ──
+    story_arc = scene_num / max(total, 1)
+    for e in kept:
+        if e["type"] == "tree":
+            # Absolute scale target: small sapling → mighty tree
+            e["scale"] = 0.8 + story_arc * 1.8
+        elif e["type"] == "child" and scene_num > total * 0.5:
+            e["scale"] = e.get("scale", 1.0) * 1.3
+
+    vis["elements"] = kept[:5]
+
+    # ── Update story state for persistence ──
+    state["entity_history"] = state.get("entity_history", [])
+    state["entity_history"].append([e["type"] for e in vis["elements"]])
+    state["prev_elements"] = list(vis["elements"])
 
     # Background consistency: carry same bg type forward unless text strongly suggests change
     if state["bg"] and scene_num > 1:
