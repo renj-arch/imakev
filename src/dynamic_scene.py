@@ -132,6 +132,12 @@ ELEMENT_DEFS = {
     "store":      {"type": "shop", "scale": 2.5, "fill": [170, 145, 115], "window_color": [255, 240, 200]},
     "cafe":       {"type": "shop", "scale": 2.5, "fill": [190, 160, 130], "window_color": [255, 240, 200]},
     "flag":       {"type": "flag", "scale": 2.0, "fill": [200, 50, 50]},
+    "cannon":     {"type": "cannon", "scale": 2.5, "fill": [60, 60, 60]},
+    "wall":       {"type": "wall", "scale": 2.0, "fill": [140, 120, 100]},
+    "tower":      {"type": "tower", "scale": 2.0, "fill": [130, 110, 90]},
+    "fortress":   {"type": "fortress", "scale": 2.0, "fill": [120, 100, 80]},
+    "tent":       {"type": "tent", "scale": 2.5, "fill": [160, 140, 100]},
+    "chain":      {"type": "chain", "scale": 2.0, "fill": [100, 90, 80]},
     "crown":      {"type": "crown", "scale": 2.5, "fill": [230, 200, 50]},
     "book":       {"type": "book", "scale": 3.5, "fill": [180, 120, 80]},
     "coin":       {"type": "coin", "scale": 2.5, "fill": [230, 200, 80]},
@@ -272,7 +278,8 @@ def compute_positions(concepts: dict, scene_type: str) -> list:
                             "canoe", "kayak", "raft", "pirate_ship", "galleon", "train",
                             "planet", "blackhole", "galaxy", "snow", "rain", "lightning",
                             "storm", "fog", "desert", "computer", "network", "ai", "circuit",
-                             "data", "microscope", "experiment", "alien", "artifact"):
+                              "data", "microscope", "experiment", "alien", "artifact",
+                              "cannon", "wall", "tent", "chain", "tower", "fortress"):
             # Foreground elements
             x = col_positions[col_idx % 3]
             y = 0.65 + (i * 0.04)
