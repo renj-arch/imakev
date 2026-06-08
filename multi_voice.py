@@ -788,62 +788,78 @@ def assemble_video(output_dir="output/mv_frames", output_video="output/mv_video.
         print("No manifest found. Run with --generate first.")
         return
     manifest = json.load(open(manifest_path))
+    segments = manifest["segments"]
     w, h = manifest["width"], manifest["height"]
     fps = manifest.get("fps", 24)
     w = manifest.get("width", 720)
     h = manifest.get("height", 1280)
 
-    # Simple concat assembly — text is already baked into frames
-    concat_path = os.path.join(output_dir, "concat.txt")
-    segments = manifest["segments"]
-    with open(concat_path, "w") as f:
-        for i, seg in enumerate(segments):
-            fp = os.path.join(output_dir, seg["frame"]).replace("\\", "/")
-            duration = seg.get("duration_frames", 120) / fps
-            f.write(f"file '{fp}'\n")
-            f.write(f"duration {duration:.2f}\n")
-        # Last file must be written again WITHOUT duration for concat demuxer
-        last_fp = os.path.join(output_dir, segments[-1]["frame"]).replace("\\", "/")
-        f.write(f"file '{last_fp}'\n")
-
     import subprocess, shutil
 
-    # Debug: check ffmpeg and files
     which_ff = shutil.which("ffmpeg")
-    print(f"ffmpeg path: {which_ff}")
-    print(f"concat.txt exists: {os.path.exists(concat_path)}")
-    print(f"output_dir exists: {os.path.exists(output_dir)}")
-    print(f"First frame exists: {os.path.exists(os.path.join(output_dir, segments[0]['frame']))}")
-    with open(concat_path) as f:
-        concat_content = f.read()[:500]
-    print(f"concat.txt:\n{concat_content}")
-
     if not which_ff:
         print("ERROR: ffmpeg not found on PATH")
         return
+    print(f"ffmpeg: {which_ff}")
 
-    cmd = [
+    # Build per-segment temp videos then concat
+    # This avoids concat demuxer quirks with PNG files
+    temp_dir = os.path.join(output_dir, "temp_vids")
+    os.makedirs(temp_dir, exist_ok=True)
+    concat_list = []
+    total_frames = 0
+
+    for i, seg in enumerate(segments):
+        frame = os.path.join(output_dir, seg["frame"])
+        duration = seg.get("duration_frames", 120) / fps
+        out_clip = os.path.join(temp_dir, f"clip_{i:03d}.mp4")
+        # Create a video from a single image with proper duration
+        cmd_clip = [
+            which_ff, "-y",
+            "-loop", "1",
+            "-i", frame,
+            "-c:v", "libx264",
+            "-t", str(duration),
+            "-pix_fmt", "yuv420p",
+            "-r", str(fps),
+            "-vf", f"scale={w}:{h}:force_original_aspect_ratio=decrease,pad={w}:{h}:(ow-iw)/2:(oh-ih)/2",
+            out_clip
+        ]
+        r = subprocess.run(cmd_clip, capture_output=True, text=True)
+        if r.returncode != 0:
+            print(f"  clip {i} failed: {r.stderr[:200]}")
+            continue
+        concat_list.append(f"file '{out_clip}'")
+        total_frames += int(duration * fps)
+
+    if not concat_list:
+        print("ERROR: no clips created")
+        return
+
+    # Concat all clips
+    concat_vid_path = os.path.join(temp_dir, "clips.txt")
+    with open(concat_vid_path, "w") as f:
+        f.write("\n".join(concat_list) + "\n")
+
+    cmd_concat = [
         which_ff, "-y",
         "-f", "concat",
         "-safe", "0",
-        "-i", concat_path,
+        "-i", concat_vid_path,
         "-c:v", "libx264",
         "-pix_fmt", "yuv420p",
-        "-r", str(fps),
         output_video
     ]
-
-    print(f"Running: {' '.join(cmd)}")
-    result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
-    print(f"Return code: {result.returncode}")
-    if result.stderr:
-        print(f"stderr:\n{result.stderr[:1000]}")
-    if result.stdout:
-        print(f"stdout:\n{result.stdout[:500]}")
-    if result.returncode == 0:
-        print(f"Video saved: {output_video}")
+    print(f"Concatenating {len(concat_list)} clips -> {output_video}")
+    r = subprocess.run(cmd_concat, capture_output=True, text=True)
+    if r.returncode == 0:
+        print(f"Video saved: {output_video} ({total_frames} frames)")
     else:
-        print(f"Video file exists after attempt: {os.path.exists(output_video)}")
+        print(f"Concat failed ({r.returncode}): {r.stderr[:500]}")
+
+    # Cleanup temp clips
+    import shutil
+    shutil.rmtree(temp_dir, ignore_errors=True)
 
 
 if __name__ == "__main__":
