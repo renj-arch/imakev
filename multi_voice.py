@@ -806,9 +806,24 @@ def assemble_video(output_dir="output/mv_frames", output_video="output/mv_video.
         last_fp = os.path.join(output_dir, segments[-1]["frame"]).replace("\\", "/")
         f.write(f"file '{last_fp}'\n")
 
-    import subprocess
+    import subprocess, shutil
+
+    # Debug: check ffmpeg and files
+    which_ff = shutil.which("ffmpeg")
+    print(f"ffmpeg path: {which_ff}")
+    print(f"concat.txt exists: {os.path.exists(concat_path)}")
+    print(f"output_dir exists: {os.path.exists(output_dir)}")
+    print(f"First frame exists: {os.path.exists(os.path.join(output_dir, segments[0]['frame']))}")
+    with open(concat_path) as f:
+        concat_content = f.read()[:500]
+    print(f"concat.txt:\n{concat_content}")
+
+    if not which_ff:
+        print("ERROR: ffmpeg not found on PATH")
+        return
+
     cmd = [
-        "ffmpeg", "-y",
+        which_ff, "-y",
         "-f", "concat",
         "-safe", "0",
         "-i", concat_path,
@@ -818,14 +833,17 @@ def assemble_video(output_dir="output/mv_frames", output_video="output/mv_video.
         output_video
     ]
 
-    print(f"Running: ffmpeg -y -f concat -safe 0 -i concat.txt -c:v libx264 ...")
-    result = subprocess.run(cmd, capture_output=True, text=True)
+    print(f"Running: {' '.join(cmd)}")
+    result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+    print(f"Return code: {result.returncode}")
+    if result.stderr:
+        print(f"stderr:\n{result.stderr[:1000]}")
+    if result.stdout:
+        print(f"stdout:\n{result.stdout[:500]}")
     if result.returncode == 0:
         print(f"Video saved: {output_video}")
     else:
-        print(f"ffmpeg failed (code {result.returncode})")
-        print(f"stderr: {result.stderr[:500]}")
-        print("Try running the command manually with the concat.txt file.")
+        print(f"Video file exists after attempt: {os.path.exists(output_video)}")
 
 
 if __name__ == "__main__":
