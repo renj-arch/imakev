@@ -3,6 +3,14 @@ __pycache__/
 *.pyc
 temp/
 output/*.mp4
+output/*.png
+output/*.json
+output/*.txt
+output/*.gif
+output/*.py
+output/.mv_cache.json
+output/elem_dict/
+output/char_*.png
 assets/backgrounds/*
 !assets/backgrounds/.gitkeep
 assets/music/*
@@ -16,3 +24,6 @@ _wan_seed.png
 assets/piper_voices/*
 !assets/piper_voices/.gitkeep
 test_*.py
+test_*/
+img_*.png
+*.png
