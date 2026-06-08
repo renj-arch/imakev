@@ -10,11 +10,11 @@ from src.narration_to_sketch import _describe_scene
 
 CACHE_FILE = "output/.mv_cache.json"
 
-# Voice configurations
+# Voice configurations with personality roles
 VOICES = {
-    "Ding":  {"name": "Ding", "gender": "male", "color": (60, 140, 220), "icon": "🎙️"},
-    "Dong":  {"name": "Dong", "gender": "female", "color": (200, 100, 180), "icon": "🎙️"},
-    "Think": {"name": "Think", "gender": "child", "color": (255, 200, 60), "icon": "💭"},
+    "Ding":  {"name": "Ding", "role": "Storykeeper", "color": (60, 140, 220), "icon": "~"},
+    "Dong":  {"name": "Dong", "role": "Reflector", "color": (200, 100, 180), "icon": "~"},
+    "Think": {"name": "Think", "role": "Curious", "color": (255, 200, 60), "icon": "?"},
 }
 
 # Mapping from script labels to voice keys
@@ -28,35 +28,45 @@ SPEAKER_MAP = {
     "Kid":      "Think",
 }
 
-# Child interjection templates
+# Child interjection templates (no family references — just a curious voice)
 THINK_QUESTIONS = [
-    "Hey Dad, why did the walls take so long to build?",
-    "Hey Mom, how did the cannons get so big?",
-    "Dad, what happened to the people inside the city?",
-    "Mom, why didn't the army just go around the walls?",
-    "Dad, how did they drag ships over land?",
-    "Mom, what does it feel like when a city falls?",
-    "Hey Dad, was the sultan scared too?",
-    "Mom, how long is a thousand years?",
-    "Dad, why do people build walls if they can be broken?",
-    "Mom, did anyone escape?",
-    "Hey Dad, what's an empire?",
-    "Mom, how do you know what happened so long ago?",
-    "Dad, who rebuilt the city after it fell?",
-    "Mom, could it happen to our city?",
-    "Hey Dad, why do people fight over places?",
-    "Mom, was there a dragon?",
-    "Dad, did the king fight too?",
-    "Mom, where did all the treasure go?",
-    "Hey Dad, what is gunpowder?",
-    "Mom, why did the story end like that?",
+    "Why did the walls take so long to build?",
+    "How did the cannons get so big?",
+    "What happened to the people inside the city?",
+    "Why didn't the army just go around the walls?",
+    "How did they drag ships over land?",
+    "What does it feel like when a city falls?",
+    "Was the sultan scared too?",
+    "How long is a thousand years?",
+    "Why do people build walls if they can be broken?",
+    "Did anyone escape?",
+    "What's an empire?",
+    "How do you know what happened so long ago?",
+    "Who rebuilt the city after it fell?",
+    "Could it happen to our city?",
+    "Why do people fight over places?",
+    "Was there a dragon?",
+    "Did the king fight too?",
+    "Where did all the treasure go?",
+    "What is gunpowder?",
+    "Why did the story end like that?",
+    "Can I ask something?",
+    "I have a question.",
+    "Wait — I don't understand.",
+    "But how?",
+    "Tell me more about that part.",
+    "Why is that important?",
+    "What happened next?",
+    "Do you think they were scared?",
+    "Could someone have stopped it?",
+    "I want to know more.",
 ]
 
 # Visual style per voice
 VOICE_STYLES = {
-    "Ding":  {"border": (60, 140, 220), "bar_color": (10, 30, 60), "icon": "🎙️"},
-    "Dong":  {"border": (200, 100, 180), "bar_color": (50, 20, 40), "icon": "🎙️"},
-    "Think": {"border": (255, 200, 60), "bar_color": (50, 40, 10), "icon": "💭"},
+    "Ding":  {"border": (60, 140, 220), "bar_color": (10, 30, 60), "icon": "~"},
+    "Dong":  {"border": (200, 100, 180), "bar_color": (50, 20, 40), "icon": "~"},
+    "Think": {"border": (255, 200, 60), "bar_color": (50, 40, 10), "icon": "?"},
 }
 
 STYLES = [
@@ -132,7 +142,7 @@ def insert_child_interjections(segments: list[dict], density=0.4) -> list[dict]:
 def child_acknowledgment(segments: list[dict]) -> list[dict]:
     """Append child acknowledgment at the end."""
     ack_text = (
-        "Hey Dad, hey Mom — I liked the story.\n"
+        "I liked the story.\n"
         "I didn't understand all of it.\n"
         "But I think I understood the end."
     )
@@ -140,7 +150,6 @@ def child_acknowledgment(segments: list[dict]) -> list[dict]:
                     "auto_inserted": True})
     # Short child outro
     outro = (
-        "Dad? Mom?\n"
         "Will our walls hold?\n"
         "...I hope so."
     )
@@ -262,13 +271,12 @@ def add_voice_overlay(img: Image.Image, voice_key: str, text: str,
     w, h = img.size
     vstyle = VOICE_STYLES.get(voice_key, VOICE_STYLES["Ding"])
     voice_info = VOICES.get(voice_key, VOICES["Ding"])
-    icon = voice_info["icon"][0]
-
+    icon = voice_info["icon"]
     # Top voice indicator bar
     bar_h = int(h * 0.05)
     draw.rectangle([0, 0, w, bar_h], fill=vstyle["bar_color"] + (200,))
-    # Voice name + gender
-    label = f"{voice_key} ({voice_info['gender']})"
+    # Voice name + role
+    label = f"{icon} {voice_key} ({voice_info['role']})"
     font = None
     if font_path and os.path.exists(font_path):
         try:
