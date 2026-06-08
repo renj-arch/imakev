@@ -1850,6 +1850,192 @@ class SketchGenerator:
         self.draw_rect(draw, x + bl//2 - 2, y - 5*s, int(4*s), int(10*s),
                        fill=(40, 40, 40, 220))
 
+    def draw_wall(self, draw, x, y, size=1.0, color=(140, 120, 100)):
+        """Draw a stone wall with battlements."""
+        s = size
+        c = tuple(color[:3])
+        w = int(40 * s)
+        h = int(24 * s)
+        # Main wall body
+        self.draw_shadow(draw,
+            [(x - w//2, y - h), (x + w//2, y - h),
+             (x + w//2, y), (x - w//2, y)],
+            offset=(2, 2), blur_radius=3, color=(0, 0, 0, 40))
+        self.fill_gradient_rect(draw, x - w//2, y - h, w, h,
+                                self._darken(c, 10), self._lighten(c, 15))
+        # Battlements
+        batt_count = 6
+        batt_w = w // batt_count
+        for i in range(batt_count):
+            bx = x - w//2 + i * batt_w
+            if i % 2 == 0:
+                self.draw_rect(draw, bx, y - h - int(8*s), batt_w, int(8*s),
+                               fill=c+(200,), stroke=self._darken(c, 20)+(150,), stroke_width=1)
+        # Stone lines
+        for row in range(4):
+            ry = y - h + row * (h // 4)
+            self.draw_line(draw, x - w//2, ry, x + w//2, ry,
+                           color=self._darken(c, 15)+(80,), width=1)
+        # Vertical mortar lines
+        for i in range(1, batt_count):
+            lx = x - w//2 + i * batt_w
+            self.draw_line(draw, lx, y - h, lx, y,
+                           color=self._darken(c, 15)+(80,), width=1)
+
+    def draw_tent(self, draw, x, y, size=1.0, color=(160, 140, 100)):
+        """Draw a tent with pole and opening."""
+        s = size
+        c = tuple(color[:3])
+        w = int(32 * s)
+        h = int(28 * s)
+        # Shadow
+        self.draw_polygon(draw,
+            [(x - w//2 + 2, y + 2), (x + w//2 + 2, y + 2),
+             (x + 2, y - h + 2)],
+            fill=(0, 0, 0, 30))
+        # Tent body (triangle)
+        self.draw_polygon(draw,
+            [(x - w//2, y), (x + w//2, y), (x, y - h)],
+            fill=c+(210,), stroke=self._darken(c, 20)+(150,), stroke_width=2)
+        # Pole
+        self.draw_line(draw, x, y - h, x, y - h - int(6*s),
+                       color=(80, 60, 40, 200), width=2)
+        # Opening
+        open_w = int(10 * s)
+        open_h = int(14 * s)
+        self.draw_polygon(draw,
+            [(x - open_w//2, y), (x + open_w//2, y),
+             (x, y - open_h)],
+            fill=self._darken(c, 30)+(150,), stroke=self._darken(c, 20)+(100,), stroke_width=1)
+        # Tent lines (fabric seams)
+        self.draw_line(draw, x - w//4, y - h//2, x + w//4, y - h//2,
+                       color=self._darken(c, 10)+(80,), width=1)
+        self.draw_line(draw, x, y - h, x, y, color=self._darken(c, 10)+(60,), width=1)
+
+    def draw_chain(self, draw, x, y, size=1.0, color=(100, 90, 80)):
+        """Draw a chain with visible links."""
+        s = size
+        c = tuple(color[:3])
+        n_links = 5
+        link_w = int(10 * s)
+        link_h = int(16 * s)
+        gap = int(8 * s)
+        total_w = n_links * (link_w + gap)
+        start_x = x - total_w // 2
+        for i in range(n_links):
+            lx = start_x + i * (link_w + gap)
+            # Outer oval
+            self.draw_circle(draw, lx, y, link_h//2,
+                           fill=(0,0,0,30))
+            self.draw_rect(draw, lx - link_w//2, y - link_h//2, link_w, link_h,
+                          fill=self._lighten(c, 10)+(200,),
+                          stroke=self._darken(c, 20)+(150,), stroke_width=2, rx=link_w//2)
+            # Inner hole
+            self.draw_rect(draw, lx - link_w//4, y - link_h//4, link_w//2, link_h//2,
+                          fill=(30, 30, 40, 180),
+                          rx=link_w//4)
+
+    def draw_tower(self, draw, x, y, size=1.0, color=(130, 110, 90)):
+        """Draw a stone tower with battlements and windows."""
+        s = size
+        c = tuple(color[:3])
+        w = int(24 * s)
+        h = int(40 * s)
+        # Shadow
+        self.draw_shadow(draw,
+            [(x - w//2, y - h), (x + w//2, y - h),
+             (x + w//2, y), (x - w//2, y)],
+            offset=(2, 2), blur_radius=3, color=(0, 0, 0, 40))
+        # Tower body
+        self.fill_gradient_rect(draw, x - w//2, y - h, w, h,
+                                self._darken(c, 10), self._lighten(c, 15))
+        # Battlements
+        batt_count = 4
+        batt_w = w // batt_count
+        for i in range(batt_count):
+            bx = x - w//2 + i * batt_w
+            if i % 2 == 0:
+                self.draw_rect(draw, bx, y - h - int(6*s), batt_w, int(6*s),
+                               fill=c+(200,), stroke=self._darken(c, 20)+(150,), stroke_width=1)
+        # Door
+        door_w = int(8 * s)
+        door_h = int(10 * s)
+        self.draw_rect(draw, x - door_w//2, y - door_h, door_w, door_h,
+                      fill=self._darken(c, 30)+(180,), stroke=self._darken(c, 20)+(120,), stroke_width=1)
+        # Windows
+        for wy in [y - h + int(14*s), y - h + int(24*s)]:
+            self.draw_rect(draw, x - int(3*s), wy - int(4*s), int(6*s), int(8*s),
+                          fill=(180, 190, 200, 150), stroke=(60, 50, 40, 100), stroke_width=1)
+        # Stone lines
+        for row in range(5):
+            ry = y - h + row * (h // 5)
+            self.draw_line(draw, x - w//2, ry, x + w//2, ry,
+                           color=self._darken(c, 15)+(60,), width=1)
+
+    def draw_fortress(self, draw, x, y, size=1.0, color=(120, 100, 80)):
+        """Draw a fortress/castle with keep, towers and walls."""
+        s = size
+        c = tuple(color[:3])
+        # Central keep
+        kw, kh = int(24*s), int(32*s)
+        # Side towers
+        tw, th = int(14*s), int(22*s)
+        # Walls connecting
+        wall_h = int(12*s)
+        # Shadow
+        self.draw_shadow(draw,
+            [(x - kw//2 - tw, y), (x + kw//2 + tw, y),
+             (x + kw//2 + tw, y - th - 4), (x - kw//2 - tw, y - th - 4)],
+            offset=(2, 3), blur_radius=4, color=(0, 0, 0, 50))
+        # Left tower
+        ltx = x - kw//2 - tw//2
+        self.fill_gradient_rect(draw, ltx - tw//2, y - th, tw, th,
+                                self._darken(c, 10), self._lighten(c, 15))
+        # Right tower
+        rtx = x + kw//2 + tw//2
+        self.fill_gradient_rect(draw, rtx - tw//2, y - th, tw, th,
+                                self._darken(c, 10), self._lighten(c, 15))
+        # Connecting walls
+        self.draw_rect(draw, x - kw//2, y - wall_h, kw, wall_h,
+                      fill=c+(200,), stroke=self._darken(c, 20)+(150,), stroke_width=1)
+        self.draw_rect(draw, ltx + tw//2, y - wall_h, kw//2 - tw//2, wall_h,
+                      fill=c+(180,))
+        self.draw_rect(draw, rtx - tw//2 - kw//2 + tw//2, y - wall_h, kw//2 - tw//2, wall_h,
+                      fill=c+(180,))
+        # Central keep
+        self.fill_gradient_rect(draw, x - kw//2, y - kh, kw, kh,
+                                self._darken(c, 15), self._lighten(c, 10))
+        # Keep battlements
+        for i in range(4):
+            bx = x - kw//2 + i * (kw // 4)
+            if i % 2 == 0:
+                self.draw_rect(draw, bx, y - kh - int(5*s), kw//4, int(5*s),
+                               fill=c+(200,), stroke=self._darken(c, 20)+(150,), stroke_width=1)
+        # Tower battlements
+        for tlx in [ltx, rtx]:
+            for i in range(3):
+                bx = tlx - tw//2 + i * (tw // 3)
+                if i % 2 == 0:
+                    self.draw_rect(draw, bx, y - th - int(4*s), tw//3, int(4*s),
+                                   fill=c+(200,), stroke=self._darken(c, 20)+(150,), stroke_width=1)
+        # Gate
+        self.draw_rect(draw, x - int(6*s), y - int(10*s), int(12*s), int(10*s),
+                      fill=self._darken(c, 30)+(180,), stroke=(60, 50, 40, 150), stroke_width=2, rx=2)
+        # Gate arch (arc above door)
+        self.draw_arc(draw, x, y - int(10*s), int(6*s), 180, 0,
+                      color=(60, 50, 40, 150), width=2)
+        # Windows on keep
+        for wy in [y - kh + int(10*s), y - kh + int(18*s)]:
+            self.draw_rect(draw, x - int(3*s), wy - int(4*s), int(6*s), int(8*s),
+                          fill=(180, 190, 200, 150), stroke=(50, 40, 30, 100), stroke_width=1)
+        # Flags on towers
+        for fx, fy in [(ltx, y - th - int(4*s)), (rtx, y - th - int(4*s)), (x, y - kh - int(5*s))]:
+            self.draw_line(draw, fx, fy, fx, fy - int(6*s),
+                          color=(80, 60, 40, 200), width=2)
+            self.draw_polygon(draw,
+                [(fx, fy - int(6*s)), (fx + int(6*s), fy - int(3*s)), (fx, fy)],
+                fill=(180, 40, 40, 200))
+
     def draw_grass(self, draw, count=40, y_range=None, color=(50, 100, 40)):
         """Draw grass blades across an area."""
         c = tuple(color[:3])
@@ -4406,6 +4592,26 @@ class SketchGenerator:
         elif etype == "cannon":
             c = fill or (60, 60, 60)
             self.draw_cannon(draw, x, y, s, c)
+
+        elif etype == "wall":
+            c = fill or (140, 120, 100)
+            self.draw_wall(draw, x, y, s, c)
+
+        elif etype == "tent":
+            c = fill or (160, 140, 100)
+            self.draw_tent(draw, x, y, s, c)
+
+        elif etype == "chain":
+            c = fill or (100, 90, 80)
+            self.draw_chain(draw, x, y, s, c)
+
+        elif etype == "tower":
+            c = fill or (130, 110, 90)
+            self.draw_tower(draw, x, y, s, c)
+
+        elif etype == "fortress":
+            c = fill or (120, 100, 80)
+            self.draw_fortress(draw, x, y, s, c)
 
         elif etype == "flag":
             c = fill or (200, 50, 50)
