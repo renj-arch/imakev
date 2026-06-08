@@ -2943,60 +2943,126 @@ class SketchGenerator:
         tail_tip = (200, 180, 180)
         self.draw_circle(draw, tx - 5*s, y - 6*s, 2*s, fill=tail_tip + (200,))
 
-    def draw_pyramid(self, draw, x, y, size=1.0, color=(180, 150, 120), steps=3):
-        """Draw a step pyramid (Maya style)."""
-        s = size
+    def draw_pyramid(self, draw, x, y, size=1.0, color=(180, 150, 120), steps=5):
+        """Draw a Maya step pyramid — proper proportions, temple on top, stone texture."""
+        s = max(size, 2.0)
         c = tuple(color[:3])
-        self.draw_shadow_circle(draw, x, y + 2, 18*s, offset=(3, 3), blur_radius=4, color=(0, 0, 0, 35))
-        base_w = 28 * s
-        max_h = 36 * s
-        for i in range(steps):
-            t = i / steps
-            lw = int(base_w * (1 - t * 0.6))
-            lh = int(max_h / steps)
+        base_w = int(24 * s)
+        max_h = int(38 * s)
+        self.draw_shadow_circle(draw, x, y + 3, base_w // 2, offset=(4, 4), blur_radius=6, color=(0, 0, 0, 40))
+
+        # Steps from bottom to top
+        n = max(4, steps)
+        for i in range(n):
+            t = i / n
+            lw = int(base_w * (1 - t * 0.55))
+            lh = int(max_h / n)
             ly = y - max_h + i * lh
             lx = x - lw // 2
-            sc = self._darken(c, 10 * i) if i % 2 == 0 else self._lighten(c, 5 * i)
-            self.draw_rect(draw, lx, ly, lw, lh, fill=sc + (220,),
-                          stroke=self._darken(c, 15) + (180,), stroke_width=2)
-            # Stone block lines
-            for row in range(2):
-                ry = ly + lh * row // 2
-                for col in range(1, 4):
-                    rx = lx + lw * col // 4
-                    self.draw_line(draw, rx, ry, rx, ry + lh // 2,
-                                  color=self._darken(c, 20) + (100,), width=1)
-        # Doorway at base
-        dw, dh = int(8*s), int(12*s)
-        self.draw_rect(draw, x - dw//2, y - dh, dw, dh, fill=(30, 25, 20, 220))
+            # Step color: darker at bottom, lighter at top
+            shade = self._darken(c, 8 * (n - i)) if i < n - 1 else self._lighten(c, 10)
+            self.draw_rect(draw, lx, ly, lw, lh, fill=shade + (235,),
+                          stroke=self._darken(c, 20) + (180,), stroke_width=2)
+            # Stone joint lines per step face
+            joints = 2 + i
+            for j in range(1, joints):
+                jx = lx + lw * j // joints
+                self.draw_line(draw, jx, ly, jx, ly + lh, color=self._darken(c, 25) + (80,), width=1)
+            # Horizontal stone line
+            self.draw_line(draw, lx, ly + lh // 2, lx + lw, ly + lh // 2,
+                          color=self._darken(c, 20) + (60,), width=1)
+
+        # Temple shrine on top
+        sh_w = int(base_w * 0.35)
+        sh_h = int(max_h * 0.15)
+        sh_x = x - sh_w // 2
+        sh_y = y - max_h - sh_h
+        self.draw_rect(draw, sh_x, sh_y, sh_w, sh_h, fill=self._lighten(c, 15) + (235,),
+                      stroke=self._darken(c, 15) + (180,), stroke_width=2)
+        # Roof crest
+        cr_w = int(sh_w * 0.6)
+        cr_h = int(sh_h * 0.5)
+        self.draw_rect(draw, x - cr_w // 2, sh_y - cr_h, cr_w, cr_h, fill=self._darken(c, 5) + (220,),
+                      stroke=self._darken(c, 20) + (160,), stroke_width=2)
+        # Doorway in shrine
+        dw, dh = int(sh_w * 0.35), int(sh_h * 0.7)
+        self.draw_rect(draw, x - dw // 2, sh_y + sh_h - dh, dw, dh, fill=(20, 18, 15, 230))
+        # Door arch
+        self.draw_arc(draw, x - dw // 2, sh_y + sh_h - dh, dw // 2, 0, 180,
+                     color=(20, 18, 15, 230), width=2)
+
+        # Staircase (center, going up)
+        stair_w = int(base_w * 0.22)
+        for i in range(n):
+            st = i / n
+            sy = y - max_h + i * (max_h // n)
+            sw = int(stair_w * (1 - st * 0.4))
+            self.draw_line(draw, x - sw // 2, sy, x + sw // 2, sy,
+                          color=self._darken(c, 25) + (150,), width=2)
+
+        # Base platform
+        base_h = int(max_h * 0.08)
+        self.draw_rect(draw, x - base_w // 2 - 4, y - base_h, base_w + 8, base_h,
+                      fill=self._darken(c, 15) + (235,), stroke=self._darken(c, 25) + (180,), stroke_width=2)
 
     def draw_temple(self, draw, x, y, size=1.0, color=(160, 130, 100)):
-        """Draw a Maya temple with roof comb."""
-        s = size
+        """Draw a Maya temple — corbel arch, roof comb, stepped platform."""
+        s = max(size, 1.5)
         c = tuple(color[:3])
-        bw, bh = 22*s, 16*s
-        # Base platform
-        self.draw_rect(draw, x - bw//2, y - bh, bw, bh, fill=c + (220,),
+        self.draw_shadow_circle(draw, x, y + 2, 14*s, offset=(3, 3), blur_radius=4, color=(0, 0, 0, 35))
+
+        # Stepped platform (3 tiers)
+        tiers = 3
+        for i in range(tiers):
+            tw = int(24 * s * (1 - i * 0.15))
+            th = int(6 * s)
+            ty = y - (tiers - i) * th
+            tx = x - tw // 2
+            shade = self._darken(c, 5 * (tiers - i))
+            self.draw_rect(draw, tx, ty, tw, th, fill=shade + (235,),
+                          stroke=self._darken(c, 15) + (180,), stroke_width=2)
+
+        # Upper walls
+        uw = int(18 * s)
+        uh = int(14 * s)
+        uy = y - tiers * int(6*s) - uh
+        self.draw_rect(draw, x - uw//2, uy, uw, uh, fill=self._lighten(c, 5) + (235,),
                       stroke=self._darken(c, 15) + (180,), stroke_width=2)
-        # Upper platform
-        uw = int(bw * 0.7)
-        uh = int(bh * 0.6)
-        self.draw_rect(draw, x - uw//2, y - bh - uh, uw, uh, fill=self._lighten(c, 5) + (220,),
-                      stroke=self._darken(c, 15) + (180,), stroke_width=2)
-        # Roof comb
-        rw = int(uw * 0.55)
-        rh = int(bh * 0.5)
-        self.draw_rect(draw, x - rw//2, y - bh - uh - rh, rw, rh, fill=self._darken(c, 10) + (200,),
+
+        # Roof comb (tall crest on top)
+        rw = int(uw * 0.45)
+        rh = int(16 * s)
+        ry = uy - rh
+        self.draw_rect(draw, x - rw//2, ry, rw, rh, fill=self._darken(c, 10) + (220,),
                       stroke=self._darken(c, 20) + (160,), stroke_width=2)
-        # Doorway
-        dw, dh = int(6*s), int(8*s)
-        self.draw_rect(draw, x - dw//2, y - dh, dw, dh, fill=(30, 25, 20, 220))
-        # Steps
-        for i in range(4):
-            sy = y - i * int(3*s)
-            sw = int(bw * (0.5 - i * 0.08))
+        # Roof comb cutouts (decorative slots)
+        for slot in range(3):
+            sx = x - rw//3 + slot * int(rw//3)
+            sy = ry + int(rh * 0.2)
+            sh2 = int(rh * 0.5)
+            self.draw_rect(draw, sx - 2, sy, 4, sh2, fill=(120, 100, 80, 180))
+
+        # Corbel arch doorway
+        dw = int(uw * 0.25)
+        dh = int(uh * 0.65)
+        dx = x - dw // 2
+        dy = uy + uh - dh
+        # Door frame
+        self.draw_rect(draw, dx, dy, dw, dh, fill=(15, 12, 10, 235))
+        # Corbel arch top (triangular)
+        self.draw_polygon(draw, [(dx, dy), (x, dy - int(dw * 0.4)), (dx + dw, dy)],
+                         fill=(15, 12, 10, 235))
+
+        # Staircase
+        for i in range(tiers * 3):
+            sy = y - i * int(2*s)
+            sw = int(10 * s * (1 - i * 0.03))
             self.draw_line(draw, x - sw//2, sy, x + sw//2, sy,
-                          color=self._darken(c, 20) + (180,), width=2)
+                          color=self._darken(c, 20) + (130,), width=2)
+
+        # Platform base
+        self.draw_rect(draw, x - int(13*s), y - int(3*s), int(26*s), int(3*s),
+                      fill=self._darken(c, 15) + (235,), stroke=self._darken(c, 25) + (180,), stroke_width=2)
 
     def draw_leaf(self, draw, x, y, size=1.0, color=(100, 160, 60)):
         """Draw a detailed leaf with veins."""
@@ -5145,8 +5211,8 @@ class SketchGenerator:
             self.draw_anchor(draw, x, y, s, fill or (80, 75, 70))
 
         elif etype == "building":
-            bw = int(elem.get("width", 0.12) * self.w)
-            bh = int(elem.get("height", 0.25) * self.h)
+            bw = int(elem.get("width", 0.12) * self.w) if "width" in elem else int(40 * s)
+            bh = int(elem.get("height", 0.25) * self.h) if "height" in elem else int(60 * s)
             c = fill or (120, 100, 80)
             wc = self._tc(elem.get("window_color", (255, 220, 100))) or (255, 220, 100)
             self.draw_building(draw, x, y, bw, bh, c, wc)
