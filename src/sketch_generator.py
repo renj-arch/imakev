@@ -4715,6 +4715,68 @@ class SketchGenerator:
     def _render_element_dispatch(self, draw, elem, etype, x, y, s, fill, stroke, opacity=255):
         """Dispatch to the correct draw method based on element type."""
 
+        # ── Alias table: map alternative names to canonical types ──
+        ALIAS = {
+            "seagull": "bird", "bird_flock": "bird", "flying_bird": "bird",
+            "drifting_cloud": "cloud", "cloud_small": "cloud", "storm_cloud": "cloud",
+            "sunrise": "sun", "dawn": "sun", "morning": "sun", "sunset": "sun", "twilight": "sun",
+            "full_moon": "moon",
+            "human_silhouette": "human", "silhouette": "human", "shadow_figure": "human",
+            "cliff": "mountain", "canyon": "mountain", "valley": "mountain",
+            "dune": "hill", "sand_dune": "hill",
+            "snowflake": "snow", "raindrop": "rain",
+            "spark": "star", "sparkle": "star", "glowing_eye": "star",
+            "falling_leaf": "leaf", "drifting_leaf": "leaf",
+            "floating_ember": "fire", "campfire": "fire", "bonfire": "fire", "flickering_torch": "torch",
+            "palm_tree": "tree", "pine_tree": "tree", "dead_tree": "tree",
+            "grass_patch": "grass", "blowing_grass": "grass",
+            "moving_wave": "wave", "flowing_river": "river",
+            "running_animal": "animal", "animal_track": "footprint",
+            "shrub": "bush", "berry_bush": "bush",
+            "lantern_glow": "lamp", "lantern": "lamp", "torch_glow": "torch",
+            "window_light": "window",
+            "cave_entrance": "cave", "hidden_path": "path",
+            "ancient_ruin": "building", "ruin": "building", "abandoned_house": "house",
+            "sealed_door": "door", "gateway": "gate",
+            "forgotten_map": "map", "map_table": "map",
+            "thought_bubble": "lightbulb", "answer_mark": "question_mark",
+            "magnifying_glass": "microscope",
+            "paw_print": "footprint",
+            "cracked_stone": "rock", "leaf_pile": "leaf",
+            "smoke_column": "smoke",
+            "drifting_log": "log", "log": "tree",
+            "shark_fin": "shark",
+            "fish_school": "fish",
+            "shipwreck": "ship", "sail_ship": "ship",
+            "skull_flag": "flag",
+            "horseman": "horse",
+            "fallen_weapon": "sword",
+            "watchtower": "tower",
+            "thought_bubble": "lightbulb",
+            "puzzle_piece": "puzzle",
+            "marching_group": "crowd_small",
+            "village_people": "crowd_small",
+            "marketplace": "market_stall",
+            "wood": "tree",
+            "plank": "wall",
+            "stone": "rock",
+            "brick": "rect",
+            "cobblestone": "path",
+            "signpost": "flag",
+            "wheelbarrow": "cart",
+            "story": "book",
+            "tale": "book",
+            "legend": "book",
+            "myth": "book",
+        }
+        resolved = ALIAS.get(etype, etype)
+
+        if resolved != etype:
+            # Recursive call with resolved type, preserving all params
+            elem = dict(elem)
+            elem["type"] = resolved
+            return self._render_element_dispatch(draw, elem, resolved, x, y, s, fill, stroke, opacity)
+
         if etype in ("mountain", "mountains"):
             w = int(elem.get("width", 0.3) * self.w)
             h = int(elem.get("height", 0.25) * self.h)

@@ -10,7 +10,7 @@ Usage:
     img.save("output.png")
 """
 
-import re, json
+import re, json, random
 from PIL import Image
 from src.sketch_generator import SketchGenerator
 
@@ -88,8 +88,9 @@ def _describe_scene(narration: str, story_context: dict = None,
     
     Pipeline:
       1. Scene type detection (story/diagram/timeline/etc.)
-      2. Scene composition (creative → knowledge → dynamic → keyword → fallback)
+      2. Scene composition (keyword → creative → knowledge → dynamic → fallback)
       3. Visual treatment — ONE dominant treatment per segment (camera, particles, mood, etc.)
+      4. Background enrichment — fill in context-appropriate background elements
     """
     
     # Detect what kind of visual this narration needs
@@ -117,12 +118,26 @@ def _describe_scene(narration: str, story_context: dict = None,
     treatment = select_treatment(narration, scene.get("mood", ""), rng)
     scene = apply_treatment(scene, treatment, rng)
     
+    # Enrich background AFTER treatment so filler elements survive treatment filtering
+    scene["_narration"] = narration
+    scene = _enrich_background(scene)
+    
     return scene
 
 
 def _compose_scene(narration: str, story_context: dict = None,
                     voice: str = None, camera: str = "medium") -> dict:
-    """Scene composition pipeline (no treatment applied here)."""
+    """Scene composition pipeline (no treatment or enrichment applied here).
+    
+    Pipeline order (most specific → generic):
+      1. Creative scene (poetic/reflective text)
+      2. Keyword parsing (exact word match — specific topics like ship, robot, ice age)
+      3. Knowledge base (fuzzy semantic scene templates, conservative threshold)
+      4. Dynamic scene composer (context-aware generic scenes)
+      5. Generic fallback (mood-based dynamic scene)
+    
+    Treatment and background enrichment are applied by _describe_scene() after compose.
+    """
     
     # PRIMARY: Creative scene — poetic/reflective/philosophical text
     from src.creative_scenes import match_creative_scene
@@ -130,20 +145,20 @@ def _compose_scene(narration: str, story_context: dict = None,
     if result:
         return result
     
-    # SECONDARY: Knowledge base — curated scene templates for known topics.
-    from src.scene_knowledge import semantic_scene
-    result = semantic_scene(narration, threshold=0.3)
+    # SECONDARY: Keyword parsing (exact word match — specific topics first)
+    result = _keyword_describe(narration)
     if result:
         return result
     
-    # TERTIARY: Dynamic scene composer — context-aware
+    # TERTIARY: Knowledge base — fuzzy semantic scene templates (conservative threshold)
+    from src.scene_knowledge import semantic_scene
+    result = semantic_scene(narration, threshold=0.5)
+    if result:
+        return result
+    
+    # QUATERNARY: Dynamic scene composer — context-aware (if nothing specific matched)
     from src.dynamic_scene import compose_context_scene
     result = compose_context_scene(narration, story_context=story_context, voice=voice, camera=camera)
-    if result:
-        return result
-    
-    # QUATERNARY: Keyword parsing (fast path for common topics)
-    result = _keyword_describe(narration)
     if result:
         return result
     
@@ -698,6 +713,45 @@ def _keyword_describe(narration: str) -> dict | None:
         scenes.append(scene)
 
     # ═══════════════════════════════════════════════════════════════
+    #  EARLY HUMANS / DISCOVERY / FIRST ENCOUNTER
+    # ═══════════════════════════════════════════════════════════════
+    if any(w in n for w in ("first humans", "early humans", "first time they saw",
+                             "first people", "first encounter", "first discovery",
+                             "ancient humans", "first human", "human saw",
+                             "first saw", "first time human", "discovered by",
+                             "first explorers", "first to see")):
+        is_ocean = any(w in n for w in ("ocean", "sea", "shore", "coast", "beach", "wave", "water"))
+        if is_ocean:
+            scene = {
+                "bg": {"type": "ocean", "sky_color": [255, 220, 160], "horizon_color": [200, 150, 100],
+                       "horizon": 0.45, "water_color": [30, 80, 160]},
+                "elements": [
+                    {"type": "mountain", "x": 0.3, "y": 0.55, "width": 0.25, "height": 0.3, "fill": [120, 110, 130]},
+                    {"type": "sun", "x": 0.15, "y": 0.3, "radius": 22, "fill": [255, 200, 80]},
+                    {"type": "wave", "x": 0.2, "y": 0.55, "scale": 2.5, "fill": [40, 100, 180]},
+                    {"type": "wave", "x": 0.6, "y": 0.58, "scale": 2.0, "fill": [30, 90, 170]},
+                    {"type": "human", "x": 0.5, "y": 0.55, "scale": 4.5, "fill": [80, 60, 50]},
+                    {"type": "bird", "x": 0.75, "y": 0.15, "scale": 1.5},
+                    {"type": "footprint", "x": 0.35, "y": 0.7, "scale": 1.5, "fill": [100, 90, 80]},
+                ],
+                "atmosphere": {"particles": "none", "fog": False},
+                "mood": "wonder"
+            }
+        else:
+            scene = {
+                "bg": {"type": "gradient", "colors": [[180, 200, 220], [120, 160, 200]], "horizon": 0.55, "ground_color": [60, 90, 60]},
+                "elements": [
+                    {"type": "tree", "x": 0.2, "y": 0.7, "scale": 3.5, "tree_style": "round", "fill": [50, 120, 50]},
+                    {"type": "hill", "x": 0.5, "y": 0.75, "width": 0.5, "height": 0.1, "fill": [70, 130, 70]},
+                    {"type": "human", "x": 0.5, "y": 0.55, "scale": 4.5, "fill": [80, 60, 50]},
+                    {"type": "bird", "x": 0.7, "y": 0.15, "scale": 1.5},
+                ],
+                "atmosphere": {"particles": "none", "fog": False},
+                "mood": "wonder"
+            }
+        scenes.append(scene)
+
+    # ═══════════════════════════════════════════════════════════════
     #  WATER / OCEAN / SEA / UNDERWATER
     # ═══════════════════════════════════════════════════════════════
     if any(w in n for w in ("ocean", "sea", "underwater", "marine",
@@ -836,25 +890,6 @@ def _keyword_describe(narration: str) -> dict | None:
             "atmosphere": {"particles": "none", "fog": True},
             "mood": "mysterious"
         }
-        scenes.append(scene)
-
-    # Ocean / Ship / Pirate
-    if any(w in n for w in ("pirate", "ship", "sail", "ocean", "sea", "sailor", "boat", "navy", "harbor")):
-        scene = {
-            "bg": {"type": "ocean", "sky_color": [180, 210, 240], "horizon_color": [120, 170, 220],
-                   "horizon": 0.5, "water_color": [30, 70, 150]},
-            "elements": [
-                {"type": "ship", "x": 0.5, "y": 0.55, "scale": 5.0, "fill": [80, 60, 40], "sail_color": [220, 210, 190]},
-            ],
-            "atmosphere": {"particles": "none", "fog": False},
-            "mood": "dramatic" if any(w in n for w in ("storm", "danger", "battle", "war", "attack")) else "peaceful"
-        }
-        if "pirate" in n:
-            scene["elements"].append({"type": "human", "x": 0.35, "y": 0.5, "scale": 3.5, "fill": [100, 60, 40]})
-        if any(w in n for w in ("storm", "dark", "thunder")):
-            scene["atmosphere"]["fog"] = True
-            scene["bg"]["sky_color"] = [100, 100, 120]
-            scene["bg"]["horizon_color"] = [80, 80, 100]
         scenes.append(scene)
 
     # Evolution / Body Change (legs, tails, bodies growing, etc.)
@@ -1041,19 +1076,157 @@ def _keyword_describe(narration: str) -> dict | None:
 
 
 def _generic_fallback(narration: str) -> dict:
-    """Ultimate fallback: generic landscape with narration text."""
-    return {
-        "bg": {"type": "gradient", "colors": [[200, 210, 230], [140, 160, 200]],
-               "horizon": 0.6, "ground_color": [60, 90, 50]},
-        "elements": [
+    """Ultimate fallback: dynamic scene based on narration mood and keywords."""
+    n = narration.lower()
+    if any(w in n for w in ("storm", "war", "battle", "danger", "dark", "death", "sad", "lost")):
+        mood = "dramatic"
+        colors = [[100, 100, 120], [60, 60, 80]]
+    elif any(w in n for w in ("beautiful", "love", "hope", "joy", "wonder", "amazing")):
+        mood = "hopeful"
+        colors = [[200, 220, 240], [140, 180, 220]]
+    elif any(w in n for w in ("mystery", "secret", "hidden", "strange", "weird")):
+        mood = "mysterious"
+        colors = [[80, 70, 100], [40, 35, 60]]
+    elif any(w in n for w in ("world", "planet", "earth", "universe", "space")):
+        mood = "epic"
+        colors = [[20, 20, 50], [10, 10, 40]]
+    elif any(w in n for w in ("journey", "travel", "walk", "run", "move", "go")):
+        mood = "hopeful"
+        colors = [[180, 210, 200], [120, 170, 150]]
+    else:
+        mood = "peaceful"
+        colors = [[200, 210, 230], [140, 160, 200]]
+    elements = []
+    if mood == "dramatic":
+        elements = [
+            {"type": "cloud", "x": 0.25, "y": 0.2, "scale": 3.5, "fill": [60, 60, 80]},
+            {"type": "cloud", "x": 0.75, "y": 0.15, "scale": 3.0, "fill": [50, 50, 70]},
+            {"type": "line", "x1": 0.3, "y1": 0.2, "x2": 0.3, "y2": 0.45, "fill": [255, 220, 50], "stroke_width": 3},
+            {"type": "line", "x1": 0.7, "y1": 0.15, "x2": 0.7, "y2": 0.35, "fill": [255, 220, 50], "stroke_width": 2},
+        ]
+    elif mood == "mysterious":
+        elements = [
+            {"type": "moon", "x": 0.7, "y": 0.2, "radius": 18},
+            {"type": "cloud", "x": 0.25, "y": 0.15, "scale": 3.0, "fill": [60, 60, 80]},
+            {"type": "cloud", "x": 0.65, "y": 0.18, "scale": 2.5, "fill": [50, 50, 70]},
+            {"type": "star", "x": 0.2, "y": 0.08, "radius": 2},
+            {"type": "star", "x": 0.8, "y": 0.1, "radius": 1.5},
+            {"type": "star", "x": 0.4, "y": 0.05, "radius": 1.5},
+        ]
+    elif mood == "epic":
+        elements = [
+            {"type": "star", "x": 0.2, "y": 0.1, "radius": 2.5, "fill": [255, 255, 200]},
+            {"type": "star", "x": 0.7, "y": 0.08, "radius": 2, "fill": [200, 200, 255]},
+            {"type": "star", "x": 0.8, "y": 0.3, "radius": 1.5, "fill": [255, 200, 200]},
+            {"type": "star", "x": 0.15, "y": 0.5, "radius": 1.5, "fill": [200, 255, 200]},
+            {"type": "star", "x": 0.9, "y": 0.6, "radius": 1, "fill": [255, 255, 255]},
+            {"type": "globe", "x": 0.5, "y": 0.45, "scale": 4.0, "fill": [80, 140, 200]},
+        ]
+    else:
+        elements = [
             {"type": "hill", "x": 0.5, "y": 0.7, "width": 0.5, "height": 0.15, "fill": [60, 120, 60]},
-            {"type": "tree", "x": 0.3, "y": 0.72, "scale": 4.0, "tree_style": "round", "fill": [50, 120, 50]},
-            {"type": "cloud", "x": 0.5, "y": 0.2, "scale": 3.0},
-            {"type": "text", "x": 0.5, "y": 0.08, "text": narration[:40].upper(), "font_size": 28, "fill": [40, 35, 30]},
-        ],
+            {"type": "cloud", "x": 0.3, "y": 0.2, "scale": 2.5},
+            {"type": "cloud", "x": 0.7, "y": 0.25, "scale": 2.0},
+            {"type": "bird", "x": 0.25, "y": 0.15, "scale": 1.5},
+            {"type": "bird", "x": 0.55, "y": 0.18, "scale": 1.25},
+        ]
+    elements.append({"type": "text", "x": 0.5, "y": 0.08, "text": narration[:50].upper(), "font_size": 26, "fill": [40, 35, 30]})
+    return {
+        "bg": {"type": "gradient", "colors": colors, "horizon": 0.6, "ground_color": [60, 90, 50]},
+        "elements": elements,
         "atmosphere": {"particles": "none", "fog": False},
-        "mood": "peaceful"
+        "mood": mood
     }
+
+
+def _enrich_background(scene: dict) -> dict:
+    """Add context-appropriate background elements to make scenes richer."""
+    elements = scene.get("elements", [])
+    existing_types = {e.get("type") for e in elements}
+    bg = scene.get("bg", {})
+    bg_type = bg.get("type", "gradient") if isinstance(bg, dict) else "gradient"
+    mood = scene.get("mood", "peaceful")
+    atmos = scene.get("atmosphere", {})
+    n = scene.get("_narration", "").lower()
+
+    # Don't over-enrich if scene already has 6+ non-text elements
+    non_text_count = sum(1 for e in elements if e.get("type") not in ("text", "star", "circle", "line"))
+    if non_text_count >= 6:
+        return scene
+
+    is_tech = any(w in n for w in ("computer", "internet", "technology", "digital", "circuit", "quantum", "algorithm", "data", "binary", "robot"))
+    is_indoor = bg_type == "indoor" or is_tech
+    is_night = bg_type in ("night", "space")
+    is_ocean = bg_type == "ocean"
+    outdoor_ground = not is_indoor and not is_night and not is_ocean
+    has_plant = any(t in existing_types for t in ("tree", "flower", "grass"))
+
+    fillers = []
+
+    # Sky elements
+    if not is_indoor and not is_night:
+        if "cloud" not in existing_types and mood not in ("dramatic", "somber", "mysterious") and rng.random() < 0.5:
+            fillers.append({"type": "cloud", "x": 0.2, "y": 0.2, "scale": 2.5})
+        if "bird" not in existing_types and mood not in ("somber", "dramatic", "mysterious") and rng.random() < 0.3:
+            fillers.append({"type": "bird", "x": 0.3, "y": 0.15, "scale": 1.5})
+        if "sun" not in existing_types and mood in ("peaceful", "hopeful", "epic", "wonder") and rng.random() < 0.15:
+            fillers.append({"type": "sun", "x": 0.85, "y": 0.12, "radius": 18, "fill": [255, 230, 80]})
+
+    # Night/space stars
+    if is_night and "star" not in existing_types:
+        for _ in range(rng.randint(3, 5)):
+            fillers.append({"type": "star", "x": rng.uniform(0.05, 0.95), "y": rng.uniform(0.05, 0.5), "radius": rng.uniform(1, 2.5), "fill": [255, 255, 200]})
+        if "moon" not in existing_types and rng.random() < 0.5:
+            fillers.append({"type": "moon", "x": 0.8, "y": 0.2, "radius": 18})
+
+    # Ground nature
+    if outdoor_ground and not has_plant and rng.random() < 0.5:
+        fillers.append({"type": "tree", "x": 0.15, "y": 0.72, "scale": 3.0, "tree_style": "round" if rng.random() < 0.5 else "pine", "fill": [50, 120, 50]})
+    if "flower" not in existing_types and outdoor_ground and mood in ("peaceful", "hopeful") and rng.random() < 0.3:
+        fillers.append({"type": "flower", "x": 0.35, "y": 0.76, "scale": 1.5, "fill": [200, 100, 150]})
+
+    # Ocean context
+    if is_ocean and "bird" not in existing_types and rng.random() < 0.3:
+        fillers.append({"type": "bird", "x": 0.3, "y": 0.12, "scale": 1.5})
+
+    # Bare scene fallback
+    total_visible = non_text_count + len(fillers)
+    if total_visible < 2 and outdoor_ground:
+        if "hill" not in existing_types:
+            fillers.append({"type": "hill", "x": 0.5, "y": 0.78, "width": 0.5, "height": 0.1, "fill": [70, 130, 70]})
+        if "cloud" not in existing_types:
+            fillers.append({"type": "cloud", "x": 0.5, "y": 0.2, "scale": 2.5})
+
+    # Atmosphere
+    if not atmos.get("particles") or atmos.get("particles") == "none":
+        if bg_type == "night":
+            atmos["particles"] = "stars"
+            atmos["star_count"] = 30
+        elif mood in ("mysterious", "somber") and not is_indoor:
+            atmos["particles"] = "fog" if rng.random() < 0.5 else "mist"
+            atmos["fog"] = True
+        elif mood == "dramatic" and not is_indoor:
+            atmos["particles"] = "rain" if rng.random() < 0.3 else "mist"
+            if atmos["particles"] == "mist":
+                atmos["fog"] = True
+    scene["atmosphere"] = {**atmos}
+
+    # Style
+    style = scene.setdefault("style", {})
+    if mood == "dramatic":
+        style.setdefault("vignette", 0.5)
+    elif mood in ("peaceful", "hopeful"):
+        style.setdefault("vignette", 0.1)
+
+    # Merge
+    text_elems = [e for e in elements if e.get("type") == "text"]
+    non_text = [e for e in elements if e.get("type") != "text"]
+    final_fillers = [f for f in fillers if f.get("type") not in existing_types]
+    scene["elements"] = non_text + final_fillers + text_elems
+    return scene
+
+
+rng = random.Random()
 
 
 def batch_sketch_from_narrations(narrations: list[str], width=W, height=H) -> list[Image.Image]:

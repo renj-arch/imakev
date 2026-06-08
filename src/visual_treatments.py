@@ -245,6 +245,7 @@ def select_treatment(segment_text: str, story_mood: str = "", rng=None) -> dict:
             "epic": "epic_scale",
             "peaceful": "minimal",
             "informational": "documentary",
+            "wonder": "dreamy",
         }
         best = mood_map.get(story_mood, "atmospheric")
         # Still use RNG to add variety
@@ -300,20 +301,30 @@ def apply_treatment(scene: dict, treatment: dict, rng) -> dict:
     # ── Element count filter ──
     count_mode = treatment.get("element_count", "moderate")
     elements = scene.get("elements", [])
+    # Primary subject types that must never be removed by count filter
+    PRIMARY_TYPES = {"ship", "whale", "mammoth", "human", "robot", "dinosaur",
+                     "skeleton", "animal", "house", "building", "globe",
+                     "astronaut", "rocket", "spaceship", "mountain", "glacier",
+                     "iceberg", "sun", "moon", "tree", "flower", "bird",
+                     "fish", "heart", "dna", "atom", "gear"}
+    protected = [e for e in elements if e.get("type") in PRIMARY_TYPES]
+    non_protected = [e for e in elements if e.get("type") not in PRIMARY_TYPES]
     if count_mode == "single" and len(elements) > 1:
-        # Keep only the most relevant element (largest or first non-circle)
-        non_circle = [e for e in elements if e.get("type") != "circle"]
+        non_circle = [e for e in non_protected if e.get("type") != "circle"]
         if non_circle:
             best_elem = max(non_circle, key=lambda e: e.get("scale", 1))
-            elements = [best_elem]
+            non_protected = [best_elem]
         else:
-            elements = [elements[0]]
+            non_protected = non_protected[:1] if non_protected else []
     elif count_mode == "few" and len(elements) > 3:
-        rng.shuffle(elements)
-        elements = elements[:3]
+        rng.shuffle(non_protected)
+        non_protected = non_protected[:max(0, 3 - len(protected))]
     elif count_mode == "many":
         pass  # keep all
-    scene["elements"] = elements
+    # Merge protected + filtered non-protected, preserving text at end
+    text = [e for e in non_protected if e.get("type") == "text"]
+    other = [e for e in non_protected if e.get("type") != "text"]
+    scene["elements"] = protected + other + text
 
     # ── Palette / color bias ──
     palette = treatment.get("palette", "neutral")
