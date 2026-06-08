@@ -1,0 +1,65 @@
+name: Ding-Dong-Think Story Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      script_file:
+        description: 'Path to script in repo (e.g. stories/mammoth.txt)'
+        required: true
+        default: 'last_mammoth_raw.txt'
+      no_child:
+        description: 'Skip Think interjections'
+        type: boolean
+        default: false
+      seed:
+        description: 'Random seed'
+        default: '42'
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install pillow numpy
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+
+      - name: Generate frames
+        run: |
+          NAME=$(basename "${{ inputs.script_file }}" .txt)
+          python multi_voice.py \
+            --file "${{ inputs.script_file }}" \
+            --smart \
+            --output "output/$NAME" \
+            --seed ${{ inputs.seed }} \
+            ${{ inputs.no_child && '--no-child' || '' }}
+
+      - name: Assemble video
+        run: |
+          NAME=$(basename "${{ inputs.script_file }}" .txt)
+          python multi_voice.py \
+            --assemble \
+            --output "output/$NAME" \
+            --video "output/$NAME.mp4"
+
+      - name: Upload frames
+        uses: actions/upload-artifact@v4
+        with:
+          name: story-frames
+          path: output/
+          if-no-files-found: error
+
+      - name: Upload video
+        uses: actions/upload-artifact@v4
+        with:
+          name: story-video
+          path: output/*.mp4
+          if-no-files-found: error
