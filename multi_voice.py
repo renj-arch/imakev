@@ -851,11 +851,13 @@ def assemble_video(output_dir="output/mv_frames", output_video="output/mv_video.
         output_video
     ]
     print(f"Concatenating {len(concat_list)} clips -> {output_video}")
-    r = subprocess.run(cmd_concat, capture_output=True, text=True)
+    r = subprocess.run(cmd_concat, capture_output=True, text=True, timeout=180)
     if r.returncode == 0:
-        print(f"Video saved: {output_video} ({total_frames} frames)")
+        sz = os.path.getsize(output_video) if os.path.exists(output_video) else 0
+        print(f"Video saved: {output_video} ({total_frames} frames, {sz} bytes)")
     else:
-        print(f"Concat failed ({r.returncode}): {r.stderr[:500]}")
+        print(f"Concat failed ({r.returncode})")
+        print(f"stderr last 2000 chars:\n{r.stderr[-2000:]}")
 
     # Cleanup temp clips
     import shutil
