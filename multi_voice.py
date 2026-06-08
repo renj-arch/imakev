@@ -780,6 +780,29 @@ def assemble_video(output_dir="output/mv_frames", output_video="output/mv_video.
     w, h = manifest["width"], manifest["height"]
     fps = manifest.get("fps", 24)
 
+    # Find a system font for drawtext
+    import platform as _platform
+    _sys = _platform.system()
+    fontfile = ""
+    if _sys == "Linux":
+        for _p in ["/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+                     "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
+                     "/usr/share/fonts/truetype/noto/NotoSans-Regular.ttf"]:
+            if os.path.exists(_p):
+                fontfile = f":fontfile='{_p}'"
+                break
+    elif _sys == "Windows":
+        for _p in ["C:/Windows/Fonts/arial.ttf", "C:/Windows/Fonts/seguiui.ttf"]:
+            if os.path.exists(_p):
+                fontfile = f":fontfile='{_p}'"
+                break
+    elif _sys == "Darwin":
+        for _p in ["/System/Library/Fonts/Helvetica.ttc",
+                     "/Library/Fonts/Arial.ttf"]:
+            if os.path.exists(_p):
+                fontfile = f":fontfile='{_p}'"
+                break
+
     # Build per-segment filter chains with Ken Burns + animated text + comment pops
     filter_parts = []
     input_files = []
@@ -814,11 +837,14 @@ def assemble_video(output_dir="output/mv_frames", output_video="output/mv_video.
                  f"y='ih/2-(ih/zoom/2)+{pan_y:.4f}*ih':"
                  f"s={w}x{h}")
 
-        # Drawtext subtitle — typewriter effect (reveal one character at a time)
-        text_len = len(text)
-        typewriter_speed = max(1, text_len / (duration * fps))  # chars per frame
+        # Drawtext subtitle — write text to temp file to avoid shell/filter escaping issues
+        text_file = os.path.join(output_dir, "temp", f"text_{i+1:03d}.txt")
+        os.makedirs(os.path.dirname(text_file), exist_ok=True)
+        with open(text_file, "w", encoding="utf-8") as tf:
+            tf.write(text)
+        # Use textfile parameter instead of inline text — avoids all escaping issues
         subtitle_filter = (
-            f"drawtext=text='{text}':"
+            f"drawtext=textfile='{text_file}'{fontfile}:"
             f"fontcolor=white:fontsize={int(h*0.028)}:"
             f"x=(w-text_w)/2:y=h-{int(h*0.11)}:"
             f"shadowcolor=black:shadowx=2:shadowy=2:"
@@ -870,6 +896,26 @@ def assemble_video(output_dir="output/mv_frames", output_video="output/mv_video.
     ret = os.system(cmd)
     if ret == 0:
         print(f"Video saved: {output_video}")
+    elif filter_parts:
+        # Complex filter failed — likely drawtext font issue. Fall back to simple concat
+        print("Complex filter failed, falling back to simple concat (no subtitles)...")
+        concat_path = os.path.join(output_dir, "concat.txt")
+        with open(concat_path, "w") as f:
+            for i, seg in enumerate(manifest["segments"]):
+                fp = input_files[i]
+                duration = seg.get("duration_frames", 120) / fps
+                f.write(f"file '{fp}'\nduration {duration:.2f}\n")
+        cmd = (
+            f'ffmpeg -y -f concat -safe 0 -i "{concat_path}" '
+            f'-c:v libx264 -pix_fmt yuv420p -r {fps} '
+            f'-vf "scale={w}:{h}:force_original_aspect_ratio=decrease,pad={w}:{h}:(ow-iw)/2:(oh-ih)/2" '
+            f'"{output_video}"'
+        )
+        ret = os.system(cmd)
+        if ret == 0:
+            print(f"Video saved (fallback): {output_video}")
+        else:
+            print("Video assembly failed in both modes. Install ffmpeg or run manually.")
     else:
         print("Video assembly failed. Install ffmpeg or run manually.")
         print(f"Full command length: {len(cmd)} chars")
