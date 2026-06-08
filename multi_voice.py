@@ -28,39 +28,135 @@ SPEAKER_MAP = {
     "Kid":      "Think",
 }
 
-# Child interjection templates (no family references — just a curious voice)
+# Generic child interjection templates (no family references — just a curious voice)
 THINK_QUESTIONS = [
-    "Why did the walls take so long to build?",
-    "How did the cannons get so big?",
-    "What happened to the people inside the city?",
-    "Why didn't the army just go around the walls?",
-    "How did they drag ships over land?",
-    "What does it feel like when a city falls?",
-    "Was the sultan scared too?",
-    "How long is a thousand years?",
-    "Why do people build walls if they can be broken?",
-    "Did anyone escape?",
-    "What's an empire?",
-    "How do you know what happened so long ago?",
-    "Who rebuilt the city after it fell?",
-    "Could it happen to our city?",
-    "Why do people fight over places?",
-    "Was there a dragon?",
-    "Did the king fight too?",
-    "Where did all the treasure go?",
-    "What is gunpowder?",
-    "Why did the story end like that?",
+    "Why is that important?",
+    "What happened next?",
+    "How do you know that?",
+    "Was that real?",
+    "Could it happen again?",
+    "Do you think they were scared?",
     "Can I ask something?",
     "I have a question.",
     "Wait — I don't understand.",
     "But how?",
     "Tell me more about that part.",
-    "Why is that important?",
-    "What happened next?",
-    "Do you think they were scared?",
+    "How long did that take?",
+    "Why did that happen?",
+    "What does that mean?",
+    "Is that true?",
+    "How is that possible?",
+    "What would you have done?",
     "Could someone have stopped it?",
     "I want to know more.",
+    "Did anyone see it coming?",
+    "How did they know what to do?",
+    "What happened after that?",
+    "Why is that so hard to believe?",
+    "What does that feel like?",
+    "How do we know about it now?",
 ]
+
+# Extract key nouns from story text for context-aware questions
+STOP_WORDS = {"the", "a", "an", "is", "was", "are", "were", "be", "been",
+              "have", "has", "had", "do", "does", "did", "will", "would",
+              "could", "should", "may", "might", "can", "shall", "it", "its",
+              "this", "that", "these", "those", "i", "you", "he", "she",
+              "they", "we", "my", "your", "his", "her", "our", "their",
+              "me", "him", "us", "them", "and", "but", "or", "not", "no",
+              "all", "each", "every", "some", "any", "none", "who", "what",
+              "where", "when", "why", "how", "which", "of", "in", "on",
+              "at", "to", "for", "with", "by", "from", "as", "into",
+              "through", "during", "before", "after", "above", "below",
+              "between", "out", "off", "over", "under", "again", "then",
+              "once", "here", "there", "more", "most", "other", "such",
+              "very", "just", "also", "because", "if", "than"}
+
+
+def extract_story_keywords(text: str, max_words=10) -> list[str]:
+    """Extract meaningful nouns/keywords from story text."""
+    words = re.findall(r'\b[a-zA-Z]{4,}\b', text.lower())
+    freq = {}
+    for w in words:
+        if w not in STOP_WORDS:
+            freq[w] = freq.get(w, 0) + 1
+    sorted_words = sorted(freq.items(), key=lambda x: -x[1])
+    # Filter out common verbs/adjectives that make bad question subjects
+    bad_subjects = {"imagine", "survived", "survive", "become", "became",
+                    "began", "begun", "taken", "took", "known", "knew",
+                    "shown", "showed", "grown", "grew", "meant", "meant",
+                    "found", "kept", "felt", "left", "lost", "told",
+                    "given", "gave", "gone", "went", "seen", "seen",
+                    "heard", "held", "kept", "said", "made", "tried",
+                    "lived", "lives", "living", "died", "dying", "dead",
+                    "coming", "going", "being", "having", "doing",
+                    "looking", "finding", "keeping", "taking", "giving",
+                    "walking", "standing", "sitting", "running", "moving",
+                    "wanted", "wants", "wanting", "needed", "needs",
+                    "knowing", "thinking", "feeling", "believing",
+                    "trying", "asking", "telling", "showing", "calling",
+                    "started", "starts", "starting", "ended", "ends",
+                    "ending", "changed", "changes", "changing",
+                    "followed", "follows", "following", "crossed",
+                    "crosses", "crossing", "retreated", "retreats",
+                    "retreating", "spread", "spreading", "disappeared",
+                    "disappears", "disappearing", "shrank", "shrinking",
+                    "roamed", "roams", "roaming", "notice", "noticed",
+                    "noticing", "inherited", "inherits", "inheriting",
+                    "remained", "remains", "remaining", "walks", "walked",
+                    "record", "recorded", "recording", "marks", "marked",
+                    "marking", "continued", "continues", "continuing",
+                    "vanished", "vanishes", "vanishing", "stopped",
+                    "stops", "stopping", "remembers", "remembering",
+                    "remembered", "knows", "understood", "understand",
+                    "understanding", "sudden", "slowly", "familiar",
+                    "ordinary", "ancient", "enormous", "brutal",
+                    "frozen", "endless", "heavy", "strange", "obvious",
+                    "single", "final", "cold", "hundreds", "thousands",
+                    "eventually", "completely", "simply", "perhaps",
+                    "almost", "yet", "still", "another", "different",
+                    "small", "smaller", "tiny", "enormous", "huge",
+                    "slightly", "exactly", "nothing", "something",
+                    "everything", "always", "never", "together"}
+    filtered = [(w, c) for w, c in sorted_words if w not in bad_subjects]
+    if not filtered:
+        filtered = sorted_words[:5]
+    return [w for w, _ in filtered[:max_words]]
+
+
+def generate_context_question(story_text: str, keywords: list[str],
+                               used_questions: set) -> str:
+    """Generate a story-aware child question using extracted keywords."""
+    templates = [
+        "Why did the {}...?",
+        "How did the {}...?",
+        "What happened to the {}?",
+        "Was the {} real?",
+        "Could the {} have been saved?",
+        "How big was the {}?",
+        "Where did the {} go?",
+        "Did anyone see the {}?",
+        "What does the {} look like?",
+        "Why is the {} important?",
+    ]
+    import random
+    rng = random.Random(hash(story_text[:100]))
+    # Filter keywords not yet used in questions
+    fresh = [k for k in keywords if k not in str(used_questions).lower()]
+    if not fresh:
+        fresh = keywords
+    for _ in range(20):
+        kw = rng.choice(fresh)
+        tmpl = rng.choice(templates)
+        q = tmpl.format(kw).capitalize()
+        if q not in used_questions:
+            used_questions.add(q)
+            return q
+    # Fallback to generic
+    q = rng.choice(THINK_QUESTIONS)
+    if q not in used_questions:
+        used_questions.add(q)
+    return q
 
 # Visual style per voice
 VOICE_STYLES = {
@@ -130,8 +226,13 @@ def insert_child_interjections(segments: list[dict], density=0.4) -> list[dict]:
     """Insert Think child question segments scattered through narration."""
     result = []
     q_idx = 0
+    used_questions = set()
     narration_count = sum(1 for s in segments if s["voice"] in ("Ding", "Dong"))
     insert_every = max(1, int(1 / density)) if narration_count > 0 else 999
+
+    # Extract keywords from full story for context-aware questions
+    full_text = " ".join(s["text"] for s in segments if s["voice"] in ("Ding", "Dong"))
+    keywords = extract_story_keywords(full_text)
 
     seg_count = 0
     for seg in segments:
@@ -139,8 +240,11 @@ def insert_child_interjections(segments: list[dict], density=0.4) -> list[dict]:
         if seg["voice"] in ("Ding", "Dong"):
             seg_count += 1
             if seg_count % insert_every == 0:
-                q = THINK_QUESTIONS[q_idx % len(THINK_QUESTIONS)]
-                q_idx += 1
+                if keywords and q_idx < len(keywords) * 2:
+                    q = generate_context_question(seg["text"], keywords, used_questions)
+                else:
+                    q = THINK_QUESTIONS[q_idx % len(THINK_QUESTIONS)]
+                    q_idx += 1
                 result.append({"voice": "Think", "speaker": "Think",
                               "text": q, "auto_inserted": True})
     return result
@@ -148,6 +252,11 @@ def insert_child_interjections(segments: list[dict], density=0.4) -> list[dict]:
 
 def child_acknowledgment(segments: list[dict]) -> list[dict]:
     """Append child acknowledgment at the end."""
+    # Extract the last few keywords for a context-relevant final question
+    full_text = " ".join(s["text"] for s in segments if s["voice"] in ("Ding", "Dong"))
+    keywords = extract_story_keywords(full_text, max_words=5)
+    kw = keywords[0] if keywords else "story"
+
     ack_text = (
         "I liked the story.\n"
         "I didn't understand all of it.\n"
@@ -155,11 +264,16 @@ def child_acknowledgment(segments: list[dict]) -> list[dict]:
     )
     segments.append({"voice": "Think", "speaker": "Think", "text": ack_text,
                     "auto_inserted": True})
-    # Short child outro
-    outro = (
-        "Will our walls hold?\n"
-        "...I hope so."
-    )
+    # Generic child outro — no wall references
+    outro_templates = [
+        f"I hope the {kw} was okay in the end.",
+        f"I wonder what happened to the {kw} afterward.",
+        f"I'll remember the {kw} for a long time.",
+        f"Do you think the {kw} is still out there somewhere?",
+    ]
+    import random
+    rng = random.Random(hash(full_text[-200:]))
+    outro = rng.choice(outro_templates)
     segments.append({"voice": "Think", "speaker": "Think", "text": outro,
                     "auto_inserted": True})
     return segments
