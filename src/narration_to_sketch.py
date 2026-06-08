@@ -1004,6 +1004,30 @@ def _keyword_describe(narration: str) -> dict | None:
         }
         scenes.append(scene)
 
+    # Ice Age / Mammoth / Prehistoric
+    if any(w in n for w in ("mammoth", "woolly mammoth", "ice age", "prehistoric",
+                             "tundra", "glacier", "frozen steppe", "megafauna",
+                             "winter storm", "snowstorm", "blizzard", "frozen plain",
+                             "extinct giant", "last mammoth")):
+        scene = {
+            "bg": {"type": "gradient", "colors": [[180, 200, 220], [120, 150, 190]], "horizon": 0.55, "ground_color": [180, 190, 210]},
+            "elements": [
+                {"type": "mountain", "x": 0.2, "y": 0.45, "width": 0.35, "height": 0.35, "fill": [140, 150, 170], "snow": True},
+                {"type": "mountain", "x": 0.75, "y": 0.5, "width": 0.3, "height": 0.25, "fill": [120, 130, 150], "snow": True},
+                {"type": "snow", "x": 0.5, "y": 0.58, "width": 0.5, "height": 0.06, "fill": [200, 210, 220]},
+                {"type": "tree", "x": 0.3, "y": 0.7, "scale": 3.0, "tree_style": "pine", "fill": [40, 80, 60]},
+                {"type": "tree", "x": 0.7, "y": 0.72, "scale": 2.5, "tree_style": "pine", "fill": [35, 75, 55]},
+                {"type": "bird", "x": 0.4, "y": 0.18, "scale": 1.5, "fill": [60, 60, 70]},
+                {"type": "bird", "x": 0.55, "y": 0.2, "scale": 1.25, "fill": [70, 70, 80]},
+            ],
+            "atmosphere": {"particles": "mist", "fog": True},
+            "mood": "somber"
+        }
+        # If narration explicitly mentions mammoth, add one
+        if any(w in n for w in ("mammoth", "woolly mammoth", "tusk", "herd", "megafauna", "last mammoth")):
+            scene["elements"].insert(0, {"type": "mammoth", "x": 0.5, "y": 0.6, "scale": 3.5, "fill": [150, 130, 100]})
+        scenes.append(scene)
+
     # Choose best match (first match by priority order)
     if scenes:
         scene = scenes[0]

@@ -91,6 +91,11 @@ class SketchGenerator:
             self.technique = None
 
         self.paper_color = tuple(self.technique["paper_tint"]) if self.technique else (255, 255, 255)
+        self._clean_canvas = None
+
+    def get_clean_canvas(self):
+        """Return the pre-_post_process canvas, or None if not yet rendered."""
+        return self._clean_canvas
 
     # ── Color utilities ─────────────────────────────────────────
 
@@ -2570,6 +2575,92 @@ class SketchGenerator:
             self.draw_rect(draw, x + lx - 3.5*s, y + 6*s, 7*s, 3*s,
                           fill=self._darken(leg_c, 15) + (220,))
 
+    def draw_mammoth(self, draw, x, y, size=1.0, color=(150, 130, 100)):
+        """Draw a woolly mammoth — long curved tusks, small ears, hump, shaggy fur."""
+        s = size
+        c = tuple(color[:3])
+        fur_c = self._lighten(c, 5)
+        dark_fur = self._darken(c, 15)
+        self.draw_shadow_circle(draw, x, y + 4, 28*s, offset=(3, 3), blur_radius=4, color=(0, 0, 0, 35))
+
+        # Body (large rounded ellipse — stockier than elephant)
+        body_w, body_h = 40*s, 24*s
+        self.draw_ellipse(draw, x, y - body_h//2 - 2*s, body_w, body_h,
+                          fill=fur_c + (220,), stroke=dark_fur + (180,), stroke_width=2)
+
+        # Hump (distinctive shoulder hump)
+        hump_pts = [(x - 6*s, y - 16*s), (x, y - 22*s), (x + 8*s, y - 20*s),
+                    (x + 12*s, y - 14*s), (x + 6*s, y - 12*s)]
+        self.draw_polygon(draw, hump_pts, fill=fur_c + (220,),
+                          stroke=dark_fur + (160,), stroke_width=2)
+
+        # Head (domed, lower than modern elephant)
+        head_r = 10*s
+        hx = x + 14*s
+        hy = y - 14*s
+        self.draw_circle(draw, hx, hy, head_r, fill=self._lighten(c, 3) + (220,),
+                        stroke=dark_fur + (180,), stroke_width=2)
+
+        # Small ear (mammoth ears are tiny vs African elephant)
+        ear_pts = [(hx + 2*s, hy - 3*s), (hx - 2*s, hy - 8*s), (hx - 5*s, hy - 5*s),
+                   (hx - 4*s, hy + 1*s)]
+        self.draw_polygon(draw, ear_pts, fill=dark_fur + (200,),
+                          stroke=self._darken(c, 25) + (160,), stroke_width=1)
+
+        # Trunk (shorter, more curved than elephant)
+        trunk_pts = [(hx + 6*s, hy + 1*s), (hx + 12*s, hy - 1*s), (hx + 14*s, hy + 3*s),
+                     (hx + 12*s, hy + 10*s), (hx + 8*s, hy + 14*s)]
+        self.draw_polygon(draw, trunk_pts, fill=fur_c + (220,),
+                          stroke=dark_fur + (160,), stroke_width=1)
+        # Trunk wrinkle lines
+        for wy in range(3):
+            wy2 = hy + 3*s + wy * 3*s
+            wx1 = hx + 10*s - wy * s
+            wx2 = hx + 13*s - wy * s
+            self.draw_line(draw, wx1, wy2, wx2, wy2, color=dark_fur + (100,), width=1)
+
+        # Long curved tusks (mammoth signature — very long, upward curve)
+        tusk_color = (245, 240, 230)
+        tusk_pts = [(hx + 8*s, hy + 4*s), (hx + 14*s, hy + 4*s),
+                    (hx + 18*s, hy - 2*s), (hx + 20*s, hy - 6*s),
+                    (hx + 16*s, hy - 4*s), (hx + 10*s, hy + 0*s)]
+        self.draw_polygon(draw, tusk_pts, fill=tusk_color + (220,),
+                          stroke=(160, 150, 130, 150), stroke_width=1)
+
+        # Second tusk (behind, slightly offset)
+        tusk2_pts = [(hx + 7*s, hy + 5*s), (hx + 13*s, hy + 5*s),
+                     (hx + 16*s, hy - 1*s), (hx + 14*s, hy - 2*s),
+                     (hx + 9*s, hy + 0*s)]
+        self.draw_polygon(draw, tusk2_pts, fill=tusk_color + (180,),
+                          stroke=(160, 150, 130, 120), stroke_width=1)
+
+        # Eye
+        self.draw_circle(draw, hx + 4*s, hy - 2*s, 1.5*s, fill=(25, 20, 15, 200))
+        self.draw_circle(draw, hx + 4*s, hy - 2*s, 0.5*s, fill=(255, 255, 255, 150))
+
+        # Shaggy fur texture (hanging hair along belly and legs)
+        # Belly fur
+        for fx in range(-12, 13, 3):
+            fx2 = x + fx * s
+            fy2 = y - 2*s
+            fur_len = int(3*s + (fx % 4) * 0.5*s)
+            self.draw_line(draw, fx2, fy2, fx2 - s, fy2 + fur_len,
+                          color=dark_fur + (120,), width=int(1.5*s))
+
+        # Legs (thick columns with fur)
+        leg_c = dark_fur
+        leg_positions = [-12*s, -4*s, 4*s, 12*s]
+        for lx in leg_positions:
+            lx_pos = x + lx
+            self.draw_rect(draw, lx_pos - 4*s, y - 3*s, 8*s, 12*s,
+                          fill=leg_c + (220,), stroke=self._darken(leg_c, 10) + (160,), stroke_width=1)
+            # Fur tufts at bottom of legs
+            self.draw_ellipse(draw, lx_pos, y + 8*s, 9*s, 3*s,
+                             fill=dark_fur + (200,), stroke=self._darken(dark_fur, 10) + (140,), stroke_width=1)
+            # Hoof
+            self.draw_rect(draw, lx_pos - 3.5*s, y + 9*s, 7*s, 2*s,
+                          fill=self._darken(leg_c, 20) + (220,))
+
     def draw_dog(self, draw, x, y, size=1.0, color=(180, 140, 100)):
         """Draw a dog — four legs, tail, floppy ears, snout."""
         s = size
@@ -4334,6 +4425,7 @@ class SketchGenerator:
             draw.rectangle([0, 0, self.w, self.h], fill=(30, 20, 10, 60))
 
         # ── Post-processing ──
+        self._clean_canvas = canvas.copy()
         canvas = self._post_process(canvas, desc.get("mood", ""), desc.get("style", {}))
 
         return canvas.convert("RGB")
@@ -5251,9 +5343,11 @@ class SketchGenerator:
                         "mule", "unicorn", "centaur"):
             self.draw_horse(draw, x, y, s, fill or (140, 100, 70))
 
-        # ── Elephant aliases ──
-        elif etype in ("elephant", "calf", "mammoth", "tusker"):
+        # ── Elephant / Mammoth aliases ──
+        elif etype in ("elephant", "calf", "tusker"):
             self.draw_elephant(draw, x, y, s, fill or (130, 130, 140))
+        elif etype == "mammoth":
+            self.draw_mammoth(draw, x, y, s, fill or (150, 130, 100))
 
         # ── Dog aliases ──
         elif etype in ("dog", "puppy", "hound", "poodle", "terrier", "beagle",

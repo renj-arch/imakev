@@ -616,6 +616,11 @@ def generate_multi_voice(
                 gen.technique = SKETCH_TECHNIQUES.get(sketch_tech, SKETCH_TECHNIQUES["pencil"])
                 gen.paper_color = tuple(gen.technique["paper_tint"])
             img = gen.render_scene(scene_desc)
+            # Save clean (pre-stylized) canvas for later restyling
+            clean_canvas = gen.get_clean_canvas()
+            if clean_canvas is not None:
+                clean_path = os.path.join(output_dir, f"seg_{i+1:03d}_clean.png")
+                clean_canvas.save(clean_path)
             scene_descs.append(scene_desc)
 
         # Bake text into frame directly (reliable, no ffmpeg drawtext dependency)
@@ -920,6 +925,78 @@ def assemble_video(output_dir="output/mv_frames", output_video="output/mv_video.
     shutil.rmtree(temp_dir, ignore_errors=True)
 
 
+def restyle_video(output_dir="output/mv_frames", technique="pencil", output_video=None):
+    """Re-apply a different sketch technique to already-generated clean frames."""
+    manifest_path = os.path.join(output_dir, "manifest.json")
+    if not os.path.exists(manifest_path):
+        print("No manifest found at", manifest_path)
+        return
+    manifest = json.load(open(manifest_path))
+    segments = manifest["segments"]
+    w, h = manifest["width"], manifest["height"]
+    fps = manifest.get("fps", 24)
+
+    available = list(SKETCH_TECHNIQUES.keys())
+    if technique not in available:
+        print(f"Unknown technique '{technique}'. Choose from: {', '.join(available)}")
+        return
+
+    import glob as glob_mod
+    clean_files = sorted(glob_mod.glob(os.path.join(output_dir, "seg_*_clean.png")))
+    if not clean_files:
+        print("No clean frames found. Regenerate with current pipeline first.")
+        return
+
+    print(f"Restyling {len(clean_files)} frames with technique '{technique}'...")
+
+    for clean_path in clean_files:
+        basename = os.path.basename(clean_path)
+        seg_idx = basename.replace("_clean", "")
+
+        clean_img = Image.open(clean_path).convert("RGBA")
+
+        gen = SketchGenerator(w, h, hand_drawn=True)
+        gen.technique = dict(SKETCH_TECHNIQUES[technique])
+        gen.paper_color = tuple(gen.technique["paper_tint"])
+
+        stylized = gen._post_process(clean_img, "", {})
+
+        out_path = os.path.join(output_dir, seg_idx)
+        stylized.convert("RGB").save(out_path)
+
+    # Re-apply text overlays
+    font_path = None
+    try:
+        import platform
+        if platform.system() == "Windows":
+            for p in ["C:/Windows/Fonts/arial.ttf", "C:/Windows/Fonts/segoeui.ttf"]:
+                if os.path.exists(p):
+                    font_path = p
+                    break
+        else:
+            for p in ["/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+                      "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf"]:
+                if os.path.exists(p):
+                    font_path = p
+                    break
+    except Exception:
+        pass
+
+    for i, seg in enumerate(segments):
+        frame_path = os.path.join(output_dir, f"seg_{i+1:03d}.png")
+        if not os.path.exists(frame_path):
+            continue
+        img = Image.open(frame_path).convert("RGBA")
+        img = add_voice_overlay(img, seg["voice"], seg["text"], font_path, bake_text=True)
+        img.save(frame_path)
+
+    if output_video is None:
+        output_video = os.path.join(os.path.dirname(output_dir.rstrip("/")),
+                                    os.path.basename(output_dir) + f"_{technique}.mp4")
+
+    assemble_video(output_dir, output_video)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Multi-voice narration scene generator")
     parser.add_argument("--text", "-t", type=str, help="Narration script text")
@@ -937,10 +1014,16 @@ if __name__ == "__main__":
     parser.add_argument("--no-hand-drawn", action="store_true",
                        help="Disable hand-drawn sketch style (clean digital look)")
     parser.add_argument("--assemble", action="store_true")
+    parser.add_argument("--restyle", type=str, default=None, metavar="TECHNIQUE",
+                       help="Re-apply a different sketch technique to clean frames (pencil, pen, charcoal, watercolor, comic)")
     parser.add_argument("--tts", action="store_true",
                        help="Generate TTS audio for each segment using edge-tts")
     parser.add_argument("--video", type=str, default="output/mv_video.mp4")
     args = parser.parse_args()
+
+    if args.restyle:
+        restyle_video(args.output, args.restyle, args.video)
+        exit(0)
 
     if args.assemble:
         assemble_video(args.output, args.video, use_tts=args.tts)

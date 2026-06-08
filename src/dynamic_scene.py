@@ -59,6 +59,8 @@ ELEMENT_DEFS = {
     "cat":        {"type": "cat", "scale": 2.0, "fill": [180, 140, 100]},
     "horse":      {"type": "horse", "scale": 3.0, "fill": [120, 90, 60]},
     "elephant":   {"type": "elephant", "scale": 3.5, "fill": [130, 130, 120]},
+    "mammoth":    {"type": "mammoth", "scale": 3.5, "fill": [150, 130, 100]},
+    "woolly_mammoth": {"type": "mammoth", "scale": 3.5, "fill": [160, 140, 100]},
     "bear":       {"type": "bear", "scale": 2.5, "fill": [100, 70, 50]},
     "deer":       {"type": "deer", "scale": 2.5, "fill": [160, 130, 80]},
     "wolf":       {"type": "dog", "scale": 2.5, "fill": [110, 110, 110]},

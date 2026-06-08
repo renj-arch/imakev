@@ -7,13 +7,14 @@ param(
     [switch]$nochild = $false,
     [switch]$nohanddrawn = $false,
     [switch]$tts = $false,
+    [string]$restyle = "",
     [string]$seed = "42",
     [switch]$help = $false
 )
 
 if ($help -or $script -eq "" -or $script -like "-*") {
     Write-Host @"
-Usage: .\run.ps1 <script.txt> [-name NAME] [-out_dir OUTPUT] [-nocache] [-nochild] [-nohanddrawn] [-tts] [-seed N]
+Usage: .\run.ps1 <script.txt> [-name NAME] [-out_dir OUTPUT] [-nocache] [-nochild] [-nohanddrawn] [-tts] [-seed N] [-restyle TECHNIQUE]
 
 Examples:
   .\run.ps1 my_story.txt
@@ -21,6 +22,7 @@ Examples:
   .\run.ps1 my_story.txt -nocache -seed 123
   .\run.ps1 my_story.txt -nohanddrawn
   .\run.ps1 my_story.txt -tts           # Add TTS voice narration
+  .\run.ps1 my_story.txt -restyle comic # Re-style existing frames to comic
 "@
     exit 0
 }
@@ -47,6 +49,22 @@ if ($nocache -and (Test-Path "output/.mv_cache.json")) {
 # Step 1: Generate frames
 $childFlag = if ($nochild) { "--no-child" } else { "" }
 $handDrawnFlag = if ($nohanddrawn) { "--no-hand-drawn" } else { "" }
+
+# Restyle mode: re-style existing clean frames with a different technique
+if ($restyle -ne "") {
+    Write-Host ">>> Restyling frames with technique '$restyle'..." -ForegroundColor Green
+    $videoPath = "$outputDir`_$restyle.mp4"
+    $rstCmd = "python `"$PSScriptRoot\multi_voice.py`" --restyle $restyle --output `"$outputDir`" --video `"$videoPath`""
+    Write-Host "  $rstCmd" -ForegroundColor Gray
+    Invoke-Expression $rstCmd
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "ERROR: Restyle failed" -ForegroundColor Red
+        exit 1
+    }
+    Write-Host "`n=== DONE ===" -ForegroundColor Cyan
+    Write-Host "Video  : $videoPath"
+    exit 0
+}
 
 Write-Host ">>> Step 1: Generating frames..." -ForegroundColor Green
 $genCmd = "python `"$PSScriptRoot\multi_voice.py`" --file `"$scriptPath`" --smart --output `"$outputDir`" --seed $seed $childFlag $handDrawnFlag"
