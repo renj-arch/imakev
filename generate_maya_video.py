@@ -485,7 +485,7 @@ for scene_idx, scene in enumerate(SCENES):
                 # Arrowhead
                 draw.polygon([(bx-15, by-6), (bx-15, by+6), (bx, by)], fill=(200, 60, 50, 200))
                 # Counter arrow
-                draw.line([(bx-50, by+20), (ax+50, ay+20)], fill=(200, 60, 50, 150), width=2, dash=[5,3])
+                draw.line([(bx-50, by+20), (ax+50, ay+20)], fill=(200, 60, 50, 150), width=2)
             
             elif elem == "fire":
                 # Fire on city
