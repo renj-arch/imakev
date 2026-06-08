@@ -165,7 +165,7 @@ SCENES.append({"narration":"Food became scarce.","shots":[
 
 # Scene 11
 SCENES.append({"narration":"As resources shrank, rival city-states fought.","shots":[
-    {"cam":HIGH,"dur":3.5,"elems":[E("building",0.3,0.5,2.0),E("building",0.7,0.5,2.0),E("fire",0.2,0.55,1.5),E("fire",0.8,0.5,1.5)]},
+    {"cam":HIGH,"dur":3.5,"elems":[E("building",0.3,0.5,2.0),E("building",0.7,0.5,2.0),E("fire",0.3,0.4,4.0),E("fire",0.7,0.38,4.0)]},
 ]})
 
 # Scene 12
