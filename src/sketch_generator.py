@@ -2096,6 +2096,83 @@ class SketchGenerator:
              (spx, y - bh - int(12*s))],
             fill=(180, 180, 190, 200))
 
+    def draw_alien(self, draw, x, y, size=1.0, color=(80, 200, 120)):
+        """Draw a classic alien with large head and eyes."""
+        s = size
+        c = tuple(color[:3])
+        # Head
+        head_r = int(10 * s)
+        self.draw_ellipse(draw, x - head_r, y - head_r*2, head_r*2, head_r*2,
+                         fill=c+(200,), stroke=self._darken(c, 20)+(150,), stroke_width=2)
+        # Eyes (large black)
+        eye_off = int(3*s)
+        for ex in [x - eye_off, x + eye_off]:
+            self.draw_circle(draw, ex, y - int(2*s), int(3*s),
+                           fill=(10, 10, 10, 230))
+            self.draw_circle(draw, ex - 1, y - int(3*s), 1,
+                           fill=(255, 255, 255, 200))
+        # Body (smaller)
+        bw, bh = int(8*s), int(10*s)
+        self.draw_rect(draw, x - bw//2, y, bw, bh,
+                      fill=c+(180,), stroke=self._darken(c, 20)+(120,), stroke_width=1)
+        # Arms
+        for dx in [-1, 1]:
+            self.draw_line(draw, x + dx*bw//2, y + int(2*s),
+                          x + dx*bw//2 + dx*int(5*s), y + int(5*s),
+                          color=c+(150,), width=int(2*s))
+        # Legs
+        for dx in [-1, 1]:
+            self.draw_line(draw, x + dx*int(2*s), y + bh,
+                          x + dx*int(3*s), y + bh + int(6*s),
+                          color=c+(150,), width=int(2*s))
+
+    def draw_artifact(self, draw, x, y, size=1.0, color=(100, 255, 200)):
+        """Draw a glowing ancient artifact."""
+        s = size
+        c = tuple(color[:3])
+        # Glow
+        glow_r = int(16 * s)
+        self.draw_circle(draw, x, y - int(4*s), glow_r,
+                        fill=c+(60,))
+        self.draw_circle(draw, x, y - int(4*s), int(glow_r*0.6),
+                        fill=c+(100,))
+        # Gem/core
+        self.draw_polygon(draw,
+            [(x, y - int(12*s)), (x + int(6*s), y - int(4*s)),
+             (x, y + int(4*s)), (x - int(6*s), y - int(4*s))],
+            fill=self._lighten(c, 20)+(220,), stroke=self._darken(c, 20)+(150,), stroke_width=2)
+        # Pedestal
+        pw = int(12*s)
+        self.draw_rect(draw, x - pw//2, y + int(4*s), pw, int(3*s),
+                      fill=(120, 100, 80, 200), stroke=(80, 60, 40, 150), stroke_width=1)
+        self.draw_rect(draw, x - int(pw*0.7), y + int(7*s), int(pw*0.7*2), int(2*s),
+                      fill=(100, 80, 60, 200))
+
+    def draw_candle(self, draw, x, y, size=1.0, color=(255, 220, 180)):
+        """Draw a candle with flame."""
+        s = size
+        c = tuple(color[:3])
+        # Candle body
+        cw, ch = int(6*s), int(16*s)
+        self.draw_rect(draw, x - cw//2, y - ch, cw, ch,
+                      fill=c+(210,), stroke=self._darken(c, 15)+(150,), stroke_width=1)
+        # Wax drips
+        for dx in [-1, 1]:
+            self.draw_circle(draw, x + dx*cw//2, y - ch + int(3*s), int(1.5*s),
+                           fill=c+(180,))
+        # Wick
+        self.draw_line(draw, x, y - ch, x, y - ch - int(2*s),
+                      color=(40, 30, 20, 200), width=1)
+        # Flame (teardrop)
+        flame_c = (255, 200, 50, 220)
+        self.draw_polygon(draw,
+            [(x, y - ch - int(10*s)), (x + int(3*s), y - ch - int(3*s)),
+             (x, y - ch), (x - int(3*s), y - ch - int(3*s))],
+            fill=flame_c)
+        # Inner flame
+        self.draw_circle(draw, x, y - ch - int(5*s), int(2*s),
+                        fill=(255, 255, 200, 200))
+
     def draw_grass(self, draw, count=40, y_range=None, color=(50, 100, 40)):
         """Draw grass blades across an area."""
         c = tuple(color[:3])
@@ -4676,6 +4753,18 @@ class SketchGenerator:
         elif etype == "soldier":
             c = fill or (140, 60, 60)
             self.draw_soldier(draw, x, y, s, c)
+
+        elif etype == "alien":
+            c = fill or (80, 200, 120)
+            self.draw_alien(draw, x, y, s, c)
+
+        elif etype == "artifact":
+            c = fill or (100, 255, 200)
+            self.draw_artifact(draw, x, y, s, c)
+
+        elif etype == "candle":
+            c = fill or (255, 220, 180)
+            self.draw_candle(draw, x, y, s, c)
 
         elif etype == "flag":
             c = fill or (200, 50, 50)
