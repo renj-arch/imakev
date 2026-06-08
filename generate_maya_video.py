@@ -119,7 +119,7 @@ SCENES.append({"narration":"Astronomers track the stars.","shots":[
 
 # Scene 3
 SCENES.append({"narration":"What happened to the Maya?","shots":[
-    {"cam":LONG,"dur":2.5,"elems":[E("pyramid",0.35,0.75,4.5,steps=4),E("pyramid",0.65,0.78,3.5,steps=4),E("sun",0.88,0.12,3.0),E("house",0.2,0.82,2.0)]},
+    {"cam":LONG,"dur":2.5,"elems":[E("pyramid",0.35,0.75,4.5,steps=4),E("pyramid",0.65,0.78,3.5,steps=4),E("sun",0.88,0.12,3.0),E("building",0.2,0.82,2.0)]},
     {"cam":CU,"dur":2.0,"elems":[E("pyramid",0.5,0.65,8.0,steps=4),E("question_mark",0.5,0.18,12)]},
 ]})
 
@@ -188,88 +188,8 @@ SCENES.append({"narration":"But here's the biggest misconception. The Maya did n
 
 # Scene 16
 SCENES.append({"narration":"The cities fell. The people remained.","shots":[
-    {"cam":LONG,"dur":3.5,"elems":[E("pyramid",0.2,0.78,3.0,steps=3),E("human",0.75,0.72,3.5,pose="standing",gender="man",mood="hopeful"),E("human",0.82,0.76,2.5,pose="standing",gender="woman",mood="hopeful"),E("human",0.88,0.8,1.8,pose="standing",gender="child",mood="hopeful"),E("sun",0.5,0.5,5.0)]},
+    {"cam":LONG,"dur":3.5,"elems":[E("pyramid",0.2,0.78,3.0,steps=3),E("human",0.75,0.72,3.5,pose="standing",gender="man",mood="hopeful"),E("human",0.82,0.76,2.5,pose="standing",gender="woman",mood="hopeful"),E("human",0.88,0.8,1.8,pose="standing",gender="child",mood="hopeful"),E("sun",0.88,0.12,2.5)]},
 ]})
-
-# Scene 2
-SCENES.append({"narration":"Astronomers track the stars.","shots":[
-    {"cam":MED,"dur":3.0,"elems":[E("moon",0.85,0.12,3.0),E("star",0.2,0.1,2.0),E("star",0.4,0.08,1.5),E("star",0.6,0.12,1.8),E("star",0.9,0.25,1.5),E("human",0.5,0.7,3.5,pose="standing",gender="man",mood="peaceful")]},
-]})
-
-# Scene 3
-SCENES.append({"narration":"What happened to the Maya?","shots":[
-    {"cam":LONG,"dur":2.5,"elems":[E("pyramid",0.35,0.75,4.0,steps=4),E("pyramid",0.65,0.78,3.0,steps=4),E("sun",0.88,0.12,3.0),E("house",0.2,0.78,2.0),E("house",0.8,0.8,1.5)]},
-    {"cam":CU,"dur":2.0,"elems":[E("pyramid",0.5,0.65,7.0,steps=4),E("question_mark",0.5,0.2,10)]},
-]})
-
-# Scene 4
-SCENES.append({"narration":"Then, around the 800s AD, something strange began to happen.","shots":[
-    {"cam":MED,"dur":3.0,"elems":[E("building",0.3,0.72,2.5),E("building",0.5,0.68,3.0),E("building",0.7,0.72,2.5),E("line",0.5,0.9,1.0)]},
-]})
-
-# Scene 5
-SCENES.append({"narration":"One by one, major cities stopped building monuments.","shots":[
-    {"cam":MED,"dur":2.5,"elems":[E("human",0.35,0.72,2.5,pose="standing",gender="man"),E("human",0.5,0.7,2.5,pose="standing",gender="man"),E("pyramid",0.7,0.78,3.0,steps=3)]},
-    {"cam":CU,"dur":2.0,"elems":[E("pyramid",0.5,0.65,6.0,steps=2)]},
-]})
-
-# Scene 6
-SCENES.append({"narration":"Royal palaces were abandoned.","shots":[
-    {"cam":MED,"dur":2.5,"elems":[E("throne",0.5,0.72,3.5),E("leaf",0.2,0.35,1.5),E("leaf",0.8,0.25,1.0)]},
-    {"cam":CU,"dur":2.0,"elems":[E("throne",0.5,0.62,6.0)]},
-]})
-
-# Scene 7
-SCENES.append({"narration":"Was it war?","shots":[
-    {"cam":LONG,"dur":2.5,"elems":[E("pyramid",0.2,0.75,3.5,steps=4),E("pyramid",0.8,0.75,3.5,steps=4),E("human",0.35,0.72,2.5,pose="fighting_stance",gender="man",mood="angry"),E("human",0.65,0.72,2.5,pose="fighting_stance",gender="man",mood="angry"),E("fire",0.45,0.55,1.5)]},
-    {"cam":CU,"dur":1.5,"elems":[E("human",0.5,0.7,4.5,pose="fighting_stance",gender="man",mood="angry")]},
-]})
-
-# Scene 8
-SCENES.append({"narration":"Evidence suggests the Maya faced severe droughts.","shots":[
-    {"cam":LONG,"dur":3.0,"elems":[E("sun",0.5,0.1,5.0),E("cracked_ground",0.5,0.75,3.0,width=8,height=3)]},
-]})
-
-# Scene 9
-SCENES.append({"narration":"Years without enough rain meant crops failed.","shots":[
-    {"cam":MED,"dur":3.0,"elems":[E("tree",0.3,0.75,3.0),E("tree",0.5,0.72,3.5),E("tree",0.7,0.75,3.0),E("sun",0.88,0.1,4.0)]},
-]})
-
-# Scene 10
-SCENES.append({"narration":"Food became scarce.","shots":[
-    {"cam":MED,"dur":3.0,"elems":[E("basket",0.35,0.72,3.0),E("basket",0.65,0.72,3.0),E("human",0.4,0.68,3.0,pose="standing",gender="man",mood="sad"),E("human",0.6,0.7,2.5,pose="standing",gender="woman",mood="sad")]},
-]})
-
-# Scene 11
-SCENES.append({"narration":"As resources shrank, rival city-states fought.","shots":[
-    {"cam":HIGH,"dur":3.5,"elems":[E("building",0.3,0.5,2.0),E("building",0.7,0.5,2.0),E("fire",0.3,0.4,4.0),E("fire",0.7,0.38,4.0)]},
-]})
-
-# Scene 12
-SCENES.append({"narration":"Large forests had been cleared.","shots":[
-    {"cam":LONG,"dur":3.0,"elems":[E("tree",0.2,0.75,3.0),E("tree",0.4,0.72,3.5),E("tree",0.6,0.75,3.0),E("tree",0.8,0.78,2.5)]},
-]})
-
-# Scene 13
-SCENES.append({"narration":"Eventually, many people left.","shots":[
-    {"cam":ZOOM_IN,"dur":3.5,"elems":[E("pyramid",0.78,0.68,4.5,steps=4),E("human",0.2,0.68,3.0,pose="walking",gender="man"),E("human",0.3,0.72,2.5,pose="walking",gender="woman"),E("human",0.38,0.76,2.0,pose="walking",gender="child"),E("sun",0.88,0.2,2.5)]},
-]})
-
-# Scene 14
-SCENES.append({"narration":"The jungle slowly reclaimed them.","shots":[
-    {"cam":MED,"dur":3.0,"elems":[E("pyramid",0.5,0.72,4.0,steps=4),E("tree",0.2,0.75,3.5),E("tree",0.8,0.78,3.0),E("grass",0.3,0.85,1.0)]},
-]})
-
-# Scene 15
-SCENES.append({"narration":"But here's the biggest misconception. The Maya did not vanish.","shots":[
-    {"cam":MED,"dur":3.0,"elems":[E("human",0.35,0.72,3.0,pose="standing",gender="man",mood="hopeful"),E("human",0.65,0.72,3.0,pose="standing",gender="man",mood="hopeful"),E("human",0.7,0.76,2.0,pose="standing",gender="child",mood="hopeful"),E("sun",0.88,0.12,3.0)]},
-]})
-
-# Scene 16
-SCENES.append({"narration":"The cities fell. The people remained.","shots":[
-    {"cam":LONG,"dur":3.5,"elems":[E("pyramid",0.25,0.78,2.5,steps=3),E("human",0.75,0.72,3.0,pose="standing",gender="man",mood="hopeful"),E("human",0.8,0.75,2.0,pose="standing",gender="woman",mood="hopeful"),E("human",0.85,0.78,1.5,pose="standing",gender="child",mood="hopeful"),E("sun",0.5,0.55,4.0)]},
-]})
-
 
 # ─── RENDER ───────────────────────────────────────────────────────
 

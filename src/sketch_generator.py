@@ -4931,7 +4931,7 @@ class SketchGenerator:
             "lantern_glow": "lamp", "lantern": "lamp", "torch_glow": "torch",
             "window_light": "window",
             "cave_entrance": "cave", "hidden_path": "path",
-            "ancient_ruin": "building", "ruin": "building", "abandoned_house": "house",
+            "ancient_ruin": "building", "ruin": "building", "abandoned_house": "building", "house": "building",
             "sealed_door": "door", "gateway": "gate",
             "forgotten_map": "map", "map_table": "map",
             "thought_bubble": "lightbulb", "answer_mark": "question_mark",
