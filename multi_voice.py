@@ -69,6 +69,13 @@ VOICE_STYLES = {
     "Think": {"border": (255, 200, 60), "bar_color": (50, 40, 10), "icon": "?"},
 }
 
+# Character portrait thumbnails
+CHAR_PORTRAITS = {}
+for _v in ["ding", "dong", "think"]:
+    _p = os.path.join("output", f"char_{_v}.png")
+    if os.path.exists(_p):
+        CHAR_PORTRAITS[_v.capitalize()] = Image.open(_p).convert("RGBA")
+
 STYLES = [
     {"tag": "[Epic twilight] ", "mood": "epic", "bg_hint": "sunset", "zoom": 1.0},
     {"tag": "[Dramatic night] ", "mood": "dramatic", "bg_hint": "night", "zoom": 1.1},
@@ -265,29 +272,48 @@ def generate_multi_voice(
 
 def add_voice_overlay(img: Image.Image, voice_key: str, text: str,
                       font_path=None) -> Image.Image:
-    """Add subtitle bar with voice indicator and colored border."""
+    """Add subtitle bar with voice indicator, colored border, and character portrait."""
     img = img.copy()
     draw = ImageDraw.Draw(img, "RGBA")
     w, h = img.size
     vstyle = VOICE_STYLES.get(voice_key, VOICE_STYLES["Ding"])
     voice_info = VOICES.get(voice_key, VOICES["Ding"])
     icon = voice_info["icon"]
-    # Top voice indicator bar
-    bar_h = int(h * 0.05)
-    draw.rectangle([0, 0, w, bar_h], fill=vstyle["bar_color"] + (200,))
-    # Voice name + role
-    label = f"{icon} {voice_key} ({voice_info['role']})"
-    font = None
-    if font_path and os.path.exists(font_path):
-        try:
-            font = ImageFont.truetype(font_path, int(bar_h * 0.55))
-        except Exception:
-            pass
-    draw.text((12, 2), label, fill=(255, 255, 255, 230), font=font)
 
     # Colored left border strip
     strip_w = int(w * 0.015)
     draw.rectangle([0, 0, strip_w, h], fill=vstyle["border"] + (180,))
+
+    # Top voice indicator bar with character portrait
+    bar_h = int(h * 0.055)
+    draw.rectangle([0, 0, w, bar_h], fill=vstyle["bar_color"] + (200,))
+
+    font = None
+    if font_path and os.path.exists(font_path):
+        try:
+            font = ImageFont.truetype(font_path, int(bar_h * 0.45))
+        except Exception:
+            pass
+
+    # Character portrait thumbnail
+    portrait = CHAR_PORTRAITS.get(voice_key)
+    if portrait:
+        thumb_size = int(bar_h * 0.8)
+        thumb = portrait.resize((thumb_size, thumb_size), Image.LANCZOS)
+        # Circular mask
+        mask = Image.new("L", (thumb_size, thumb_size), 0)
+        mask_draw = ImageDraw.Draw(mask)
+        mask_draw.ellipse([0, 0, thumb_size, thumb_size], fill=255)
+        portrait_x = int(bar_h * 0.1)
+        portrait_y = int(bar_h * 0.1)
+        img.paste(thumb, (portrait_x, portrait_y), mask)
+        label_x = portrait_x + thumb_size + int(bar_h * 0.2)
+    else:
+        label_x = 12
+
+    # Voice name + role
+    label = f"{icon} {voice_key} ({voice_info['role']})"
+    draw.text((label_x, int(bar_h * 0.15)), label, fill=(255, 255, 255, 230), font=font)
 
     # Bottom subtitle bar
     sub_h = int(h * 0.13)
@@ -303,8 +329,8 @@ def add_voice_overlay(img: Image.Image, voice_key: str, text: str,
                 lines.append(word)
             else:
                 lines[-1] += " " + word
-        lines.append("")  # paragraph break
-    lines = [l for l in lines if l]  # remove trailing empty
+        lines.append("")
+    lines = [l for l in lines if l]
 
     line_h = int(sub_h * 0.28)
     start_y = h - sub_h + (sub_h - len(lines) * line_h) // 2
