@@ -2943,6 +2943,135 @@ class SketchGenerator:
         tail_tip = (200, 180, 180)
         self.draw_circle(draw, tx - 5*s, y - 6*s, 2*s, fill=tail_tip + (200,))
 
+    def draw_pyramid(self, draw, x, y, size=1.0, color=(180, 150, 120), steps=3):
+        """Draw a step pyramid (Maya style)."""
+        s = size
+        c = tuple(color[:3])
+        self.draw_shadow_circle(draw, x, y + 2, 18*s, offset=(3, 3), blur_radius=4, color=(0, 0, 0, 35))
+        base_w = 28 * s
+        max_h = 36 * s
+        for i in range(steps):
+            t = i / steps
+            lw = int(base_w * (1 - t * 0.6))
+            lh = int(max_h / steps)
+            ly = y - max_h + i * lh
+            lx = x - lw // 2
+            sc = self._darken(c, 10 * i) if i % 2 == 0 else self._lighten(c, 5 * i)
+            self.draw_rect(draw, lx, ly, lw, lh, fill=sc + (220,),
+                          stroke=self._darken(c, 15) + (180,), stroke_width=2)
+            # Stone block lines
+            for row in range(2):
+                ry = ly + lh * row // 2
+                for col in range(1, 4):
+                    rx = lx + lw * col // 4
+                    self.draw_line(draw, rx, ry, rx, ry + lh // 2,
+                                  color=self._darken(c, 20) + (100,), width=1)
+        # Doorway at base
+        dw, dh = int(8*s), int(12*s)
+        self.draw_rect(draw, x - dw//2, y - dh, dw, dh, fill=(30, 25, 20, 220))
+
+    def draw_temple(self, draw, x, y, size=1.0, color=(160, 130, 100)):
+        """Draw a Maya temple with roof comb."""
+        s = size
+        c = tuple(color[:3])
+        bw, bh = 22*s, 16*s
+        # Base platform
+        self.draw_rect(draw, x - bw//2, y - bh, bw, bh, fill=c + (220,),
+                      stroke=self._darken(c, 15) + (180,), stroke_width=2)
+        # Upper platform
+        uw = int(bw * 0.7)
+        uh = int(bh * 0.6)
+        self.draw_rect(draw, x - uw//2, y - bh - uh, uw, uh, fill=self._lighten(c, 5) + (220,),
+                      stroke=self._darken(c, 15) + (180,), stroke_width=2)
+        # Roof comb
+        rw = int(uw * 0.55)
+        rh = int(bh * 0.5)
+        self.draw_rect(draw, x - rw//2, y - bh - uh - rh, rw, rh, fill=self._darken(c, 10) + (200,),
+                      stroke=self._darken(c, 20) + (160,), stroke_width=2)
+        # Doorway
+        dw, dh = int(6*s), int(8*s)
+        self.draw_rect(draw, x - dw//2, y - dh, dw, dh, fill=(30, 25, 20, 220))
+        # Steps
+        for i in range(4):
+            sy = y - i * int(3*s)
+            sw = int(bw * (0.5 - i * 0.08))
+            self.draw_line(draw, x - sw//2, sy, x + sw//2, sy,
+                          color=self._darken(c, 20) + (180,), width=2)
+
+    def draw_leaf(self, draw, x, y, size=1.0, color=(100, 160, 60)):
+        """Draw a detailed leaf with veins."""
+        s = size
+        c = tuple(color[:3])
+        # Shadow
+        self.draw_shadow_circle(draw, x + 2, y + 2, 10*s, offset=(2, 2), blur_radius=3, color=(0, 0, 0, 25))
+        # Leaf body
+        self.draw_ellipse(draw, x - 8*s, y - 4*s, 16*s, 8*s,
+                         fill=c + (220,), stroke=self._darken(c, 15) + (180,), stroke_width=2)
+        # Stem
+        self.draw_line(draw, x - 8*s, y, x - 14*s, y + 2*s,
+                      color=self._darken(c, 20) + (200,), width=2)
+        # Center vein
+        self.draw_line(draw, x - 7*s, y, x + 7*s, y,
+                      color=self._darken(c, 20) + (140,), width=1)
+        # Side veins
+        for side in [-1, 1]:
+            for v in range(3):
+                vx = x + side * (2 + v * 2) * s
+                vy = y + side * (1 + v) * s
+                self.draw_line(draw, vx, y, vx + side * 2*s, vy,
+                              color=self._darken(c, 20) + (100,), width=1)
+
+    def draw_throne(self, draw, x, y, size=1.0, color=(140, 100, 70)):
+        """Draw a simple throne/seat."""
+        s = size
+        c = tuple(color[:3])
+        tw, th = 18*s, 22*s
+        bw = int(tw * 0.7)
+        self.draw_rect(draw, x - bw//2, y - th, bw, int(th*0.6), fill=c + (200,),
+                      stroke=self._darken(c, 15) + (160,), stroke_width=2)
+        self.draw_rect(draw, x - tw//2, y - int(th*0.35), tw, int(th*0.35), fill=self._lighten(c, 10) + (220,),
+                      stroke=self._darken(c, 15) + (180,), stroke_width=2)
+        for side in [-1, 1]:
+            ax = x + side * tw//2
+            self.draw_rect(draw, ax - int(1.5*s), y - th, int(3*s), int(th*0.5), fill=self._darken(c, 10) + (200,),
+                          stroke=self._darken(c, 20) + (160,), stroke_width=1)
+        for side in [-1, 1]:
+            lx = x + side * int(tw*0.35)
+            self.draw_rect(draw, lx - int(s), y - int(th*0.3), int(2*s), int(th*0.3), fill=self._darken(c, 20) + (220,))
+
+    def draw_cracked_ground(self, draw, x, y, width=1.0, height=1.0):
+        """Draw cracked earth pattern."""
+        w = int(width * 100)
+        h = int(height * 60)
+        self.draw_rect(draw, x - w//2, y - h//2, w, h, fill=(180, 160, 130, 200),
+                      stroke=(60, 55, 50, 150), stroke_width=1)
+        import random as _r
+        _r.seed(hash((x, y)) & 0xFFFFFFFF)
+        for _ in range(10):
+            sx = x + _r.randint(-w//2, w//2)
+            sy = y + _r.randint(-h//2, h//2)
+            for _ in range(3):
+                ex = sx + _r.randint(-15, 15)
+                ey = sy + _r.randint(-12, 12)
+                self.draw_line(draw, sx, sy, ex, ey, color=(100, 85, 70, 200), width=2)
+                sx, sy = ex, ey
+
+    def draw_basket(self, draw, x, y, size=1.0, color=(160, 140, 100)):
+        """Draw a simple basket."""
+        s = size
+        c = tuple(color[:3])
+        bw, bh = 14*s, 10*s
+        self.draw_ellipse(draw, x - bw//2, y - bh//2, bw, bh,
+                         fill=c + (220,), stroke=self._darken(c, 15) + (180,), stroke_width=2)
+        # Rim
+        self.draw_ellipse(draw, x - bw//2, y - bh//2 - s, bw, int(bh*0.2),
+                         fill=self._lighten(c, 15) + (200,), stroke=self._darken(c, 15) + (160,), stroke_width=1)
+        # Weave lines
+        for i in range(4):
+            wy = y - bh//2 + i * int(bh/4)
+            self.draw_line(draw, x - bw//2, wy, x + bw//2, wy,
+                          color=self._darken(c, 15) + (80,), width=1)
+
     def draw_dragon(self, draw, x, y, size=1.0, color=(60, 120, 60)):
         s = size
         c = tuple(color[:3])
@@ -5133,6 +5262,29 @@ class SketchGenerator:
         elif etype == "cow":
             c = fill or (240, 230, 220)
             self.draw_cow(draw, x, y, s, c)
+
+        elif etype in ("pyramid", "step_pyramid"):
+            c = fill or (180, 150, 120)
+            self.draw_pyramid(draw, x, y, s, c, steps=elem.get("steps", 3))
+
+        elif etype in ("temple", "mayan_temple"):
+            c = fill or (160, 130, 100)
+            self.draw_temple(draw, x, y, s, c)
+
+        elif etype == "leaf":
+            c = fill or (100, 160, 60)
+            self.draw_leaf(draw, x, y, s, c)
+
+        elif etype == "throne":
+            c = fill or (140, 100, 70)
+            self.draw_throne(draw, x, y, s, c)
+
+        elif etype == "cracked_ground":
+            self.draw_cracked_ground(draw, x, y, elem.get("width", 1.0), elem.get("height", 1.0))
+
+        elif etype == "basket":
+            c = fill or (160, 140, 100)
+            self.draw_basket(draw, x, y, s, c)
 
         elif etype == "dragon":
             c = fill or (60, 120, 60)
