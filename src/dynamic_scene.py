@@ -194,6 +194,11 @@ ELEMENT_DEFS = {
     "kneeling":   {"type": "none"},
     "jogging":    {"type": "none"},
     "running":    {"type": "none"},
+    
+    # Narrator character silhouettes
+    "ding":       {"type": "ding", "scale": 1.8, "fill": [200, 200, 210]},
+    "dong":       {"type": "dong", "scale": 1.8, "fill": [200, 200, 210]},
+    "think_owl":  {"type": "think_owl", "scale": 1.5, "fill": [200, 200, 210]},
 }
 
 
@@ -252,11 +257,12 @@ def _apply_palette_shift(element: dict, rng: random.Random):
     element["fill"] = shifted
 
 
-def compute_positions(concepts: dict, scene_type: str) -> list:
+def compute_positions(concepts: dict, scene_type: str, camera: str = "medium") -> list:
     """Place elements with creative variety using seeded randomness.
     
     Features:
     - Multiple layout patterns (3-col grid, diagonal, radial, clustered)
+    - Camera-aware positioning (wide/closeup/overhead/low_angle/medium)
     - Position jitter to avoid grid-like appearance
     - Scale randomization
     - Palette shifting per element
@@ -266,6 +272,10 @@ def compute_positions(concepts: dict, scene_type: str) -> list:
     elements = []
     sorted_concepts = sorted(concepts.items(), key=lambda x: -x[1])
     visual_concepts = [c for c, _ in sorted_concepts if c in ELEMENT_DEFS]
+
+    # Camera angle adjustments
+    camera_zoom = {"wide": 0.8, "medium": 1.0, "closeup": 1.5, "overhead": 1.0, "low_angle": 1.0}.get(camera, 1.0)
+    camera_y_offset = {"wide": 0.0, "medium": 0.0, "closeup": -0.05, "overhead": 0.1, "low_angle": -0.08}.get(camera, 0.0)
 
     if not visual_concepts:
         return elements
@@ -390,13 +400,19 @@ def compute_positions(concepts: dict, scene_type: str) -> list:
         x = max(0.05, min(0.95, x))
         y = max(0.05, min(0.88, y))
 
+        # Camera angle adjustments
+        x = 0.5 + (x - 0.5) * camera_zoom  # Zoom toward center
+        y = 0.4 + (y - 0.4) * camera_zoom + camera_y_offset
+        x = max(0.05, min(0.95, x))
+        y = max(0.05, min(0.88, y))
+
         element["x"] = round(x, 3)
         element["y"] = round(y, 3)
 
-        # Scale randomization
+        # Scale randomization (camera-aware)
         base_scale = element.get("scale", 1.0)
         scale_jitter = rng.uniform(0.75, 1.3)
-        element["scale"] = round(base_scale * scale_jitter, 2)
+        element["scale"] = round(base_scale * scale_jitter * camera_zoom, 2)
 
         # Palette shift
         _apply_palette_shift(element, rng)
@@ -554,15 +570,24 @@ def recall(text: str) -> dict | None:
 # ── Dynamic composition ───────────────────────────────────────
 
 def compose_dynamic_scene(text: str) -> dict | None:
-    """Compose a scene from scratch for ANY narration text.
+    """Legacy: compose a scene without story context. Use compose_context_scene instead."""
+    return compose_context_scene(text, story_context=None)
+
+
+def compose_context_scene(text: str, story_context: dict = None,
+                          voice: str = None, camera: str = "medium") -> dict | None:
+    """Compose a scene from narration text, optionally with story context.
     
-    Now with creative variety:
-    - Multiple layout patterns (grid, diagonal, radial, clustered, asymmetric)
-    - Position jitter + scale randomization
-    - Palette shifting per element
-    - Subset concept selection (not all concepts become elements)
-    - Ambient decorative particles
-    - HSL hue rotation for overall color mood
+    When story_context is provided:
+    - Filters out concepts not relevant to the story's key themes
+    - Selects background matching the story setting
+    - Adds narrator character (Ding/Dong) to the scene
+    - Avoids literal renderings of metaphorical words (e.g. "see" → eye)
+    
+    Args:
+        text: The segment text to visualize
+        story_context: Dict from story_context.analyze_story(), or None
+        voice: "Ding", "Dong", or "Think" — used to place narrator character
     """
     # Check memory first
     remembered = recall(text)
@@ -572,33 +597,29 @@ def compose_dynamic_scene(text: str) -> dict | None:
             return remembered
 
     rng = _scene_rng(text)
+    has_context = story_context and story_context.get("key_elements")
 
-    # Extract concepts
-    concepts = extract_concepts(text)
+    # Extract concepts — with story context filtering
+    if has_context:
+        from src.story_context import get_segment_concepts
+        concepts = get_segment_concepts(text, story_context)
+    else:
+        concepts = extract_concepts(text)
 
     # If no concepts found, build a minimal scene from mood + bg type
     if not concepts:
         bg_type = detect_bg_type({"lightbulb": 1})
         mood = detect_mood(text)
-        scene = {
-            "bg": BG_CONFIGS.get(bg_type, BG_CONFIGS["gradient"]).copy(),
-            "elements": [
-                {"type": "text", "x": 0.5, "y": 0.08,
-                 "text": text[:40].upper(), "font_size": 24, "fill": [80, 80, 100]},
-                {"type": "circle", "x": 0.5, "y": 0.4, "radius": 30,
-                 "fill": [100, 140, 200, 40], "stroke": [80, 120, 180], "stroke_width": 2},
-                {"type": "circle", "x": 0.5, "y": 0.4, "radius": 15, "fill": [140, 180, 230, 60]},
-                {"type": "circle", "x": 0.5, "y": 0.4, "radius": 5, "fill": [200, 220, 255]},
-            ],
-            "atmosphere": ATMOSPHERE_CONFIGS.get(bg_type, ATMOSPHERE_CONFIGS["gradient"]).copy(),
-            "mood": mood,
-        }
+        scene = _build_minimal_scene(text, mood, bg_type, story_context, voice)
         remember(text, scene)
         return scene
 
     # Infer scene properties
     scene_type = infer_scene_type(concepts)
-    bg_type = detect_bg_type(concepts)
+    if has_context:
+        bg_type = story_context.get("bg_type", detect_bg_type(concepts))
+    else:
+        bg_type = detect_bg_type(concepts)
     mood = detect_mood(text)
 
     # Sometimes override mood for variety (20% chance)
@@ -611,44 +632,17 @@ def compose_dynamic_scene(text: str) -> dict | None:
     atmos_config = ATMOSPHERE_CONFIGS.get(bg_type, ATMOSPHERE_CONFIGS["gradient"]).copy()
 
     # Apply mood-based color shifts and atmosphere effects
-    if "colors" in bg_config:
-        top, bot = list(bg_config["colors"][0]), list(bg_config["colors"][1])
-        if mood == "somber":
-            top = [max(0, c - 30) for c in top]
-            bot = [max(0, c - 20) for c in bot]
-            atmos_config["fog"] = True
-        elif mood == "hopeful":
-            top = [min(255, c + 30) for c in top]
-            bot = [min(255, c + 15) for c in bot]
-            if atmos_config.get("particles") == "none":
-                atmos_config["particles"] = "sparkles"
-                atmos_config["star_count"] = 20
-        elif mood == "dramatic":
-            top = [min(255, top[0] + 20), max(0, top[1] - 30), max(0, top[2] - 30)]
-            bot = [max(0, bot[0] - 10), max(0, bot[1] - 20), max(0, bot[2] - 20)]
-        elif mood == "mysterious":
-            top = [max(0, c - 20) for c in top]
-            bot = [max(0, c - 10) for c in bot]
-            atmos_config["fog"] = True
-        elif mood == "epic":
-            top = [min(255, top[0] + 20), min(255, top[1] + 10), min(255, top[2] + 10)]
-            bot = [max(0, bot[0] - 10), max(0, bot[1] - 10), max(0, bot[2] - 10)]
-
-        # Apply subtle random hue rotation for creative variety within mood
-        hue_shift = rng.randint(-15, 15)
-        top = [max(0, min(255, c + hue_shift)) for c in top]
-        bot = [max(0, min(255, c + hue_shift)) for c in bot]
-
-        bg_config["colors"] = [tuple(top), tuple(bot)]
+    bg_config = _apply_mood_colors(bg_config, mood, rng)
+    bg_config = _apply_random_hue(bg_config, rng)
 
     # Randomly add ambient particles for depth
     if rng.random() < 0.3 and atmos_config.get("particles", "none") == "none":
         atmos_config["particles"] = rng.choice(["stars", "mist", "dust", "sparkles"])
         atmos_config["star_count"] = rng.randint(8, 20)
 
-    elements = compute_positions(concepts, scene_type)
+    elements = compute_positions(concepts, scene_type, camera)
 
-    # Add ambient decorative elements (floating dust, sparkles, etc.)
+    # Add ambient decorative elements
     if rng.random() < 0.4 and len(elements) < 8:
         n_ambient = rng.randint(1, 3)
         for _ in range(n_ambient):
@@ -662,6 +656,161 @@ def compose_dynamic_scene(text: str) -> dict | None:
             elements.append(amb)
 
     # Apply pose modifiers from original text
+    elements = _apply_pose_modifiers(elements, text)
+
+    # Add atmosphere particles for space
+    if bg_type == "space":
+        atmos_config["particles"] = "stars"
+        atmos_config["star_count"] = 40
+
+    # Spatial relationship: astronaut/alien on planet surface
+    elements = _apply_spatial_relations(elements)
+
+    # Add narrator character if story context is provided
+    if has_context and voice:
+        elements = _add_narrator_to_scene(elements, voice, text, rng, story_context)
+
+    # Remove text label label (story title at top) — let the voice overlay handle it
+    elements = [e for e in elements if e.get("type") != "text" or e.get("y", 0.5) < 0.05]
+
+    scene = {
+        "bg": bg_config,
+        "elements": elements,
+        "atmosphere": atmos_config,
+        "mood": mood,
+    }
+
+    # Save to memory
+    remember(text, scene)
+
+    return scene
+
+
+def _build_minimal_scene(text: str, mood: str, bg_type: str,
+                          story_context: dict = None, voice: str = None) -> dict:
+    """Build a minimal scene when no concepts are found."""
+    rng = _scene_rng(text + "_minimal")
+    bg_config = BG_CONFIGS.get(bg_type, BG_CONFIGS["gradient"]).copy()
+    atmos_config = ATMOSPHERE_CONFIGS.get(bg_type, ATMOSPHERE_CONFIGS["gradient"]).copy()
+    bg_config = _apply_mood_colors(bg_config, mood, rng)
+
+    elements = [
+        {"type": "circle", "x": 0.5, "y": 0.4, "radius": 30,
+         "fill": [100, 140, 200, 40], "stroke": [80, 120, 180], "stroke_width": 2},
+        {"type": "circle", "x": 0.5, "y": 0.4, "radius": 15, "fill": [140, 180, 230, 60]},
+        {"type": "circle", "x": 0.5, "y": 0.4, "radius": 5, "fill": [200, 220, 255]},
+    ]
+
+    # Add narrator if context available
+    if story_context and voice:
+        elements = _add_narrator_to_scene(elements, voice, text, rng, story_context)
+
+    return {
+        "bg": bg_config,
+        "elements": elements,
+        "atmosphere": atmos_config,
+        "mood": mood,
+    }
+
+
+def _add_narrator_to_scene(elements: list, voice: str, text: str,
+                            rng: random.Random, story_context: dict) -> list:
+    """Add the narrator character (Ding sage or Dong woman) to the scene.
+    
+    Places the narrator as a silhouette at bottom-left or bottom-center,
+    scaled to be visible but not dominating the scene.
+    """
+    # Choose narrator type
+    if voice == "Ding":
+        narrator_type = "ding"
+    elif voice == "Dong":
+        narrator_type = "dong"
+    elif voice == "Think":
+        narrator_type = "think_owl"
+    else:
+        return elements
+
+    # Position: bottom-right or bottom-left, facing inward
+    side = rng.choice(["left", "right"])
+    if side == "left":
+        nx, ny = 0.15, 0.72
+    else:
+        nx, ny = 0.85, 0.72
+
+    # Scale based on scene complexity — larger if few elements
+    if len(elements) <= 2:
+        scale = 2.2
+    else:
+        scale = 1.6
+
+    narrator_elem = {
+        "type": narrator_type,
+        "x": nx,
+        "y": ny,
+        "scale": scale,
+        "z_order": -1,  # Behind most elements
+        "fill": [200, 200, 210],
+    }
+
+    # Insert before other elements so it renders behind
+    elements.insert(0, narrator_elem)
+
+    # Add a subtle hand gesture element (small hand near the narrator)
+    if rng.random() < 0.6:
+        hand_x = nx + (0.08 if side == "left" else -0.08)
+        hand_y = ny - 0.08
+        elements.insert(1, {
+            "type": "circle",
+            "x": hand_x,
+            "y": hand_y,
+            "radius": 5,
+            "fill": [220, 210, 200, 120],
+        })
+
+    return elements
+
+
+def _apply_mood_colors(bg_config: dict, mood: str, rng: random.Random) -> dict:
+    """Apply mood-based color shifts to background."""
+    if "colors" not in bg_config:
+        return bg_config
+    bg = dict(bg_config)
+    top, bot = list(bg["colors"][0]), list(bg["colors"][1])
+    if mood == "somber":
+        top = [max(0, c - 30) for c in top]
+        bot = [max(0, c - 20) for c in bot]
+    elif mood == "hopeful":
+        top = [min(255, c + 30) for c in top]
+        bot = [min(255, c + 15) for c in bot]
+    elif mood == "dramatic":
+        top = [min(255, top[0] + 20), max(0, top[1] - 30), max(0, top[2] - 30)]
+        bot = [max(0, bot[0] - 10), max(0, bot[1] - 20), max(0, bot[2] - 20)]
+    elif mood == "mysterious":
+        top = [max(0, c - 20) for c in top]
+        bot = [max(0, c - 10) for c in bot]
+    elif mood == "epic":
+        top = [min(255, top[0] + 20), min(255, top[1] + 10), min(255, top[2] + 10)]
+        bot = [max(0, bot[0] - 10), max(0, bot[1] - 10), max(0, bot[2] - 10)]
+    bg["colors"] = [tuple(top), tuple(bot)]
+    return bg
+
+
+def _apply_random_hue(bg_config: dict, rng: random.Random) -> dict:
+    """Apply subtle random hue rotation for variety."""
+    if "colors" not in bg_config:
+        return bg_config
+    bg = dict(bg_config)
+    top = list(bg["colors"][0])
+    bot = list(bg["colors"][1]) if len(bg["colors"]) > 1 else list(top)
+    hue_shift = rng.randint(-15, 15)
+    top = [max(0, min(255, c + hue_shift)) for c in top]
+    bot = [max(0, min(255, c + hue_shift)) for c in bot]
+    bg["colors"] = [tuple(top), tuple(bot)]
+    return bg
+
+
+def _apply_pose_modifiers(elements: list, text: str) -> list:
+    """Apply pose modifiers from text to human elements."""
     tl = text.lower()
     if "sitting" in tl or "seated" in tl or "sits" in tl:
         for elem in elements:
@@ -716,13 +865,11 @@ def compose_dynamic_scene(text: str) -> dict | None:
             e.get("type") in ("car", "vehicle", "truck", "bus") and
             any(h.get("type") in ("human", "man", "woman", "child") for h in elements)
         )]
+    return elements
 
-    # Add atmosphere particles for space
-    if bg_type == "space":
-        atmos_config["particles"] = "stars"
-        atmos_config["star_count"] = 40
 
-    # Spatial relationship: astronaut/alien on planet surface
+def _apply_spatial_relations(elements: list) -> list:
+    """Apply spatial relationships between elements (e.g., astronaut on planet)."""
     has_astronaut = any(e.get("type") in ("astronaut", "alien") for e in elements)
     has_planet = any(e.get("type") == "planet" for e in elements)
     if has_astronaut and has_planet:
@@ -732,15 +879,4 @@ def compose_dynamic_scene(text: str) -> dict | None:
                 e["scale"] = 1.5
             if e.get("type") in ("astronaut", "alien"):
                 e["y"] = 0.45
-
-    scene = {
-        "bg": bg_config,
-        "elements": elements,
-        "atmosphere": atmos_config,
-        "mood": mood,
-    }
-
-    # Save to memory
-    remember(text, scene)
-
-    return scene
+    return elements

@@ -1,0 +1,4776 @@
+{
+  "1e6d85d0f8f3d584f18576f99bf432e9": {
+    "text": "A happy man",
+    "scene_type": "story",
+    "elements": [
+      "human",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "f7a17b910232ca5de4faa0e61269fda2": {
+    "text": "A sad man",
+    "scene_type": "story",
+    "elements": [
+      "human",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 1
+  },
+  "d3a251453283a01ad5b67d30a40efa87": {
+    "text": "An angry man",
+    "scene_type": "story",
+    "elements": [
+      "human",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "7c3d6ef3f899fdcb84dec6996d2d6e59": {
+    "text": "a happy child with a big smile in a sunny meadow",
+    "scene_type": "story",
+    "elements": [
+      "sun",
+      "flower",
+      "circle",
+      "human",
+      "text"
+    ],
+    "bg_type": "forest",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "90c00455d3de14b4048bc18ec79bf156": {
+    "text": "a happy child with a big smile waving in a sunny meadow",
+    "scene_type": "story",
+    "elements": [
+      "sun",
+      "flower",
+      "circle",
+      "human",
+      "text"
+    ],
+    "bg_type": "forest",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "8f7b0c4db238776b5be5bb86217b4ec4": {
+    "text": "a sad man with a frown feeling lonely in the rain",
+    "scene_type": "story",
+    "elements": [
+      "line",
+      "human",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 1
+  },
+  "b34bf6d31c5a3374bfa29f585e8db916": {
+    "text": "a happy child waving in a sunny meadow",
+    "scene_type": "story",
+    "elements": [
+      "sun",
+      "flower",
+      "circle",
+      "human",
+      "text"
+    ],
+    "bg_type": "forest",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "83df1d430c6c71db17b52cc259609329": {
+    "text": "a sad man feeling lonely in the rain",
+    "scene_type": "story",
+    "elements": [
+      "line",
+      "human",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 1
+  },
+  "d78304ddfc58aaea5757b3955794f70f": {
+    "text": "a surprised woman shocked by a noise",
+    "scene_type": "story",
+    "elements": [
+      "human",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "9f93a806e95eaf1eb324648b7cd0c015": {
+    "text": "a determined hero on a cliff",
+    "scene_type": "story",
+    "elements": [
+      "mountain",
+      "human",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "bff12629b0b91890a03d9e8fefe3d796": {
+    "text": "a peaceful person meditating in a garden",
+    "scene_type": "story",
+    "elements": [
+      "flower",
+      "human",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "66eaeeaf476236b565b27337da99eea7": {
+    "text": "a majestic horse galloping in a green field",
+    "scene_type": "story",
+    "elements": [
+      "circle",
+      "animal",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "f3aabd7afcde6fa877dfce69ca3bf7a8": {
+    "text": "a horse galloping in a green field",
+    "scene_type": "story",
+    "elements": [
+      "circle",
+      "animal",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 3
+  },
+  "6b17aa417e12a15b05174b5ba9933295": {
+    "text": "a crocodile lurking in a swamp",
+    "scene_type": "story",
+    "elements": [
+      "crocodile",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 3
+  },
+  "fe93d4e1fea507cc502c7b265a12b2e0": {
+    "text": "a blue bird flying in the sky",
+    "scene_type": "story",
+    "elements": [
+      "cloud",
+      "bird",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 3
+  },
+  "70058dcd756f51c18b6337855eda68a7": {
+    "text": "a goldfish swimming in a pond",
+    "scene_type": "story",
+    "elements": [
+      "water",
+      "fish",
+      "text",
+      "wave",
+      "wave",
+      "wave"
+    ],
+    "bg_type": "ocean",
+    "mood": "peaceful",
+    "hits": 3
+  },
+  "e69f8197ee799ec9b3ada53f248cee55": {
+    "text": "a great white shark fin cutting through water",
+    "scene_type": "story",
+    "elements": [
+      "shark",
+      "water",
+      "fish",
+      "text"
+    ],
+    "bg_type": "ocean",
+    "mood": "peaceful",
+    "hits": 3
+  },
+  "663eadd6719016fb83cc7389693b8419": {
+    "text": "a sea serpent rising from the waves",
+    "scene_type": "story",
+    "elements": [
+      "wave",
+      "line",
+      "text",
+      "wave",
+      "wave",
+      "wave"
+    ],
+    "bg_type": "ocean",
+    "mood": "peaceful",
+    "hits": 3
+  },
+  "67e60c6e132ae91aca17a33ad72d56cd": {
+    "text": "a dog running in a park",
+    "scene_type": "story",
+    "elements": [
+      "animal",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 3
+  },
+  "d1d3bb394203b125938ca78ba53b17cf": {
+    "text": "a horse",
+    "scene_type": "story",
+    "elements": [
+      "horse",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 3
+  },
+  "9ae3116c105655b9b9c3d8ebd4adb044": {
+    "text": "a dog",
+    "scene_type": "story",
+    "elements": [
+      "dog",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 3
+  },
+  "c1d0e44b09d5ac52f90f463fe410fc88": {
+    "text": "a cat",
+    "scene_type": "story",
+    "elements": [
+      "cat",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 3
+  },
+  "55c5872e02058083fce51af088b7ef0f": {
+    "text": "a bear",
+    "scene_type": "story",
+    "elements": [
+      "bear",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 5
+  },
+  "84eeb729d4c28ff527c3bb96bf6ebff7": {
+    "text": "a deer",
+    "scene_type": "story",
+    "elements": [
+      "animal",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "9f4c14406afbb3d1d41b09834831308f": {
+    "text": "a rabbit",
+    "scene_type": "story",
+    "elements": [
+      "animal",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "94302c4835b76aab80e9f3b44736b782": {
+    "text": "a cow",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "7261d6adadc75700b2f0e81d60600d8b": {
+    "text": "a dragon",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 3
+  },
+  "c483f45a788dc910f18fe57cbaaff3b0": {
+    "text": "a snake",
+    "scene_type": "story",
+    "elements": [
+      "line",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "d0d9e438e884c4344d75168cf34bf127": {
+    "text": "a turtle",
+    "scene_type": "story",
+    "elements": [
+      "circle",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "21eda17adf47b0ba08635701263e312f": {
+    "text": "a crocodile",
+    "scene_type": "story",
+    "elements": [
+      "crocodile",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "6ab7975fc5eacd1214b1afde8f0f24eb": {
+    "text": "a bird",
+    "scene_type": "story",
+    "elements": [
+      "bird",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "0b3f6387171a8336032e37a5a0a74399": {
+    "text": "a fish",
+    "scene_type": "story",
+    "elements": [
+      "fish",
+      "text",
+      "wave",
+      "wave",
+      "wave"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "508b04a31337acf411d6f9d4edfff112": {
+    "text": "a whale",
+    "scene_type": "story",
+    "elements": [
+      "whale",
+      "text",
+      "wave",
+      "wave",
+      "wave"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "9423e8dc0e8c21b9538ea0094f70aa33": {
+    "text": "a shark",
+    "scene_type": "story",
+    "elements": [
+      "shark",
+      "text",
+      "wave",
+      "wave",
+      "wave"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "1090db37d26417e692239dd530df51d5": {
+    "text": "a sea_serpent",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "c67549b5a5fb0f7ed2776906bd937aec": {
+    "text": "a rhino",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "6e08a8aec9497e0a36777405a69db0f2": {
+    "text": "a hippo",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "c1cb355c8ae5a51e6feffb7e9dabbbc0": {
+    "text": "a monkey",
+    "scene_type": "story",
+    "elements": [
+      "monkey",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 3
+  },
+  "c49d38b389125f059926cb50a81e3b86": {
+    "text": "a squirrel",
+    "scene_type": "story",
+    "elements": [],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "737c4c7c3c31ad5d89aa36d0f61a7966": {
+    "text": "a lizard",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "7405ad59313898225f7787294635a9e5": {
+    "text": "a frog",
+    "scene_type": "story",
+    "elements": [
+      "animal",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "3ed7a4ae559ac45a4820e18f4d7608b8": {
+    "text": "a goat",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "689f36237fa135b173e83a1cdff5a61a": {
+    "text": "a sheep",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "5243ef7cf1ed257c9c4c50562dad28df": {
+    "text": "a pig",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "f20df07da933b88b093121a4e220e7e2": {
+    "text": "a rat",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "2283038c0c0376c971d1441080302caa": {
+    "text": "a beaver",
+    "scene_type": "story",
+    "elements": [],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "790d5fcb2e46d33a82976d58bde4b41f": {
+    "text": "a otter",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "99e9a318a224784e17978d5a5c9b7992": {
+    "text": "a hedgehog",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "3195b1e1ca5adc3efa2213047e4ffb7f": {
+    "text": "a bat",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "e714153ed4c0beab7678605d916a8b28": {
+    "text": "a kangaroo",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "8675fcd46af6daf3317b733e8a04c746": {
+    "text": "a sloth",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "ef8729bfe3a7bf3dc89f701dc295904a": {
+    "text": "a raccoon",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "cce9a90c24e9678e1d0fc1f864749c8e": {
+    "text": "a skunk",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "40ffb882a54ee403b27433962b5c1448": {
+    "text": "a troll",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "e3ab272c329c4fa59cf5448da8413026": {
+    "text": "a elf",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "74223fc85fd2202ecc88f9984da1e326": {
+    "text": "a dwarf",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "c3ddaa49ee84bdfd5724861a582da460": {
+    "text": "a beast",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "cffc94c08fa39be49cf4626dcf016ba4": {
+    "text": "a wolf",
+    "scene_type": "story",
+    "elements": [
+      "animal",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "a17e77eb23dbfdf686df339a8400c92a": {
+    "text": "a mouse",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "4541b6bcc91a337966fa36f2fb668417": {
+    "text": "a gorilla",
+    "scene_type": "story",
+    "elements": [],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "95929768adb96a5e324ed213487769f3": {
+    "text": "a man sitting on a chair",
+    "scene_type": "story",
+    "elements": [
+      "human",
+      "none",
+      "text"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 13
+  },
+  "8cca45961a3b22ae2b7b8e3fe094f089": {
+    "text": "man reading newspaper",
+    "scene_type": "story",
+    "elements": [
+      "book",
+      "human",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "f75b209074742227848c29efda3bd435": {
+    "text": "man sleeping on bed",
+    "scene_type": "story",
+    "elements": [
+      "human",
+      "none",
+      "text"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 9
+  },
+  "abb41a4638819bfeb0e76093e38c503c": {
+    "text": "man riding a bike",
+    "scene_type": "story",
+    "elements": [
+      "human",
+      "none",
+      "text"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 7
+  },
+  "74df83ce007bbd29ed6391142a0d7e3c": {
+    "text": "man driving a car",
+    "scene_type": "story",
+    "elements": [
+      "human",
+      "none",
+      "text"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 7
+  },
+  "5b356fde6ddd7853a9458bbc7f148311": {
+    "text": "A man sitting on a chair in a dark room. He stands up and walks to the window. Rain falling outside,",
+    "scene_type": "story",
+    "elements": [
+      "rain",
+      "cloud",
+      "lightning",
+      "human",
+      "window",
+      "none",
+      "text"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 1
+  },
+  "16451ffa6781eda419cd51307dcb880e": {
+    "text": "A man sits alone in a dark room, reading a book by candlelight.",
+    "scene_type": "story",
+    "elements": [
+      "book",
+      "human",
+      "none",
+      "text"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 1
+  },
+  "d1ad00999b1e6f8b2f945ad5a8a55566": {
+    "text": "He hears a noise outside and stands up, walking to the window.",
+    "scene_type": "story",
+    "elements": [
+      "window",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "68f667509b35d20c74155f0cf6fb441f": {
+    "text": "Rain pours down. Lightning flashes across the sky, illuminating a tall figure in the distance.",
+    "scene_type": "story",
+    "elements": [
+      "rain",
+      "cloud",
+      "lightning",
+      "human",
+      "text"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "9072e46d5e1f0ce379982822133752e5": {
+    "text": "A ship battles the stormy sea, waves crashing against its hull.",
+    "scene_type": "story",
+    "elements": [
+      "wave",
+      "storm",
+      "ship",
+      "text"
+    ],
+    "bg_type": "ocean",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "74be7fa682c5fcbf60fc60c85b3fdd2c": {
+    "text": "A lone astronaut stands on a barren planet, gazing at a swirling galaxy in the sky.",
+    "scene_type": "story",
+    "elements": [
+      "planet",
+      "astronaut",
+      "galaxy",
+      "text"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 5
+  },
+  "3ae6ca38f416f47736d54992351b0526": {
+    "text": "Inside the spaceship, monitors flicker with data and circuit diagrams.",
+    "scene_type": "story",
+    "elements": [
+      "spaceship",
+      "circuit",
+      "data",
+      "text"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 3
+  },
+  "7d38f9a84001d12be59953b9a2b295bc": {
+    "text": "The astronaut discovers a glowing alien artifact buried in the dust.",
+    "scene_type": "story",
+    "elements": [
+      "astronaut",
+      "alien",
+      "artifact",
+      "text"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 3
+  },
+  "bdc861f8f17bf4ffc2ce709e77af608f": {
+    "text": "A fleet of ships arrives, lighting up the horizon with fire.",
+    "scene_type": "story",
+    "elements": [
+      "fire",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 3
+  },
+  "64498534140e9f6bfd1ad1352dd5da40": {
+    "text": "[Dramatic night] For centuries, armies came. For centuries, armies failed. And each time the city en",
+    "scene_type": "story",
+    "elements": [
+      "human",
+      "clock",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 3
+  },
+  "b55db4a959120b7dbe3eb4edc0a4a23a": {
+    "text": "[Somber dawn] In the year 1453, a young ruler looked toward the city. His name was Mehmed II. He was",
+    "scene_type": "story",
+    "elements": [
+      "human",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 3
+  },
+  "ff13d8b27ced8bbf002c209ff14ca4f4": {
+    "text": "[Grand sunset] When spring arrived, the city found itself surrounded. Thousands of Ottoman soldiers ",
+    "scene_type": "story",
+    "elements": [
+      "wall",
+      "tent",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 3
+  },
+  "dcceb2189ef0b2b0c8d90a748d5e46c9": {
+    "text": "[Epic twilight] When spring arrived, the city found itself surrounded. Thousands of Ottoman soldiers",
+    "scene_type": "story",
+    "elements": [
+      "wall",
+      "tent",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "4bb83585408e391998f28310d053818e": {
+    "text": "A massive fortress with stone walls stood on the hill. Cannons were placed along the walls. A tall t",
+    "scene_type": "story",
+    "elements": [
+      "building",
+      "tent",
+      "mountain",
+      "flower",
+      "cannon",
+      "wall",
+      "chain",
+      "text"
+    ],
+    "bg_type": "forest",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "bc76eaf4b9c43196713dfb0b1f7157fa": {
+    "text": "Thousands of Ottoman soldiers gathered outside the fortress walls. Soldiers carried spears and shiel",
+    "scene_type": "story",
+    "elements": [
+      "soldier",
+      "building",
+      "wall",
+      "tent",
+      "text"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "f4b0f5edb1607dae7050c9119855353c": {
+    "text": "[Dramatic night] History loves hearing people say \"never.\"",
+    "scene_type": "story",
+    "elements": [
+      "human",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 9
+  },
+  "92bf8538ccd0041553e9acce54927a61": {
+    "text": "[Somber dawn] The city had survived invasions, rebellions, and sieges.\n\nEmpires had risen and disapp",
+    "scene_type": "story",
+    "elements": [
+      "wall",
+      "text",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 5
+  },
+  "705c3b10211a9fa7ab9d496459c5feee": {
+    "text": "[Grand sunset] And certainty can be dangerous.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 5
+  },
+  "4c9ca3740bfb4ef80e03bf6e483155a0": {
+    "text": "[Mysterious moonlight] In 1453, a young Ottoman sultan named Mehmed looked upon the city.\n\nHe was on",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "puzzle",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 5
+  },
+  "132843239002d88fa586fdefa187c308": {
+    "text": "[Hopeful golden] Or an opportunity.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 5
+  },
+  "96aa7ef07424a8b644527644dbde89d1": {
+    "text": "[Intense overcast] Beyond those walls stood one of the most important cities in the world.\n\nA prize ",
+    "scene_type": "story",
+    "elements": [
+      "cloud",
+      "text",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 5
+  },
+  "1059ba650e477982ed8c291d86eb5cd9": {
+    "text": "[Quiet evening] The walls had never met gunpowder like this.",
+    "scene_type": "story",
+    "elements": [
+      "wall",
+      "text",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 7
+  },
+  "d9b7612355e4ca5f9f57a7eb7fc6ad31": {
+    "text": "[Epic twilight] Then the cannons began to fire.\n\nThe earth shook.\n\nStone cracked.\n\nDust filled the a",
+    "scene_type": "story",
+    "elements": [
+      "planet",
+      "fire",
+      "text",
+      "star",
+      "star",
+      "star",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 5
+  },
+  "24e5c4727ec767f807a6f4f8b0f9761f": {
+    "text": "[Dramatic night] A contest between stone and time.",
+    "scene_type": "story",
+    "elements": [
+      "clock",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 7
+  },
+  "944c667c621ebe46a93f9bc31636ad74": {
+    "text": "[Somber dawn] Yet even that was not enough.\n\nBecause Mehmed had another plan.\n\nThe city's harbor was",
+    "scene_type": "story",
+    "elements": [
+      "water",
+      "text",
+      "wave",
+      "wave",
+      "wave"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 5
+  },
+  "2d83d4d3e7bbc3345a89b0da3ed7f064": {
+    "text": "[Grand sunset] Not around the harbor.\n\nAround reality's expectations.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 5
+  },
+  "8ceee2fe02881c381020d00b6ff4a39e": {
+    "text": "[Mysterious moonlight] His men dragged ships across land.\n\nAcross hills.\n\nAcross wooden tracks.\n\nWhe",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "human",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 5
+  },
+  "b3a6338ec267ded326c37bcfed68cf2b": {
+    "text": "[Intense overcast] Weeks passed.\n\nFood dwindled.\n\nExhaustion spread.\n\nEvery repaired wall became ano",
+    "scene_type": "story",
+    "elements": [
+      "wave",
+      "wall",
+      "text",
+      "wave",
+      "wave",
+      "wave",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 5
+  },
+  "eb08dd9f56e94a1ee9ddf24814cc6689": {
+    "text": "[Quiet evening] And every wall meets its final day.",
+    "scene_type": "story",
+    "elements": [
+      "wall",
+      "text",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 7
+  },
+  "5cc456e72dcb42902c5b2365321eb7d2": {
+    "text": "[Epic twilight] By the end of that day, Constantinople had fallen.\n\nAn empire more than a thousand y",
+    "scene_type": "story",
+    "elements": [
+      "crown",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 9
+  },
+  "88a9301c07f66659952a1093120399b1": {
+    "text": "[Dramatic night] Not with a single moment.\n\nBut with centuries leading to it.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 9
+  },
+  "3fb39bcc375925e25957623e7f966433": {
+    "text": "[Somber dawn] Because cities rarely fall in a day.\n\nEmpires rarely fall in a battle.\n\nThe final chap",
+    "scene_type": "story",
+    "elements": [
+      "human",
+      "text",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 5
+  },
+  "5048f22dc283fde7fab609374ac649d3": {
+    "text": "[Grand sunset] The story was ending.\n\nA different one was beginning.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 5
+  },
+  "ee6cb5cda8d9b5b988479fccf1c7d3a1": {
+    "text": "[Mysterious moonlight] And as the sun set over Constantinople, the world looked much the same.\n\nThe ",
+    "scene_type": "story",
+    "elements": [
+      "wave",
+      "moon",
+      "text",
+      "wave",
+      "wave",
+      "wave"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 5
+  },
+  "60cad490abb82c2ea67d6511cf751a47": {
+    "text": "[Somber dawn] Hey Dad, why did the walls take so long to build?",
+    "scene_type": "story",
+    "elements": [
+      "wall",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 1
+  },
+  "7abb49784879a53ad2196d045337e410": {
+    "text": "[Grand sunset] The city had survived invasions, rebellions, and sieges.\n\nEmpires had risen and disap",
+    "scene_type": "story",
+    "elements": [
+      "wall",
+      "text",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 3
+  },
+  "f9041e3613123aa4d2761782cdd52011": {
+    "text": "[Mysterious moonlight] And certainty can be dangerous.",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "text",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 5
+  },
+  "43adb83b6398537cf0640f839f9cc37a": {
+    "text": "[Hopeful golden] Hey Mom, how did the cannons get so big?",
+    "scene_type": "story",
+    "elements": [
+      "cannon",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "42b9581e2a93f97456df24f95e1407c2": {
+    "text": "[Intense overcast] In 1453, a young Ottoman sultan named Mehmed looked upon the city.\n\nHe was only t",
+    "scene_type": "story",
+    "elements": [
+      "cloud",
+      "puzzle",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 3
+  },
+  "bcd2ff0ef4cd4894c1aa0604f17b4c8c": {
+    "text": "[Quiet evening] Or an opportunity.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 3
+  },
+  "001d89a6a7030ca5bf7fa51ab75ee207": {
+    "text": "[Epic twilight] Dad, what happened to the people inside the city?",
+    "scene_type": "story",
+    "elements": [
+      "human",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "a3c9f7d77c5592a866a7958ba66136c4": {
+    "text": "[Dramatic night] Beyond those walls stood one of the most important cities in the world.\n\nA prize ma",
+    "scene_type": "story",
+    "elements": [
+      "wall",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 3
+  },
+  "03a4f539251e57b18d65f2e2ac98c783": {
+    "text": "[Somber dawn] The walls had never met gunpowder like this.",
+    "scene_type": "story",
+    "elements": [
+      "wall",
+      "text",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 3
+  },
+  "cdb42bc7ea36fca579e61359f3d6b5cb": {
+    "text": "[Grand sunset] Mom, why didn't the army just go around the walls?",
+    "scene_type": "story",
+    "elements": [
+      "soldier",
+      "wall",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 1
+  },
+  "cd7bd5457a82dac4a5a033209a2ed6dc": {
+    "text": "[Mysterious moonlight] Then the cannons began to fire.\n\nThe earth shook.\n\nStone cracked.\n\nDust fille",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "cannon",
+      "fire",
+      "text"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 3
+  },
+  "732aa271de3ba2be751dbdf99b475d04": {
+    "text": "[Hopeful golden] A contest between stone and time.",
+    "scene_type": "story",
+    "elements": [
+      "clock",
+      "text",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 3
+  },
+  "fd84c2858ad0ab31b4e79103128618db": {
+    "text": "[Intense overcast] Dad, how did they drag ships over land?",
+    "scene_type": "story",
+    "elements": [
+      "cloud",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "007d703e7a6c48ca4f38924859713f95": {
+    "text": "[Quiet evening] Yet even that was not enough.\n\nBecause Mehmed had another plan.\n\nThe city's harbor w",
+    "scene_type": "story",
+    "elements": [
+      "water",
+      "text",
+      "wave",
+      "wave",
+      "wave",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 3
+  },
+  "50a695e2269a270a75e05e7a053018b3": {
+    "text": "[Epic twilight] Not around the harbor.\n\nAround reality's expectations.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 3
+  },
+  "4af41dfe5c1506445206525f75cfbdb3": {
+    "text": "[Somber dawn] His men dragged ships across land.\n\nAcross hills.\n\nAcross wooden tracks.\n\nWhen the peo",
+    "scene_type": "story",
+    "elements": [
+      "mountain",
+      "text",
+      "flower",
+      "flower",
+      "flower",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 3
+  },
+  "661131edc20a02cf55ce088f5231d64b": {
+    "text": "[Mysterious moonlight] Hey Dad, was the sultan scared too?",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 1
+  },
+  "0e27c6c61bef28f049c571ef16c82252": {
+    "text": "[Hopeful golden] Weeks passed.\n\nFood dwindled.\n\nExhaustion spread.\n\nEvery repaired wall became anoth",
+    "scene_type": "story",
+    "elements": [
+      "wave",
+      "text",
+      "wave",
+      "wave",
+      "wave"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 3
+  },
+  "5c0a8b8844963bfde36d72460c0b2465": {
+    "text": "[Quiet evening] Mom, how long is a thousand years?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "461baddc9d283103197e6e37a1f7b7df": {
+    "text": "[Grand sunset] Because cities rarely fall in a day.\n\nEmpires rarely fall in a battle.\n\nThe final cha",
+    "scene_type": "story",
+    "elements": [
+      "human",
+      "text",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 3
+  },
+  "c4123954c11fddc0abedc20a89ee472a": {
+    "text": "[Mysterious moonlight] The story was ending.\n\nA different one was beginning.",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "text",
+      "star",
+      "star",
+      "star",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 3
+  },
+  "2918f6033281a7ce21e44b94d9f2ac2d": {
+    "text": "[Hopeful golden] Mom, did anyone escape?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "5d0922c672f190650401a89242493515": {
+    "text": "[Intense overcast] And as the sun set over Constantinople, the world looked much the same.\n\nThe stre",
+    "scene_type": "story",
+    "elements": [
+      "wave",
+      "cloud",
+      "text",
+      "wave",
+      "wave",
+      "wave"
+    ],
+    "bg_type": "ocean",
+    "mood": "mysterious",
+    "hits": 3
+  },
+  "6277d6edd12b32123ee46572921f0644": {
+    "text": "[Quiet evening] Hey Dad, hey Mom \u2014 I liked the story.\nI didn't understand all of it.\nBut I think I u",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "b9a60d25c2cddab10a98073bea66b38c": {
+    "text": "[Epic twilight] Dad? Mom?\nWill our walls hold?\n...I hope so.",
+    "scene_type": "story",
+    "elements": [
+      "wall",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "1fa69b7d27f5d13ebb13190140a4e6e6": {
+    "text": "A soldier stood guard near the fortress walls with cannons ready.",
+    "scene_type": "story",
+    "elements": [
+      "soldier",
+      "wall",
+      "cannon",
+      "text"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "709a6d7c853ca3c37ac631fc1ebee423": {
+    "text": "A spaceship flew past a planet while an astronaut gazed at the stars.",
+    "scene_type": "story",
+    "elements": [
+      "spaceship",
+      "star",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "3ff616bea0cb3a1d4c3345f505ce0d26": {
+    "text": "A scholar sat in a dark room reading a book by candlelight.",
+    "scene_type": "story",
+    "elements": [
+      "book",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 1
+  },
+  "13b847dc1fc7e66e8801f6d3f88416ce": {
+    "text": "An alien artifact glowed on a pedestal in the desert.",
+    "scene_type": "story",
+    "elements": [
+      "desert",
+      "artifact",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "e981975ad7429d44528f5a3c0ad0ab97": {
+    "text": "Imagine standing on a beach thousands of years ago. Behind you a familiar world. Forests. Rivers. Hu",
+    "scene_type": "story",
+    "elements": [
+      "water",
+      "wave",
+      "text",
+      "wave",
+      "wave",
+      "wave"
+    ],
+    "bg_type": "ocean",
+    "mood": "peaceful",
+    "hits": 7
+  },
+  "0d792e7ffc4260fb324dcc8afeaabb55": {
+    "text": "[Epic twilight] Imagine being the last of your kind.\n\nNot the last in a herd.\n\nNot the last in a val",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 5
+  },
+  "c112d8c3493e4792f74c8fe963c51724": {
+    "text": "[Dramatic night] That's a heavy thought.",
+    "scene_type": "story",
+    "elements": [
+      "lightbulb",
+      "text",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 5
+  },
+  "98cdb29308364a3026e10fe73ba7aedf": {
+    "text": "[Somber dawn] Why did the walls take so long to build?",
+    "scene_type": "story",
+    "elements": [
+      "wall",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 1
+  },
+  "42f07274bd52ef949713374e031d2b88": {
+    "text": "[Mysterious moonlight] Thousands of years ago, mammoths roamed enormous stretches of Earth.\n\nThey cr",
+    "scene_type": "story",
+    "elements": [
+      "glacier",
+      "planet",
+      "text",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 5
+  },
+  "f9d111ea3ea25feecd012d0f8b9a21c9": {
+    "text": "[Hopeful golden] How did the cannons get so big?",
+    "scene_type": "story",
+    "elements": [
+      "cannon",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "7275d83a60739236be14ae60b9a35ddf": {
+    "text": "[Intense overcast] A world that wasn't going to stay frozen.",
+    "scene_type": "story",
+    "elements": [
+      "glacier",
+      "text",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 5
+  },
+  "9b693df3fc946665698978354fc7b923": {
+    "text": "[Quiet evening] Slowly, the climate changed.\n\nThe ice retreated.\n\nForests spread.\n\nGrasslands disapp",
+    "scene_type": "story",
+    "elements": [
+      "glacier",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 5
+  },
+  "680a5eb9400fcba7ce5866989094ce86": {
+    "text": "[Epic twilight] What happened to the people inside the city?",
+    "scene_type": "story",
+    "elements": [
+      "human",
+      "text",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "932966820195f22810e9cb5251fe41ca": {
+    "text": "[Dramatic night] Not overnight.\n\nGeneration by generation.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 5
+  },
+  "3dce7e20346332905f4ac973002d8944": {
+    "text": "[Somber dawn] Exactly.\n\nThe change was so slow that no mammoth could notice it happening.\n\nYet every",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 5
+  },
+  "6800c05ff13fbb86b199e26f5e9e6c8c": {
+    "text": "[Grand sunset] Why didn't the army just go around the walls?",
+    "scene_type": "story",
+    "elements": [
+      "soldier",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 1
+  },
+  "ad1ebea471a8fd07340403d18658c512": {
+    "text": "[Mysterious moonlight] That's almost worse than a sudden disaster.",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "text",
+      "star",
+      "star",
+      "star",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 5
+  },
+  "e35fd3cc9a337502f92aea8a54bef025": {
+    "text": "[Hopeful golden] Perhaps.\n\nBecause there was no single moment to point to.\n\nNo obvious ending.\n\nJust",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 5
+  },
+  "c0a0bd0157ae8221a47d0f6304a5b9f0": {
+    "text": "[Intense overcast] How did they drag ships over land?",
+    "scene_type": "story",
+    "elements": [
+      "cloud",
+      "text",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "bd5f316ed8ee52a649d28a74091050d6": {
+    "text": "[Quiet evening] And eventually...\n\none final group.",
+    "scene_type": "story",
+    "elements": [
+      "human",
+      "text",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 5
+  },
+  "9e9a10a48fcf537999a80a679a302b2f": {
+    "text": "[Epic twilight] Imagine standing on an Arctic island.\n\nCold wind.\n\nEndless sea.\n\nAnd somewhere out t",
+    "scene_type": "story",
+    "elements": [
+      "wave",
+      "text",
+      "wave",
+      "wave",
+      "wave"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 5
+  },
+  "41e111cbdbc5063110d858ed56278f58": {
+    "text": "[Somber dawn] Completely unaware that history is ending around it.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 5
+  },
+  "92befd760af6f0738a317aa8a601e68f": {
+    "text": "[Grand sunset] No animal knows it's the last.\n\nNo ceremony marks the moment.\n\nNo witness records it.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 5
+  },
+  "8f63d560cc593d1bfc15c0b1e928ffd6": {
+    "text": "[Mysterious moonlight] Was the sultan scared too?",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 1
+  },
+  "4fd97b0d3b83481000cb7b47f6b02991": {
+    "text": "[Hopeful golden] The world kept moving.\n\nThe oceans continued rising and falling.\n\nThe seasons conti",
+    "scene_type": "story",
+    "elements": [
+      "wave",
+      "text",
+      "wave",
+      "wave",
+      "wave",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 5
+  },
+  "6c3cce3345c12b1c1abb9bb3e73f77c5": {
+    "text": "[Intense overcast] But something ancient had vanished.\n\nA creature that had walked the Earth for hun",
+    "scene_type": "story",
+    "elements": [
+      "planet",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 5
+  },
+  "1de9a912a9eebb830189f77e36f3109a": {
+    "text": "[Quiet evening] How long is a thousand years?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "703d89b2be33811c01744f5905cf87fb": {
+    "text": "[Epic twilight] That's the unsettling thing about extinction.\n\nThe planet doesn't stop.\n\nLife simply",
+    "scene_type": "story",
+    "elements": [
+      "planet",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 5
+  },
+  "c24a4ccc9d888d97e598939209e0cd81": {
+    "text": "[Dramatic night] And yet...\n\nthousands of years later...\n\nwe still remember them.\n\nNot because they ",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 5
+  },
+  "0aa58b47b75c9f99640645412f6ae928": {
+    "text": "[Grand sunset] I liked the story.\nI didn't understand all of it.\nBut I think I understood the end.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 5
+  },
+  "7bae14ecb5726cfd6ca5c26a812a8d84": {
+    "text": "[Mysterious moonlight] Will our walls hold?\n...I hope so.",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 1
+  },
+  "ed51c66cb4a638db5bc54fc290e4d240": {
+    "text": "[Somber dawn] What happened to the years?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 1
+  },
+  "8592423dba100d1a56912d1c5576c18a": {
+    "text": "[Hopeful golden] Why is the survived important?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "826248659759f06be7bd9621cbdab799": {
+    "text": "[Epic twilight] Was the imagine real?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "01173c3a2c8e532ce1c24c852c095833": {
+    "text": "[Grand sunset] How big was the last?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 1
+  },
+  "e1345f8dd7be0a2ed4127d90dff57b1c": {
+    "text": "[Intense overcast] Was the thousands real?",
+    "scene_type": "story",
+    "elements": [
+      "cloud",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "12f8bd849382a460b15185962b2a29ea": {
+    "text": "[Dramatic night] Could the mammoths have been saved?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "6685296e9b20ffd780765752786e21b4": {
+    "text": "[Mysterious moonlight] What happened to the earth?",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 1
+  },
+  "75ef4fd968c8ccf3be4c769f097a4edb": {
+    "text": "[Quiet evening] Where did the world go?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "bbabc20c610ef76469cf1bac91aaa2c0": {
+    "text": "[Somber dawn] How big was the frozen?",
+    "scene_type": "story",
+    "elements": [
+      "glacier",
+      "text",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "7f61e15ef3c2c5e20d0766937d3e5377": {
+    "text": "[Mysterious moonlight] I wonder what happened to the last afterward.",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "6e3a574dc475feb1027465f9ec5e1ad8": {
+    "text": "[Somber dawn] Did anyone see the moment?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 1
+  },
+  "1f5205a201112f9141b54c4384450c35": {
+    "text": "[Hopeful golden] What does the herd look like?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "3caa69ce6ac6ef9bc3f7d4ed79a2c4ae": {
+    "text": "[Epic twilight] How did the generation...?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 3
+  },
+  "6895342aad520d317a2c5d5506a9ad8c": {
+    "text": "[Grand sunset] Did anyone see the world?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 1
+  },
+  "290f2f5b652efd41dbb44f6764f25b17": {
+    "text": "[Intense overcast] How big was the years?",
+    "scene_type": "story",
+    "elements": [
+      "cloud",
+      "text",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "678680dd200c189cc61b706e77d47680": {
+    "text": "[Dramatic night] What does the mammoths look like?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "de767ff7cea04cb7ddc36b126d421a96": {
+    "text": "[Mysterious moonlight] Did anyone see the kind?",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "text",
+      "star",
+      "star",
+      "star",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 1
+  },
+  "3a42f5ce8581b13db7ec2b188a4983e1": {
+    "text": "[Quiet evening] Where did the fewer go?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "3f04d9ac560c3d660a752fe736768ce6": {
+    "text": "[Somber dawn] Why did the earth...?",
+    "scene_type": "story",
+    "elements": [
+      "planet",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 1
+  },
+  "6c895f12f615649812c84e3158592ec9": {
+    "text": "[Mysterious moonlight] Do you think the last is still out there somewhere?",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "text",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 1
+  },
+  "5c4127b617b275aa3e59afe06f046234": {
+    "text": "[Somber dawn] How big was the walls?",
+    "scene_type": "story",
+    "elements": [
+      "wall",
+      "text",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 1
+  },
+  "ab7743259352cc92b86b7ee4a3da1af6": {
+    "text": "[Hopeful golden] What happened to the history?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "c961c981a6e7fbe58a5e696bae43674a": {
+    "text": "[Epic twilight] What does the fall look like?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "164fbe6388effdfedfd3ee75ad9c7484": {
+    "text": "[Grand sunset] How big was the years?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 3
+  },
+  "086b3072656b544850efcd06b7b4c024": {
+    "text": "[Intense overcast] Where did the mehmed go?",
+    "scene_type": "story",
+    "elements": [
+      "cloud",
+      "text",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "a4bb36a8b162f91b4bb349ee8db6f458": {
+    "text": "[Dramatic night] How did the stone...?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "3f065adcfeb139993fdc2d19c253e191": {
+    "text": "[Mysterious moonlight] Where did the across go?",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "text",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 1
+  },
+  "6b4dcfc31694876ee387a64f3c024bd7": {
+    "text": "[Somber dawn] How did the people...?",
+    "scene_type": "story",
+    "elements": [
+      "human",
+      "text",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 1
+  },
+  "d331a095e95daa1fefa293dc38c80b0a": {
+    "text": "[Hopeful golden] What happened to the constantinople?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "0aa075ce99491ebd68a38ef0aa770e01": {
+    "text": "[Quiet evening] I liked the story.\nI didn't understand all of it.\nBut I think I understood the end.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 3
+  },
+  "dbede0d05ea9036bd360c45c3affdbc7": {
+    "text": "[Epic twilight] Do you think the city is still out there somewhere?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "f0f0e22bd1d5f3da525099164457fd8e": {
+    "text": "[Epic twilight] Imagine being the last of your kind.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "59d6b7e99fcebf2c7187e722f73b525d": {
+    "text": "[Dramatic night] Why is the herd important?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "99c55ab043f9c66c93c23e099f4bb523": {
+    "text": "[Somber dawn] Not the last in a herd.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 1
+  },
+  "a497c5bf75b32d4fea5023f5d7e4b290": {
+    "text": "[Grand sunset] What does the generation look like?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 1
+  },
+  "12adb49d70977fa565854314dc92bfb7": {
+    "text": "[Mysterious moonlight] Not the last in a valley.",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 1
+  },
+  "99f13a7422c223d0bbbc0435a115a9aa": {
+    "text": "[Hopeful golden] Was the years real?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "27e27523e04e3166e0a8fae2f34fe5a9": {
+    "text": "[Intense overcast] The last.",
+    "scene_type": "story",
+    "elements": [
+      "cloud",
+      "text",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "9351a9e4749b48a1da77a4fe3897a07c": {
+    "text": "[Quiet evening] Where did the kind go?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "cc8b97abe36bf29beb3b1bb54e59f9fc": {
+    "text": "[Epic twilight] That's a heavy thought.",
+    "scene_type": "story",
+    "elements": [
+      "lightbulb",
+      "text",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "100779e851ed579efab57cd816447e07": {
+    "text": "[Dramatic night] How big was the last?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "a943453fba1a96efd43c13dfc5037899": {
+    "text": "[Somber dawn] And the strange part is...",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 1
+  },
+  "0bd9eb9fa8fe2807e3908cb8cca2f4af": {
+    "text": "[Grand sunset] Why is the mammoths important?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 1
+  },
+  "a5f33e363c141a57eb02e8030ab64797": {
+    "text": "[Hopeful golden] What does the earth look like?",
+    "scene_type": "story",
+    "elements": [
+      "planet",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "b3ea76a9f55ac93490a31be3ff96cb54": {
+    "text": "[Intense overcast] Thousands of years ago, mammoths roamed enormous stretches of Earth.",
+    "scene_type": "story",
+    "elements": [
+      "planet",
+      "text",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "30ba07c94a7130a65f0768367abc8c30": {
+    "text": "[Quiet evening] They crossed frozen plains.",
+    "scene_type": "story",
+    "elements": [
+      "glacier",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "de5bd7819da996a33ee9da1972bb86f6": {
+    "text": "[Epic twilight] Why did the fewer...?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "268dd694893ab8991313ecd6fb34d1b9": {
+    "text": "[Dramatic night] Survived brutal winters.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "0cd51e9fa09d6b637941b75e3c8d0537": {
+    "text": "[Somber dawn] How big was the moment?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 1
+  },
+  "2db050916b59e4514d51202e351d2462": {
+    "text": "[Grand sunset] And lived in a world of ice.",
+    "scene_type": "story",
+    "elements": [
+      "glacier",
+      "text",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 1
+  },
+  "dd97ddf3d181d17ef6e658d6bbbcccae": {
+    "text": "[Mysterious moonlight] What happened to the world?",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 1
+  },
+  "4b81e0e55bbca0270761a4a9e826e6a8": {
+    "text": "[Hopeful golden] A world that wasn't going to stay frozen.",
+    "scene_type": "story",
+    "elements": [
+      "glacier",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "7aad7402e5dd7ef73456b8c73145f98d": {
+    "text": "[Intense overcast] What happened to the last?",
+    "scene_type": "story",
+    "elements": [
+      "cloud",
+      "text",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "cf45ec890f856b9bfea15e29b69fbf29": {
+    "text": "[Quiet evening] Slowly, the climate changed.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "2f376fc036df6c169f677fd4aadb8444": {
+    "text": "[Epic twilight] Why is the earth important?",
+    "scene_type": "story",
+    "elements": [
+      "planet",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "464695ee8a48b58c39f28c5350ecb1d7": {
+    "text": "[Dramatic night] The ice retreated.",
+    "scene_type": "story",
+    "elements": [
+      "glacier",
+      "text",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "c93bd3506db75d7d6edf371ffdbd09b9": {
+    "text": "[Somber dawn] Did anyone see the earth?",
+    "scene_type": "story",
+    "elements": [
+      "planet",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "39fe1aa3aab9b97523fdf4f23fd932e9": {
+    "text": "[Grand sunset] Forests spread.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 1
+  },
+  "5cb83035ac7d00a9caaf5e9ef5928ebd": {
+    "text": "[Mysterious moonlight] What happened to the herd?",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 1
+  },
+  "1a1ee2813ac0d8176326490e2f842e07": {
+    "text": "[Hopeful golden] Grasslands disappeared.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "c84744f0e086d0742bb40168f8e1ac5a": {
+    "text": "[Intense overcast] What happened to the generation?",
+    "scene_type": "story",
+    "elements": [
+      "cloud",
+      "text",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "ef35c56974505cb52fac6c71f8923fb9": {
+    "text": "[Quiet evening] The mammoths' home began to shrink.",
+    "scene_type": "story",
+    "elements": [
+      "building",
+      "text",
+      "building",
+      "building",
+      "building",
+      "building"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "b87e44fcfb65e27d457021f3162240c5": {
+    "text": "[Epic twilight] Why is the world important?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "ca504998a2df421c6e92c7783eaacb65": {
+    "text": "[Dramatic night] Not overnight.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "7b37a84aac35e21843e3722b65a286e0": {
+    "text": "[Somber dawn] What happened to the earth?",
+    "scene_type": "story",
+    "elements": [
+      "planet",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 1
+  },
+  "ac793a40b2ecf6623764ca1a6ef5b8a2": {
+    "text": "[Grand sunset] Generation by generation.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 1
+  },
+  "f5947cb97620644b1822b2af42ecba70": {
+    "text": "[Mysterious moonlight] What does the mammoths look like?",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 1
+  },
+  "4bbac6d4a4c339222ca00adae2f69b4b": {
+    "text": "[Hopeful golden] Exactly.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "b61b55ef7fd2fa8797d049e94ee46ba9": {
+    "text": "[Intense overcast] Where did the herd go?",
+    "scene_type": "story",
+    "elements": [
+      "cloud",
+      "text",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "83b7c89af8a4385f9923d4449fc473c6": {
+    "text": "[Quiet evening] The change was so slow that no mammoth could notice it happening.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "8eda0d16b27a0b49ee30147e5aafb767": {
+    "text": "[Epic twilight] Yet every generation inherited a slightly smaller world.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "34b501bb5a3030f02a952b4556da6f5b": {
+    "text": "[Dramatic night] What happened to the kind?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "eb68fc0164d14bed307d1d3bd48521c0": {
+    "text": "[Somber dawn] That's almost worse than a sudden disaster.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 1
+  },
+  "1cbf9cfa42f7463e50deffdf0dff0858": {
+    "text": "[Grand sunset] Could the last have been saved?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 1
+  },
+  "0b11f13d733b58596cc1d4c7a6d47e64": {
+    "text": "[Mysterious moonlight] Perhaps.",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 1
+  },
+  "e165f016dcb75b288e231ab1f989e94a": {
+    "text": "[Hopeful golden] Why did the generation...?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "ebfe4891b7792ec5a464e69d2efd3111": {
+    "text": "[Intense overcast] Because there was no single moment to point to.",
+    "scene_type": "story",
+    "elements": [
+      "cloud",
+      "text",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "b2f0870a4e40479bf4b64e43302142a3": {
+    "text": "[Quiet evening] No obvious ending.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "201ce58e9990253402f196e2c03a57ee": {
+    "text": "[Dramatic night] Just fewer mammoths.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "7c1be8414ad44f1777b7a50825110a2e": {
+    "text": "[Somber dawn] Why is the kind important?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 1
+  },
+  "1f6a451d61967ae48d5b410d23440d3a": {
+    "text": "[Grand sunset] Then fewer still.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "c10e5f6c22b04f8a96d975f6619bd597": {
+    "text": "[Mysterious moonlight] Did anyone see the herd?",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 1
+  },
+  "634a84fd2899f9cccb0820b7256e6188": {
+    "text": "[Hopeful golden] Until only small groups remained.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "39275f48bd9d4533660192472b61e125": {
+    "text": "[Intense overcast] Why did the mammoths...?",
+    "scene_type": "story",
+    "elements": [
+      "cloud",
+      "text",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "cc68cc7fbe1d95f1fcc21691c259f8d4": {
+    "text": "[Quiet evening] And eventually...",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "1ec3074419b7cba81af2afee04ecaf43": {
+    "text": "[Epic twilight] How big was the mammoths?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "59bab0917951b137b518ef3ab3bc96ca": {
+    "text": "[Dramatic night] one final group.",
+    "scene_type": "story",
+    "elements": [
+      "human",
+      "text",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "679aeaffb115eda18b0c20d83d0fa64a": {
+    "text": "[Somber dawn] Why did the world...?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 1
+  },
+  "d8fe5937e99f1cb32b52a776412af8ac": {
+    "text": "[Grand sunset] Imagine standing on an Arctic island.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 1
+  },
+  "df74b5dfaf13fdec02ec86158da89d49": {
+    "text": "[Mysterious moonlight] What does the last look like?",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 1
+  },
+  "c7c0a3f777543032bbe022e8f0b772e2": {
+    "text": "[Hopeful golden] Cold wind.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "b566a41f0fbe98dd5c11bb316da063b2": {
+    "text": "[Intense overcast] Why did the earth...?",
+    "scene_type": "story",
+    "elements": [
+      "planet",
+      "text",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "72947efcd83168c8bf26c4ded37d446e": {
+    "text": "[Quiet evening] Endless sea.",
+    "scene_type": "story",
+    "elements": [
+      "wave",
+      "text",
+      "wave",
+      "wave",
+      "wave"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "761dc4e0ce7eeda24e1a26f6c4f8d080": {
+    "text": "[Epic twilight] Did anyone see the world?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "ebae6f859d0c9f54736f8fecf68750e7": {
+    "text": "[Dramatic night] And somewhere out there walks one of the last mammoths.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "bdc61605cdee49e4e3b732185280e133": {
+    "text": "[Somber dawn] Where did the earth go?",
+    "scene_type": "story",
+    "elements": [
+      "planet",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 1
+  },
+  "5b4a8e29f97ed2e5b8e8d0a64c4a8019": {
+    "text": "[Grand sunset] Looking for food.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 1
+  },
+  "e4acd12c45fef088b70cda9a3f63eef3": {
+    "text": "[Mysterious moonlight] Did anyone see the fewer?",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 1
+  },
+  "b7c7c02242df30f01a79f2f9f6de032d": {
+    "text": "[Hopeful golden] Following familiar paths.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "0780d393d699e192ca53c91f7638916d": {
+    "text": "[Intense overcast] How did the fewer...?",
+    "scene_type": "story",
+    "elements": [
+      "cloud",
+      "text",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "268ea438a906da137afe8f9a9d8bd25a": {
+    "text": "[Quiet evening] Living an ordinary day.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "7f9247bf16f0913dcb7eefa862355947": {
+    "text": "[Epic twilight] What does the herd look like?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "907bddf9a071222c18eee658f810d338": {
+    "text": "[Dramatic night] Completely unaware that history is ending around it.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "0a2cd624edd6b865fe84a092e337d048": {
+    "text": "[Somber dawn] Why did the years...?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 1
+  },
+  "9d3b2980a07293c20fff15b3e6fc4fb9": {
+    "text": "[Grand sunset] No animal knows it's the last.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 1
+  },
+  "c273cd31ab1fa688f06a5125eb736b28": {
+    "text": "[Mysterious moonlight] Could the world have been saved?",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 1
+  },
+  "5c4fd0130331b86204051391751ee340": {
+    "text": "[Hopeful golden] No ceremony marks the moment.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "a8f6ed789e68f62ee67f0567965d1600": {
+    "text": "[Intense overcast] Where did the years go?",
+    "scene_type": "story",
+    "elements": [
+      "cloud",
+      "text",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "7f72584d5c5c9e4eb045514f5f61f2a1": {
+    "text": "[Quiet evening] No witness records it.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "89f4ea80743b06f00fe11ebdcdeb3051": {
+    "text": "[Epic twilight] Where did the world go?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "edd19613e336d4d7c1624d1952649856": {
+    "text": "[Dramatic night] One day the mammoths were here.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "384dfa48012c38779d4e46880c5fdef6": {
+    "text": "[Somber dawn] Was the mammoths real?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 1
+  },
+  "162493ae3a37354a4835d24930559019": {
+    "text": "[Grand sunset] Then they weren't.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 1
+  },
+  "ba1693793d10418c50f4b16128ada062": {
+    "text": "[Mysterious moonlight] What does the moment look like?",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 1
+  },
+  "8712d0529970247d606e6c4d82822843": {
+    "text": "[Hopeful golden] The world kept moving.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "d3f90ffd550abeb1b4bf70344eea0713": {
+    "text": "[Intense overcast] Where did the mammoths go?",
+    "scene_type": "story",
+    "elements": [
+      "cloud",
+      "text",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "2a5ccb1309993793d7468e989d50b1e1": {
+    "text": "[Quiet evening] The oceans continued rising and falling.",
+    "scene_type": "story",
+    "elements": [
+      "wave",
+      "text",
+      "wave",
+      "wave",
+      "wave"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "ebce25b2f02443be2471c3ac228b6f5d": {
+    "text": "[Epic twilight] What happened to the years?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "944e99f738787c34cbe4a502136d551f": {
+    "text": "[Dramatic night] The seasons continued changing.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "dcc781ed12d67894bac9877bfacac9f7": {
+    "text": "[Somber dawn] Was the moment real?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 1
+  },
+  "8b93ed824fa8d6b70f360bba1ab25d76": {
+    "text": "[Mysterious moonlight] What happened to the moment?",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 1
+  },
+  "c37d40c7fab6e45787c28151d6781df5": {
+    "text": "[Hopeful golden] A creature that had walked the Earth for hundreds of thousands of years.",
+    "scene_type": "story",
+    "elements": [
+      "planet",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "33467c97653cdc9e2d3c11586293a907": {
+    "text": "[Intense overcast] Gone.",
+    "scene_type": "story",
+    "elements": [
+      "cloud",
+      "text",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "b97b20aebd014c8e3e4668018b9333a4": {
+    "text": "[Quiet evening] Was the generation real?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "a449f85dc6536bbbb8addc2f6cce01f4": {
+    "text": "[Epic twilight] That's the unsettling thing about extinction.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "70e8d6852b189566b70b5ad6924c5fda": {
+    "text": "[Dramatic night] How big was the herd?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "4f47c053d8885e8f9f6a20dd2db749c0": {
+    "text": "[Mysterious moonlight] Life simply turns the page.",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 1
+  },
+  "a94be0b1cd728b92861d4f44c86823fb": {
+    "text": "[Hopeful golden] How did the years...?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "233ccce13293dbe9631c51ed14b4796b": {
+    "text": "[Intense overcast] And yet...",
+    "scene_type": "story",
+    "elements": [
+      "cloud",
+      "text",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "9b3d16f843848c87c99aa27c0be59cd9": {
+    "text": "[Quiet evening] Did anyone see the kind?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "ad476dfed1a2e12f2de2df45bf865736": {
+    "text": "[Epic twilight] thousands of years later...",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "85a935279bd4683d9f7b82ed862d6399": {
+    "text": "[Dramatic night] What does the world look like?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "57145675f3e9baf8801fc3a349cee612": {
+    "text": "[Grand sunset] Where did the moment go?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 1
+  },
+  "bf1118de3a7252a61e28b79316b4df1e": {
+    "text": "[Hopeful golden] What happened to the fewer?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "8979815b5da644a7f63a363cc103fe40": {
+    "text": "[Intense overcast] Because their story did.",
+    "scene_type": "story",
+    "elements": [
+      "cloud",
+      "text",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "ce7988171b06782954cce9491eb208c5": {
+    "text": "[Epic twilight] I hope the last was okay in the end.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "0fa0e409daf8fdb3e35fad7217d4e226": {
+    "text": "[Epic twilight] Imagine being the last of your kind. Not the last in a herd. Not the last in a valle",
+    "scene_type": "story",
+    "elements": [
+      "ding",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "ocean",
+    "mood": "dramatic",
+    "hits": 13
+  },
+  "6ac89ce5f554e5b63ba110a5f094be75": {
+    "text": "[Dramatic night] Why is the years important?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "51ee8e8221143bf25d6c051a5d71071d": {
+    "text": "[Somber dawn] The last. That's a heavy thought. And the strange part is... you would never know. Tho",
+    "scene_type": "story",
+    "elements": [
+      "ding",
+      "circle"
+    ],
+    "bg_type": "ocean",
+    "mood": "mysterious",
+    "hits": 3
+  },
+  "b83da1a4184a43d44c29a29dd8c2258e": {
+    "text": "[Grand sunset] They crossed frozen plains. Survived brutal winters. And lived in a world of ice. A w",
+    "scene_type": "story",
+    "elements": [
+      "ding",
+      "glacier",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "ocean",
+    "mood": "epic",
+    "hits": 3
+  },
+  "7a685cffd72ef9a370e3517ef2660692": {
+    "text": "[Mysterious moonlight] Slowly, the climate changed. The ice retreated. Forests spread. Grasslands di",
+    "scene_type": "story",
+    "elements": [
+      "ding",
+      "circle",
+      "glacier",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "ocean",
+    "mood": "mysterious",
+    "hits": 3
+  },
+  "54aae620f88fe3e014db3950383e922c": {
+    "text": "[Intense overcast] The change was so slow that no mammoth could notice it happening. Yet every gener",
+    "scene_type": "story",
+    "elements": [
+      "ding",
+      "circle",
+      "wave",
+      "wave",
+      "wave",
+      "wave",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "ocean",
+    "mood": "dramatic",
+    "hits": 3
+  },
+  "1e40d7a74767f1e9b4462cedb33b3296": {
+    "text": "[Quiet evening] That's almost worse than a sudden disaster. Perhaps. Because there was no single mom",
+    "scene_type": "story",
+    "elements": [
+      "dong",
+      "circle",
+      "wave",
+      "wave",
+      "wave",
+      "wave",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "ocean",
+    "mood": "peaceful",
+    "hits": 3
+  },
+  "c7069085ef23856082d64f7080064312": {
+    "text": "[Epic twilight] No obvious ending. Just fewer mammoths. Then fewer still. Until only small groups re",
+    "scene_type": "story",
+    "elements": [
+      "ding",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "ocean",
+    "mood": "epic",
+    "hits": 3
+  },
+  "d9b8723060565ddb78cc938b51a04efd": {
+    "text": "[Dramatic night] one final group. Imagine standing on an Arctic island. Cold wind. Endless sea. And ",
+    "scene_type": "story",
+    "elements": [
+      "ding",
+      "circle",
+      "wave",
+      "wave",
+      "wave",
+      "wave"
+    ],
+    "bg_type": "ocean",
+    "mood": "dramatic",
+    "hits": 3
+  },
+  "8b7976451866daf322fe77586f14f415": {
+    "text": "[Somber dawn] How did the mammoths...?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 1
+  },
+  "542f65f68019e6358acdc0a18c26b8cf": {
+    "text": "[Grand sunset] Looking for food. Following familiar paths. Living an ordinary day. Completely unawar",
+    "scene_type": "story",
+    "elements": [
+      "ding",
+      "wave",
+      "wave",
+      "wave",
+      "wave",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "ocean",
+    "mood": "epic",
+    "hits": 3
+  },
+  "ee84bf3a7e0fa01982cd6402570e4a85": {
+    "text": "[Mysterious moonlight] No animal knows it's the last. No ceremony marks the moment. No witness recor",
+    "scene_type": "story",
+    "elements": [
+      "ding",
+      "circle"
+    ],
+    "bg_type": "ocean",
+    "mood": "mysterious",
+    "hits": 3
+  },
+  "228197b0d95790580a72890e206a287e": {
+    "text": "[Hopeful golden] Then they weren't. The world kept moving. The oceans continued rising and falling. ",
+    "scene_type": "story",
+    "elements": [
+      "ding",
+      "circle",
+      "wave",
+      "wave",
+      "wave",
+      "wave",
+      "circle"
+    ],
+    "bg_type": "ocean",
+    "mood": "hopeful",
+    "hits": 3
+  },
+  "efdd523419ab10f57c65727cee4e3517": {
+    "text": "[Quiet evening] A creature that had walked the Earth for hundreds of thousands of years. Gone. That'",
+    "scene_type": "story",
+    "elements": [
+      "ding"
+    ],
+    "bg_type": "ocean",
+    "mood": "peaceful",
+    "hits": 3
+  },
+  "6aea1b7376f67e072d57e27872945901": {
+    "text": "[Epic twilight] The planet doesn't stop. Life simply turns the page. And yet... thousands of years l",
+    "scene_type": "story",
+    "elements": [
+      "ding",
+      "planet",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "ocean",
+    "mood": "dramatic",
+    "hits": 3
+  },
+  "9c57c156829d4f0a0cf67c7f9eb9cc07": {
+    "text": "[Dramatic night] Not because they survived. Because their story did.",
+    "scene_type": "story",
+    "elements": [
+      "dong",
+      "wave",
+      "wave",
+      "wave",
+      "wave"
+    ],
+    "bg_type": "ocean",
+    "mood": "dramatic",
+    "hits": 3
+  },
+  "16f370609d198981e0ead1e66a8955c4": {
+    "text": "[Somber dawn] I liked the story.\nI didn't understand all of it.\nBut I think I understood the end.",
+    "scene_type": "story",
+    "elements": [
+      "think_owl",
+      "circle",
+      "wave",
+      "wave",
+      "wave",
+      "wave"
+    ],
+    "bg_type": "ocean",
+    "mood": "somber",
+    "hits": 3
+  },
+  "6c386f21be41876cb71d70f8090dba19": {
+    "text": "[Epic twilight] For more than a thousand years, Constantinople stood where East met West. It was the",
+    "scene_type": "story",
+    "elements": [
+      "crown",
+      "text",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "e4e1dcad2e1882b565f93164003d6c5d": {
+    "text": "[Dramatic night] History loves hearing people say never.",
+    "scene_type": "story",
+    "elements": [
+      "human",
+      "text",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "8ca0b24d462c7372a82aa71e4a9b9177": {
+    "text": "[Somber dawn] The city had survived invasions, rebellions, and sieges. Emperors had come and gone. T",
+    "scene_type": "story",
+    "elements": [
+      "wall",
+      "text",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 1
+  },
+  "e62d3fb5aec03fc503b508e670caab56": {
+    "text": "[Grand sunset] How big was the across?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 1
+  },
+  "2b8bebc44534f3807125cd7276546675": {
+    "text": "[Hopeful golden] In 1453, a young Ottoman sultan named Mehmed looked upon those walls and saw someth",
+    "scene_type": "story",
+    "elements": [
+      "soldier",
+      "text",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "9c22ca94324ea7317d22caca8a2ed6ac": {
+    "text": "[Intense overcast] Beyond those walls stood one of the most important cities in the world. An empire",
+    "scene_type": "story",
+    "elements": [
+      "cloud",
+      "wall",
+      "text",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "16488b23b764e9fd23ef41fac8389f26": {
+    "text": "[Epic twilight] Then the cannons began to fire. The earth shook. Stone cracked. The greatest walls i",
+    "scene_type": "story",
+    "elements": [
+      "planet",
+      "wall",
+      "cannon",
+      "text"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "795aa3654f55734432ac68bc4c74a65a": {
+    "text": "[Somber dawn] Yet even that was not enough. Because Mehmed had another plan. A plan that broke the r",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 1
+  },
+  "cab3126bce63dcd75bae14498f7059eb": {
+    "text": "[Grand sunset] Not around the harbor. Around reality's expectations.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 1
+  },
+  "cac5988befeca73b37b2adf35ea138ac": {
+    "text": "[Mysterious moonlight] His men dragged ships across land. Across hills. Across wooden tracks. The im",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "text",
+      "star",
+      "star",
+      "star",
+      "star",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 1
+  },
+  "9bd72c0a3b00d99059e6494362ab76db": {
+    "text": "[Intense overcast] Weeks passed. Food dwindled. Exhaustion spread. Every repetition carved deeper in",
+    "scene_type": "story",
+    "elements": [
+      "cloud",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "44ace29adb92e949beb42b4a920d4e71": {
+    "text": "[Epic twilight] By the end of that day, Constantinople had fallen. An empire had ended. A world had ",
+    "scene_type": "story",
+    "elements": [
+      "crown",
+      "text",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "7a5b6ef3fcb3f6469508d6bde547c90e": {
+    "text": "[Dramatic night] How big was the constantinople?",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "794f3e2827d828ea714db5450ae9433c": {
+    "text": "[Somber dawn] Not with a single moment. But with centuries leading to it.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 1
+  },
+  "d203b5146038ebb1a61f5e9f902ecc8b": {
+    "text": "[Grand sunset] Because cities rarely fall in a day. Empires rarely fall in a season. They fall in th",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 1
+  },
+  "ce8276caccc79a569ca48fe1727c06ed": {
+    "text": "[Mysterious moonlight] The story was ending. A different one was beginning.",
+    "scene_type": "story",
+    "elements": [
+      "moon",
+      "text",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 1
+  },
+  "2e0316644c0cdd1f252b2052544352b4": {
+    "text": "[Hopeful golden] And as the sun set over Constantinople, the world looked much the same. But it was ",
+    "scene_type": "story",
+    "elements": [
+      "sun",
+      "text",
+      "star",
+      "star",
+      "star",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "2d2c22f18adabd3813ae68123a15acae": {
+    "text": "[Intense overcast] I liked the story.\nI didn't understand all of it.\nBut I think I understood the en",
+    "scene_type": "story",
+    "elements": [
+      "cloud",
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "430b01b350a54099daf4165d044a27ac": {
+    "text": "[Quiet evening] I hope the world was okay in the end.",
+    "scene_type": "story",
+    "elements": [
+      "text",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "c5af608058009d1b9eabf27d6fd5a2eb": {
+    "text": "[Dramatic night] The last. That's a heavy thought. And the strange part is... you would never know. ",
+    "scene_type": "story",
+    "elements": [
+      "ding",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "ocean",
+    "mood": "dramatic",
+    "hits": 5
+  },
+  "6df1b868a56fde04137079982b3ee186": {
+    "text": "[Somber dawn] They crossed frozen plains. Survived brutal winters. And lived in a world of ice. A wo",
+    "scene_type": "story",
+    "elements": [
+      "ding",
+      "circle",
+      "glacier",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "ocean",
+    "mood": "epic",
+    "hits": 5
+  },
+  "777fccc6da581ea5392ccad5abf66e46": {
+    "text": "[Grand sunset] Slowly, the climate changed. The ice retreated. Forests spread. Grasslands disappeare",
+    "scene_type": "story",
+    "elements": [
+      "ding",
+      "circle",
+      "glacier",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "ocean",
+    "mood": "epic",
+    "hits": 5
+  },
+  "175d10696a9ce06b17681776d5dbc424": {
+    "text": "[Hopeful golden] The change was so slow that no mammoth could notice it happening. Yet every generat",
+    "scene_type": "story",
+    "elements": [
+      "ding",
+      "wave",
+      "wave",
+      "wave",
+      "wave"
+    ],
+    "bg_type": "ocean",
+    "mood": "hopeful",
+    "hits": 5
+  },
+  "f4b30f76a6a9776e792facd8efbb80b8": {
+    "text": "[Intense overcast] That's almost worse than a sudden disaster. Perhaps. Because there was no single ",
+    "scene_type": "story",
+    "elements": [
+      "dong",
+      "circle",
+      "wave",
+      "wave",
+      "wave",
+      "wave"
+    ],
+    "bg_type": "ocean",
+    "mood": "dramatic",
+    "hits": 5
+  },
+  "21898b4f15bebd3a88c7b7094f694a2a": {
+    "text": "[Quiet evening] No obvious ending. Just fewer mammoths. Then fewer still. Until only small groups re",
+    "scene_type": "story",
+    "elements": [
+      "ding",
+      "circle"
+    ],
+    "bg_type": "ocean",
+    "mood": "peaceful",
+    "hits": 5
+  },
+  "6941a9bb9fc895863099fedd503ad35c": {
+    "text": "[Epic twilight] one final group. Imagine standing on an Arctic island. Cold wind. Endless sea. And s",
+    "scene_type": "story",
+    "elements": [
+      "ding",
+      "wave",
+      "wave",
+      "wave",
+      "wave"
+    ],
+    "bg_type": "ocean",
+    "mood": "dramatic",
+    "hits": 5
+  },
+  "fef9783a196334e9d74ff34347803b56": {
+    "text": "[Dramatic night] Looking for food. Following familiar paths. Living an ordinary day. Completely unaw",
+    "scene_type": "story",
+    "elements": [
+      "ding",
+      "circle",
+      "wave",
+      "wave",
+      "wave",
+      "wave",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "ocean",
+    "mood": "dramatic",
+    "hits": 5
+  },
+  "7d0b03c3c2c4118a5b75a321fd44f3d5": {
+    "text": "[Somber dawn] No animal knows it's the last. No ceremony marks the moment. No witness records it. On",
+    "scene_type": "story",
+    "elements": [
+      "ding",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "ocean",
+    "mood": "somber",
+    "hits": 5
+  },
+  "c1561f5505c76253662b863d00949caf": {
+    "text": "[Grand sunset] Then they weren't. The world kept moving. The oceans continued rising and falling. Th",
+    "scene_type": "story",
+    "elements": [
+      "ding",
+      "circle",
+      "wave",
+      "wave",
+      "wave",
+      "wave"
+    ],
+    "bg_type": "ocean",
+    "mood": "epic",
+    "hits": 5
+  },
+  "4c885f55435c503c72172aeb68c88c5a": {
+    "text": "[Hopeful golden] A creature that had walked the Earth for hundreds of thousands of years. Gone. That",
+    "scene_type": "story",
+    "elements": [
+      "ding",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "ocean",
+    "mood": "hopeful",
+    "hits": 5
+  },
+  "181784c1ed456ddd2e973360379e57e5": {
+    "text": "[Intense overcast] The planet doesn't stop. Life simply turns the page. And yet... thousands of year",
+    "scene_type": "story",
+    "elements": [
+      "ding",
+      "planet",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "ocean",
+    "mood": "peaceful",
+    "hits": 5
+  },
+  "95f9fe536be8ba60be647adaaa9e9037": {
+    "text": "[Quiet evening] Not because they survived. Because their story did.",
+    "scene_type": "story",
+    "elements": [
+      "dong",
+      "circle",
+      "wave",
+      "wave",
+      "wave",
+      "wave",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "ocean",
+    "mood": "mysterious",
+    "hits": 5
+  },
+  "e215cd5dbb071d6471ade9ee2ed34b01": {
+    "text": "[Dramatic night] Did anyone see the world?",
+    "scene_type": "story",
+    "elements": [
+      "think_owl",
+      "circle",
+      "wave",
+      "wave",
+      "wave",
+      "wave"
+    ],
+    "bg_type": "ocean",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "2229b1e2d110acdb25308182c9991c7c": {
+    "text": "[Somber dawn] Was the herd real?",
+    "scene_type": "story",
+    "elements": [
+      "think_owl",
+      "circle"
+    ],
+    "bg_type": "ocean",
+    "mood": "somber",
+    "hits": 1
+  }
+}

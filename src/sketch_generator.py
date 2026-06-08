@@ -4469,6 +4469,16 @@ class SketchGenerator:
         fill = _tc(fill)
         stroke = _tc(stroke)
 
+        # ── Drop shadow ──
+        if elem.get("shadow") and etype not in ("text", "circle", "none"):
+            r = max(10, int(20 * s))
+            draw.ellipse([x - r, y - r + 4, x + r, y + r + 4], fill=(0, 0, 0, 50))
+
+        self._render_element_dispatch(draw, elem, etype, x, y, s, fill, stroke, opacity)
+
+    def _render_element_dispatch(self, draw, elem, etype, x, y, s, fill, stroke, opacity=255):
+        """Dispatch to the correct draw method based on element type."""
+
         if etype in ("mountain", "mountains"):
             w = int(elem.get("width", 0.3) * self.w)
             h = int(elem.get("height", 0.25) * self.h)
@@ -5431,6 +5441,22 @@ class SketchGenerator:
         elif etype == "hat":
             s = elem.get("scale", 1.0)
             self.draw_hat(draw, x, y, s=int(28 * s), color=fill)
+
+        # ── Narrator characters in scene ──
+        elif etype == "ding":
+            s = elem.get("scale", 1.0)
+            c = fill or (200, 200, 210)
+            self.draw_scene_ding(draw, x, y, s, c)
+
+        elif etype == "dong":
+            s = elem.get("scale", 1.0)
+            c = fill or (200, 200, 210)
+            self.draw_scene_dong(draw, x, y, s, c)
+
+        elif etype == "think_owl":
+            s = elem.get("scale", 1.0)
+            c = fill or (200, 200, 210)
+            self.draw_scene_think(draw, x, y, s, c)
 
         # ── New diagram types ──
         elif etype == "network_diagram":
@@ -7137,6 +7163,72 @@ class SketchGenerator:
         canvas = canvas.filter(ImageFilter.UnsharpMask(radius=1, percent=80, threshold=2))
 
         return canvas
+
+    # ═══════════════════════════════════════════════════════════════
+    # Narrator character silhouettes for story scenes
+    # These are small background figures (Ding/Dong/Think)
+    # ═══════════════════════════════════════════════════════════════
+
+    def draw_scene_ding(self, draw, x, y, s=1.0, color=(200,200,210)):
+        """Ding narrator silhouette — robed figure with scroll staff."""
+        c = color
+        s = int(30 * s)
+        # Robe body (trapezoid)
+        draw.ellipse([x-s//2, y-s, x+s//2, y+s], fill=c, outline=None)
+        # Head
+        head_r = s//3
+        draw.ellipse([x-head_r, y-s-head_r, x+head_r, y-s+head_r], fill=(235,220,200), outline=None)
+        # Scroll staff on right
+        staff_x = x + s//2 + 2
+        draw.line([staff_x, y-s, staff_x, y+s], fill=(180,160,140), width=max(2, s//10))
+        # Scroll top
+        draw.ellipse([staff_x-3, y-s-2, staff_x+3, y-s+4], fill=(220,200,180), outline=None)
+        # Hood hint
+        draw.arc([x-head_r, y-s-head_r, x+head_r, y-s+head_r], 0, 180, fill=(160,150,170), width=2)
+
+    def draw_scene_dong(self, draw, x, y, s=1.0, color=(200,200,210)):
+        """Dong narrator silhouette — gowned figure with mirror."""
+        c = color
+        s = int(30 * s)
+        # Gown body
+        draw.ellipse([x-s//2, y-s, x+s//2, y+s], fill=c, outline=None)
+        # Head
+        head_r = s//3
+        draw.ellipse([x-head_r, y-s-head_r, x+head_r, y-s+head_r], fill=(220,195,180), outline=None)
+        # Gown waist taper
+        draw.polygon([x-s//2, y, x+s//2, y, x+s//2+4, y+s, x-s//2-4, y+s], fill=(180,170,190), outline=None)
+        # Hair (longer)
+        draw.ellipse([x-head_r-2, y-s, x+head_r+2, y-s+head_r//2], fill=(120,80,60), outline=None)
+        # Mirror on left
+        mir_x = x - s//2 - 6
+        mir_r = s//4
+        draw.ellipse([mir_x-mir_r, y-mir_r, mir_x+mir_r, y+mir_r], fill=(200,220,240), outline=(160,180,200), width=2)
+        # Mirror handle
+        draw.line([mir_x, y+mir_r, mir_x, y+mir_r+6], fill=(160,140,120), width=2)
+
+    def draw_scene_think(self, draw, x, y, s=1.0, color=(200,200,210)):
+        """Think owl narrator silhouette."""
+        c = color
+        s = int(25 * s)
+        # Body (oval)
+        draw.ellipse([x-s//2, y-s//2, x+s//2, y+s//2], fill=c, outline=None)
+        # Head (round)
+        head_r = s//3
+        draw.ellipse([x-head_r, y-s//2-head_r, x+head_r, y-s//2+head_r], fill=c, outline=None)
+        # Eye circles (large, wide)
+        eye_r = max(3, s//8)
+        draw.ellipse([x-s//4-eye_r, y-s//2-eye_r, x-s//4+eye_r, y-s//2+eye_r], fill=(255,240,200), outline=None)
+        draw.ellipse([x+s//4-eye_r, y-s//2-eye_r, x+s//4+eye_r, y-s//2+eye_r], fill=(255,240,200), outline=None)
+        # Pupils
+        p_r = max(2, eye_r//2)
+        draw.ellipse([x-s//4-p_r, y-s//2-p_r, x-s//4+p_r, y-s//2+p_r], fill=(60,40,20), outline=None)
+        draw.ellipse([x+s//4-p_r, y-s//2-p_r, x+s//4+p_r, y-s//2+p_r], fill=(60,40,20), outline=None)
+        # Beak
+        beak_pts = [(x, y-s//2+head_r//2), (x-3, y-s//2+head_r+2), (x+3, y-s//2+head_r+2)]
+        draw.polygon(beak_pts, fill=(220,180,80), outline=None)
+        # Wing lines
+        draw.arc([x-s//2, y-s//2, x, y+s//2], 90, 270, fill=(170,170,180), width=2)
+        draw.arc([x, y-s//2, x+s//2, y+s//2], 270, 90, fill=(170,170,180), width=2)
 
 
 # ── Convenience function ──────────────────────────────────────

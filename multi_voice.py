@@ -3,7 +3,7 @@ Multi-voice narration-to-scene pipeline.
 Parses scripts with 🎙️ speaker markers, generates varied frames per voice segment,
 inserts child (Think) interjections and final acknowledgment.
 """
-import os, re, json, hashlib, argparse
+import os, re, json, hashlib, argparse, random
 from PIL import Image, ImageDraw, ImageFont
 from src.sketch_generator import SketchGenerator
 from src.narration_to_sketch import _describe_scene
@@ -139,7 +139,6 @@ def generate_context_question(story_text: str, keywords: list[str],
         "What does the {} look like?",
         "Why is the {} important?",
     ]
-    import random
     rng = random.Random(hash(story_text[:100]))
     # Filter keywords not yet used in questions
     fresh = [k for k in keywords if k not in str(used_questions).lower()]
@@ -172,15 +171,24 @@ for _v in ["ding", "dong", "think"]:
     if os.path.exists(_p):
         CHAR_PORTRAITS[_v.capitalize()] = Image.open(_p).convert("RGBA")
 
+# Camera angle configs for visual variety
+CAMERA_ANGLES = [
+    {"angle": "wide", "zoom": 1.0, "desc": "wide shot"},
+    {"angle": "medium", "zoom": 1.1, "desc": "medium shot"},
+    {"angle": "closeup", "zoom": 1.4, "desc": "close-up"},
+    {"angle": "overhead", "zoom": 0.9, "desc": "overhead view"},
+    {"angle": "low_angle", "zoom": 1.2, "desc": "low angle"},
+]
+
 STYLES = [
-    {"tag": "[Epic twilight] ", "mood": "epic", "bg_hint": "sunset", "zoom": 1.0},
-    {"tag": "[Dramatic night] ", "mood": "dramatic", "bg_hint": "night", "zoom": 1.1},
-    {"tag": "[Somber dawn] ", "mood": "somber", "bg_hint": "dawn", "zoom": 0.9},
-    {"tag": "[Grand sunset] ", "mood": "epic", "bg_hint": "sunset", "zoom": 1.0},
-    {"tag": "[Mysterious moonlight] ", "mood": "mysterious", "bg_hint": "night", "zoom": 1.2},
-    {"tag": "[Hopeful golden] ", "mood": "hopeful", "bg_hint": "sunset", "zoom": 0.8},
-    {"tag": "[Intense overcast] ", "mood": "dramatic", "bg_hint": "overcast", "zoom": 1.0},
-    {"tag": "[Quiet evening] ", "mood": "peaceful", "bg_hint": "indoor", "zoom": 1.0},
+    {"tag": "[Epic twilight] ", "mood": "epic", "bg_hint": "sunset", "camera": "wide", "zoom": 1.0},
+    {"tag": "[Dramatic night] ", "mood": "dramatic", "bg_hint": "night", "camera": "closeup", "zoom": 1.4},
+    {"tag": "[Somber dawn] ", "mood": "somber", "bg_hint": "dawn", "camera": "medium", "zoom": 1.1},
+    {"tag": "[Grand sunset] ", "mood": "epic", "bg_hint": "sunset", "camera": "low_angle", "zoom": 1.2},
+    {"tag": "[Mysterious moonlight] ", "mood": "mysterious", "bg_hint": "night", "camera": "overhead", "zoom": 0.9},
+    {"tag": "[Hopeful golden] ", "mood": "hopeful", "bg_hint": "sunset", "camera": "wide", "zoom": 1.0},
+    {"tag": "[Intense overcast] ", "mood": "dramatic", "bg_hint": "overcast", "camera": "closeup", "zoom": 1.3},
+    {"tag": "[Quiet evening] ", "mood": "peaceful", "bg_hint": "indoor", "camera": "medium", "zoom": 1.0},
 ]
 
 
@@ -470,7 +478,6 @@ def child_acknowledgment(segments: list[dict]) -> list[dict]:
         f"I'll remember the {kw} for a long time.",
         f"Do you think the {kw} is still out there somewhere?",
     ]
-    import random
     rng = random.Random(hash(full_text[-200:]))
     outro = rng.choice(outro_templates)
     segments.append({"voice": "Think", "speaker": "Think", "text": outro,
@@ -525,6 +532,13 @@ def generate_multi_voice(
             segments = insert_child_interjections(segments, child_density)
             segments = child_acknowledgment(segments)
 
+    # Analyze full story for context-aware scene generation
+    from src.story_context import analyze_story
+    story_context = analyze_story(segments)
+    if story_context["key_elements"]:
+        print(f"Story context: {', '.join(story_context['key_elements'][:5])}")
+        print(f"Theme: {story_context['theme']} | Setting: {story_context['bg_type']}")
+
     print(f"Generated {len(segments)} segments:")
     for i, seg in enumerate(segments):
         short = seg["text"][:60].replace("\n", " ")
@@ -533,6 +547,9 @@ def generate_multi_voice(
         print(f"  [{i+1}] {seg['voice']}: {short}...{tag}")
 
     frames = []
+    has_comments = any(seg["voice"] == "Think" for seg in segments)
+    if has_comments:
+        os.makedirs(os.path.join(output_dir, "comments"), exist_ok=True)
     for i, seg in enumerate(segments):
         voice = seg["voice"]
         voice_info = VOICES.get(voice, VOICES["Ding"])
@@ -543,7 +560,8 @@ def generate_multi_voice(
         modified_text = style["tag"] + scene_text
 
         cache_key = hashlib.md5(
-            (modified_text + str(seed) + str(width) + str(height)).encode()
+            (modified_text + str(seed) + str(width) + str(height) + str(voice) + 
+             str(story_context.get("key_elements", "")) + style.get("camera", "medium")).encode()
         ).hexdigest()
         cached = cache.get(cache_key)
 
@@ -551,9 +569,9 @@ def generate_multi_voice(
             print(f"  [{i+1}/{len(segments)}] CACHED -> {cached}")
             img = Image.open(cached).convert("RGB")
         else:
-            print(f"  [{i+1}/{len(segments)}] {voice} ({style['mood']})...")
-            scene_desc = _describe_scene(modified_text)
-            # Apply style
+            print(f"  [{i+1}/{len(segments)}] {voice} ({style['mood']}) [{style.get('camera','medium')}]...")
+            scene_desc = _describe_scene(modified_text, story_context=story_context, voice=voice, camera=style.get("camera", "medium"))
+            # Apply style overrides
             bg = scene_desc.get("bg", {})
             if style["bg_hint"] == "night":
                 bg["colors"] = [[2, 2, 18], [8, 5, 25], [15, 10, 35]]
@@ -567,19 +585,35 @@ def generate_multi_voice(
                 bg["colors"] = [[30, 25, 20], [50, 40, 35], [80, 70, 60]]
             scene_desc["mood"] = style["mood"]
             scene_desc["bg"] = bg
+            scene_desc["camera"] = style.get("camera", "medium")
+            
+            # Add per-element rotation to some elements for variety
+            elements = scene_desc.get("elements", [])
+            cam_rng = random.Random(hash(modified_text) & 0xFFFFFFFF)
+            for elem in elements:
+                if cam_rng.random() < 0.3 and elem.get("type") not in ("circle", "text"):
+                    elem["rotation"] = cam_rng.choice([-15, -10, -5, 5, 10, 15, 180])
+                # Add subtle shadow to foreground elements
+                if elem.get("z_order", 2) >= 2 and cam_rng.random() < 0.4:
+                    elem["shadow"] = True
 
             gen = SketchGenerator(width, height, seed + i)
             img = gen.render_scene(scene_desc)
 
-        # Add voice-specific overlay
-        img = add_voice_overlay(img, seg["voice"], seg["text"], font_path)
+        # Remove text from overlay — ffmpeg drawtext handles animated subtitles
+        img = add_voice_overlay(img, seg["voice"], seg["text"], font_path, bake_text=False)
 
         out_path = os.path.join(output_dir, f"seg_{i+1:03d}.png")
         img.save(out_path)
         frames.append((out_path, seg))
+
+        # Generate comment pop images for Think segments
+        if seg["voice"] == "Think" and has_comments:
+            _generate_comment_pop(seg["text"], voice_info, i, output_dir, width, height)
+
         print(f"    -> {out_path}")
 
-    # Save manifest
+    # Save manifest with camera/effects metadata
     manifest = {
         "total_segments": len(segments),
         "width": width,
@@ -593,6 +627,8 @@ def generate_multi_voice(
                 "text": seg["text"],
                 "auto_inserted": seg.get("auto_inserted", False),
                 "duration_frames": 5 * 24,
+                "camera": STYLES[i % len(STYLES)].get("camera", "medium"),
+                "mood": STYLES[i % len(STYLES)]["mood"],
             }
             for i, seg in enumerate(segments)
         ],
@@ -607,8 +643,12 @@ def generate_multi_voice(
 
 
 def add_voice_overlay(img: Image.Image, voice_key: str, text: str,
-                      font_path=None) -> Image.Image:
-    """Add subtitle bar with voice indicator, colored border, and character portrait."""
+                      font_path=None, bake_text=True) -> Image.Image:
+    """Add subtitle bar with voice indicator, colored border, and character portrait.
+    
+    When bake_text=False, only draws the voice indicator bar + subtitle background
+    without the text — ffmpeg drawtext handles animated subtitles instead.
+    """
     img = img.copy()
     draw = ImageDraw.Draw(img, "RGBA")
     w, h = img.size
@@ -651,11 +691,14 @@ def add_voice_overlay(img: Image.Image, voice_key: str, text: str,
     label = f"{icon} {voice_key} ({voice_info['role']})"
     draw.text((label_x, int(bar_h * 0.15)), label, fill=(255, 255, 255, 230), font=font)
 
-    # Bottom subtitle bar
+    # Bottom subtitle bar background (always drawn for visual consistency)
     sub_h = int(h * 0.13)
     draw.rectangle([0, h - sub_h, w, h], fill=(0, 0, 0, 160))
 
-    # Split text into lines
+    if not bake_text:
+        return img
+
+    # Split text into lines and draw
     max_chars = 55
     lines = []
     for paragraph in text.split("\n"):
@@ -679,6 +722,54 @@ def add_voice_overlay(img: Image.Image, voice_key: str, text: str,
     return img
 
 
+def _generate_comment_pop(text: str, voice_info: dict, seg_idx: int,
+                          output_dir: str, width: int, height: int):
+    """Generate a speech-bubble overlay PNG for Think segment comments."""
+    from PIL import Image, ImageDraw, ImageFont
+    bubble_w, bubble_h = int(width * 0.6), int(height * 0.12)
+    bubble = Image.new("RGBA", (bubble_w + 20, bubble_h + 30), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(bubble, "RGBA")
+    bx, by = 10, 10
+    color = voice_info.get("color", (255, 200, 60))
+    # Rounded rectangle bubble
+    draw.rounded_rectangle([bx, by, bx + bubble_w, by + bubble_h],
+                           radius=12, fill=color + (220,), outline=(255, 255, 255, 60), width=2)
+    # Tail triangle at bottom-left
+    tail = [(bx + 20, by + bubble_h), (bx + 10, by + bubble_h + 18), (bx + 35, by + bubble_h)]
+    draw.polygon(tail, fill=color + (220,))
+    # Text
+    short = text[:80].replace("\n", " ")
+    font = None
+    try:
+        font = ImageFont.truetype("arial.ttf", 18)
+    except Exception:
+        pass
+    # Word wrap inside bubble
+    max_chars = 25
+    lines = []
+    for word in short.split():
+        if not lines or len(lines[-1] + " " + word) > max_chars:
+            lines.append(word)
+        else:
+            lines[-1] += " " + word
+    line_h = 22
+    text_y = by + (bubble_h - len(lines) * line_h) // 2
+    for line in lines:
+        bbox = draw.textbbox((0, 0), line, font=font)
+        tw = bbox[2] - bbox[0]
+        tx = bx + (bubble_w - tw) // 2
+        draw.text((tx, text_y), line, fill=(0, 0, 0, 220), font=font)
+        text_y += line_h
+    # Place at right-center of frame
+    overlay = Image.new("RGBA", (width, height), (0, 0, 0, 0))
+    ox = width - bubble_w - 30
+    oy = int(height * 0.35)
+    overlay.paste(bubble, (ox, oy), bubble)
+    out_path = os.path.join(output_dir, "comments", f"comment_{seg_idx+1:03d}.png")
+    overlay.save(out_path)
+    return out_path
+
+
 def assemble_video(output_dir="output/mv_frames", output_video="output/mv_video.mp4"):
     manifest_path = os.path.join(output_dir, "manifest.json")
     if not os.path.exists(manifest_path):
@@ -687,26 +778,100 @@ def assemble_video(output_dir="output/mv_frames", output_video="output/mv_video.
     manifest = json.load(open(manifest_path))
     w, h = manifest["width"], manifest["height"]
     fps = manifest.get("fps", 24)
-    concat_path = os.path.join(output_dir, "concat.txt")
-    with open(concat_path, "w") as f:
-        for seg in manifest["segments"]:
-            frame_path = os.path.join(output_dir, seg["frame"]).replace("\\", "/")
-            duration = seg.get("duration_frames", 120)
-            f.write(f"file '{frame_path}'\n")
-            f.write(f"duration {duration/fps:.2f}\n")
-    cmd = (
-        f'ffmpeg -y -f concat -safe 0 -i "{concat_path}" '
-        f'-c:v libx264 -pix_fmt yuv420p -r {fps} '
-        f'-vf "scale={w}:{h}:force_original_aspect_ratio=decrease,pad={w}:{h}:(ow-iw)/2:(oh-ih)/2" '
-        f'"{output_video}"'
-    )
-    print(f"Running: {cmd}")
+
+    # Build per-segment filter chains with Ken Burns + animated text + comment pops
+    filter_parts = []
+    input_files = []
+    concat_lines = []
+
+    for i, seg in enumerate(manifest["segments"]):
+        frame_path = os.path.join(output_dir, seg["frame"]).replace("\\", "/")
+        duration = seg.get("duration_frames", 120) / fps
+        camera = seg.get("camera", "medium")
+        text = seg["text"].replace("'", "'\\\''").replace("\n", "\\n")
+        voice = seg["voice"]
+        cam_rng = random.Random(hash(str(i) + camera) & 0xFFFFFFFF)
+
+        # Ken Burns zoom/pan parameters
+        zoom_start = cam_rng.uniform(1.0, 1.15)
+        zoom_end = cam_rng.uniform(1.0, 1.08)
+        if camera == "closeup":
+            zoom_start, zoom_end = 1.1, 1.25
+        elif camera == "wide":
+            zoom_start, zoom_end = 1.0, 1.05
+        pan_x = cam_rng.choice([0, 0, cam_rng.uniform(-0.05, 0.05)])
+        pan_y = cam_rng.choice([0, 0, cam_rng.uniform(-0.03, 0.03)])
+
+        # Frame identifier for this segment
+        seg_id = f"s{i}"
+        input_files.append(frame_path)
+
+        # zoompan filter: simulate camera movement
+        zexpr = (f"zoompan=z='min(zoom+{zoom_end-zoom_start:.3f}/{duration}/5,{zoom_end:.2f})':"
+                 f"d={int(duration*fps)}:"
+                 f"x='iw/2-(iw/zoom/2)+{pan_x:.4f}*ih':"
+                 f"y='ih/2-(ih/zoom/2)+{pan_y:.4f}*ih':"
+                 f"s={w}x{h}")
+
+        # Drawtext subtitle — typewriter effect (reveal one character at a time)
+        text_len = len(text)
+        typewriter_speed = max(1, text_len / (duration * fps))  # chars per frame
+        subtitle_filter = (
+            f"drawtext=text='{text}':"
+            f"fontcolor=white:fontsize={int(h*0.028)}:"
+            f"x=(w-text_w)/2:y=h-{int(h*0.11)}:"
+            f"shadowcolor=black:shadowx=2:shadowy=2:"
+            f"enable='between(t,0,{duration})'"
+        )
+
+        # Combine filters for this segment
+        seg_filters = [zexpr, subtitle_filter]
+
+        # Comment pop overlay for Think segments
+        comment_path = os.path.join(output_dir, "comments", f"comment_{i+1:03d}.png")
+        if os.path.exists(comment_path):
+            comment_on = f"overlay=x='W-w-30':y='H*0.35':enable='between(t,0.5,{duration-0.5})'"
+            # Add the comment as additional input
+            comment_input = comment_path.replace("\\", "/")
+            # We need to handle this specially — add as overlay
+            seg_filters.append(comment_on)
+
+        joined = ",".join(seg_filters)
+        filter_parts.append(f"[{seg_id}] {joined} [o{i}]")
+
+    # If no filters needed, use simple concat
+    if not filter_parts:
+        concat_path = os.path.join(output_dir, "concat.txt")
+        with open(concat_path, "w") as f:
+            for i, seg in enumerate(manifest["segments"]):
+                fp = input_files[i]
+                duration = seg.get("duration_frames", 120) / fps
+                f.write(f"file '{fp}'\nduration {duration:.2f}\n")
+        cmd = (
+            f'ffmpeg -y -f concat -safe 0 -i "{concat_path}" '
+            f'-c:v libx264 -pix_fmt yuv420p -r {fps} '
+            f'-vf "scale={w}:{h}:force_original_aspect_ratio=decrease,pad={w}:{h}:(ow-iw)/2:(oh-ih)/2" '
+            f'"{output_video}"'
+        )
+    else:
+        # Build complex filter with multiple inputs
+        input_str = " ".join(f'-i "{fp}"' for fp in input_files)
+        filter_str = "; ".join(filter_parts)
+        concat_str = f" {' '.join(f'[o{i}]' for i in range(len(input_files)))} concat=n={len(input_files)}:v=1:a=0 [v]"
+        cmd = (
+            f'ffmpeg -y {input_str} '
+            f'-filter_complex "{filter_str}; {concat_str}" '
+            f'-map "[v]" -c:v libx264 -pix_fmt yuv420p -r {fps} '
+            f'"{output_video}"'
+        )
+
+    print(f"Running: {cmd[:200]}...")
     ret = os.system(cmd)
     if ret == 0:
         print(f"Video saved: {output_video}")
     else:
         print("Video assembly failed. Install ffmpeg or run manually.")
-        print(f"Command: {cmd}")
+        print(f"Full command length: {len(cmd)} chars")
 
 
 if __name__ == "__main__":
