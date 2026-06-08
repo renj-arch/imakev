@@ -1,0 +1,134 @@
+{
+  "element_types": {
+    "sun": {
+      "scale_min": 2.0,
+      "scale_max": 2.0,
+      "y_min": 0.05,
+      "y_max": 0.15,
+      "x_min": 0.7,
+      "x_max": 0.95,
+      "note": "sun should be small in upper sky — never center or large"
+    },
+    "house": {
+      "alias": "building",
+      "note": "no dedicated draw method, maps to building"
+    },
+    "moon": {
+      "scale_min": 2.0,
+      "scale_max": 4.0,
+      "y_min": 0.05,
+      "y_max": 0.2
+    },
+    "pyramid": {
+      "scale_min": 3.0,
+      "scale_max": 10.0,
+      "y_min": 0.5,
+      "y_max": 0.85
+    },
+    "building": {
+      "scale_min": 1.5,
+      "scale_max": 6.0,
+      "y_min": 0.4,
+      "y_max": 0.85
+    },
+    "cat": {
+      "scale_min": 2.0,
+      "scale_max": 8.0,
+      "y_min": 0.3,
+      "y_max": 0.75
+    },
+    "dog": {
+      "scale_min": 2.5,
+      "scale_max": 6.0,
+      "y_min": 0.5,
+      "y_max": 0.8
+    },
+    "rat": {
+      "scale_min": 0.8,
+      "scale_max": 5.0,
+      "y_min": 0.3,
+      "y_max": 0.85
+    },
+    "human": {
+      "scale_min": 1.5,
+      "scale_max": 8.0,
+      "y_min": 0.4,
+      "y_max": 0.85
+    },
+    "temple": {
+      "scale_min": 2.0,
+      "scale_max": 7.0,
+      "y_min": 0.5,
+      "y_max": 0.85
+    },
+    "throne": {
+      "scale_min": 3.0,
+      "scale_max": 8.0,
+      "y_min": 0.5,
+      "y_max": 0.8
+    },
+    "ship": {
+      "scale_min": 2.0,
+      "scale_max": 7.0,
+      "y_min": 0.55,
+      "y_max": 0.9
+    },
+    "tree": {
+      "scale_min": 2.0,
+      "scale_max": 6.0,
+      "y_min": 0.55,
+      "y_max": 0.85
+    },
+    "fire": {
+      "scale_min": 2.0,
+      "scale_max": 8.0,
+      "y_min": 0.2,
+      "y_max": 0.65
+    },
+    "cloud": {
+      "scale_min": 1.5,
+      "scale_max": 5.0,
+      "y_min": 0.05,
+      "y_max": 0.35
+    },
+    "leaf": {
+      "scale_min": 1.0,
+      "scale_max": 12.0
+    },
+    "ellipse": {}
+  },
+  "scene": {
+    "element_count_min": 2,
+    "element_count_max": 6
+  },
+  "forbidden_types": [
+    "ellipse"
+  ],
+  "feedback_log": [
+    {
+      "text": "sun scale high",
+      "element_type": "sun",
+      "action": "reduced sun scale_max to 3.0"
+    },
+    {
+      "text": "oval shapes",
+      "element_type": null,
+      "action": "none — dispatched via alias table"
+    },
+    {
+      "text": "house draws as concept card",
+      "element_type": "house",
+      "action": "aliased house -> building"
+    },
+    {
+      "text": "sun was too big in scene 5",
+      "element_type": "sun",
+      "action": "reduced sun scale_max to 2.0"
+    },
+    {
+      "text": "oval shapes — no generic fallback",
+      "element_type": "ellipse",
+      "action": "added ellipse to forbidden types"
+    }
+  ]
+}
