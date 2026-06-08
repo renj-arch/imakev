@@ -548,6 +548,7 @@ def generate_multi_voice(
         print(f"  [{i+1}] {seg['voice']}: {short}...{tag}")
 
     frames = []
+    scene_descs = []
     has_comments = any(seg["voice"] == "Think" for seg in segments)
     if has_comments:
         os.makedirs(os.path.join(output_dir, "comments"), exist_ok=True)
@@ -569,6 +570,7 @@ def generate_multi_voice(
         if cached and os.path.exists(cached):
             print(f"  [{i+1}/{len(segments)}] CACHED -> {cached}")
             img = Image.open(cached).convert("RGB")
+            scene_descs.append({})  # no _camera data for cached
         else:
             print(f"  [{i+1}/{len(segments)}] {voice} ({style['mood']}) [{style.get('camera','medium')}]...")
             scene_desc = _describe_scene(modified_text, story_context=story_context, voice=voice, camera=style.get("camera", "medium"))
@@ -600,6 +602,7 @@ def generate_multi_voice(
 
             gen = SketchGenerator(width, height, seed + i, hand_drawn=hand_drawn)
             img = gen.render_scene(scene_desc)
+            scene_descs.append(scene_desc)
 
         # Remove text from overlay — ffmpeg drawtext handles animated subtitles
         img = add_voice_overlay(img, seg["voice"], seg["text"], font_path, bake_text=False)
@@ -630,6 +633,7 @@ def generate_multi_voice(
                 "duration_frames": 5 * 24,
                 "camera": STYLES[i % len(STYLES)].get("camera", "medium"),
                 "mood": STYLES[i % len(STYLES)]["mood"],
+                "_camera": scene_descs[i].get("_camera", {}) if i < len(scene_descs) else {},
             }
             for i, seg in enumerate(segments)
         ],
@@ -816,15 +820,22 @@ def assemble_video(output_dir="output/mv_frames", output_video="output/mv_video.
         voice = seg["voice"]
         cam_rng = random.Random(hash(str(i) + camera) & 0xFFFFFFFF)
 
-        # Ken Burns zoom/pan parameters
-        zoom_start = cam_rng.uniform(1.0, 1.15)
-        zoom_end = cam_rng.uniform(1.0, 1.08)
-        if camera == "closeup":
-            zoom_start, zoom_end = 1.1, 1.25
-        elif camera == "wide":
-            zoom_start, zoom_end = 1.0, 1.05
-        pan_x = cam_rng.choice([0, 0, cam_rng.uniform(-0.05, 0.05)])
-        pan_y = cam_rng.choice([0, 0, cam_rng.uniform(-0.03, 0.03)])
+        # Ken Burns zoom/pan from treatment _camera data, or fallback to randomized
+        cam_data = seg.get("_camera", {})
+        if cam_data:
+            zoom_start = cam_data.get("zoom_start", 1.0)
+            zoom_end = cam_data.get("zoom_end", 1.05)
+            pan_x = cam_data.get("pan_x", 0.0)
+            pan_y = cam_data.get("pan_y", 0.0)
+        else:
+            zoom_start = cam_rng.uniform(1.0, 1.15)
+            zoom_end = cam_rng.uniform(1.0, 1.08)
+            if camera == "closeup":
+                zoom_start, zoom_end = 1.1, 1.25
+            elif camera == "wide":
+                zoom_start, zoom_end = 1.0, 1.05
+            pan_x = cam_rng.choice([0, 0, cam_rng.uniform(-0.05, 0.05)])
+            pan_y = cam_rng.choice([0, 0, cam_rng.uniform(-0.03, 0.03)])
 
         # Frame identifier for this segment
         seg_id = f"s{i}"

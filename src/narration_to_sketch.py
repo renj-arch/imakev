@@ -86,18 +86,16 @@ def _describe_scene(narration: str, story_context: dict = None,
                      voice: str = None, camera: str = "medium") -> dict:
     """Convert narration to scene description using the engine's built-in intelligence.
     
-    Pipeline (primary → fallback):
-      1. Creative scenes — poetic/reflective/meta patterns (book, planet, thought)
-      2. Knowledge base — TF-IDF similarity against 55+ curated scene templates
-      3. Dynamic scene composer — context-aware (uses story_context)
-      4. Keyword parser — fast path for common topics (legacy)
-      5. Generic fallback
+    Pipeline:
+      1. Scene type detection (story/diagram/timeline/etc.)
+      2. Scene composition (creative → knowledge → dynamic → keyword → fallback)
+      3. Visual treatment — ONE dominant treatment per segment (camera, particles, mood, etc.)
     """
     
     # Detect what kind of visual this narration needs
     visual_type = _detect_visual_type(narration)
     
-    # Non-story types: route to auto_story's specialized generators
+    # Non-story types: route to auto_story's specialized generators (no treatment applied)
     if visual_type != "story":
         try:
             from auto_story import _infer_visuals_local
@@ -108,6 +106,23 @@ def _describe_scene(narration: str, story_context: dict = None,
                 return scene
         except Exception:
             pass
+    
+    # Build scene through compositon pipeline
+    scene = _compose_scene(narration, story_context, voice, camera)
+    
+    # Apply visual treatment — ONE dominant look per segment
+    import random
+    rng = random.Random(hash(narration) & 0xFFFFFFFF)
+    from src.visual_treatments import select_treatment, apply_treatment
+    treatment = select_treatment(narration, scene.get("mood", ""), rng)
+    scene = apply_treatment(scene, treatment, rng)
+    
+    return scene
+
+
+def _compose_scene(narration: str, story_context: dict = None,
+                    voice: str = None, camera: str = "medium") -> dict:
+    """Scene composition pipeline (no treatment applied here)."""
     
     # PRIMARY: Creative scene — poetic/reflective/philosophical text
     from src.creative_scenes import match_creative_scene
