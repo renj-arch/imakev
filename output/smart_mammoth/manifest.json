@@ -1,0 +1,168 @@
+{
+  "total_segments": 20,
+  "width": 720,
+  "height": 1280,
+  "fps": 24,
+  "segments": [
+    {
+      "frame": "seg_001.png",
+      "voice": "Ding",
+      "speaker": "Narrator",
+      "text": "Imagine being the last of your kind. Not the last in a herd. Not the last in a valley.",
+      "auto_inserted": false,
+      "duration_frames": 120
+    },
+    {
+      "frame": "seg_002.png",
+      "voice": "Think",
+      "speaker": "Think",
+      "text": "Why is the years important?",
+      "auto_inserted": true,
+      "duration_frames": 120
+    },
+    {
+      "frame": "seg_003.png",
+      "voice": "Ding",
+      "speaker": "Narrator",
+      "text": "The last. That's a heavy thought. And the strange part is... you would never know. Thousands of years ago, mammoths roamed enormous stretches of Earth.",
+      "auto_inserted": false,
+      "duration_frames": 120
+    },
+    {
+      "frame": "seg_004.png",
+      "voice": "Ding",
+      "speaker": "Narrator",
+      "text": "They crossed frozen plains. Survived brutal winters. And lived in a world of ice. A world that wasn't going to stay frozen.",
+      "auto_inserted": false,
+      "duration_frames": 120
+    },
+    {
+      "frame": "seg_005.png",
+      "voice": "Ding",
+      "speaker": "Narrator",
+      "text": "Slowly, the climate changed. The ice retreated. Forests spread. Grasslands disappeared. The mammoths' home began to shrink.",
+      "auto_inserted": false,
+      "duration_frames": 120
+    },
+    {
+      "frame": "seg_006.png",
+      "voice": "Ding",
+      "speaker": "Narrator",
+      "text": "Not overnight. Generation by generation. Exactly.",
+      "auto_inserted": false,
+      "duration_frames": 120
+    },
+    {
+      "frame": "seg_007.png",
+      "voice": "Ding",
+      "speaker": "Narrator",
+      "text": "The change was so slow that no mammoth could notice it happening. Yet every generation inherited a slightly smaller world.",
+      "auto_inserted": false,
+      "duration_frames": 120
+    },
+    {
+      "frame": "seg_008.png",
+      "voice": "Dong",
+      "speaker": "Reflector",
+      "text": "That's almost worse than a sudden disaster. Perhaps. Because there was no single moment to point to.",
+      "auto_inserted": false,
+      "duration_frames": 120
+    },
+    {
+      "frame": "seg_009.png",
+      "voice": "Ding",
+      "speaker": "Narrator",
+      "text": "No obvious ending. Just fewer mammoths. Then fewer still. Until only small groups remained. And eventually...",
+      "auto_inserted": false,
+      "duration_frames": 120
+    },
+    {
+      "frame": "seg_010.png",
+      "voice": "Ding",
+      "speaker": "Narrator",
+      "text": "one final group. Imagine standing on an Arctic island. Cold wind. Endless sea. And somewhere out there walks one of the last mammoths.",
+      "auto_inserted": false,
+      "duration_frames": 120
+    },
+    {
+      "frame": "seg_011.png",
+      "voice": "Think",
+      "speaker": "Think",
+      "text": "How did the mammoths...?",
+      "auto_inserted": true,
+      "duration_frames": 120
+    },
+    {
+      "frame": "seg_012.png",
+      "voice": "Ding",
+      "speaker": "Narrator",
+      "text": "Looking for food. Following familiar paths. Living an ordinary day. Completely unaware that history is ending around it.",
+      "auto_inserted": false,
+      "duration_frames": 120
+    },
+    {
+      "frame": "seg_013.png",
+      "voice": "Ding",
+      "speaker": "Narrator",
+      "text": "No animal knows it's the last. No ceremony marks the moment. No witness records it. One day the mammoths were here.",
+      "auto_inserted": false,
+      "duration_frames": 120
+    },
+    {
+      "frame": "seg_014.png",
+      "voice": "Ding",
+      "speaker": "Narrator",
+      "text": "Then they weren't. The world kept moving. The oceans continued rising and falling. The seasons continued changing.",
+      "auto_inserted": false,
+      "duration_frames": 120
+    },
+    {
+      "frame": "seg_015.png",
+      "voice": "Ding",
+      "speaker": "Narrator",
+      "text": "But something ancient had vanished.",
+      "auto_inserted": false,
+      "duration_frames": 120
+    },
+    {
+      "frame": "seg_016.png",
+      "voice": "Ding",
+      "speaker": "Narrator",
+      "text": "A creature that had walked the Earth for hundreds of thousands of years. Gone. That's the unsettling thing about extinction.",
+      "auto_inserted": false,
+      "duration_frames": 120
+    },
+    {
+      "frame": "seg_017.png",
+      "voice": "Ding",
+      "speaker": "Narrator",
+      "text": "The planet doesn't stop. Life simply turns the page. And yet... thousands of years later... we still remember them.",
+      "auto_inserted": false,
+      "duration_frames": 120
+    },
+    {
+      "frame": "seg_018.png",
+      "voice": "Dong",
+      "speaker": "Reflector",
+      "text": "Not because they survived. Because their story did.",
+      "auto_inserted": false,
+      "duration_frames": 120
+    },
+    {
+      "frame": "seg_019.png",
+      "voice": "Think",
+      "speaker": "Think",
+      "text": "I liked the story.\nI didn't understand all of it.\nBut I think I understood the end.",
+      "auto_inserted": true,
+      "duration_frames": 120
+    },
+    {
+      "frame": "seg_020.png",
+      "voice": "Think",
+      "speaker": "Think",
+      "text": "I'll remember the last for a long time.",
+      "auto_inserted": true,
+      "duration_frames": 120
+    }
+  ]
+}

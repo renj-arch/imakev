@@ -222,37 +222,237 @@ def parse_script(text: str) -> list[dict]:
     return segments
 
 
-def insert_child_interjections(segments: list[dict], density=0.4) -> list[dict]:
-    """Insert Think child question segments scattered through narration."""
+def smart_parse(text: str) -> list[dict]:
+    """Parse raw story text without voice markers.
+    
+    The engine automatically:
+    - Splits text into natural segments (paragraph-based, merging short lines)
+    - Classifies each segment as Narration (Ding) or Reflection (Dong)
+    - Uses linguistic heuristics + context alternation
+    """
+    text = text.replace("\r\n", "\n")
+    
+    # Remove title line
+    lines = text.split("\n")
+    title = None
+    non_empty = [l for l in lines if l.strip()]
+    if non_empty:
+        first = non_empty[0].strip()
+        if len(first.split()) <= 5 and not first.endswith((".", "!", "?")):
+            title = first
+            text = "\n".join(lines[lines.index(first) + 1:])
+    
+    # Split by blank lines into paragraphs first
+    paragraphs = re.split(r'\n\n+', text.strip())
+    
+    segments = []
+    for para in paragraphs:
+        para = para.strip()
+        if not para:
+            continue
+        
+        # Within a paragraph, merge short lines into larger chunks
+        lines = para.split("\n")
+        lines = [l.strip() for l in lines if l.strip()]
+        
+        chunks = []
+        current = []
+        for line in lines:
+            word_count = len(line.split())
+            # If this line is short and continues the same thought, merge
+            if word_count <= 12 and current:
+                current.append(line)
+            elif word_count <= 12 and not current:
+                current.append(line)
+            else:
+                if current:
+                    chunks.append(" ".join(current))
+                    current = []
+                chunks.append(line)
+        if current:
+            chunks.append(" ".join(current))
+        
+        # Further group very short chunks with nearby ones
+        merged = []
+        for chunk in chunks:
+            if merged and len(chunk.split()) <= 8 and len(merged[-1].split()) <= 12:
+                merged[-1] = merged[-1] + " " + chunk
+            else:
+                merged.append(chunk)
+        
+        for chunk in merged:
+            chunk = chunk.strip()
+            if chunk:
+                segments.append({"text": chunk})
+    
+    # If too many segments, merge adjacent same-voice candidates
+    if len(segments) > 40:
+        merged = []
+        for seg in segments:
+            if merged and len(seg["text"].split()) <= 10 and len(merged[-1]["text"].split()) <= 15:
+                merged[-1]["text"] = merged[-1]["text"] + " " + seg["text"]
+            else:
+                merged.append(seg)
+        segments = merged
+    
+    return segments, title
+
+
+def classify_voice(segment: dict, prev_voice=None) -> str:
+    """Classify a text segment as narration (Ding) or reflection (Dong).
+    
+    Uses multiple signals:
+    - Length and sentence count
+    - Linguistic patterns (tense, phrasing, punctuation)
+    - Content keywords
+    - Alternation preference to keep a natural back-and-forth rhythm
+    """
+    text = segment["text"].strip()
+    words = text.split()
+    word_count = len(words)
+    sentences = re.split(r'[.!?]+\s*', text)
+    sentences = [s.strip() for s in sentences if s.strip()]
+    sent_count = len(sentences)
+    
+    # Strong narration signals (factual storytelling) — checked first
+    # Past tense narrative about events
+    if re.search(r'(was|were|had been|had|did|could|would)\s', text, re.IGNORECASE):
+        # Check if it's describing events or making a philosophical point
+        if re.search(r'(years ago|roamed|lived|survived|crossed|retreated|spread|disappeared|'
+                     r'began|remained|walked|stood|fired|dragged|passed|fallen|vanished)', 
+                     text, re.IGNORECASE):
+            return "Ding"
+    
+    # Specific historical/factual content
+    if re.search(r'(thousands of|millions of|hundreds of) (years|miles|people)', text, re.IGNORECASE):
+        return "Ding"
+    if re.search(r'(in |on |at |during |across |through |over |under )', text, re.IGNORECASE):
+        # But only if it's describing something specific
+        if word_count >= 6 and not re.match(r'^(and yet|that\'s|it\'s)', text, re.IGNORECASE):
+            return "Ding"
+    
+    # Strong reflection signals
+    if re.search(r'\.{4,}', text):
+        return "Dong"  # Long ellipsis = pensive reflection
+    
+    if re.search(r'^(that\'s|that is|it\'s|it is|this is)', text, re.IGNORECASE):
+        return "Dong"
+    if re.search(r'^(and yet|but yet|yet|still,|but still)', text, re.IGNORECASE):
+        return "Dong"
+    if re.search(r'^(perhaps|maybe|almost|exactly|indeed|surely|certainly)', text, re.IGNORECASE):
+        return "Dong"
+    if re.search(r'^(not |no one|no |never |nothing )', text, re.IGNORECASE):
+        # Check if it's continuing a narration
+        if word_count <= 12:
+            return "Dong"
+    if re.search(r'^(the )?(unsettling|strange|saddest|hardest|heaviest|weirdest)', 
+                 text, re.IGNORECASE):
+        return "Dong"
+    if re.search(r'(heavier|worse|better|stranger|sadder) than', text, re.IGNORECASE):
+        return "Dong"
+    if re.search(r'(almost )?(worse|better|stranger)', text, re.IGNORECASE):
+        return "Dong"
+    if re.search(r'^(imagine|wonder|curious|strange thing|funny thing)', text, re.IGNORECASE):
+        return "Dong"
+    
+    # Very short segments with present tense tend to be reflection
+    if word_count <= 6 and sent_count <= 1:
+        if re.search(r'(is|are|doesn\'t|don\'t|can\'t|won\'t|will|shall)', text, re.IGNORECASE):
+            return "Dong"
+        # "The last.", "Gone.", "Exactly." — short reflective
+        return "Dong"
+    
+    # Short reflective patterns (7-15 words, single sentence)
+    if word_count <= 15 and sent_count <= 1:
+        if re.search(r'(heavy thought|strange part|that\'s|it\'s|here\'s)', text, re.IGNORECASE):
+            return "Dong"
+        if re.search(r'(not because|because their|that\'s what|that is what)', text, re.IGNORECASE):
+            return "Dong"
+        if re.search(r'^and (yet|eventually|so|then)', text, re.IGNORECASE):
+            return "Dong"
+    
+    # Long factual segments with multiple sentences
+    if word_count > 30 or sent_count >= 3:
+        return "Ding"
+    
+    # Medium segments: use alternation for natural rhythm
+    if prev_voice:
+        return "Dong" if prev_voice == "Ding" else "Ding"
+    
+    return "Ding"
+
+
+def insert_smart_child(segments: list[dict], density=0.3) -> list[dict]:
+    """Insert child questions at natural pause points.
+    
+    Places Think questions sparingly — only after key reflective moments
+    or major narrative transitions, never more than a few per story.
+    """
     result = []
     q_idx = 0
     used_questions = set()
-    narration_count = sum(1 for s in segments if s["voice"] in ("Ding", "Dong"))
-    insert_every = max(1, int(1 / density)) if narration_count > 0 else 999
-
-    # Extract keywords from full story for context-aware questions
-    full_text = " ".join(s["text"] for s in segments if s["voice"] in ("Ding", "Dong"))
+    
+    full_text = " ".join(s["text"] for s in segments)
     keywords = extract_story_keywords(full_text)
-
-    seg_count = 0
-    for seg in segments:
+    
+    # Determine max inserts based on story length
+    total_segments = len([s for s in segments if s["voice"] in ("Ding", "Dong")])
+    max_inserts = max(1, min(int(total_segments * density * 0.4), 6))
+    inserted = 0
+    
+    # Identify natural insertion points: after major narration or reflection
+    insertion_candidates = []
+    for i, seg in enumerate(segments):
+        text_lower = seg["text"].lower()
+        
+        # After reflection with emotional weight
+        if seg["voice"] == "Dong" and any(w in text_lower for w in [
+            "heavy thought", "unsettling", "strange part", "worse than",
+            "never know", "almost worse", "not because", "simply turns",
+            "doesn't stop", "ending around"
+        ]):
+            insertion_candidates.append(i)
+        
+        # After key narration moments
+        if seg["voice"] == "Ding" and any(w in text_lower for w in [
+            "imagine", "never know", "ended", "final group",
+            "last of", "had vanished", "gone.", "disappeared",
+            "last mammoth", "one final"
+        ]):
+            insertion_candidates.append(i)
+    
+    # Prioritize first few candidates spaced evenly
+    if insertion_candidates:
+        step = max(1, len(insertion_candidates) // max_inserts)
+        chosen = insertion_candidates[::step][:max_inserts]
+    else:
+        # Fallback: pick evenly spaced
+        step = max(1, total_segments // (max_inserts + 1))
+        chosen = []
+        count = 0
+        for i, seg in enumerate(segments):
+            if seg["voice"] in ("Ding", "Dong"):
+                count += 1
+                if count % step == 0 and len(chosen) < max_inserts:
+                    chosen.append(i)
+    
+    for i, seg in enumerate(segments):
         result.append(seg)
-        if seg["voice"] in ("Ding", "Dong"):
-            seg_count += 1
-            if seg_count % insert_every == 0:
-                if keywords and q_idx < len(keywords) * 2:
-                    q = generate_context_question(seg["text"], keywords, used_questions)
-                else:
-                    q = THINK_QUESTIONS[q_idx % len(THINK_QUESTIONS)]
-                    q_idx += 1
-                result.append({"voice": "Think", "speaker": "Think",
-                              "text": q, "auto_inserted": True})
+        if i in chosen and inserted < max_inserts:
+            if keywords:
+                q = generate_context_question(seg["text"], keywords, used_questions)
+            else:
+                q = THINK_QUESTIONS[q_idx % len(THINK_QUESTIONS)]
+                q_idx += 1
+            result.append({"voice": "Think", "speaker": "Think",
+                          "text": q, "auto_inserted": True})
+            inserted += 1
+    
     return result
 
 
 def child_acknowledgment(segments: list[dict]) -> list[dict]:
     """Append child acknowledgment at the end."""
-    # Extract the last few keywords for a context-relevant final question
     full_text = " ".join(s["text"] for s in segments if s["voice"] in ("Ding", "Dong"))
     keywords = extract_story_keywords(full_text, max_words=5)
     kw = keywords[0] if keywords else "story"
@@ -264,7 +464,6 @@ def child_acknowledgment(segments: list[dict]) -> list[dict]:
     )
     segments.append({"voice": "Think", "speaker": "Think", "text": ack_text,
                     "auto_inserted": True})
-    # Generic child outro — no wall references
     outro_templates = [
         f"I hope the {kw} was okay in the end.",
         f"I wonder what happened to the {kw} afterward.",
@@ -288,20 +487,43 @@ def generate_multi_voice(
     font_path=None,
     child_density=0.4,
     add_child=True,
+    smart=False,
 ):
-    """Generate scene frames from a multi-voice script."""
+    """Generate scene frames from a multi-voice script.
+    
+    If smart=True, engine auto-parses raw text without markers:
+    - Segments paragraphs, classifies voice (narration vs reflection)
+    - Inserts child questions at natural pause points
+    - Uses concept extraction for intelligent illustration
+    """
     os.makedirs(output_dir, exist_ok=True)
     cache = load_cache()
 
     # Parse and expand script
-    segments = parse_script(script_text)
-    if not segments:
-        print("No segments parsed from script.")
-        return []
+    if smart:
+        segments, title = smart_parse(script_text)
+        print(f"Smart parsing: {len(segments)} segments extracted")
+        if title:
+            print(f"Title: {title}")
+        # Classify each segment's voice
+        prev = None
+        for seg in segments:
+            seg["voice"] = classify_voice(seg, prev)
+            seg["speaker"] = "Narrator" if seg["voice"] == "Ding" else "Reflector"
+            prev = seg["voice"]
+        
+        if add_child:
+            segments = insert_smart_child(segments, child_density)
+            segments = child_acknowledgment(segments)
+    else:
+        segments = parse_script(script_text)
+        if not segments:
+            print("No segments parsed from script.")
+            return []
 
-    if add_child:
-        segments = insert_child_interjections(segments, child_density)
-        segments = child_acknowledgment(segments)
+        if add_child:
+            segments = insert_child_interjections(segments, child_density)
+            segments = child_acknowledgment(segments)
 
     print(f"Generated {len(segments)} segments:")
     for i, seg in enumerate(segments):
@@ -499,6 +721,8 @@ if __name__ == "__main__":
                        help="Skip child interjections and acknowledgment")
     parser.add_argument("--child-density", type=float, default=0.4,
                        help="How often child questions appear (0-1)")
+    parser.add_argument("--smart", action="store_true",
+                       help="Smart mode: raw text without markers — engine figures out voices")
     parser.add_argument("--assemble", action="store_true")
     parser.add_argument("--video", type=str, default="output/mv_video.mp4")
     args = parser.parse_args()
@@ -523,4 +747,5 @@ if __name__ == "__main__":
         output_dir=args.output,
         add_child=not args.no_child,
         child_density=args.child_density,
+        smart=args.smart,
     )
