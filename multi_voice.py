@@ -795,24 +795,37 @@ def assemble_video(output_dir="output/mv_frames", output_video="output/mv_video.
 
     # Simple concat assembly — text is already baked into frames
     concat_path = os.path.join(output_dir, "concat.txt")
+    segments = manifest["segments"]
     with open(concat_path, "w") as f:
-        for i, seg in enumerate(manifest["segments"]):
+        for i, seg in enumerate(segments):
             fp = os.path.join(output_dir, seg["frame"]).replace("\\", "/")
             duration = seg.get("duration_frames", 120) / fps
-            f.write(f"file '{fp}'\nduration {duration:.2f}\n")
+            f.write(f"file '{fp}'\n")
+            f.write(f"duration {duration:.2f}\n")
+        # Last file must be written again WITHOUT duration for concat demuxer
+        last_fp = os.path.join(output_dir, segments[-1]["frame"]).replace("\\", "/")
+        f.write(f"file '{last_fp}'\n")
 
-    cmd = (
-        f'ffmpeg -y -f concat -safe 0 -i "{concat_path}" '
-        f'-c:v libx264 -pix_fmt yuv420p -r {fps} '
-        f'"{output_video}"'
-    )
+    import subprocess
+    cmd = [
+        "ffmpeg", "-y",
+        "-f", "concat",
+        "-safe", "0",
+        "-i", concat_path,
+        "-c:v", "libx264",
+        "-pix_fmt", "yuv420p",
+        "-r", str(fps),
+        output_video
+    ]
 
-    print(f"Running ffmpeg concat...")
-    ret = os.system(cmd)
-    if ret == 0:
+    print(f"Running: ffmpeg -y -f concat -safe 0 -i concat.txt -c:v libx264 ...")
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    if result.returncode == 0:
         print(f"Video saved: {output_video}")
     else:
-        print("Video assembly failed. Install ffmpeg and try again manually.")
+        print(f"ffmpeg failed (code {result.returncode})")
+        print(f"stderr: {result.stderr[:500]}")
+        print("Try running the command manually with the concat.txt file.")
 
 
 if __name__ == "__main__":
