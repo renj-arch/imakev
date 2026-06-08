@@ -5,7 +5,7 @@ inserts child (Think) interjections and final acknowledgment.
 """
 import os, re, json, hashlib, argparse, random
 from PIL import Image, ImageDraw, ImageFont
-from src.sketch_generator import SketchGenerator
+from src.sketch_generator import SketchGenerator, SKETCH_TECHNIQUES
 from src.narration_to_sketch import _describe_scene
 
 CACHE_FILE = "output/.mv_cache.json"
@@ -601,11 +601,18 @@ def generate_multi_voice(
                     elem["shadow"] = True
 
             gen = SketchGenerator(width, height, seed + i, hand_drawn=hand_drawn)
+            # Per-segment sketch technique from visual treatment
+            sketch_tech = scene_desc.get("_sketch", "pencil" if hand_drawn else "none")
+            if isinstance(hand_drawn, str):
+                sketch_tech = hand_drawn
+            if sketch_tech != "none":
+                gen.technique = SKETCH_TECHNIQUES.get(sketch_tech, SKETCH_TECHNIQUES["pencil"])
+                gen.paper_color = tuple(gen.technique["paper_tint"])
             img = gen.render_scene(scene_desc)
             scene_descs.append(scene_desc)
 
-        # Remove text from overlay — ffmpeg drawtext handles animated subtitles
-        img = add_voice_overlay(img, seg["voice"], seg["text"], font_path, bake_text=False)
+        # Bake text into frame directly (reliable, no ffmpeg drawtext dependency)
+        img = add_voice_overlay(img, seg["voice"], seg["text"], font_path, bake_text=True)
 
         out_path = os.path.join(output_dir, f"seg_{i+1:03d}.png")
         img.save(out_path)
@@ -783,153 +790,29 @@ def assemble_video(output_dir="output/mv_frames", output_video="output/mv_video.
     manifest = json.load(open(manifest_path))
     w, h = manifest["width"], manifest["height"]
     fps = manifest.get("fps", 24)
+    w = manifest.get("width", 720)
+    h = manifest.get("height", 1280)
 
-    # Find a system font for drawtext
-    import platform as _platform
-    _sys = _platform.system()
-    fontfile = ""
-    if _sys == "Linux":
-        for _p in ["/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-                     "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
-                     "/usr/share/fonts/truetype/noto/NotoSans-Regular.ttf"]:
-            if os.path.exists(_p):
-                fontfile = f":fontfile='{_p}'"
-                break
-    elif _sys == "Windows":
-        for _p in ["C:/Windows/Fonts/arial.ttf", "C:/Windows/Fonts/seguiui.ttf"]:
-            if os.path.exists(_p):
-                fontfile = f":fontfile='{_p}'"
-                break
-    elif _sys == "Darwin":
-        for _p in ["/System/Library/Fonts/Helvetica.ttc",
-                     "/Library/Fonts/Arial.ttf"]:
-            if os.path.exists(_p):
-                fontfile = f":fontfile='{_p}'"
-                break
+    # Simple concat assembly — text is already baked into frames
+    concat_path = os.path.join(output_dir, "concat.txt")
+    with open(concat_path, "w") as f:
+        for i, seg in enumerate(manifest["segments"]):
+            fp = os.path.join(output_dir, seg["frame"]).replace("\\", "/")
+            duration = seg.get("duration_frames", 120) / fps
+            f.write(f"file '{fp}'\nduration {duration:.2f}\n")
 
-    # Build per-segment filter chains with Ken Burns + animated text + comment pops
-    filter_parts = []
-    input_files = []
-    concat_lines = []
+    cmd = (
+        f'ffmpeg -y -f concat -safe 0 -i "{concat_path}" '
+        f'-c:v libx264 -pix_fmt yuv420p -r {fps} '
+        f'"{output_video}"'
+    )
 
-    for i, seg in enumerate(manifest["segments"]):
-        frame_path = os.path.join(output_dir, seg["frame"]).replace("\\", "/")
-        duration = seg.get("duration_frames", 120) / fps
-        camera = seg.get("camera", "medium")
-        text = seg["text"].replace("'", "'\\\''").replace("\n", "\\n")
-        voice = seg["voice"]
-        cam_rng = random.Random(hash(str(i) + camera) & 0xFFFFFFFF)
-
-        # Ken Burns zoom/pan from treatment _camera data, or fallback to randomized
-        cam_data = seg.get("_camera", {})
-        if cam_data:
-            zoom_start = cam_data.get("zoom_start", 1.0)
-            zoom_end = cam_data.get("zoom_end", 1.05)
-            pan_x = cam_data.get("pan_x", 0.0)
-            pan_y = cam_data.get("pan_y", 0.0)
-        else:
-            zoom_start = cam_rng.uniform(1.0, 1.15)
-            zoom_end = cam_rng.uniform(1.0, 1.08)
-            if camera == "closeup":
-                zoom_start, zoom_end = 1.1, 1.25
-            elif camera == "wide":
-                zoom_start, zoom_end = 1.0, 1.05
-            pan_x = cam_rng.choice([0, 0, cam_rng.uniform(-0.05, 0.05)])
-            pan_y = cam_rng.choice([0, 0, cam_rng.uniform(-0.03, 0.03)])
-
-        # Frame identifier for this segment
-        seg_id = f"s{i}"
-        input_files.append(frame_path)
-
-        # zoompan filter: simulate camera movement
-        zexpr = (f"zoompan=z='min(zoom+{zoom_end-zoom_start:.3f}/{duration}/5,{zoom_end:.2f})':"
-                 f"d={int(duration*fps)}:"
-                 f"x='iw/2-(iw/zoom/2)+{pan_x:.4f}*ih':"
-                 f"y='ih/2-(ih/zoom/2)+{pan_y:.4f}*ih':"
-                 f"s={w}x{h}")
-
-        # Drawtext subtitle — write text to temp file to avoid shell/filter escaping issues
-        text_file = os.path.join(output_dir, "temp", f"text_{i+1:03d}.txt")
-        os.makedirs(os.path.dirname(text_file), exist_ok=True)
-        with open(text_file, "w", encoding="utf-8") as tf:
-            tf.write(text)
-        # Use textfile parameter instead of inline text — avoids all escaping issues
-        subtitle_filter = (
-            f"drawtext=textfile='{text_file}'{fontfile}:"
-            f"fontcolor=white:fontsize={int(h*0.028)}:"
-            f"x=(w-text_w)/2:y=h-{int(h*0.11)}:"
-            f"shadowcolor=black:shadowx=2:shadowy=2:"
-            f"enable='between(t,0,{duration})'"
-        )
-
-        # Combine filters for this segment
-        seg_filters = [zexpr, subtitle_filter]
-
-        # Comment pop overlay for Think segments
-        comment_path = os.path.join(output_dir, "comments", f"comment_{i+1:03d}.png")
-        if os.path.exists(comment_path):
-            comment_on = f"overlay=x='W-w-30':y='H*0.35':enable='between(t,0.5,{duration-0.5})'"
-            # Add the comment as additional input
-            comment_input = comment_path.replace("\\", "/")
-            # We need to handle this specially — add as overlay
-            seg_filters.append(comment_on)
-
-        joined = ",".join(seg_filters)
-        filter_parts.append(f"[{seg_id}] {joined} [o{i}]")
-
-    # If no filters needed, use simple concat
-    if not filter_parts:
-        concat_path = os.path.join(output_dir, "concat.txt")
-        with open(concat_path, "w") as f:
-            for i, seg in enumerate(manifest["segments"]):
-                fp = input_files[i]
-                duration = seg.get("duration_frames", 120) / fps
-                f.write(f"file '{fp}'\nduration {duration:.2f}\n")
-        cmd = (
-            f'ffmpeg -y -f concat -safe 0 -i "{concat_path}" '
-            f'-c:v libx264 -pix_fmt yuv420p -r {fps} '
-            f'-vf "scale={w}:{h}:force_original_aspect_ratio=decrease,pad={w}:{h}:(ow-iw)/2:(oh-ih)/2" '
-            f'"{output_video}"'
-        )
-    else:
-        # Build complex filter with multiple inputs
-        input_str = " ".join(f'-i "{fp}"' for fp in input_files)
-        filter_str = "; ".join(filter_parts)
-        concat_str = f" {' '.join(f'[o{i}]' for i in range(len(input_files)))} concat=n={len(input_files)}:v=1:a=0 [v]"
-        cmd = (
-            f'ffmpeg -y {input_str} '
-            f'-filter_complex "{filter_str}; {concat_str}" '
-            f'-map "[v]" -c:v libx264 -pix_fmt yuv420p -r {fps} '
-            f'"{output_video}"'
-        )
-
-    print(f"Running: {cmd[:200]}...")
+    print(f"Running ffmpeg concat...")
     ret = os.system(cmd)
     if ret == 0:
         print(f"Video saved: {output_video}")
-    elif filter_parts:
-        # Complex filter failed — likely drawtext font issue. Fall back to simple concat
-        print("Complex filter failed, falling back to simple concat (no subtitles)...")
-        concat_path = os.path.join(output_dir, "concat.txt")
-        with open(concat_path, "w") as f:
-            for i, seg in enumerate(manifest["segments"]):
-                fp = input_files[i]
-                duration = seg.get("duration_frames", 120) / fps
-                f.write(f"file '{fp}'\nduration {duration:.2f}\n")
-        cmd = (
-            f'ffmpeg -y -f concat -safe 0 -i "{concat_path}" '
-            f'-c:v libx264 -pix_fmt yuv420p -r {fps} '
-            f'-vf "scale={w}:{h}:force_original_aspect_ratio=decrease,pad={w}:{h}:(ow-iw)/2:(oh-ih)/2" '
-            f'"{output_video}"'
-        )
-        ret = os.system(cmd)
-        if ret == 0:
-            print(f"Video saved (fallback): {output_video}")
-        else:
-            print("Video assembly failed in both modes. Install ffmpeg or run manually.")
     else:
-        print("Video assembly failed. Install ffmpeg or run manually.")
-        print(f"Full command length: {len(cmd)} chars")
+        print("Video assembly failed. Install ffmpeg and try again manually.")
 
 
 if __name__ == "__main__":

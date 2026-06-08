@@ -12,14 +12,15 @@ TREATMENTS = {
     "cinematic": {
         "label": "Cinematic",
         "moods": ["dramatic", "epic"],
-        "camera_zoom": (1.08, 1.35),       # (start, end) Ken Burns zoom
-        "camera_pan": (0.02, 0.06),         # pan drift range
-        "vignette": 0.7,                    # heavy dark edges
+        "camera_zoom": (1.08, 1.35),
+        "camera_pan": (0.02, 0.06),
+        "vignette": 0.7,
         "particles": "none",
         "fog": False,
         "palette": "cool",
         "element_count": "many",
         "grain": 0.02,
+        "sketch": "pen",              # bold ink lines for dramatic scenes
         "triggers": [
             r"\b(cinematic|epic|battle|charge|march|vast|sweep\w*)\b",
             r"\b(enormous|titanic|colossal|monumental)\b",
@@ -38,6 +39,7 @@ TREATMENTS = {
         "palette": "neutral",
         "element_count": "moderate",
         "grain": 0.06,
+        "sketch": "charcoal",          # smudgy rough for mystery
         "triggers": [
             r"\b(mist|fog|gloom|shadow|dark\w*)\b",
             r"\b(mystery|unknown|ancient|old)\b",
@@ -57,6 +59,7 @@ TREATMENTS = {
         "palette": "warm",
         "element_count": "many",
         "grain": 0.03,
+        "sketch": "comic",             # bold pop-art style
         "triggers": [
             r"\b(sudden\w*|burst|flash|explos\w*)\b",
             r"\b(rapid\w*|fast|quick|rush|surge)\b",
@@ -76,6 +79,7 @@ TREATMENTS = {
         "palette": "warm",
         "element_count": "single",
         "grain": 0.04,
+        "sketch": "pencil",
         "triggers": [
             r"\b(one|single|alone|lone\w*|only)\b",
             r"\b(intimate|close|personal|private)\b",
@@ -95,6 +99,7 @@ TREATMENTS = {
         "palette": "cool",
         "element_count": "moderate",
         "grain": 0.02,
+        "sketch": "watercolor",
         "triggers": [
             r"\b(planet|world|earth|universe|cosmos)\b",
             r"\b(galaxy|star|nebula|space|sky)\b",
@@ -114,6 +119,7 @@ TREATMENTS = {
         "palette": "dark",
         "element_count": "few",
         "grain": 0.08,
+        "sketch": "charcoal",
         "triggers": [
             r"\b(dark|night|shadow|gloom|despair)\b",
             r"\b(sad|solemn|mourn|grief|loss)\b",
@@ -133,6 +139,7 @@ TREATMENTS = {
         "palette": "pastel",
         "element_count": "few",
         "grain": 0.05,
+        "sketch": "watercolor",
         "triggers": [
             r"\b(dream|imagine|wonder|magic\w*)\b",
             r"\b(gentle|soft|peaceful|serene|calm)\b",
@@ -152,6 +159,7 @@ TREATMENTS = {
         "palette": "neutral",
         "element_count": "moderate",
         "grain": 0.01,
+        "sketch": "pen",
         "triggers": [
             r"\b(fact|history|document|record|account)\b",
             r"\b(research|study|observe\w*)\b",
@@ -171,6 +179,7 @@ TREATMENTS = {
         "palette": "neutral",
         "element_count": "single",
         "grain": 0.03,
+        "sketch": "pencil",
         "triggers": [
             r"\b(simple|just|only|merely|bare)\b",
             r"\b(empty|void|space|blank|nothing)\b",
@@ -190,6 +199,7 @@ TREATMENTS = {
         "palette": "cool",
         "element_count": "single",
         "grain": 0.04,
+        "sketch": "comic",
         "triggers": [
             r"\b(reveal|unveil|emerge|appear)\b",
             r"\b(sudden\w*|finally|at\s+last|then)\b",
@@ -317,5 +327,8 @@ def apply_treatment(scene: dict, treatment: dict, rng) -> dict:
         scene["_palette_bias"] = (1.15, 1.1, 1.2)
     else:
         scene["_palette_bias"] = (1.0, 1.0, 1.0)
+
+    # ── Sketch technique ──
+    scene["_sketch"] = treatment.get("sketch", "pencil")
 
     return scene

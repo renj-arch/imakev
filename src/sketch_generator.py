@@ -14,6 +14,65 @@ import config
 W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
 
 
+SKETCH_TECHNIQUES = {
+    "pencil": {
+        "stroke": (40, 35, 30),        # HB pencil gray
+        "stroke_width": 2,
+        "fill_t": 0.35,                # how much to lighten fills
+        "paper_tint": (250, 245, 235),
+        "noise": 35,
+        "blur_sigma": 0.4,
+        "edge_strength": 0.5,
+        "grain": 0.07,
+        "label": "Pencil Sketch",
+    },
+    "pen": {
+        "stroke": (15, 12, 10),        # dark ink
+        "stroke_width": 3,
+        "fill_t": 0.45,
+        "paper_tint": (255, 250, 240),
+        "noise": 15,
+        "blur_sigma": 0.1,
+        "edge_strength": 0.7,
+        "grain": 0.02,
+        "label": "Pen & Ink",
+    },
+    "charcoal": {
+        "stroke": (25, 22, 25),        # dark, slightly warm
+        "stroke_width": 4,
+        "fill_t": 0.50,
+        "paper_tint": (235, 225, 210),
+        "noise": 50,
+        "blur_sigma": 0.8,
+        "edge_strength": 0.6,
+        "grain": 0.10,
+        "label": "Charcoal",
+    },
+    "watercolor": {
+        "stroke": (55, 50, 60),        # soft edges
+        "stroke_width": 1,
+        "fill_t": 0.20,
+        "paper_tint": (252, 248, 240),
+        "noise": 20,
+        "blur_sigma": 1.2,
+        "edge_strength": 0.2,
+        "grain": 0.05,
+        "label": "Watercolor",
+    },
+    "comic": {
+        "stroke": (10, 10, 10),        # bold black
+        "stroke_width": 5,
+        "fill_t": 0.15,
+        "paper_tint": (255, 255, 255),
+        "noise": 5,
+        "blur_sigma": 0.0,
+        "edge_strength": 0.9,
+        "grain": 0.0,
+        "label": "Comic",
+    },
+}
+
+
 class SketchGenerator:
     """Generate detailed, full-color illustrations from structured scene descriptions."""
 
@@ -23,8 +82,15 @@ class SketchGenerator:
         self.rng = random.Random(seed)
         self.hand_drawn = hand_drawn
 
-        # Paper color for hand-drawn mode
-        self.paper_color = (250, 245, 235) if hand_drawn else (255, 255, 255)
+        # Resolve sketch technique
+        if isinstance(hand_drawn, str):
+            self.technique = SKETCH_TECHNIQUES.get(hand_drawn, SKETCH_TECHNIQUES["pencil"])
+        elif hand_drawn:
+            self.technique = SKETCH_TECHNIQUES["pencil"]
+        else:
+            self.technique = None
+
+        self.paper_color = tuple(self.technique["paper_tint"]) if self.technique else (255, 255, 255)
 
     # ── Color utilities ─────────────────────────────────────────
 
@@ -51,13 +117,12 @@ class SketchGenerator:
 
     def _sketchify_fill(self, fill):
         """Lighten/desaturate fill colors for hand-drawn sketch appearance."""
-        if fill is None: return None
+        if fill is None or self.technique is None: return fill
         if isinstance(fill, int): return fill
         try:
             c = tuple(fill[:3])
-            # Lighten toward paper white
+            t = self.technique["fill_t"]
             paper = self.paper_color
-            t = 0.35  # blend 35% toward paper
             return tuple(int(a + (b - a) * t) for a, b in zip(c, paper))
         except (TypeError, IndexError):
             return fill
@@ -4536,10 +4601,10 @@ class SketchGenerator:
         # ── Hand-drawn style overrides ──
         if self.hand_drawn:
             if stroke is None:
-                stroke = (35, 30, 25)  # dark ink/charcoal
+                stroke = self.technique["stroke"]
             fill = self._sketchify_fill(fill)
             # Force a stroke width override via elem context
-            elem["_stroke_width"] = max(elem.get("stroke_width", 1), 3)
+            elem["_stroke_width"] = max(elem.get("stroke_width", 1), self.technique["stroke_width"])
 
         def _tc(c):
             if c is None: return None
@@ -7215,53 +7280,58 @@ class SketchGenerator:
         """Apply final touches: paper grain, sketch stylization, vignette."""
 
         # ── Hand-drawn sketch stylization ──
-        if self.hand_drawn:
+        if self.hand_drawn and self.technique:
+            tx = self.technique
             arr = np.array(canvas, dtype=np.float32)
 
-            # 1. Boost contrast on dark lines (edge enhancement)
+            # 1. Darken dark lines (edge enhancement)
             gray = np.mean(arr[..., :3], axis=2)
             dark_mask = (gray < 80).astype(np.float32)
             for c in range(3):
                 arr[..., c] = np.where(dark_mask > 0,
-                                       arr[..., c] * 0.7,  # darken dark lines
+                                       arr[..., c] * (1.0 - tx["edge_strength"] * 0.3),
                                        arr[..., c])
 
-            # 2. Paper grain (heavy, organic)
+            # 2. Paper grain + tint
             noise = np.random.RandomState(hash((self.w, self.h, 42)) & 0x7FFFFFFF) \
-                .randint(0, 40, (self.h, self.w)).astype(np.float32)
-            paper_tint = np.array([248, 243, 233], dtype=np.float32)
+                .randint(0, max(1, int(tx["noise"] * 1.2)), (self.h, self.w)).astype(np.float32)
+            paper_rgb = np.array(tx["paper_tint"], dtype=np.float32)
             for c in range(3):
-                arr[..., c] = arr[..., c] * 0.92 + paper_tint[c] * 0.08 + (noise - 20) * 0.15
+                arr[..., c] = arr[..., c] * 0.92 + paper_rgb[c] * 0.08 + (noise - tx["noise"]/2) * 0.15
                 arr[..., c] = np.clip(arr[..., c], 0, 255)
 
-            # 3. Slight soften to remove digital crispness
-            blur_arr = np.copy(arr)
-            from scipy.ndimage import gaussian_filter
-            for c in range(3):
-                blur_arr[..., c] = gaussian_filter(arr[..., c], sigma=0.4)
-            arr = arr * 0.6 + blur_arr * 0.4
+            # 3. Soften if technique calls for it
+            if tx["blur_sigma"] > 0.01:
+                blur_arr = np.copy(arr)
+                from scipy.ndimage import gaussian_filter
+                for c in range(3):
+                    blur_arr[..., c] = gaussian_filter(arr[..., c], sigma=tx["blur_sigma"])
+                arr = arr * 0.6 + blur_arr * 0.4
 
             canvas = Image.fromarray(arr.astype(np.uint8))
 
-            # 4. Edge-darkening overlay (simulates pencil pressure)
-            edge_arr = np.array(canvas.convert("L"), dtype=np.float32)
-            from scipy.ndimage import sobel
-            edge_x = sobel(edge_arr, axis=1)
-            edge_y = sobel(edge_arr, axis=0)
-            edge_mag = np.sqrt(edge_x**2 + edge_y**2)
-            edge_mask = np.clip(edge_mag / 60.0, 0, 1)
-            edge_overlay = np.ones((self.h, self.w, 3), dtype=np.float32) * 255
-            for c in range(3):
-                edge_overlay[..., c] = np.where(
-                    edge_mask > 0.3,
-                    255 * (1 - edge_mask * 0.5),
-                    255
-                )
-            arr2 = np.array(canvas, dtype=np.float32)
-            arr2_rgb = arr2[..., :3] * (edge_overlay / 255.0) * 0.85 + paper_tint[None, None, :] * 0.15
-            arr2_rgb = np.clip(arr2_rgb, 0, 255).astype(np.uint8)
-            arr2 = np.dstack([arr2_rgb, arr2[..., 3:4].astype(np.uint8)]) if arr2.shape[2] == 4 else arr2_rgb
-            canvas = Image.fromarray(arr2)
+            # 4. Edge-darkening overlay (pen/pencil pressure simulation)
+            if tx["edge_strength"] > 0.1:
+                edge_arr = np.array(canvas.convert("L"), dtype=np.float32)
+                from scipy.ndimage import sobel
+                edge_x = sobel(edge_arr, axis=1)
+                edge_y = sobel(edge_arr, axis=0)
+                edge_mag = np.sqrt(edge_x**2 + edge_y**2)
+                edge_mask = np.clip(edge_mag / (60.0 / tx["edge_strength"]), 0, 1)
+                edge_overlay = np.ones((self.h, self.w, 3), dtype=np.float32) * 255
+                for c in range(3):
+                    edge_overlay[..., c] = np.where(
+                        edge_mask > 0.3,
+                        255 * (1 - edge_mask * 0.5 * tx["edge_strength"]),
+                        255
+                    )
+                arr2 = np.array(canvas, dtype=np.float32)
+                arr2_rgb = arr2[..., :3] * (edge_overlay / 255.0) * 0.85 + paper_rgb[None, None, :] * 0.15
+                arr2_rgb = np.clip(arr2_rgb, 0, 255).astype(np.uint8)
+                arr2 = np.dstack([arr2_rgb, arr2[..., 3:4].astype(np.uint8)]) if arr2.shape[2] == 4 else arr2_rgb
+                canvas = Image.fromarray(arr2)
+
+            return canvas
 
             return canvas
 
