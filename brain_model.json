@@ -1,0 +1,761 @@
+{
+  "keywords": {
+    "years": {
+      "building": 3,
+      "rat": 6,
+      "fruit": 3
+    },
+    "ago": {
+      "building": 3,
+      "rat": 6,
+      "fruit": 3
+    },
+    "humans": {
+      "building": 6,
+      "rat": 6,
+      "fruit": 3,
+      "cat": 9,
+      "human": 6,
+      "star": 6,
+      "throne": 3
+    },
+    "began": {
+      "building": 6,
+      "rat": 6,
+      "fruit": 3,
+      "cat": 3,
+      "human": 3
+    },
+    "storing": {
+      "building": 3,
+      "rat": 6,
+      "fruit": 3
+    },
+    "food": {
+      "building": 6,
+      "rat": 6,
+      "fruit": 3,
+      "cat": 3,
+      "human": 3
+    },
+    "mice": {
+      "building": 3,
+      "rat": 12,
+      "fruit": 3,
+      "cat": 9,
+      "grass": 3
+    },
+    "followed": {
+      "building": 3,
+      "rat": 6,
+      "fruit": 3
+    },
+    "wildcats": {
+      "cat": 9,
+      "grass": 3,
+      "rat": 6
+    },
+    "noticed": {
+      "cat": 6,
+      "grass": 3,
+      "rat": 3
+    },
+    "feast": {
+      "cat": 6,
+      "grass": 3,
+      "rat": 3
+    },
+    "came": {
+      "cat": 6,
+      "grass": 3,
+      "rat": 3
+    },
+    "strange": {
+      "cat": 3,
+      "human": 3,
+      "building": 3
+    },
+    "partnership": {
+      "cat": 3,
+      "human": 3,
+      "building": 3
+    },
+    "got": {
+      "cat": 6,
+      "human": 6,
+      "building": 6
+    },
+    "pest": {
+      "cat": 3,
+      "human": 3,
+      "building": 3
+    },
+    "control": {
+      "cat": 3,
+      "human": 3,
+      "building": 3
+    },
+    "cats": {
+      "cat": 27,
+      "human": 12,
+      "building": 3,
+      "dog": 3,
+      "temple": 6,
+      "sun": 6,
+      "ship": 3,
+      "wave": 3,
+      "star": 6,
+      "throne": 6
+    },
+    "dogs": {
+      "dog": 3,
+      "human": 3,
+      "cat": 3
+    },
+    "became": {
+      "dog": 3,
+      "human": 3,
+      "cat": 3
+    },
+    "obedient": {
+      "dog": 3,
+      "human": 3,
+      "cat": 3
+    },
+    "barely": {
+      "dog": 3,
+      "human": 3,
+      "cat": 3
+    },
+    "changed": {
+      "dog": 3,
+      "human": 3,
+      "cat": 3
+    },
+    "ancient": {
+      "temple": 3,
+      "cat": 6,
+      "sun": 3
+    },
+    "egypt": {
+      "temple": 3,
+      "cat": 6,
+      "sun": 3
+    },
+    "made": {
+      "temple": 3,
+      "cat": 6,
+      "sun": 3
+    },
+    "celebrities": {
+      "temple": 3,
+      "cat": 6,
+      "sun": 3
+    },
+    "appeared": {
+      "temple": 3,
+      "cat": 6,
+      "sun": 3
+    },
+    "artwork": {
+      "temple": 3,
+      "cat": 6,
+      "sun": 3
+    },
+    "ships": {
+      "ship": 3,
+      "cat": 3,
+      "wave": 3
+    },
+    "carried": {
+      "ship": 3,
+      "cat": 3,
+      "wave": 3
+    },
+    "world": {
+      "ship": 3,
+      "cat": 3,
+      "wave": 3
+    },
+    "hunted": {
+      "ship": 3,
+      "cat": 6,
+      "wave": 3,
+      "rat": 3
+    },
+    "rats": {
+      "ship": 3,
+      "cat": 3,
+      "wave": 3
+    },
+    "board": {
+      "ship": 3,
+      "cat": 3,
+      "wave": 3
+    },
+    "dominate": {
+      "cat": 3,
+      "star": 6
+    },
+    "social": {
+      "cat": 3,
+      "star": 6
+    },
+    "media": {
+      "cat": 3,
+      "star": 6
+    },
+    "spend": {
+      "cat": 3,
+      "star": 6
+    },
+    "hours": {
+      "cat": 3,
+      "star": 6
+    },
+    "photographing": {
+      "cat": 3,
+      "star": 6
+    },
+    "never": {
+      "throne": 3,
+      "cat": 3,
+      "human": 3
+    },
+    "built": {
+      "throne": 3,
+      "cat": 3,
+      "human": 3
+    },
+    "cities": {
+      "throne": 3,
+      "cat": 3,
+      "human": 3
+    },
+    "yet": {
+      "throne": 3,
+      "cat": 3,
+      "human": 3
+    },
+    "provide": {
+      "throne": 3,
+      "cat": 3,
+      "human": 3
+    },
+    "everything": {
+      "throne": 3,
+      "cat": 3,
+      "human": 3
+    },
+    "conquered": {
+      "throne": 3,
+      "cat": 3,
+      "human": 3
+    },
+    "purring": {
+      "throne": 3,
+      "cat": 3,
+      "human": 3
+    },
+    "villages": {
+      "cat": 3,
+      "rat": 3
+    },
+    "egyptians": {
+      "temple": 3,
+      "cat": 3,
+      "sun": 3
+    },
+    "worshipped": {
+      "temple": 3,
+      "cat": 3,
+      "sun": 3
+    },
+    "temples": {
+      "temple": 3,
+      "cat": 3,
+      "sun": 3
+    }
+  },
+  "element_stats": {
+    "building": {
+      "count": 6,
+      "x_sum": 3.1500000000000004,
+      "y_sum": 4.2,
+      "s_sum": 18.0,
+      "x_ss": 0,
+      "y_ss": 0,
+      "s_ss": 0
+    },
+    "rat": {
+      "count": 12,
+      "x_sum": 4.35,
+      "y_sum": 8.790000000000001,
+      "s_sum": 15.299999999999997,
+      "x_ss": 0,
+      "y_ss": 0,
+      "s_ss": 0
+    },
+    "fruit": {
+      "count": 3,
+      "x_sum": 0.8999999999999999,
+      "y_sum": 2.55,
+      "s_sum": 4.5,
+      "x_ss": 0,
+      "y_ss": 0,
+      "s_ss": 0
+    },
+    "cat": {
+      "count": 33,
+      "x_sum": 14.940000000000003,
+      "y_sum": 22.139999999999993,
+      "s_sum": 109.5,
+      "x_ss": 0,
+      "y_ss": 0,
+      "s_ss": 0
+    },
+    "grass": {
+      "count": 3,
+      "x_sum": 1.5,
+      "y_sum": 2.7,
+      "s_sum": 6.0,
+      "x_ss": 0,
+      "y_ss": 0,
+      "s_ss": 0
+    },
+    "human": {
+      "count": 9,
+      "x_sum": 4.71,
+      "y_sum": 6.419999999999999,
+      "s_sum": 28.5,
+      "x_ss": 0,
+      "y_ss": 0,
+      "s_ss": 0
+    },
+    "dog": {
+      "count": 3,
+      "x_sum": 0.75,
+      "y_sum": 2.0999999999999996,
+      "s_sum": 10.5,
+      "x_ss": 0,
+      "y_ss": 0,
+      "s_ss": 0
+    },
+    "temple": {
+      "count": 6,
+      "x_sum": 3.0,
+      "y_sum": 4.319999999999999,
+      "s_sum": 30.0,
+      "x_ss": 0,
+      "y_ss": 0,
+      "s_ss": 0
+    },
+    "sun": {
+      "count": 6,
+      "x_sum": 5.28,
+      "y_sum": 0.72,
+      "s_sum": 18.0,
+      "x_ss": 0,
+      "y_ss": 0,
+      "s_ss": 0
+    },
+    "ship": {
+      "count": 3,
+      "x_sum": 1.2000000000000002,
+      "y_sum": 2.25,
+      "s_sum": 15.0,
+      "x_ss": 0,
+      "y_ss": 0,
+      "s_ss": 0
+    },
+    "wave": {
+      "count": 3,
+      "x_sum": 1.5,
+      "y_sum": 2.64,
+      "s_sum": 15.0,
+      "x_ss": 0,
+      "y_ss": 0,
+      "s_ss": 0
+    },
+    "star": {
+      "count": 6,
+      "x_sum": 3.0,
+      "y_sum": 0.72,
+      "s_sum": 18.0,
+      "x_ss": 0,
+      "y_ss": 0,
+      "s_ss": 0
+    },
+    "throne": {
+      "count": 3,
+      "x_sum": 1.5,
+      "y_sum": 2.0999999999999996,
+      "s_sum": 15.0,
+      "x_ss": 0,
+      "y_ss": 0,
+      "s_ss": 0
+    }
+  },
+  "cooccurrence": {
+    "rat": {
+      "fruit": 3,
+      "building": 3,
+      "grass": 3,
+      "cat": 6
+    },
+    "fruit": {
+      "rat": 3,
+      "building": 3
+    },
+    "building": {
+      "rat": 3,
+      "fruit": 3,
+      "cat": 3,
+      "human": 3
+    },
+    "grass": {
+      "rat": 3,
+      "cat": 3
+    },
+    "cat": {
+      "rat": 6,
+      "grass": 3,
+      "human": 9,
+      "building": 3,
+      "dog": 3,
+      "temple": 6,
+      "sun": 6,
+      "ship": 3,
+      "wave": 3,
+      "star": 3,
+      "throne": 3
+    },
+    "human": {
+      "cat": 9,
+      "building": 3,
+      "dog": 3,
+      "throne": 3
+    },
+    "dog": {
+      "cat": 3,
+      "human": 3
+    },
+    "temple": {
+      "cat": 6,
+      "sun": 6
+    },
+    "sun": {
+      "temple": 6,
+      "cat": 6
+    },
+    "ship": {
+      "cat": 3,
+      "wave": 3
+    },
+    "wave": {
+      "cat": 3,
+      "ship": 3
+    },
+    "star": {
+      "cat": 3
+    },
+    "throne": {
+      "cat": 3,
+      "human": 3
+    }
+  },
+  "mood_elements": {
+    "peaceful": {
+      "rat": 9,
+      "fruit": 3,
+      "building": 3,
+      "grass": 3,
+      "cat": 15,
+      "dog": 3,
+      "human": 3,
+      "temple": 6,
+      "sun": 6
+    },
+    "hopeful": {
+      "cat": 6,
+      "human": 3,
+      "building": 3,
+      "ship": 3,
+      "wave": 3
+    },
+    "playful": {
+      "star": 3,
+      "cat": 6,
+      "throne": 3,
+      "human": 3
+    }
+  },
+  "pair_sequences": [
+    [
+      "building",
+      "rat"
+    ],
+    [
+      "rat",
+      "rat"
+    ],
+    [
+      "rat",
+      "fruit"
+    ],
+    [
+      "cat",
+      "cat"
+    ],
+    [
+      "cat",
+      "grass"
+    ],
+    [
+      "grass",
+      "rat"
+    ],
+    [
+      "cat",
+      "human"
+    ],
+    [
+      "human",
+      "building"
+    ],
+    [
+      "dog",
+      "human"
+    ],
+    [
+      "human",
+      "cat"
+    ],
+    [
+      "temple",
+      "cat"
+    ],
+    [
+      "cat",
+      "cat"
+    ],
+    [
+      "cat",
+      "sun"
+    ],
+    [
+      "ship",
+      "cat"
+    ],
+    [
+      "cat",
+      "wave"
+    ],
+    [
+      "cat",
+      "star"
+    ],
+    [
+      "star",
+      "star"
+    ],
+    [
+      "throne",
+      "cat"
+    ],
+    [
+      "cat",
+      "human"
+    ],
+    [
+      "building",
+      "rat"
+    ],
+    [
+      "rat",
+      "rat"
+    ],
+    [
+      "rat",
+      "fruit"
+    ],
+    [
+      "cat",
+      "cat"
+    ],
+    [
+      "cat",
+      "grass"
+    ],
+    [
+      "grass",
+      "rat"
+    ],
+    [
+      "cat",
+      "human"
+    ],
+    [
+      "human",
+      "building"
+    ],
+    [
+      "dog",
+      "human"
+    ],
+    [
+      "human",
+      "cat"
+    ],
+    [
+      "temple",
+      "cat"
+    ],
+    [
+      "cat",
+      "cat"
+    ],
+    [
+      "cat",
+      "sun"
+    ],
+    [
+      "ship",
+      "cat"
+    ],
+    [
+      "cat",
+      "wave"
+    ],
+    [
+      "cat",
+      "star"
+    ],
+    [
+      "star",
+      "star"
+    ],
+    [
+      "throne",
+      "cat"
+    ],
+    [
+      "cat",
+      "human"
+    ],
+    [
+      "cat",
+      "rat"
+    ],
+    [
+      "temple",
+      "cat"
+    ],
+    [
+      "cat",
+      "sun"
+    ],
+    [
+      "building",
+      "rat"
+    ],
+    [
+      "rat",
+      "rat"
+    ],
+    [
+      "rat",
+      "fruit"
+    ],
+    [
+      "cat",
+      "cat"
+    ],
+    [
+      "cat",
+      "grass"
+    ],
+    [
+      "grass",
+      "rat"
+    ],
+    [
+      "cat",
+      "human"
+    ],
+    [
+      "human",
+      "building"
+    ],
+    [
+      "dog",
+      "human"
+    ],
+    [
+      "human",
+      "cat"
+    ],
+    [
+      "temple",
+      "cat"
+    ],
+    [
+      "cat",
+      "cat"
+    ],
+    [
+      "cat",
+      "sun"
+    ],
+    [
+      "ship",
+      "cat"
+    ],
+    [
+      "cat",
+      "wave"
+    ],
+    [
+      "cat",
+      "star"
+    ],
+    [
+      "star",
+      "star"
+    ],
+    [
+      "throne",
+      "cat"
+    ],
+    [
+      "cat",
+      "human"
+    ],
+    [
+      "cat",
+      "rat"
+    ],
+    [
+      "temple",
+      "cat"
+    ],
+    [
+      "cat",
+      "sun"
+    ],
+    [
+      "cat",
+      "rat"
+    ],
+    [
+      "temple",
+      "cat"
+    ],
+    [
+      "cat",
+      "sun"
+    ]
+  ],
+  "total_scenes": 30,
+  "version": 1
+}

@@ -129,6 +129,11 @@
       "text": "oval shapes — no generic fallback",
       "element_type": "ellipse",
       "action": "added ellipse to forbidden types"
+    },
+    {
+      "text": "--show",
+      "element_type": null,
+      "action": "no matching rule"
     }
   ]
 }
