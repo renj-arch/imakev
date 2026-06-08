@@ -503,6 +503,7 @@ def generate_multi_voice(
     add_child=True,
     smart=False,
     hand_drawn=True,
+    reveal=False,
 ):
     """Generate scene frames from a multi-voice script.
     
@@ -557,6 +558,7 @@ def generate_multi_voice(
     frames = []
     scene_descs = []
     has_comments = any(seg["voice"] == "Think" for seg in segments)
+    reveal_counts = {}
     if has_comments:
         os.makedirs(os.path.join(output_dir, "comments"), exist_ok=True)
     for i, seg in enumerate(segments):
@@ -577,7 +579,13 @@ def generate_multi_voice(
         if cached and os.path.exists(cached):
             print(f"  [{i+1}/{len(segments)}] CACHED -> {cached}")
             img = Image.open(cached).convert("RGB")
-            scene_descs.append({})  # no _camera data for cached
+            scene_descs.append({})
+            # Cached — single frame only (no reveal data)
+            img = add_voice_overlay(img, seg["voice"], seg["text"], font_path, bake_text=True)
+            out_path = os.path.join(output_dir, f"seg_{i+1:03d}.png")
+            img.save(out_path)
+            frames.append((out_path, seg))
+            reveal_counts[i] = 1
         else:
             print(f"  [{i+1}/{len(segments)}] {voice} ({style['mood']}) [{style.get('camera','medium')}]...")
             scene_desc = _describe_scene(modified_text, story_context=story_context, voice=voice, camera=style.get("camera", "medium"))
@@ -603,12 +611,10 @@ def generate_multi_voice(
             for elem in elements:
                 if cam_rng.random() < 0.3 and elem.get("type") not in ("circle", "text"):
                     elem["rotation"] = cam_rng.choice([-15, -10, -5, 5, 10, 15, 180])
-                # Add subtle shadow to foreground elements
                 if elem.get("z_order", 2) >= 2 and cam_rng.random() < 0.4:
                     elem["shadow"] = True
 
             gen = SketchGenerator(width, height, seed + i, hand_drawn=hand_drawn)
-            # Per-segment sketch technique from visual treatment
             sketch_tech = scene_desc.get("_sketch", "pencil" if hand_drawn else "none")
             if isinstance(hand_drawn, str):
                 sketch_tech = hand_drawn
@@ -616,46 +622,83 @@ def generate_multi_voice(
                 gen.technique = SKETCH_TECHNIQUES.get(sketch_tech, SKETCH_TECHNIQUES["pencil"])
                 gen.paper_color = tuple(gen.technique["paper_tint"])
             img = gen.render_scene(scene_desc)
-            # Save clean (pre-stylized) canvas for later restyling
             clean_canvas = gen.get_clean_canvas()
             if clean_canvas is not None:
                 clean_path = os.path.join(output_dir, f"seg_{i+1:03d}_clean.png")
                 clean_canvas.save(clean_path)
             scene_descs.append(scene_desc)
 
-        # Bake text into frame directly (reliable, no ffmpeg drawtext dependency)
-        img = add_voice_overlay(img, seg["voice"], seg["text"], font_path, bake_text=True)
-
-        out_path = os.path.join(output_dir, f"seg_{i+1:03d}.png")
-        img.save(out_path)
-        frames.append((out_path, seg))
+            # ── Progressive reveal frames ──
+            if reveal:
+                fg_elems = [e for e in elements if e.get("z_index", 2) >= 2 and e.get("type") != "text"]
+                if len(fg_elems) >= 2:
+                    bg_elems = [e for e in elements if e.get("z_index", 2) < 2 or e.get("type") == "text"]
+                    for r, _ in enumerate(fg_elems):
+                        prog_elems = list(bg_elems) + fg_elems[:r+1]
+                        prog_desc = dict(scene_desc)
+                        prog_desc["elements"] = prog_elems
+                        gen_r = SketchGenerator(width, height, seed + i + r * 1000, hand_drawn=hand_drawn)
+                        gen_r.technique = gen.technique
+                        gen_r.paper_color = gen.paper_color
+                        prog_img = gen_r.render_scene(prog_desc)
+                        prog_img = add_voice_overlay(prog_img, seg["voice"], seg["text"], font_path, bake_text=True)
+                        sub_path = os.path.join(output_dir, f"seg_{i+1:03d}_r{r:03d}.png")
+                        prog_img.save(sub_path)
+                        frames.append((sub_path, seg))
+                    # Full scene as last frame
+                    img = add_voice_overlay(img, seg["voice"], seg["text"], font_path, bake_text=True)
+                    out_path = os.path.join(output_dir, f"seg_{i+1:03d}_r{len(fg_elems):03d}.png")
+                    img.save(out_path)
+                    frames.append((out_path, seg))
+                    reveal_counts[i] = len(fg_elems) + 1
+                else:
+                    img = add_voice_overlay(img, seg["voice"], seg["text"], font_path, bake_text=True)
+                    out_path = os.path.join(output_dir, f"seg_{i+1:03d}.png")
+                    img.save(out_path)
+                    frames.append((out_path, seg))
+                    reveal_counts[i] = 1
+            else:
+                img = add_voice_overlay(img, seg["voice"], seg["text"], font_path, bake_text=True)
+                out_path = os.path.join(output_dir, f"seg_{i+1:03d}.png")
+                img.save(out_path)
+                frames.append((out_path, seg))
+                reveal_counts[i] = 1
 
         # Generate comment pop images for Think segments
         if seg["voice"] == "Think" and has_comments:
             _generate_comment_pop(seg["text"], voice_info, i, output_dir, width, height)
 
-        print(f"    -> {out_path}")
+        print(f"    -> {os.path.basename(frames[-1][0])}")
 
     # Save manifest with camera/effects metadata
-    manifest = {
-        "total_segments": len(segments),
-        "width": width,
-        "height": height,
-        "fps": 24,
-        "segments": [
-            {
-                "frame": f"seg_{i+1:03d}.png",
+    manifest_segments = []
+    f_idx = 0
+    for i, seg in enumerate(segments):
+        cnt = reveal_counts.get(i, 1)
+        dur_each = max(1, 5 * 24 // cnt)
+        for r in range(cnt):
+            if cnt > 1 and reveal:
+                fname = f"seg_{i+1:03d}_r{r:03d}.png"
+            else:
+                fname = f"seg_{i+1:03d}.png"
+            manifest_segments.append({
+                "frame": fname,
                 "voice": seg["voice"],
-                "speaker": seg["speaker"],
+                "speaker": seg.get("speaker", seg["voice"]),
                 "text": seg["text"],
                 "auto_inserted": seg.get("auto_inserted", False),
-                "duration_frames": 5 * 24,
+                "duration_frames": dur_each,
                 "camera": STYLES[i % len(STYLES)].get("camera", "medium"),
                 "mood": STYLES[i % len(STYLES)]["mood"],
                 "_camera": scene_descs[i].get("_camera", {}) if i < len(scene_descs) else {},
-            }
-            for i, seg in enumerate(segments)
-        ],
+            })
+
+    manifest = {
+        "total_segments": len(manifest_segments),
+        "width": width,
+        "height": height,
+        "fps": 24,
+        "segments": manifest_segments,
     }
     manifest_path = os.path.join(output_dir, "manifest.json")
     with open(manifest_path, "w") as f:
@@ -1013,6 +1056,8 @@ if __name__ == "__main__":
                        help="Smart mode: raw text without markers — engine figures out voices")
     parser.add_argument("--no-hand-drawn", action="store_true",
                        help="Disable hand-drawn sketch style (clean digital look)")
+    parser.add_argument("--reveal", action="store_true",
+                       help="Progressive frame-by-frame reveal: elements appear one by one")
     parser.add_argument("--assemble", action="store_true")
     parser.add_argument("--restyle", type=str, default=None, metavar="TECHNIQUE",
                        help="Re-apply a different sketch technique to clean frames (pencil, pen, charcoal, watercolor, comic)")
@@ -1047,4 +1092,5 @@ if __name__ == "__main__":
         child_density=args.child_density,
         smart=args.smart,
         hand_drawn=not args.no_hand_drawn,
+        reveal=args.reveal,
     )

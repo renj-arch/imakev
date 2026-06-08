@@ -7,6 +7,7 @@ param(
     [switch]$nochild = $false,
     [switch]$nohanddrawn = $false,
     [switch]$tts = $false,
+    [switch]$reveal = $false,
     [string]$restyle = "",
     [string]$seed = "42",
     [switch]$help = $false
@@ -14,7 +15,7 @@ param(
 
 if ($help -or $script -eq "" -or $script -like "-*") {
     Write-Host @"
-Usage: .\run.ps1 <script.txt> [-name NAME] [-out_dir OUTPUT] [-nocache] [-nochild] [-nohanddrawn] [-tts] [-seed N] [-restyle TECHNIQUE]
+Usage: .\run.ps1 <script.txt> [-name NAME] [-out_dir OUTPUT] [-nocache] [-nochild] [-nohanddrawn] [-tts] [-reveal] [-seed N] [-restyle TECHNIQUE]
 
 Examples:
   .\run.ps1 my_story.txt
@@ -22,6 +23,7 @@ Examples:
   .\run.ps1 my_story.txt -nocache -seed 123
   .\run.ps1 my_story.txt -nohanddrawn
   .\run.ps1 my_story.txt -tts           # Add TTS voice narration
+  .\run.ps1 my_story.txt -reveal        # Progressive frame-by-frame drawing reveal
   .\run.ps1 my_story.txt -restyle comic # Re-style existing frames to comic
 "@
     exit 0
@@ -67,7 +69,8 @@ if ($restyle -ne "") {
 }
 
 Write-Host ">>> Step 1: Generating frames..." -ForegroundColor Green
-$genCmd = "python `"$PSScriptRoot\multi_voice.py`" --file `"$scriptPath`" --smart --output `"$outputDir`" --seed $seed $childFlag $handDrawnFlag"
+$revealFlag = if ($reveal) { "--reveal" } else { "" }
+$genCmd = "python `"$PSScriptRoot\multi_voice.py`" --file `"$scriptPath`" --smart --output `"$outputDir`" --seed $seed $childFlag $handDrawnFlag $revealFlag"
 Write-Host "  $genCmd" -ForegroundColor Gray
 Invoke-Expression $genCmd
 if ($LASTEXITCODE -ne 0) {
