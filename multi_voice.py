@@ -829,7 +829,7 @@ def assemble_video(output_dir="output/mv_frames", output_video="output/mv_video.
         if r.returncode != 0:
             print(f"  clip {i} failed: {r.stderr[:200]}")
             continue
-        concat_list.append(f"file '{out_clip}'")
+        concat_list.append(f"file '{os.path.abspath(out_clip)}'")
         total_frames += int(duration * fps)
 
     if not concat_list:
