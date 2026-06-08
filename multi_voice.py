@@ -17,6 +17,13 @@ VOICES = {
     "Think": {"name": "Think", "role": "Curious", "color": (255, 200, 60), "icon": "?"},
 }
 
+# Edge-TTS voice mapping
+TTS_VOICES = {
+    "Ding":  "en-GB-RyanNeural",
+    "Dong":  "en-US-JennyNeural",
+    "Think": "en-US-AriaNeural",
+}
+
 # Mapping from script labels to voice keys
 SPEAKER_MAP = {
     "Narrator": "Ding",
@@ -782,14 +789,25 @@ def _generate_comment_pop(text: str, voice_info: dict, seg_idx: int,
     return out_path
 
 
-def assemble_video(output_dir="output/mv_frames", output_video="output/mv_video.mp4"):
+def generate_tts_segment(text, voice, output_path):
+    """Generate TTS audio for a single segment using edge-tts."""
+    try:
+        import edge_tts
+        voice_name = TTS_VOICES.get(voice, "en-US-JennyNeural")
+        import asyncio
+        asyncio.run(edge_tts.Communicate(text, voice_name).save(output_path))
+        return True
+    except Exception as e:
+        print(f"  TTS failed for [{voice}]: {e}")
+        return False
+
+def assemble_video(output_dir="output/mv_frames", output_video="output/mv_video.mp4", use_tts=False):
     manifest_path = os.path.join(output_dir, "manifest.json")
     if not os.path.exists(manifest_path):
         print("No manifest found. Run with --generate first.")
         return
     manifest = json.load(open(manifest_path))
     segments = manifest["segments"]
-    w, h = manifest["width"], manifest["height"]
     fps = manifest.get("fps", 24)
     w = manifest.get("width", 720)
     h = manifest.get("height", 1280)
@@ -802,10 +820,11 @@ def assemble_video(output_dir="output/mv_frames", output_video="output/mv_video.
         return
     print(f"ffmpeg: {which_ff}")
 
-    # Build per-segment temp videos then concat
-    # This avoids concat demuxer quirks with PNG files
     temp_dir = os.path.join(output_dir, "temp_vids")
+    tts_dir = os.path.join(output_dir, "tts_audio")
     os.makedirs(temp_dir, exist_ok=True)
+    if use_tts:
+        os.makedirs(tts_dir, exist_ok=True)
     concat_list = []
     total_frames = 0
 
@@ -813,18 +832,56 @@ def assemble_video(output_dir="output/mv_frames", output_video="output/mv_video.
         frame = os.path.join(output_dir, seg["frame"])
         duration = seg.get("duration_frames", 120) / fps
         out_clip = os.path.join(temp_dir, f"clip_{i:03d}.mp4")
-        # Create a video from a single image with proper duration
-        cmd_clip = [
-            which_ff, "-y",
-            "-loop", "1",
-            "-i", frame,
-            "-c:v", "libx264",
-            "-t", str(duration),
-            "-pix_fmt", "yuv420p",
-            "-r", str(fps),
-            "-vf", f"scale={w}:{h}:force_original_aspect_ratio=decrease,pad={w}:{h}:(ow-iw)/2:(oh-ih)/2",
-            out_clip
-        ]
+
+        if use_tts:
+            audio_path = os.path.join(tts_dir, f"seg_{i:03d}.mp3")
+            if not os.path.exists(audio_path):
+                print(f"  Generating TTS for segment {i} ({seg.get('voice','?')})...")
+                ok = generate_tts_segment(seg.get("text", ""), seg.get("voice", "Ding"), audio_path)
+                if not ok:
+                    print(f"  Skipping audio for segment {i}")
+                    audio_path = None
+
+            if audio_path and os.path.exists(audio_path):
+                cmd_clip = [
+                    which_ff, "-y",
+                    "-loop", "1",
+                    "-i", frame,
+                    "-i", audio_path,
+                    "-c:v", "libx264",
+                    "-c:a", "aac",
+                    "-shortest",
+                    "-t", str(duration),
+                    "-pix_fmt", "yuv420p",
+                    "-r", str(fps),
+                    "-vf", f"scale={w}:{h}:force_original_aspect_ratio=decrease,pad={w}:{h}:(ow-iw)/2:(oh-ih)/2",
+                    out_clip
+                ]
+            else:
+                cmd_clip = [
+                    which_ff, "-y",
+                    "-loop", "1",
+                    "-i", frame,
+                    "-c:v", "libx264",
+                    "-t", str(duration),
+                    "-pix_fmt", "yuv420p",
+                    "-r", str(fps),
+                    "-vf", f"scale={w}:{h}:force_original_aspect_ratio=decrease,pad={w}:{h}:(ow-iw)/2:(oh-ih)/2",
+                    out_clip
+                ]
+        else:
+            cmd_clip = [
+                which_ff, "-y",
+                "-loop", "1",
+                "-i", frame,
+                "-c:v", "libx264",
+                "-t", str(duration),
+                "-pix_fmt", "yuv420p",
+                "-r", str(fps),
+                "-vf", f"scale={w}:{h}:force_original_aspect_ratio=decrease,pad={w}:{h}:(ow-iw)/2:(oh-ih)/2",
+                out_clip
+            ]
+
         r = subprocess.run(cmd_clip, capture_output=True, text=True)
         if r.returncode != 0:
             print(f"  clip {i} failed: {r.stderr[:200]}")
@@ -836,7 +893,6 @@ def assemble_video(output_dir="output/mv_frames", output_video="output/mv_video.
         print("ERROR: no clips created")
         return
 
-    # Concat all clips
     concat_vid_path = os.path.join(temp_dir, "clips.txt")
     with open(concat_vid_path, "w") as f:
         f.write("\n".join(concat_list) + "\n")
@@ -850,6 +906,8 @@ def assemble_video(output_dir="output/mv_frames", output_video="output/mv_video.
         "-pix_fmt", "yuv420p",
         output_video
     ]
+    if use_tts:
+        cmd_concat.extend(["-c:a", "aac"])
     print(f"Concatenating {len(concat_list)} clips -> {output_video}")
     r = subprocess.run(cmd_concat, capture_output=True, text=True, timeout=180)
     if r.returncode == 0:
@@ -859,8 +917,6 @@ def assemble_video(output_dir="output/mv_frames", output_video="output/mv_video.
         print(f"Concat failed ({r.returncode})")
         print(f"stderr last 2000 chars:\n{r.stderr[-2000:]}")
 
-    # Cleanup temp clips
-    import shutil
     shutil.rmtree(temp_dir, ignore_errors=True)
 
 
@@ -881,11 +937,13 @@ if __name__ == "__main__":
     parser.add_argument("--no-hand-drawn", action="store_true",
                        help="Disable hand-drawn sketch style (clean digital look)")
     parser.add_argument("--assemble", action="store_true")
+    parser.add_argument("--tts", action="store_true",
+                       help="Generate TTS audio for each segment using edge-tts")
     parser.add_argument("--video", type=str, default="output/mv_video.mp4")
     args = parser.parse_args()
 
     if args.assemble:
-        assemble_video(args.output, args.video)
+        assemble_video(args.output, args.video, use_tts=args.tts)
         exit(0)
 
     if args.file:

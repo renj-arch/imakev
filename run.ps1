@@ -6,19 +6,21 @@ param(
     [switch]$nocache = $false,
     [switch]$nochild = $false,
     [switch]$nohanddrawn = $false,
+    [switch]$tts = $false,
     [string]$seed = "42",
     [switch]$help = $false
 )
 
 if ($help -or $script -eq "" -or $script -like "-*") {
     Write-Host @"
-Usage: .\run.ps1 <script.txt> [-name NAME] [-out_dir OUTPUT] [-nocache] [-nochild] [-nohanddrawn] [-seed N]
+Usage: .\run.ps1 <script.txt> [-name NAME] [-out_dir OUTPUT] [-nocache] [-nochild] [-nohanddrawn] [-tts] [-seed N]
 
 Examples:
   .\run.ps1 my_story.txt
   .\run.ps1 my_story.txt -name constantinople -nochild
   .\run.ps1 my_story.txt -nocache -seed 123
   .\run.ps1 my_story.txt -nohanddrawn
+  .\run.ps1 my_story.txt -tts           # Add TTS voice narration
 "@
     exit 0
 }
@@ -58,7 +60,8 @@ if ($LASTEXITCODE -ne 0) {
 # Step 2: Assemble video
 Write-Host "`n>>> Step 2: Assembling video..." -ForegroundColor Green
 $videoPath = "$outputDir.mp4"
-$asmCmd = "python `"$PSScriptRoot\multi_voice.py`" --assemble --output `"$outputDir`" --video `"$videoPath`""
+$ttsFlag = if ($tts) { "--tts" } else { "" }
+$asmCmd = "python `"$PSScriptRoot\multi_voice.py`" --assemble $ttsFlag --output `"$outputDir`" --video `"$videoPath`""
 Write-Host "  $asmCmd" -ForegroundColor Gray
 Invoke-Expression $asmCmd
 if ($LASTEXITCODE -ne 0) {
