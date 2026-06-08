@@ -175,7 +175,7 @@ SCENES.append({"narration":"Large forests had been cleared.","shots":[
 
 # Scene 13
 SCENES.append({"narration":"Eventually, many people left.","shots":[
-    {"cam":ZOOM_IN,"dur":3.5,"elems":[E("human",0.3,0.72,2.5,pose="walking",gender="man"),E("human",0.35,0.75,2.0,pose="walking",gender="woman"),E("human",0.4,0.78,1.5,pose="walking",gender="child"),E("pyramid",0.7,0.75,3.0,steps=4),E("footprint",0.2,0.82,2.0),E("footprint",0.25,0.85,1.8)]},
+    {"cam":ZOOM_IN,"dur":3.5,"elems":[E("pyramid",0.78,0.68,4.5,steps=4),E("human",0.2,0.68,3.0,pose="walking",gender="man"),E("human",0.3,0.72,2.5,pose="walking",gender="woman"),E("human",0.38,0.76,2.0,pose="walking",gender="child"),E("footprint",0.05,0.8,2.5),E("footprint",0.12,0.84,2.0),E("footprint",0.18,0.88,1.8),E("sun",0.88,0.2,2.5)]},
 ]})
 
 # Scene 14
