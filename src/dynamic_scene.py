@@ -270,8 +270,8 @@ def compute_positions(concepts: dict, scene_type: str) -> list:
     if not visual_concepts:
         return elements
 
-    # Randomly select a subset (80-100%) of concepts to include
-    keep_ratio = rng.uniform(0.7, 1.0)
+    # Randomly select a subset (85-100%) of concepts to include
+    keep_ratio = rng.uniform(0.85, 1.0)
     n_keep = max(1, int(len(visual_concepts) * keep_ratio))
     if n_keep < len(visual_concepts):
         # Keep top concept always, randomly drop from rest

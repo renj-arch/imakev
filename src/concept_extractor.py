@@ -19,7 +19,8 @@ CONCEPTS = {
     "sun":        ["sun", "sunlight", "sunny", "solar", "sunshine", "sunrise", "sunset glow"],
     "moon":       ["moon", "lunar", "moonlight", "crescent", "full moon", "half moon"],
     "planet":     ["planet", "planetary", "orbits", "saturn", "jupiter", "mars", "venus",
-                    "mercury", "neptune", "uranus", "earth", "world", "globe"],
+                    "mercury", "neptune", "uranus", "earth",
+                    "exoplanet", "celestial body", "orbiting"],
     "astronaut":  ["astronaut", "spaceman", "space walk", "space suit", "cosmonaut"],
     "spaceship":  ["spaceship", "spacecraft", "rocket", "shuttle", "spaceship", "launch"],
     "blackhole":  ["black hole", "singularity", "event horizon", "gravitational"],
@@ -168,10 +169,10 @@ CONCEPTS = {
     "coin":       ["coin", "money", "currency", "treasure", "gold", "silver",
                     "wealth", "fortune", "riches"],
     "map":        ["map", "maps", "chart", "cartography", "navigation",
-                    "atlas", "globe", "compass", "tectonic", "landmass"],
+                    "atlas", "globe", "tectonic", "landmass"],
     "world_map":  ["world map", "continent", "continents", "continental", "asia", "africa",
-                    "europe", "north america", "south america", "america", "australia",
-                    "subcontinent", "world", "earth"],
+                     "europe", "north america", "south america", "america", "australia",
+                     "subcontinent", "earth map", "globe"],
     "india_map":  ["india map", "india outline", "indian map", "map of india"],
     "ship":       ["ship", "boat", "vessel", "sail", "sailboat", "yacht"],
     "canoe":      ["canoe", "canoeing"],
@@ -199,11 +200,11 @@ CONCEPTS = {
     "fire":       ["fire", "flame", "flames", "burning", "blaze", "inferno",
                     "campfire", "bonfire", "wildfire", "combustion"],
     "key":        ["key", "keys", "unlock", "padlock", "lock", "combination"],
-    "question":   ["question", "questions", "mystery", "unknown", "wonder",
-                    "curious", "curiosity", "puzzle", "riddle"],
+    "question":   ["question", "questions", "unknown",
+                    "curious", "curiosity", "puzzle", "riddle", "enigma"],
     "target":     ["target", "goal", "aim", "bullseye", "objective", "mission"],
-    "infinity":   ["infinity", "endless", "eternal", "forever", "boundless",
-                    "infinite", "unlimited", "timeless"],
+    "infinity":   ["infinity", "eternal", "forever", "boundless",
+                    "infinite", "unlimited", "timeless", "limitless"],
     "puzzle":     ["puzzle", "challenge", "problem", "complex", "complicated",
                     "difficult", "solve", "solution"],
     "scales":     ["scales", "balance", "justice", "fairness", "equality",
@@ -348,20 +349,43 @@ def extract_concepts(text: str) -> dict:
     """Extract visual concepts from narration text.
     
     Returns dict of {concept_name: count} for all matched concepts.
-    Filters false positives (idiomatic phrases).
+    Filters false positives (idiomatic phrases) and negations.
     """
     tl = text.lower()
     result = {}
+
+    # Build set of negated words (words preceded by negation)
+    NEGATION_WORDS = {"no", "not", "without", "nothing", "never", "none", "nobody"}
+    words = tl.split()
+    negated_words = set()
+    for i, w in enumerate(words):
+        w_clean = re.sub(r'\W+', '', w)
+        if w_clean in NEGATION_WORDS:
+            # Negate the next 3 words
+            for j in range(i + 1, min(i + 4, len(words))):
+                nw = re.sub(r'\W+', '', words[j])
+                if nw:
+                    negated_words.add(nw)
+        # Also check trailing "n't" like "don't", "can't"
+        if w_clean.endswith("n't"):
+            for j in range(i + 1, min(i + 3, len(words))):
+                nw = re.sub(r'\W+', '', words[j])
+                if nw:
+                    negated_words.add(nw)
 
     for concept, keywords in CONCEPTS.items():
         count = 0
         for kw in keywords:
             if " " in kw:
                 if kw in tl:
-                    count += 1
+                    # Check if first word of multi-word keyword is negated
+                    first_word = kw.split()[0]
+                    if first_word not in negated_words:
+                        count += 1
             else:
                 if re.search(r'\b' + re.escape(kw) + r'\b', tl):
-                    count += 1
+                    if kw not in negated_words:
+                        count += 1
         if count > 0 and not has_false_positive(concept, text):
             result[concept] = count
 
