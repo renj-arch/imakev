@@ -495,6 +495,7 @@ def generate_multi_voice(
     child_density=0.4,
     add_child=True,
     smart=False,
+    hand_drawn=True,
 ):
     """Generate scene frames from a multi-voice script.
     
@@ -597,7 +598,7 @@ def generate_multi_voice(
                 if elem.get("z_order", 2) >= 2 and cam_rng.random() < 0.4:
                     elem["shadow"] = True
 
-            gen = SketchGenerator(width, height, seed + i)
+            gen = SketchGenerator(width, height, seed + i, hand_drawn=hand_drawn)
             img = gen.render_scene(scene_desc)
 
         # Remove text from overlay — ffmpeg drawtext handles animated subtitles
@@ -888,6 +889,8 @@ if __name__ == "__main__":
                        help="How often child questions appear (0-1)")
     parser.add_argument("--smart", action="store_true",
                        help="Smart mode: raw text without markers — engine figures out voices")
+    parser.add_argument("--no-hand-drawn", action="store_true",
+                       help="Disable hand-drawn sketch style (clean digital look)")
     parser.add_argument("--assemble", action="store_true")
     parser.add_argument("--video", type=str, default="output/mv_video.mp4")
     args = parser.parse_args()
@@ -913,4 +916,5 @@ if __name__ == "__main__":
         add_child=not args.no_child,
         child_density=args.child_density,
         smart=args.smart,
+        hand_drawn=not args.no_hand_drawn,
     )

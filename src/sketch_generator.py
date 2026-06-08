@@ -17,10 +17,14 @@ W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
 class SketchGenerator:
     """Generate detailed, full-color illustrations from structured scene descriptions."""
 
-    def __init__(self, width=W, height=H, seed=None):
+    def __init__(self, width=W, height=H, seed=None, hand_drawn=True):
         self.w = width
         self.h = height
         self.rng = random.Random(seed)
+        self.hand_drawn = hand_drawn
+
+        # Paper color for hand-drawn mode
+        self.paper_color = (250, 245, 235) if hand_drawn else (255, 255, 255)
 
     # ── Color utilities ─────────────────────────────────────────
 
@@ -44,6 +48,19 @@ class SketchGenerator:
         if c is None: return default
         if isinstance(c, (list, tuple)):
             return tuple(c[:3])
+
+    def _sketchify_fill(self, fill):
+        """Lighten/desaturate fill colors for hand-drawn sketch appearance."""
+        if fill is None: return None
+        if isinstance(fill, int): return fill
+        try:
+            c = tuple(fill[:3])
+            # Lighten toward paper white
+            paper = self.paper_color
+            t = 0.35  # blend 35% toward paper
+            return tuple(int(a + (b - a) * t) for a, b in zip(c, paper))
+        except (TypeError, IndexError):
+            return fill
         return c
 
     @staticmethod
@@ -3674,13 +3691,67 @@ class SketchGenerator:
                            fill=self._darken(c, 5) + (180,),
                            stroke=self._darken(c, 20) + (120,), stroke_width=1)
 
-    def draw_book(self, draw, x, y, size=1.0, color=(140, 100, 60)):
-        s = size; c = tuple(color[:3])
-        w, h = 16*s, 12*s
-        self.draw_shadow_circle(draw, x, y+h//2, w//2, offset=(2,2), blur_radius=3, color=(0,0,0,30))
-        self.draw_polygon(draw, [(x-w//2, y+h//2), (x-w//2, y-h//2), (x, y-h//2+2*s), (x, y+h//2-2*s)], fill=c+(220,), stroke=self._darken(c,20)+(180,))
-        self.draw_polygon(draw, [(x, y-h//2+2*s), (x+w//2, y-h//2), (x+w//2, y+h//2), (x, y+h//2-2*s)], fill=self._lighten(c,15)+(220,), stroke=self._darken(c,20)+(180,))
-        self.draw_line(draw, x, y-h//2+2*s, x, y+h//2-2*s, color=(60,50,40,150), width=1)
+    def draw_book(self, draw, x, y, size=1.0, color=(140, 100, 60), title=""):
+        """Draw an open book with pages. x, y are pixel coords, size = scale."""
+        s = max(size * 15, 10)
+        cx, cy = x, y
+        bw = int(40 * s)
+        bh = int(30 * s)
+        spine_w = max(3, int(3 * s))
+
+        # Left page
+        draw.polygon([
+            (cx - bw/2, cy - bh/2),
+            (cx - spine_w/2, cy - bh/2),
+            (cx - spine_w/2, cy + bh/2),
+            (cx - bw/2, cy + bh/2),
+        ], fill=(245, 235, 215), outline=(70, 60, 50), width=2)
+
+        # Right page
+        draw.polygon([
+            (cx + spine_w/2, cy - bh/2),
+            (cx + bw/2, cy - bh/2),
+            (cx + bw/2, cy + bh/2),
+            (cx + spine_w/2, cy + bh/2),
+        ], fill=(250, 242, 225), outline=(70, 60, 50), width=2)
+
+        # Spine
+        draw.polygon([
+            (cx - spine_w/2, cy - bh/2),
+            (cx + spine_w/2, cy - bh/2),
+            (cx + spine_w/2, cy + bh/2),
+            (cx - spine_w/2, cy + bh/2),
+        ], fill=(120, 90, 60), outline=(50, 35, 25), width=2)
+
+        # Title
+        if title:
+            from PIL import ImageFont
+            try:
+                font_sz = int(12 * s)
+                fnt = ImageFont.truetype("arial.ttf", font_sz)
+                tx = cx - bw/4
+                ty = cy
+                draw.text((tx+1, ty+1), title, fill=(100, 90, 70), font=fnt, anchor="mm")
+                draw.text((tx, ty), title, fill=(30, 25, 15), font=fnt, anchor="mm")
+            except Exception:
+                pass
+
+        # Page lines
+        for i in range(8):
+            ly = cy - bh/3 + i * (bh / 9)
+            lx1 = cx - bw/2 + 4 * s
+            lx2 = cx - spine_w/2 - 4 * s
+            draw.line([(lx1, ly), (lx2, ly)], fill=(160, 150, 140, 120), width=1)
+
+        # Cover edges (dark outline)
+        draw.rectangle([
+            cx - bw/2 - 2*s, cy - bh/2 - 2*s,
+            cx - spine_w/2 + 2*s, cy + bh/2 + 2*s
+        ], outline=color, width=max(2, int(2 * s + 0.5)))
+        draw.rectangle([
+            cx + spine_w/2 - 2*s, cy - bh/2 - 2*s,
+            cx + bw/2 + 2*s, cy + bh/2 + 2*s
+        ], outline=color, width=max(2, int(2 * s + 0.5)))
 
     def draw_scroll(self, draw, x, y, size=1.0, color=(220, 200, 170)):
         s = size; c = tuple(color[:3])
@@ -4158,7 +4229,7 @@ class SketchGenerator:
         elif scene_type == "comparison":
             base = (250, 248, 245)
         else:
-            base = None
+            base = self.paper_color if self.hand_drawn else None
         canvas = self.create_canvas(base + (255,) if base else (255, 255, 255, 255))
 
         draw = ImageDraw.Draw(canvas, "RGBA")
@@ -4462,12 +4533,20 @@ class SketchGenerator:
         if stroke and isinstance(stroke, list): stroke = tuple(stroke)
         opacity = elem.get("opacity", 255)
 
+        # ── Hand-drawn style overrides ──
+        if self.hand_drawn:
+            if stroke is None:
+                stroke = (35, 30, 25)  # dark ink/charcoal
+            fill = self._sketchify_fill(fill)
+            # Force a stroke width override via elem context
+            elem["_stroke_width"] = max(elem.get("stroke_width", 1), 3)
+
         def _tc(c):
             if c is None: return None
             return tuple(c[:3]) if isinstance(c, (list, tuple)) else c
 
-        fill = _tc(fill)
-        stroke = _tc(stroke)
+        fill = self._tc(fill)
+        stroke = self._tc(stroke)
 
         # ── Drop shadow ──
         if elem.get("shadow") and etype not in ("text", "circle", "none"):
@@ -4502,32 +4581,32 @@ class SketchGenerator:
 
         elif etype in ("human", "person", "figure", "people"):
             c = fill or (80, 60, 120)
-            skin = _tc(elem.get("skin_color", (235, 200, 175))) or (235, 200, 175)
+            skin = self._tc(elem.get("skin_color", (235, 200, 175))) or (235, 200, 175)
             mood = elem.get("mood", self.desc.get("mood", "peaceful"))
             pose = elem.get("pose", "standing")
             self.draw_human(draw, x, y, s, c, skin, gender="neutral", mood=mood, pose=pose)
         elif etype == "man":
             c = fill or (70, 50, 100)
-            skin = _tc(elem.get("skin_color", (235, 200, 175))) or (235, 200, 175)
+            skin = self._tc(elem.get("skin_color", (235, 200, 175))) or (235, 200, 175)
             mood = elem.get("mood", self.desc.get("mood", "peaceful"))
             pose = elem.get("pose", "standing")
             self.draw_human(draw, x, y, s, c, skin, gender="man", mood=mood, pose=pose)
         elif etype == "woman":
             c = fill or (140, 80, 120)
-            skin = _tc(elem.get("skin_color", (230, 190, 170))) or (230, 190, 170)
+            skin = self._tc(elem.get("skin_color", (230, 190, 170))) or (230, 190, 170)
             mood = elem.get("mood", self.desc.get("mood", "peaceful"))
             pose = elem.get("pose", "standing")
             self.draw_human(draw, x, y, s, c, skin, gender="woman", mood=mood, pose=pose)
         elif etype == "child":
             c = fill or (100, 140, 180)
-            skin = _tc(elem.get("skin_color", (240, 210, 190))) or (240, 210, 190)
+            skin = self._tc(elem.get("skin_color", (240, 210, 190))) or (240, 210, 190)
             mood = elem.get("mood", self.desc.get("mood", "peaceful"))
             pose = elem.get("pose", "standing")
             self.draw_human(draw, x, y, s * 0.65, c, skin, gender="child", mood=mood, pose=pose)
 
         elif etype == "house":
             c = fill or (180, 150, 120)
-            roof = _tc(elem.get("roof_color", (150, 50, 40))) or (150, 50, 40)
+            roof = self._tc(elem.get("roof_color", (150, 50, 40))) or (150, 50, 40)
             self.draw_house(draw, x, y, s, c, roof)
 
         elif etype == "hill":
@@ -4635,8 +4714,8 @@ class SketchGenerator:
             text = elem.get("text", elem.get("label", ""))
             fs = elem.get("font_size", elem.get("size", 20))
             tc = fill or (40, 35, 30)
-            bc = _tc(elem.get("bg_color")) or (255, 250, 240)
-            border = _tc(elem.get("border_color")) or _tc(stroke) or (40, 35, 30)
+            bc = self._tc(elem.get("bg_color")) or (255, 250, 240)
+            border = self._tc(elem.get("border_color")) or self._tc(stroke) or (40, 35, 30)
             self.draw_text_box(draw, x, y, text, font_size=fs, text_color=tc, bg_color=bc, border_color=border)
 
         elif etype == "arrow":
@@ -4686,7 +4765,7 @@ class SketchGenerator:
             self.draw_line(draw, x+l, y-l, x-l, y+l, color=c, width=int(3*s+1), opacity=opacity)
 
         elif etype == "ship":
-            self.draw_ship(draw, x, y, s, fill or (80, 60, 40), _tc(elem.get("sail_color", (220, 210, 190))))
+            self.draw_ship(draw, x, y, s, fill or (80, 60, 40), self._tc(elem.get("sail_color", (220, 210, 190))))
 
         elif etype == "wave":
             self.draw_wave(draw, x, y, s, fill or (40, 100, 180))
@@ -4721,20 +4800,20 @@ class SketchGenerator:
             bw = int(elem.get("width", 0.12) * self.w)
             bh = int(elem.get("height", 0.25) * self.h)
             c = fill or (120, 100, 80)
-            wc = _tc(elem.get("window_color", (255, 220, 100))) or (255, 220, 100)
+            wc = self._tc(elem.get("window_color", (255, 220, 100))) or (255, 220, 100)
             self.draw_building(draw, x, y, bw, bh, c, wc)
 
         elif etype == "factory":
             bw = int(elem.get("width", 0.15) * self.w)
             bh = int(elem.get("height", 0.22) * self.h)
             self.draw_factory(draw, x, y, bw, bh, fill or (130, 110, 90),
-                              _tc(elem.get("window_color", (200, 180, 100))) or (200, 180, 100))
+                              self._tc(elem.get("window_color", (200, 180, 100))) or (200, 180, 100))
 
         elif etype == "shop":
             bw = int(elem.get("width", 0.12) * self.w)
             bh = int(elem.get("height", 0.2) * self.h)
             self.draw_shop(draw, x, y, bw, bh, fill or (180, 150, 120),
-                           _tc(elem.get("window_color", (255, 240, 200))) or (255, 240, 200))
+                           self._tc(elem.get("window_color", (255, 240, 200))) or (255, 240, 200))
 
         elif etype == "cannon":
             c = fill or (60, 60, 60)
@@ -5301,7 +5380,7 @@ class SketchGenerator:
             bw = int(elem.get("width", 0.12) * self.w)
             bh = int(elem.get("height", 0.25) * self.h)
             self.draw_building(draw, x, y, bw, bh, fill or (120, 100, 80),
-                              window_color=_tc(elem.get("window_color", (255, 220, 100))) or (255, 220, 100))
+                              window_color=self._tc(elem.get("window_color", (255, 220, 100))) or (255, 220, 100))
         elif etype == "windmill":
             self.draw_windmill(draw, x, y, s, fill or (150, 130, 110))
 
@@ -5309,20 +5388,20 @@ class SketchGenerator:
             bw = int(elem.get("width", 0.15) * self.w)
             bh = int(elem.get("height", 0.22) * self.h)
             self.draw_factory(draw, x, y, bw, bh, fill or (130, 110, 90),
-                              _tc(elem.get("window_color", (200, 180, 100))) or (200, 180, 100))
+                              self._tc(elem.get("window_color", (200, 180, 100))) or (200, 180, 100))
 
         elif etype in ("shop", "store", "market", "bakery", "cafe",
                         "restaurant", "pharmacy", "bookshop", "boutique"):
             bw = int(elem.get("width", 0.12) * self.w)
             bh = int(elem.get("height", 0.2) * self.h)
             self.draw_shop(draw, x, y, bw, bh, fill or (180, 150, 120),
-                           _tc(elem.get("window_color", (255, 240, 200))) or (255, 240, 200))
+                           self._tc(elem.get("window_color", (255, 240, 200))) or (255, 240, 200))
 
         # ── Ship / boat aliases ──
         elif etype in ("boat", "sailboat", "vessel", "raft",
                         "kayak", "rowboat", "warship", "galleon"):
             self.draw_ship(draw, x, y, s, fill or (80, 60, 40),
-                          _tc(elem.get("sail_color", (220, 210, 190))))
+                          self._tc(elem.get("sail_color", (220, 210, 190))))
 
         elif etype in ("canoe", "dugout"):
             self.draw_canoe(draw, x, y, s, fill or (80, 55, 35))
@@ -5457,6 +5536,15 @@ class SketchGenerator:
             s = elem.get("scale", 1.0)
             c = fill or (200, 200, 210)
             self.draw_scene_think(draw, x, y, s, c)
+
+        elif etype == "book":
+            c = fill or (160, 120, 80)
+            title = elem.get("title", "")
+            self.draw_book(draw, x, y, size=s, color=c, title=title)
+
+        elif etype == "footprint":
+            c = fill or (100, 90, 100)
+            self.draw_footprint(draw, x, y, size=s, color=c)
 
         # ── New diagram types ──
         elif etype == "network_diagram":
@@ -7124,7 +7212,60 @@ class SketchGenerator:
                       fill=(0, 0, 0, 30))
 
     def _post_process(self, canvas: Image.Image, mood: str = "", style: dict = {}) -> Image.Image:
-        """Apply final touches: rectangular vignette, grain, lighting."""
+        """Apply final touches: paper grain, sketch stylization, vignette."""
+
+        # ── Hand-drawn sketch stylization ──
+        if self.hand_drawn:
+            arr = np.array(canvas, dtype=np.float32)
+
+            # 1. Boost contrast on dark lines (edge enhancement)
+            gray = np.mean(arr[..., :3], axis=2)
+            dark_mask = (gray < 80).astype(np.float32)
+            for c in range(3):
+                arr[..., c] = np.where(dark_mask > 0,
+                                       arr[..., c] * 0.7,  # darken dark lines
+                                       arr[..., c])
+
+            # 2. Paper grain (heavy, organic)
+            noise = np.random.RandomState(hash((self.w, self.h, 42)) & 0x7FFFFFFF) \
+                .randint(0, 40, (self.h, self.w)).astype(np.float32)
+            paper_tint = np.array([248, 243, 233], dtype=np.float32)
+            for c in range(3):
+                arr[..., c] = arr[..., c] * 0.92 + paper_tint[c] * 0.08 + (noise - 20) * 0.15
+                arr[..., c] = np.clip(arr[..., c], 0, 255)
+
+            # 3. Slight soften to remove digital crispness
+            blur_arr = np.copy(arr)
+            from scipy.ndimage import gaussian_filter
+            for c in range(3):
+                blur_arr[..., c] = gaussian_filter(arr[..., c], sigma=0.4)
+            arr = arr * 0.6 + blur_arr * 0.4
+
+            canvas = Image.fromarray(arr.astype(np.uint8))
+
+            # 4. Edge-darkening overlay (simulates pencil pressure)
+            edge_arr = np.array(canvas.convert("L"), dtype=np.float32)
+            from scipy.ndimage import sobel
+            edge_x = sobel(edge_arr, axis=1)
+            edge_y = sobel(edge_arr, axis=0)
+            edge_mag = np.sqrt(edge_x**2 + edge_y**2)
+            edge_mask = np.clip(edge_mag / 60.0, 0, 1)
+            edge_overlay = np.ones((self.h, self.w, 3), dtype=np.float32) * 255
+            for c in range(3):
+                edge_overlay[..., c] = np.where(
+                    edge_mask > 0.3,
+                    255 * (1 - edge_mask * 0.5),
+                    255
+                )
+            arr2 = np.array(canvas, dtype=np.float32)
+            arr2_rgb = arr2[..., :3] * (edge_overlay / 255.0) * 0.85 + paper_tint[None, None, :] * 0.15
+            arr2_rgb = np.clip(arr2_rgb, 0, 255).astype(np.uint8)
+            arr2 = np.dstack([arr2_rgb, arr2[..., 3:4].astype(np.uint8)]) if arr2.shape[2] == 4 else arr2_rgb
+            canvas = Image.fromarray(arr2)
+
+            return canvas
+
+        # ── Original clean post-processing (non-hand-drawn) ──
         grain_intensity = style.get("grain", 0.04)
         draw = ImageDraw.Draw(canvas, "RGBA")
 
@@ -7230,6 +7371,33 @@ class SketchGenerator:
         draw.arc([x-s//2, y-s//2, x, y+s//2], 90, 270, fill=(170,170,180), width=2)
         draw.arc([x, y-s//2, x+s//2, y+s//2], 270, 90, fill=(170,170,180), width=2)
 
+    def draw_footprint(self, draw, x, y, size=1.0, color=(100, 90, 100)):
+        """Draw a simple footprint (animal/paw print)."""
+        s = max(size * 8, 5)
+        cx, cy = x, y
+
+        # Main pad
+        draw.ellipse([
+            cx - int(12 * s), cy - int(4 * s),
+            cx + int(12 * s), cy + int(12 * s)
+        ], fill=color, outline=(30, 25, 20), width=2)
+
+        # Four toe pads
+        toe_positions = [(-10, -8), (-3, -11), (3, -11), (10, -8)]
+        for tx, ty in toe_positions:
+            draw.ellipse([
+                cx + int(tx * s) - int(4 * s), cy + int(ty * s) - int(3 * s),
+                cx + int(tx * s) + int(4 * s), cy + int(ty * s) + int(3 * s)
+            ], fill=color, outline=(30, 25, 20), width=1)
+
+        # Claw marks
+        claw_positions = [(-10, -13), (-3, -16), (3, -16), (10, -13)]
+        for cx2, cy2 in claw_positions:
+            draw.ellipse([
+                cx + int(cx2 * s) - int(2 * s), cy + int(cy2 * s) - int(2 * s),
+                cx + int(cx2 * s) + int(2 * s), cy + int(cy2 * s) + int(1 * s)
+            ], fill=(min(color[0]+60, 255), min(color[1]+60, 255), min(color[2]+60, 255)))
+
 
 # ── Convenience function ──────────────────────────────────────
 
@@ -7243,10 +7411,9 @@ def generate_sketch(prompt: str, scene_desc: dict = None, width=W, height=H, see
     if scene_desc is None:
         scene_desc = llm_generate_scene(prompt)
 
-    return gen.render_scene(scene_desc)
+# ── Convenience function ──────────────────────────────────────
 
-
-def llm_generate_scene(prompt: str) -> dict:
+def generate_sketch(prompt: str) -> dict:
     """Generate a structured scene description from any text prompt.
 
     Uses the offline dynamic scene composer (no external API).

@@ -1,8 +1,11 @@
 import os, platform
 from pathlib import Path
-from dotenv import load_dotenv
 
-load_dotenv()
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    load_dotenv = lambda **kw: None
 
 ROOT_DIR = Path(__file__).parent
 ASSETS_DIR = ROOT_DIR / "assets"

@@ -5,18 +5,20 @@ param(
     [string]$out_dir = "output",
     [switch]$nocache = $false,
     [switch]$nochild = $false,
+    [switch]$nohanddrawn = $false,
     [string]$seed = "42",
     [switch]$help = $false
 )
 
 if ($help -or $script -eq "" -or $script -like "-*") {
     Write-Host @"
-Usage: .\run.ps1 <script.txt> [-name NAME] [-out_dir OUTPUT] [-nocache] [-nochild] [-seed N]
+Usage: .\run.ps1 <script.txt> [-name NAME] [-out_dir OUTPUT] [-nocache] [-nochild] [-nohanddrawn] [-seed N]
 
 Examples:
   .\run.ps1 my_story.txt
   .\run.ps1 my_story.txt -name constantinople -nochild
   .\run.ps1 my_story.txt -nocache -seed 123
+  .\run.ps1 my_story.txt -nohanddrawn
 "@
     exit 0
 }
@@ -42,8 +44,10 @@ if ($nocache -and (Test-Path "output/.mv_cache.json")) {
 
 # Step 1: Generate frames
 $childFlag = if ($nochild) { "--no-child" } else { "" }
+$handDrawnFlag = if ($nohanddrawn) { "--no-hand-drawn" } else { "" }
+
 Write-Host ">>> Step 1: Generating frames..." -ForegroundColor Green
-$genCmd = "python `"$PSScriptRoot\multi_voice.py`" --file `"$scriptPath`" --smart --output `"$outputDir`" --seed $seed $childFlag"
+$genCmd = "python `"$PSScriptRoot\multi_voice.py`" --file `"$scriptPath`" --smart --output `"$outputDir`" --seed $seed $childFlag $handDrawnFlag"
 Write-Host "  $genCmd" -ForegroundColor Gray
 Invoke-Expression $genCmd
 if ($LASTEXITCODE -ne 0) {

@@ -86,16 +86,12 @@ def _describe_scene(narration: str, story_context: dict = None,
                      voice: str = None, camera: str = "medium") -> dict:
     """Convert narration to scene description using the engine's built-in intelligence.
     
-    Args:
-        narration: Text to visualize
-        story_context: Optional dict from story_context.analyze_story()
-        voice: "Ding", "Dong", or "Think" — for narrator placement
-    
     Pipeline (primary → fallback):
-      1. Knowledge base — TF-IDF similarity against 55+ curated scene templates
-      2. Dynamic scene composer — context-aware (uses story_context)
-      3. Keyword parser — fast path for common topics (legacy)
-      4. Generic fallback
+      1. Creative scenes — poetic/reflective/meta patterns (book, planet, thought)
+      2. Knowledge base — TF-IDF similarity against 55+ curated scene templates
+      3. Dynamic scene composer — context-aware (uses story_context)
+      4. Keyword parser — fast path for common topics (legacy)
+      5. Generic fallback
     """
     
     # Detect what kind of visual this narration needs
@@ -113,19 +109,25 @@ def _describe_scene(narration: str, story_context: dict = None,
         except Exception:
             pass
     
-    # PRIMARY: Knowledge base — curated scene templates for known topics.
+    # PRIMARY: Creative scene — poetic/reflective/philosophical text
+    from src.creative_scenes import match_creative_scene
+    result = match_creative_scene(narration)
+    if result:
+        return result
+    
+    # SECONDARY: Knowledge base — curated scene templates for known topics.
     from src.scene_knowledge import semantic_scene
     result = semantic_scene(narration, threshold=0.3)
     if result:
         return result
     
-    # SECONDARY: Dynamic scene composer — context-aware
+    # TERTIARY: Dynamic scene composer — context-aware
     from src.dynamic_scene import compose_context_scene
     result = compose_context_scene(narration, story_context=story_context, voice=voice, camera=camera)
     if result:
         return result
     
-    # TERTIARY: Keyword parsing (fast path for common topics)
+    # QUATERNARY: Keyword parsing (fast path for common topics)
     result = _keyword_describe(narration)
     if result:
         return result
