@@ -2036,6 +2036,66 @@ class SketchGenerator:
                 [(fx, fy - int(6*s)), (fx + int(6*s), fy - int(3*s)), (fx, fy)],
                 fill=(180, 40, 40, 200))
 
+    def draw_soldier(self, draw, x, y, size=1.0, color=(140, 60, 60)):
+        """Draw a medieval soldier with armor, shield and spear."""
+        s = size
+        c = tuple(color[:3])
+        ss = max(int(12 * s), 6)  # base unit
+
+        # Shield (left arm)
+        shx = x - int(5 * s)
+        shy = y - int(8 * s)
+        self.draw_ellipse(draw, shx - int(4*s), shy - int(6*s), int(8*s), int(12*s),
+                         fill=(140, 120, 100, 220), stroke=(80, 60, 40, 180), stroke_width=2)
+        # Shield emblem (cross)
+        self.draw_line(draw, shx, shy - int(4*s), shx, shy + int(4*s),
+                      color=(180, 50, 50, 200), width=int(2*s))
+        self.draw_line(draw, shx - int(3*s), shy, shx + int(3*s), shy,
+                      color=(180, 50, 50, 200), width=int(2*s))
+
+        # Body (tunic / breastplate)
+        bw, bh = int(10*s), int(14*s)
+        self.draw_rect(draw, x - bw//2, y - bh, bw, bh,
+                      fill=c+(210,), stroke=self._darken(c, 20)+(150,), stroke_width=2)
+        # Belt
+        self.draw_rect(draw, x - bw//2, y - int(5*s), bw, int(2*s),
+                      fill=(60, 40, 30, 200), stroke=(40, 30, 20, 150), stroke_width=1)
+        # Legs
+        leg_w = int(3*s)
+        leg_h = int(8*s)
+        for lx in [x - int(2.5*s), x + int(2.5*s)]:
+            self.draw_rect(draw, lx - leg_w//2, y - int(1*s), leg_w, leg_h,
+                          fill=(70, 50, 80, 200), stroke=(50, 35, 60, 150), stroke_width=1)
+        # Boots
+        for bx in [x - int(2.5*s), x + int(2.5*s)]:
+            self.draw_rect(draw, bx - int(2*s), y + int(7*s), int(4*s), int(2*s),
+                          fill=(40, 30, 25, 200))
+
+        # Head / Helmet
+        hr = int(5*s)
+        # Face
+        self.draw_circle(draw, x, y - bh - int(2*s), hr,
+                        fill=(220, 190, 165, 200), stroke=self._darken(c, 20)+(150,), stroke_width=1)
+        # Helmet
+        self.draw_arc(draw, x, y - bh - int(2*s), int(6*s), 180, 0,
+                     color=(80, 75, 70, 180), width=int(3*s))
+        # Helmet crest/plume
+        crest_col = (200, 50, 50, 200)
+        self.draw_polygon(draw,
+            [(x - int(2*s), y - bh - int(9*s)), (x + int(2*s), y - bh - int(9*s)),
+             (x, y - bh - int(14*s))],
+            fill=crest_col, stroke=(120, 30, 30, 150), stroke_width=1)
+
+        # Spear (right hand)
+        spx = x + int(6*s)
+        self.draw_line(draw, spx, y - bh - int(6*s), spx, y + int(12*s),
+                      color=(100, 85, 60, 200), width=int(2*s))
+        # Spear head
+        self.draw_polygon(draw,
+            [(spx - int(2*s), y - bh - int(6*s)), (spx + int(2*s), y - bh - int(6*s)),
+             (spx, y - bh - int(12*s))],
+            fill=(180, 180, 190, 200))
+
     def draw_grass(self, draw, count=40, y_range=None, color=(50, 100, 40)):
         """Draw grass blades across an area."""
         c = tuple(color[:3])
@@ -4612,6 +4672,10 @@ class SketchGenerator:
         elif etype == "fortress":
             c = fill or (120, 100, 80)
             self.draw_fortress(draw, x, y, s, c)
+
+        elif etype == "soldier":
+            c = fill or (140, 60, 60)
+            self.draw_soldier(draw, x, y, s, c)
 
         elif etype == "flag":
             c = fill or (200, 50, 50)

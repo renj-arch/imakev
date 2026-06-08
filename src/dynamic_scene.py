@@ -138,6 +138,7 @@ ELEMENT_DEFS = {
     "fortress":   {"type": "fortress", "scale": 2.0, "fill": [120, 100, 80]},
     "tent":       {"type": "tent", "scale": 2.5, "fill": [160, 140, 100]},
     "chain":      {"type": "chain", "scale": 2.0, "fill": [100, 90, 80]},
+    "soldier":    {"type": "soldier", "scale": 3.0, "fill": [140, 60, 60]},
     "crown":      {"type": "crown", "scale": 2.5, "fill": [230, 200, 50]},
     "book":       {"type": "book", "scale": 3.5, "fill": [180, 120, 80]},
     "coin":       {"type": "coin", "scale": 2.5, "fill": [230, 200, 80]},
@@ -279,7 +280,8 @@ def compute_positions(concepts: dict, scene_type: str) -> list:
                             "planet", "blackhole", "galaxy", "snow", "rain", "lightning",
                             "storm", "fog", "desert", "computer", "network", "ai", "circuit",
                               "data", "microscope", "experiment", "alien", "artifact",
-                              "cannon", "wall", "tent", "chain", "tower", "fortress"):
+                              "cannon", "wall", "tent", "chain", "tower", "fortress",
+                              "soldier"):
             # Foreground elements
             x = col_positions[col_idx % 3]
             y = 0.65 + (i * 0.04)

@@ -99,11 +99,15 @@ CONCEPTS = {
 
     # Human / Character
     "human":      ["person", "people", "human", "man", "woman", "child",
-                    "scientist", "explorer", "adventurer", "soldier",
+                    "scientist", "explorer", "adventurer",
                     "doctor", "teacher", "artist", "musician",
                     "king", "queen", "prince", "princess",
-                    "warrior", "knight", "hero", "figure",
-                    "crowd", "audience", "group"],
+                    "hero", "figure", "crowd", "audience", "group"],
+    "soldier":    ["soldier", "soldiers", "warrior", "warriors", "knight",
+                    "army", "troop", "troops", "guard", "guards",
+                    "infantry", "spearman", "swordsman", "archer",
+                    "defender", "besieger", "militia", "legion",
+                    "crusader", "janissary", "ottoman"],
     "eye":        ["eye", "eyes", "eyeball", "vision", "sight", "gaze", "stare"],
     "hand":       ["hand", "hands", "finger", "fingers", "palm", "fist", "grip"],
     "heart":      ["heart", "cardiac", "pumping blood", "circulation",
