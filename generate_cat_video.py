@@ -3,7 +3,9 @@ import sys, os, subprocess, math, shutil, textwrap
 sys.path.insert(0, os.path.dirname(__file__))
 from PIL import Image, ImageDraw, ImageFont
 from src.sketch_generator import SketchGenerator
-from src.rules_engine import apply_rules, feedback
+from src.rules_engine import apply_rules, feedback as rules_feedback
+from src.brain.dataset import Dataset
+from src.brain.models import BrainModel
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -42,7 +44,7 @@ ZOOM_IN = lambda t: lerp(LONG, Cam(0.2,0.05,0.6,0.9), t)
 def E(typ, x=0.5, y=0.5, scale=1.0, **kw):
     d = {"type": typ, "x": x, "y": y, "scale": scale}; d.update(kw); return d
 
-def render_scene(elements, w=W*2, h=H*2, seed=None, **overrides):
+def render_scene(elements, w=W, h=H, seed=None, **overrides):
     """Build a scene dict and render through SketchGenerator."""
     elements = apply_rules([dict(e) for e in elements])
     scene = {
@@ -263,5 +265,19 @@ try:
     asyncio.run(tts())
 except Exception as e:
     print(f"TTS skipped: {e}")
+
+# ─── BRAIN: record scenes and retrain ───────────────────────────
+
+print("\nTeaching brain from this session...")
+from src.brain.dataset import Dataset
+from src.brain.models import BrainModel
+ds = Dataset()
+for sc in SCENES:
+    for sh in sc["shots"]:
+        ds.add_scene(sc["narration"], sh["elems"], source="cat_video")
+brain = BrainModel()
+brain.train(ds.examples)
+print(f"Brain now knows {len(brain.model['keywords'])} keywords across {len(brain.model['element_stats'])} element types")
+print(f"Total scenes in dataset: {ds.count}")
 
 print("Done!")
