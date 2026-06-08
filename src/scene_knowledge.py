@@ -626,8 +626,8 @@ KNOWLEDGE_TEMPLATES = [
         "scene": {
             "bg": {"type": "gradient", "colors": [[150, 140, 120], [110, 100, 85]], "horizon": 0.5, "ground_color": [90, 80, 65]},
             "elements": [
-                {"type": "building", "x": 0.35, "y": 0.4, "scale": 3.5, "fill": [130, 115, 95]},
-                {"type": "building", "x": 0.65, "y": 0.45, "scale": 2.5, "fill": [120, 105, 85]},
+                {"type": "building", "x": 0.35, "y": 0.5, "scale": 3.5, "fill": [130, 115, 95]},
+                {"type": "building", "x": 0.65, "y": 0.53, "scale": 2.5, "fill": [120, 105, 85]},
                 {"type": "line", "x1": 0, "y1": 0.6, "x2": 1, "y2": 0.65, "fill": [60, 50, 40], "stroke_width": 3},
                 {"type": "line", "x1": 0, "y1": 0.62, "x2": 1, "y2": 0.67, "fill": [40, 35, 30], "stroke_width": 2},
                 {"type": "polygon", "points": [0.0, 0.6, 0.3, 0.58, 0.5, 0.62, 0.7, 0.6, 1.0, 0.65],
@@ -759,9 +759,9 @@ KNOWLEDGE_TEMPLATES = [
         "scene": {
             "bg": {"type": "gradient", "colors": [[215, 195, 165], [175, 155, 125]], "horizon": 0.5, "ground_color": [155, 135, 105]},
             "elements": [
-                {"type": "building", "x": 0.25, "y": 0.38, "scale": 4.0, "fill": [195, 175, 145]},
-                {"type": "building", "x": 0.55, "y": 0.4, "scale": 3.25, "fill": [185, 165, 135]},
-                {"type": "building", "x": 0.78, "y": 0.44, "scale": 2.5, "fill": [175, 155, 125]},
+                {"type": "building", "x": 0.25, "y": 0.5, "scale": 4.0, "fill": [195, 175, 145]},
+                {"type": "building", "x": 0.55, "y": 0.52, "scale": 3.25, "fill": [185, 165, 135]},
+                {"type": "building", "x": 0.78, "y": 0.55, "scale": 2.5, "fill": [175, 155, 125]},
                 {"type": "flag", "x": 0.3, "y": 0.12, "scale": 3.0, "fill": [200, 50, 50]},
                 {"type": "sun", "x": 0.12, "y": 0.08, "radius": 15, "fill": [255, 220, 100]},
             ],
@@ -769,7 +769,6 @@ KNOWLEDGE_TEMPLATES = [
             "mood": "epic"
         }
     },
-
     {
         "id": "ancient_greece",
         "keywords": [
@@ -781,8 +780,8 @@ KNOWLEDGE_TEMPLATES = [
         "scene": {
             "bg": {"type": "gradient", "colors": [[200, 195, 180], [160, 155, 140]], "horizon": 0.5, "ground_color": [140, 135, 120]},
             "elements": [
-                {"type": "building", "x": 0.3, "y": 0.4, "scale": 4.0, "fill": [195, 185, 165]},
-                {"type": "building", "x": 0.65, "y": 0.45, "scale": 2.75, "fill": [185, 175, 155]},
+                {"type": "building", "x": 0.3, "y": 0.5, "scale": 4.0, "fill": [195, 185, 165]},
+                {"type": "building", "x": 0.65, "y": 0.53, "scale": 2.75, "fill": [185, 175, 155]},
                 {"type": "sun", "x": 0.15, "y": 0.1, "radius": 16, "fill": [255, 225, 120]},
                 {"type": "line", "x1": 0.25, "y1": 0.35, "x2": 0.25, "y2": 0.5, "fill": [180, 170, 150], "stroke_width": 4},
                 {"type": "line", "x1": 0.35, "y1": 0.35, "x2": 0.35, "y2": 0.5, "fill": [180, 170, 150], "stroke_width": 4},
@@ -810,8 +809,8 @@ KNOWLEDGE_TEMPLATES = [
         "scene": {
             "bg": {"type": "gradient", "colors": [[160, 175, 190], [120, 140, 160]], "horizon": 0.5, "ground_color": [80, 110, 80]},
             "elements": [
-                {"type": "building", "x": 0.3, "y": 0.38, "scale": 4.0, "fill": [130, 120, 110]},
-                {"type": "building", "x": 0.65, "y": 0.42, "scale": 3.0, "fill": [120, 110, 100]},
+                {"type": "building", "x": 0.3, "y": 0.5, "scale": 4.0, "fill": [130, 120, 110]},
+                {"type": "building", "x": 0.65, "y": 0.53, "scale": 3.0, "fill": [120, 110, 100]},
                 {"type": "flag", "x": 0.3, "y": 0.1, "scale": 2.5, "fill": [200, 50, 50]},
                 {"type": "cloud", "x": 0.5, "y": 0.15, "scale": 3.0, "fill": [190, 200, 215]},
                 {"type": "cloud", "x": 0.8, "y": 0.12, "scale": 2.5, "fill": [185, 195, 210]},
@@ -820,7 +819,6 @@ KNOWLEDGE_TEMPLATES = [
             "mood": "epic"
         }
     },
-
     {
         "id": "industrial_revolution",
         "keywords": [
@@ -832,8 +830,8 @@ KNOWLEDGE_TEMPLATES = [
         "scene": {
             "bg": {"type": "gradient", "colors": [[140, 130, 120], [95, 85, 75]], "horizon": 0.5, "ground_color": [75, 65, 55]},
             "elements": [
-                {"type": "building", "x": 0.25, "y": 0.38, "scale": 3.75, "fill": [115, 95, 75]},
-                {"type": "building", "x": 0.6, "y": 0.4, "scale": 3.25, "fill": [105, 85, 65]},
+                {"type": "building", "x": 0.25, "y": 0.5, "scale": 3.75, "fill": [115, 95, 75]},
+                {"type": "building", "x": 0.6, "y": 0.52, "scale": 3.25, "fill": [105, 85, 65]},
                 {"type": "fire", "x": 0.25, "y": 0.22, "scale": 4.0, "fill": [255, 140, 40]},
                 {"type": "fire", "x": 0.6, "y": 0.25, "scale": 3.0, "fill": [255, 140, 40]},
                 {"type": "circle", "x": 0.25, "y": 0.24, "radius": 3, "fill": [255, 200, 60]},
@@ -1135,10 +1133,10 @@ KNOWLEDGE_TEMPLATES = [
         "scene": {
             "bg": {"type": "gradient", "colors": [[60, 70, 100], [30, 40, 70]], "horizon": 0.5, "ground_color": [25, 30, 50]},
             "elements": [
-                {"type": "building", "x": 0.15, "y": 0.35, "scale": 4.5, "fill": [50, 60, 90]},
-                {"type": "building", "x": 0.4, "y": 0.3, "scale": 5.0, "fill": [55, 65, 95]},
-                {"type": "building", "x": 0.65, "y": 0.38, "scale": 4.0, "fill": [45, 55, 85]},
-                {"type": "building", "x": 0.82, "y": 0.4, "scale": 3.0, "fill": [50, 60, 90]},
+                {"type": "building", "x": 0.15, "y": 0.5, "scale": 4.5, "fill": [50, 60, 90]},
+                {"type": "building", "x": 0.4, "y": 0.48, "scale": 5.0, "fill": [55, 65, 95]},
+                {"type": "building", "x": 0.65, "y": 0.52, "scale": 4.0, "fill": [45, 55, 85]},
+                {"type": "building", "x": 0.82, "y": 0.55, "scale": 3.0, "fill": [50, 60, 90]},
                 {"type": "star", "x": 0.3, "y": 0.1, "radius": 1.5, "fill": [255, 255, 200]},
                 {"type": "star", "x": 0.6, "y": 0.08, "radius": 1, "fill": [200, 200, 255]},
                 {"type": "star", "x": 0.8, "y": 0.12, "radius": 1.2, "fill": [255, 200, 200]},
@@ -1414,16 +1412,16 @@ KNOWLEDGE_TEMPLATES = [
                 "elements": [
                     {"type": "path", "x": 0.0, "y": 0.75, "x2": 1.0, "y2": 0.9, "fill": [150, 135, 115], "width": 20},
                     {"type": "shadow_figure", "x": 0.45, "y": 0.62, "scale": 3.0, "fill": [30, 25, 35]},
-                    {"type": "lamp", "x": 0.35, "y": 0.35, "scale": 3.0, "fill": [180, 160, 120]},
-                    {"type": "lightbulb", "x": 0.35, "y": 0.32, "scale": 2.0, "fill": [255, 255, 200, 80]},
-                    {"type": "lamp", "x": 0.65, "y": 0.35, "scale": 3.0, "fill": [180, 160, 120]},
-                    {"type": "lightbulb", "x": 0.65, "y": 0.32, "scale": 2.0, "fill": [255, 255, 200, 80]},
-                    {"type": "circle", "x": 0.35, "y": 0.32, "radius": 20, "fill": [255, 255, 200, 8]},
-                    {"type": "circle", "x": 0.65, "y": 0.32, "radius": 20, "fill": [255, 255, 200, 8]},
-                    {"type": "building", "x": 0.12, "y": 0.38, "width": 0.06, "height": 0.18, "fill": [140, 110, 90]},
-                    {"type": "building", "x": 0.25, "y": 0.34, "width": 0.07, "height": 0.22, "fill": [160, 130, 100]},
-                    {"type": "building", "x": 0.75, "y": 0.35, "width": 0.06, "height": 0.2, "fill": [150, 120, 95]},
-                    {"type": "building", "x": 0.88, "y": 0.4, "width": 0.06, "height": 0.16, "fill": [170, 140, 110]},
+                    {"type": "lamp", "x": 0.35, "y": 0.5, "scale": 3.0, "fill": [180, 160, 120]},
+                    {"type": "lightbulb", "x": 0.35, "y": 0.47, "scale": 2.0, "fill": [255, 255, 200, 80]},
+                    {"type": "lamp", "x": 0.65, "y": 0.5, "scale": 3.0, "fill": [180, 160, 120]},
+                    {"type": "lightbulb", "x": 0.65, "y": 0.47, "scale": 2.0, "fill": [255, 255, 200, 80]},
+                    {"type": "circle", "x": 0.35, "y": 0.47, "radius": 20, "fill": [255, 255, 200, 8]},
+                    {"type": "circle", "x": 0.65, "y": 0.47, "radius": 20, "fill": [255, 255, 200, 8]},
+                    {"type": "building", "x": 0.12, "y": 0.5, "width": 0.06, "height": 0.18, "fill": [140, 110, 90]},
+                    {"type": "building", "x": 0.25, "y": 0.5, "width": 0.07, "height": 0.22, "fill": [160, 130, 100]},
+                    {"type": "building", "x": 0.75, "y": 0.52, "width": 0.06, "height": 0.2, "fill": [150, 120, 95]},
+                    {"type": "building", "x": 0.88, "y": 0.55, "width": 0.06, "height": 0.16, "fill": [170, 140, 110]},
                 ],
                 "atmosphere": {"particles": "none", "fog": False},
                 "mood": "mysterious"
@@ -1650,8 +1648,61 @@ KNOWLEDGE_TEMPLATES = [
                 "mood": "mysterious"
             }
         },
+    # ═══════════════════════════════════════════════════════════════
+    #  FACTORY / INDUSTRIAL
+    #  Factory building with smokestacks, industrial yard
+    # ═══════════════════════════════════════════════════════════════
+    {
+        "id": "factory_scene",
+        "keywords": [
+            "factory with smokestacks", "industrial factory", "factory building",
+            "smokestacks", "manufacturing plant", "warehouse district",
+            "refinery", "industrial zone", "assembly line"
+        ],
+        "scene": {
+            "bg": {"type": "gradient", "colors": [[140, 130, 120], [95, 85, 75]], "horizon": 0.5, "ground_color": [75, 65, 55]},
+            "elements": [
+                {"type": "factory", "x": 0.2, "y": 0.5, "width": 0.14, "height": 0.25, "fill": [130, 110, 90], "window_color": [200, 180, 100]},
+                {"type": "factory", "x": 0.5, "y": 0.5, "width": 0.18, "height": 0.28, "fill": [120, 100, 80], "window_color": [190, 170, 90]},
+                {"type": "factory", "x": 0.8, "y": 0.52, "width": 0.12, "height": 0.22, "fill": [140, 120, 100], "window_color": [200, 180, 100]},
+                {"type": "path", "x": 0.0, "y": 0.75, "x2": 1.0, "y2": 0.85, "fill": [100, 90, 75], "width": 16},
+                {"type": "circle", "x": 0.2, "y": 0.18, "radius": 6, "fill": [180, 180, 180, 50]},
+                {"type": "circle", "x": 0.5, "y": 0.12, "radius": 8, "fill": [180, 180, 180, 40]},
+                {"type": "circle", "x": 0.8, "y": 0.2, "radius": 5, "fill": [180, 180, 180, 50]},
+            ],
+            "atmosphere": {"particles": "none", "fog": True},
+            "mood": "industrial"
+        }
+    },
+    # ═══════════════════════════════════════════════════════════════
+    #  SHOP / STOREFRONT
+    #  Street-level shop with awning, display window
+    # ═══════════════════════════════════════════════════════════════
+    {
+        "id": "shop_scene",
+        "keywords": [
+            "shop on a street", "storefront", "retail shop",
+            "corner shop", "local store", "market street",
+            "shopping district", "boutique", "bakery shop",
+            "cafe on a street", "restaurant street",
+            "cafe in the city", "coffee shop", "city cafe",
+            "downtown cafe"
+        ],
+        "scene": {
+            "bg": {"type": "gradient", "colors": [[190, 195, 200], [160, 165, 170]], "horizon": 0.5, "ground_color": [130, 125, 120]},
+            "elements": [
+                {"type": "shop", "x": 0.25, "y": 0.5, "width": 0.14, "height": 0.22, "fill": [180, 150, 120], "window_color": [255, 240, 200]},
+                {"type": "shop", "x": 0.75, "y": 0.5, "width": 0.14, "height": 0.22, "fill": [170, 145, 115], "window_color": [255, 240, 200]},
+                {"type": "building", "x": 0.5, "y": 0.5, "width": 0.08, "height": 0.28, "fill": [150, 130, 110], "window_color": [255, 220, 100]},
+                {"type": "lamp", "x": 0.5, "y": 0.52, "scale": 2.5, "fill": [180, 160, 120]},
+                {"type": "path", "x": 0.0, "y": 0.75, "x2": 1.0, "y2": 0.85, "fill": [140, 130, 115], "width": 18},
+                {"type": "human", "x": 0.5, "y": 0.62, "scale": 2.5, "fill": [100, 80, 70]},
+            ],
+            "atmosphere": {"particles": "none", "fog": False},
+            "mood": "peaceful"
+        }
+    },
 ]
-
 
 # ── Singleton matcher ──────────────────────────────────────────
 

@@ -20,12 +20,12 @@ ELEMENT_DEFS = {
     "star":       {"type": "star", "radius": 2, "fill": [255, 255, 200]},
     "sun":        {"type": "sun", "radius": 22, "fill": [255, 230, 80]},
     "moon":       {"type": "moon", "radius": 14, "fill": [250, 245, 230]},
-    "planet":     {"type": "circle", "radius": 18, "fill": [80, 140, 200]},
+    "planet":     {"type": "planet", "scale": 2.5, "fill": [80, 140, 200]},
     "astronaut":  {"type": "astronaut", "scale": 3.5, "fill": [220, 220, 240]},
     "spaceship":  {"type": "spaceship", "scale": 3.0, "fill": [180, 190, 210]},
-    "blackhole":  {"type": "circle", "radius": 40, "fill": [0, 0, 0], "stroke": [200, 80, 180], "stroke_width": 2},
-    "galaxy":     {"type": "ellipse", "width": 200, "height": 80, "fill": [60, 20, 80, 25]},
-    "asteroid":   {"type": "circle", "radius": 8, "fill": [120, 110, 100]},
+    "blackhole":  {"type": "blackhole", "scale": 2.5, "fill": [0, 0, 0]},
+    "galaxy":     {"type": "galaxy", "scale": 2.5, "fill": [60, 20, 80]},
+    "asteroid":   {"type": "asteroid", "scale": 3.0, "fill": [120, 110, 100]},
 
     # Nature
     "tree":       {"type": "tree", "scale": 3.5, "tree_style": "round", "fill": [45, 115, 45]},
@@ -33,16 +33,17 @@ ELEMENT_DEFS = {
     "water":      {"type": "water", "width": 0.8, "height": 0.06, "fill": [60, 130, 200]},
     "ocean":      {"type": "wave", "scale": 3.0, "fill": [40, 100, 180]},
     "glacier":    {"type": "glacier", "scale": 2.5, "fill": [200, 220, 240]},
-    "snow":       {"type": "circle", "radius": 3, "fill": [230, 240, 250]},
+    "snow":       {"type": "snow", "scale": 3.0, "fill": [230, 240, 250]},
     "path":       {"type": "path", "scale": 3.0, "fill": [160, 140, 110]},
 
     # Weather
     "cloud":      {"type": "cloud", "scale": 3.0, "fill": [200, 210, 225]},
-    "rain":       {"type": "line", "x1": 0, "y1": 0, "x2": 0, "y2": 0.05, "fill": [180, 200, 230]},
-    "storm":      {"type": "ellipse", "width": 140, "height": 80, "fill": [60, 60, 80, 40]},
-    "lightning":  {"type": "line", "x1": 0, "y1": 0, "x2": 0, "y2": 0, "fill": [255, 230, 50], "stroke_width": 3},
+    "rain":       {"type": "rain", "scale": 3.0, "fill": [180, 200, 230]},
+    "storm":      {"type": "storm", "scale": 2.5, "fill": [60, 60, 80]},
+    "lightning":  {"type": "lightning", "scale": 2.5, "fill": [255, 230, 50]},
     "rainbow":    {"type": "rainbow", "scale": 3.0},
-    "fog":        {"type": "circle", "radius": 5, "fill": [200, 210, 220, 15]},
+    "fog":        {"type": "fog", "scale": 3.0, "fill": [200, 210, 220]},
+    "desert":     {"type": "desert", "scale": 2.0, "fill": [220, 190, 120]},
 
     # Animals
     "bird":       {"type": "bird", "scale": 1.5, "fill": [80, 60, 50]},
@@ -53,54 +54,101 @@ ELEMENT_DEFS = {
     "dinosaur":   {"type": "dinosaur", "scale": 2.5, "fill": [80, 110, 70]},
     "crocodile":  {"type": "crocodile", "scale": 2.5, "fill": [60, 100, 60]},
     "butterfly":  {"type": "bird", "scale": 1.25, "fill": [230, 150, 80]},
-    "snake":      {"type": "line", "x1": 0, "y1": 0, "x2": 0.3, "y2": 0, "fill": [80, 130, 60], "stroke_width": 4},
-    "dog":        {"type": "animal", "scale": 2.5, "fill": [140, 100, 70]},
-    "cat":        {"type": "animal", "scale": 2.0, "fill": [180, 140, 100]},
-    "horse":      {"type": "animal", "scale": 3.0, "fill": [120, 90, 60]},
-    "elephant":   {"type": "animal", "scale": 3.5, "fill": [130, 130, 120]},
-    "bear":       {"type": "animal", "scale": 2.5, "fill": [100, 70, 50]},
-    "deer":       {"type": "animal", "scale": 2.5, "fill": [160, 130, 80]},
-    "wolf":       {"type": "animal", "scale": 2.5, "fill": [110, 110, 110]},
-    "fox":        {"type": "animal", "scale": 2.0, "fill": [200, 120, 60]},
-    "rabbit":     {"type": "animal", "scale": 1.75, "fill": [200, 180, 160]},
-    "frog":       {"type": "animal", "scale": 1.5, "fill": [80, 160, 60]},
-    "turtle":     {"type": "circle", "radius": 10, "fill": [80, 140, 80]},
+    "snake":      {"type": "snake", "scale": 2.0, "fill": [80, 130, 60]},
+    "dog":        {"type": "dog", "scale": 2.5, "fill": [140, 100, 70]},
+    "cat":        {"type": "cat", "scale": 2.0, "fill": [180, 140, 100]},
+    "horse":      {"type": "horse", "scale": 3.0, "fill": [120, 90, 60]},
+    "elephant":   {"type": "elephant", "scale": 3.5, "fill": [130, 130, 120]},
+    "bear":       {"type": "bear", "scale": 2.5, "fill": [100, 70, 50]},
+    "deer":       {"type": "deer", "scale": 2.5, "fill": [160, 130, 80]},
+    "wolf":       {"type": "dog", "scale": 2.5, "fill": [110, 110, 110]},
+    "fox":        {"type": "dog", "scale": 2.0, "fill": [200, 120, 60]},
+    "rabbit":     {"type": "rabbit", "scale": 1.75, "fill": [200, 180, 160]},
+    "frog":       {"type": "frog", "scale": 1.5, "fill": [80, 160, 60]},
+    "turtle":     {"type": "turtle", "scale": 1.5, "fill": [80, 140, 80]},
+    "monkey":     {"type": "monkey", "scale": 2.5, "fill": [140, 110, 80]},
+    "squirrel":   {"type": "squirrel", "scale": 1.5, "fill": [160, 120, 80]},
+    "lizard":     {"type": "lizard", "scale": 2.0, "fill": [100, 160, 80]},
+    "goat":       {"type": "goat", "scale": 2.5, "fill": [200, 170, 140]},
+    "sheep":      {"type": "sheep", "scale": 2.5, "fill": [240, 235, 230]},
+    "pig":        {"type": "pig", "scale": 2.0, "fill": [240, 200, 180]},
+    "cow":        {"type": "cow", "scale": 2.5, "fill": [240, 230, 220]},
+    "rat":        {"type": "rat", "scale": 1.25, "fill": [160, 140, 130]},
+    "beaver":     {"type": "beaver", "scale": 2.0, "fill": [140, 110, 80]},
+    "otter":      {"type": "otter", "scale": 2.0, "fill": [140, 110, 100]},
+    "hedgehog":   {"type": "hedgehog", "scale": 1.5, "fill": [150, 120, 90]},
+    "bat":        {"type": "bat", "scale": 2.0, "fill": [60, 50, 45]},
+    "kangaroo":   {"type": "kangaroo", "scale": 2.5, "fill": [180, 140, 100]},
+    "sloth":      {"type": "sloth", "scale": 2.0, "fill": [140, 120, 100]},
+    "raccoon":    {"type": "raccoon", "scale": 1.75, "fill": [150, 140, 130]},
+    "skunk":      {"type": "skunk", "scale": 1.75, "fill": [40, 35, 30]},
+    "camel":      {"type": "camel", "scale": 2.5, "fill": [190, 160, 120]},
+    "rhino":      {"type": "rhino", "scale": 2.5, "fill": [130, 120, 110]},
+    "hippo":      {"type": "hippo", "scale": 3.0, "fill": [150, 130, 140]},
+    "giraffe":    {"type": "giraffe", "scale": 3.0, "fill": [220, 180, 100]},
+    "dragon":     {"type": "dragon", "scale": 3.0, "fill": [60, 120, 60]},
+    "mouse":      {"type": "rat", "scale": 1.0, "fill": [170, 150, 140]},
+    "lion":       {"type": "cat", "scale": 2.5, "fill": [200, 160, 100]},
+    "tiger":      {"type": "cat", "scale": 2.5, "fill": [220, 160, 80]},
+    "zebra":      {"type": "horse", "scale": 2.5, "fill": [210, 210, 210]},
+    "unicorn":    {"type": "horse", "scale": 2.5, "fill": [230, 230, 240]},
+    "panda":      {"type": "bear", "scale": 2.5, "fill": [220, 220, 220]},
+    "moose":      {"type": "deer", "scale": 3.0, "fill": [160, 130, 90]},
+    "bison":      {"type": "cow", "scale": 3.0, "fill": [140, 120, 100]},
 
     # Human
     "human":      {"type": "human", "scale": 3.5, "fill": [180, 150, 130]},
     "eye":        {"type": "eye", "scale": 4.0, "fill": [255, 200, 50]},
     "hand":       {"type": "hand", "scale": 3.0, "fill": [200, 170, 140]},
     "heart":      {"type": "heart", "scale": 4.0, "fill": [220, 50, 50]},
-    "brain":      {"type": "ellipse", "width": 80, "height": 60, "fill": [200, 180, 200]},
+    "brain":      {"type": "brain", "scale": 3.0, "fill": [200, 180, 200]},
 
     # Tech
-    "computer":   {"type": "rect", "width": 0.2, "height": 0.25, "fill": [30, 45, 80, 180], "stroke": [80, 160, 220], "stroke_width": 2},
-    "network":    {"type": "circle", "radius": 5, "fill": [60, 200, 120]},
+    "computer":   {"type": "computer", "scale": 2.5, "fill": [30, 45, 80]},
+    "network":    {"type": "network", "scale": 3.0, "fill": [60, 200, 120]},
     "robot":      {"type": "human", "scale": 3.0, "fill": [160, 165, 175]},
-    "ai":         {"type": "circle", "radius": 6, "fill": [100, 200, 255]},
-    "circuit":    {"type": "line", "x1": 0, "y1": 0, "x2": 0.3, "y2": 0, "fill": [80, 220, 140], "stroke_width": 2},
-    "data":       {"type": "rect", "width": 0.15, "height": 0.15, "fill": [20, 25, 40, 200], "stroke": [60, 180, 120], "stroke_width": 1},
+    "ai":         {"type": "ai", "scale": 3.0, "fill": [100, 200, 255]},
+    "circuit":    {"type": "circuit", "scale": 2.5, "fill": [80, 220, 140]},
+    "data":       {"type": "data", "scale": 3.0, "fill": [20, 25, 40]},
 
     # Science
     "dna":        {"type": "dna", "width": 80, "height": 120, "fill": [60, 140, 220]},
     "atom":       {"type": "atom", "radius": 30, "fill": [60, 140, 220]},
     "plant":      {"type": "plant", "scale": 2.5, "fill": [60, 140, 60]},
     "flower":     {"type": "flower", "scale": 2.5, "fill": [230, 80, 130]},
-    "grass":      {"type": "circle", "radius": 3, "fill": [50, 130, 50]},
-    "microscope": {"type": "circle", "radius": 25, "fill": [180, 200, 230, 40], "stroke": [80, 120, 180], "stroke_width": 2},
+    "grass":      {"type": "grass", "scale": 3.0, "fill": [50, 130, 50]},
+    "microscope": {"type": "microscope", "scale": 2.5, "fill": [180, 200, 230]},
     "telescope":  {"type": "telescope", "scale": 3.0, "fill": [120, 100, 80]},
-    "experiment": {"type": "circle", "radius": 4, "fill": [100, 200, 150]},
+    "experiment": {"type": "experiment", "scale": 3.0, "fill": [100, 200, 150]},
+    "alien":      {"type": "alien", "scale": 3.0, "fill": [80, 200, 120]},
+    "artifact":   {"type": "artifact", "scale": 3.0, "fill": [100, 255, 200]},
 
     # History
     "building":   {"type": "building", "scale": 2.5, "fill": [180, 160, 130]},
+    "factory":    {"type": "factory", "scale": 2.5, "fill": [130, 110, 90], "window_color": [200, 180, 100]},
+    "mill":       {"type": "factory", "scale": 2.5, "fill": [120, 100, 80], "window_color": [200, 180, 100]},
+    "warehouse":  {"type": "factory", "scale": 2.5, "fill": [110, 95, 80], "window_color": [180, 160, 90]},
+    "shop":       {"type": "shop", "scale": 2.5, "fill": [180, 150, 120], "window_color": [255, 240, 200]},
+    "store":      {"type": "shop", "scale": 2.5, "fill": [170, 145, 115], "window_color": [255, 240, 200]},
+    "cafe":       {"type": "shop", "scale": 2.5, "fill": [190, 160, 130], "window_color": [255, 240, 200]},
     "flag":       {"type": "flag", "scale": 2.0, "fill": [200, 50, 50]},
     "crown":      {"type": "crown", "scale": 2.5, "fill": [230, 200, 50]},
     "book":       {"type": "book", "scale": 3.5, "fill": [180, 120, 80]},
     "coin":       {"type": "coin", "scale": 2.5, "fill": [230, 200, 80]},
     "map":        {"type": "map", "scale": 3.0, "fill": [180, 170, 140]},
+    "world_map":  {"type": "world_map", "scale": 3.0, "fill": [200, 180, 150]},
+    "india_map":  {"type": "india_map", "scale": 3.0, "fill": [140, 180, 100]},
+    "globe":      {"type": "globe", "scale": 2.5, "fill": [80, 130, 180]},
     "ship":       {"type": "ship", "scale": 2.0, "fill": [100, 80, 60]},
-    "train":      {"type": "rect", "width": 0.3, "height": 0.08, "fill": [100, 60, 40]},
-    "car":        {"type": "rect", "width": 0.15, "height": 0.06, "fill": [150, 80, 80]},
+    "canoe":      {"type": "canoe", "scale": 2.5, "fill": [80, 55, 35]},
+    "kayak":      {"type": "kayak", "scale": 2.5, "fill": [60, 80, 120]},
+    "raft":       {"type": "raft", "scale": 2.5, "fill": [100, 80, 50]},
+    "pirate_ship":{"type": "pirate_ship", "scale": 2.0, "fill": [60, 40, 30]},
+    "galleon":    {"type": "galleon", "scale": 2.0, "fill": [70, 50, 35]},
+    "train":      {"type": "train", "scale": 2.5, "fill": [80, 40, 40]},
+    "car":        {"type": "car", "width": 0.15, "height": 0.06, "fill": [150, 80, 80]},
+    "bike":       {"type": "bike", "scale": 3.0, "fill": [60, 60, 70]},
+    "drive":      {"type": "none"},
 
     # Abstract
     "clock":      {"type": "clock", "scale": 4.0, "fill": [200, 200, 220]},
@@ -115,6 +163,30 @@ ELEMENT_DEFS = {
     "scales":     {"type": "scales", "scale": 3.0, "fill": [180, 160, 120]},
     "gear":       {"type": "gear", "scale": 3.5, "fill": [180, 180, 200]},
     "hourglass":  {"type": "hourglass", "scale": 3.0, "fill": [180, 180, 200]},
+
+    # Household items
+    "chair":      {"type": "chair", "scale": 3.5, "fill": [120, 90, 60]},
+    "table":      {"type": "table", "scale": 3.5, "fill": [140, 100, 60]},
+    "sofa":       {"type": "sofa", "scale": 3.5, "fill": [160, 80, 80]},
+    "bed":        {"type": "bed", "scale": 3.5, "fill": [180, 160, 140]},
+    "cupboard":   {"type": "cupboard", "scale": 3.5, "fill": [160, 130, 100]},
+    "fridge":     {"type": "fridge", "scale": 3.5, "fill": [240, 240, 245]},
+    "oven":       {"type": "oven", "scale": 3.5, "fill": [220, 220, 225]},
+    "sink":       {"type": "sink", "scale": 3.5, "fill": [220, 230, 240]},
+    "toilet":     {"type": "toilet", "scale": 3.5, "fill": [240, 240, 245]},
+    "bathtub":    {"type": "bathtub", "scale": 3.5, "fill": [230, 235, 240]},
+    "mirror":     {"type": "mirror", "scale": 3.5, "fill": [200, 210, 225]},
+    "curtain":    {"type": "curtain", "scale": 3.5, "fill": [180, 140, 160]},
+    "pillow":     {"type": "pillow", "scale": 3.5, "fill": [255, 250, 240]},
+    "door":       {"type": "door", "scale": 3.5, "fill": [160, 130, 100]},
+    "window":     {"type": "window", "scale": 3.5, "fill": [200, 220, 240]},
+
+    # Pose concepts (modifiers, not drawn)
+    "sitting":    {"type": "none"},
+    "lying":      {"type": "none"},
+    "kneeling":   {"type": "none"},
+    "jogging":    {"type": "none"},
+    "running":    {"type": "none"},
 }
 
 
@@ -182,12 +254,25 @@ def compute_positions(concepts: dict, scene_type: str) -> list:
             # Sky/background elements
             x = col_positions[col_idx % 3] + (i * 0.05)
             y = 0.12 + (i * 0.08)
-        elif concept in ("mountain", "glacier", "planet", "building", "dinosaur", "astronaut"):
+        elif concept in ("mountain", "glacier", "planet", "dinosaur", "astronaut"):
             # Mid-ground elements
             x = col_positions[col_idx % 3] + (i * 0.02)
             y = 0.45 + (i * 0.03)
         elif concept in ("tree", "water", "flower", "grass", "path", "ocean", "wave",
-                         "human", "animal", "dog", "cat", "horse", "ship", "car", "fire"):
+                         "human", "animal", "dog", "cat", "horse", "ship", "car", "fire",
+                         "building", "bear", "deer", "rabbit", "fox", "wolf", "frog",
+                         "turtle", "monkey", "squirrel", "camel", "rhino", "hippo",
+                         "giraffe", "dragon", "snake", "lizard", "goat", "sheep", "pig",
+                         "cow", "rat", "beaver", "otter", "hedgehog", "bat", "kangaroo",
+                         "sloth", "raccoon", "skunk", "zebra", "unicorn", "panda",
+                         "moose", "bison", "mouse", "lion", "tiger", "elephant",
+                          "chair", "table", "sofa", "bed", "cupboard", "fridge",
+                          "oven", "sink", "toilet", "bathtub", "mirror", "curtain",
+                            "pillow", "door", "window", "bike", "map", "world_map", "india_map", "globe",
+                            "canoe", "kayak", "raft", "pirate_ship", "galleon", "train",
+                            "planet", "blackhole", "galaxy", "snow", "rain", "lightning",
+                            "storm", "fog", "desert", "computer", "network", "ai", "circuit",
+                             "data", "microscope", "experiment", "alien", "artifact"):
             # Foreground elements
             x = col_positions[col_idx % 3]
             y = 0.65 + (i * 0.04)
@@ -350,7 +435,9 @@ def compose_dynamic_scene(text: str) -> dict | None:
     # Check memory first
     remembered = recall(text)
     if remembered:
-        return remembered
+        elements = remembered.get("elements", [])
+        if elements and all(isinstance(e, dict) for e in elements):
+            return remembered
 
     # Extract concepts
     concepts = extract_concepts(text)
@@ -384,12 +471,108 @@ def compose_dynamic_scene(text: str) -> dict | None:
     bg_config = BG_CONFIGS.get(bg_type, BG_CONFIGS["gradient"]).copy()
     atmos_config = ATMOSPHERE_CONFIGS.get(bg_type, ATMOSPHERE_CONFIGS["gradient"]).copy()
 
+    # Apply mood-based color shifts and atmosphere effects
+    if "colors" in bg_config:
+        top, bot = list(bg_config["colors"][0]), list(bg_config["colors"][1])
+        if mood == "somber":
+            top = [max(0, c - 30) for c in top]
+            bot = [max(0, c - 20) for c in bot]
+            atmos_config["fog"] = True
+        elif mood == "hopeful":
+            top = [min(255, c + 30) for c in top]
+            bot = [min(255, c + 15) for c in bot]
+            if atmos_config.get("particles") == "none":
+                atmos_config["particles"] = "sparkles"
+                atmos_config["star_count"] = 20
+        elif mood == "dramatic":
+            top = [min(255, top[0] + 20), max(0, top[1] - 30), max(0, top[2] - 30)]
+            bot = [max(0, bot[0] - 10), max(0, bot[1] - 20), max(0, bot[2] - 20)]
+        elif mood == "mysterious":
+            top = [max(0, c - 20) for c in top]
+            bot = [max(0, c - 10) for c in bot]
+            atmos_config["fog"] = True
+        elif mood == "epic":
+            top = [min(255, top[0] + 20), min(255, top[1] + 10), min(255, top[2] + 10)]
+            bot = [max(0, bot[0] - 10), max(0, bot[1] - 10), max(0, bot[2] - 10)]
+        bg_config["colors"] = [tuple(top), tuple(bot)]
+
     elements = compute_positions(concepts, scene_type)
+
+    # Apply pose modifiers from original text
+    tl = text.lower()
+    if "sitting" in tl or "seated" in tl or "sits" in tl:
+        for elem in elements:
+            if elem.get("type") in ("human", "man", "woman", "child"):
+                elem["pose"] = "sitting_chair"
+        # Remove standalone chair element when human sits on it
+        elements = [e for e in elements if not (
+            e.get("type") in ("chair", "stool", "bench") and
+            any(h.get("type") in ("human", "man", "woman", "child") for h in elements)
+        )]
+    if "sleeping" in tl or "asleep" in tl or "nap" in tl or "lying" in tl or "reclining" in tl or "laying" in tl:
+        for elem in elements:
+            if elem.get("type") in ("human", "man", "woman", "child"):
+                elem["pose"] = "lying_back"
+        # Remove standalone bed when human lies on it
+        elements = [e for e in elements if not (
+            e.get("type") in ("bed", "bunk", "cot") and
+            any(h.get("type") in ("human", "man", "woman", "child") for h in elements)
+        )]
+    if "kneeling" in tl or "kneels" in tl:
+        for elem in elements:
+            if elem.get("type") in ("human", "man", "woman", "child"):
+                elem["pose"] = "kneeling"
+    if "jogging" in tl or "jogs" in tl:
+        for elem in elements:
+            if elem.get("type") in ("human", "man", "woman", "child"):
+                elem["pose"] = "jogging"
+    if "running" in tl or "runs" in tl or "sprinting" in tl:
+        for elem in elements:
+            if elem.get("type") in ("human", "man", "woman", "child"):
+                elem["pose"] = "running"
+    if "gazing" in tl or "gazing at" in tl or "looks up" in tl or "looking up" in tl or "staring" in tl or "stares" in tl:
+        for elem in elements:
+            if elem.get("type") in ("human", "man", "woman", "child", "astronaut"):
+                elem["pose"] = "standing_arms_up"
+    if "reading" in tl or "reads" in tl or "newspaper" in tl:
+        for elem in elements:
+            if elem.get("type") in ("human", "man", "woman", "child"):
+                if "pose" not in elem:
+                    elem["pose"] = "reading"
+    if "riding" in tl or "rider" in tl or "cycling" in tl or "cyclist" in tl:
+        for elem in elements:
+            if elem.get("type") in ("human", "man", "woman", "child"):
+                elem["pose"] = "sitting_chair"
+        # Remove bike when riding
+        elements = [e for e in elements if not (
+            e.get("type") in ("bike", "motorcycle", "scooter") and
+            any(h.get("type") in ("human", "man", "woman", "child") for h in elements)
+        )]
+    if "driving" in tl or "driver" in tl or "drives" in tl:
+        for elem in elements:
+            if elem.get("type") in ("human", "man", "woman", "child"):
+                elem["pose"] = "sitting_chair"
+        # Remove car when driving
+        elements = [e for e in elements if not (
+            e.get("type") in ("car", "vehicle", "truck", "bus") and
+            any(h.get("type") in ("human", "man", "woman", "child") for h in elements)
+        )]
 
     # Add atmosphere particles for space
     if bg_type == "space":
         atmos_config["particles"] = "stars"
         atmos_config["star_count"] = 40
+
+    # Spatial relationship: astronaut/alien on planet surface
+    has_astronaut = any(e.get("type") in ("astronaut", "alien") for e in elements)
+    has_planet = any(e.get("type") == "planet" for e in elements)
+    if has_astronaut and has_planet:
+        for e in elements:
+            if e.get("type") == "planet":
+                e["y"] = 0.72
+                e["scale"] = 1.5
+            if e.get("type") in ("astronaut", "alien"):
+                e["y"] = 0.45
 
     scene = {
         "bg": bg_config,

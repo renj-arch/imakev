@@ -111,7 +111,7 @@ def _describe_scene(narration: str) -> dict:
     # PRIMARY: Knowledge base — curated scene templates for known topics.
     # These produce the richest, most intentional scenes for specific narrations.
     from src.scene_knowledge import semantic_scene
-    result = semantic_scene(narration, threshold=0.2)
+    result = semantic_scene(narration, threshold=0.3)
     if result:
         return result
     
