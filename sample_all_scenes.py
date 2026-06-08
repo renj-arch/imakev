@@ -89,12 +89,11 @@ scenes = [
         E("tree",0.2,0.75,3.0), E("tree",0.4,0.72,3.5),
         E("tree",0.6,0.75,3.0), E("tree",0.8,0.78,2.5),
     ], {"sky_top":(140,180,200),"sky_bot":(170,200,220),"ground":(60,120,50)}),
-    (13, "People leaving - walking away, footprints", [
+    (13, "People leaving - walking away from city", [
         E("pyramid",0.78,0.68,4.5,steps=4),
         E("human",0.2,0.68,3.0,pose="walking",gender="man"),
         E("human",0.3,0.72,2.5,pose="walking",gender="woman"),
         E("human",0.38,0.76,2.0,pose="walking",gender="child"),
-        E("footprint",0.05,0.8,2.5), E("footprint",0.12,0.84,2.0), E("footprint",0.18,0.88,1.8),
         E("sun",0.88,0.2,2.5),
     ], {"sky_top":(150,170,190),"sky_bot":(180,200,220),"ground":(80,130,70)}),
     (14, "Jungle reclaims - vines, trees over pyramid", [
