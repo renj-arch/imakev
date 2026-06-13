@@ -3274,17 +3274,6 @@ class SketchGenerator:
         self.draw_rect(draw, x - int(5*s), y + mh//2 + int(2*s), int(10*s), int(2*s),
                       fill=self._darken(c, 10) + (200,), rx=int(s))
 
-    def draw_heart(self, draw, x, y, size=1.0, color=(220, 50, 50)):
-        """Draw a heart shape."""
-        s = size
-        c = tuple(color[:3])
-        # Two circles for top lobes
-        self.draw_circle(draw, x - 3*s, y - 2*s, 3*s, fill=c + (230,))
-        self.draw_circle(draw, x + 3*s, y - 2*s, 3*s, fill=c + (230,))
-        # Triangle for bottom point
-        pts = [(x - 6*s, y - s), (x + 6*s, y - s), (x, y + 5*s)]
-        self.draw_polygon(draw, pts, fill=c + (230,))
-
     def draw_cat_toy(self, draw, x, y, size=1.0, color=(200, 80, 50)):
         """Draw a cat toy (ball with string)."""
         s = size
@@ -6089,7 +6078,7 @@ class SketchGenerator:
             h = elem.get("height", 180)
             self.draw_dna(draw, x, y, w=w, h=h, color=fill)
         elif etype == "heart":
-            self.draw_heart(draw, x, y, size=s, color=fill)
+            self.draw_heart(draw, x, y, s=int(40 * s), color=fill)
         elif etype == "smartphone":
             self.draw_smartphone(draw, x, y, size=s, color=fill or (30, 30, 35))
         elif etype == "camera":
