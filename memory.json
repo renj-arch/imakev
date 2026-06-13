@@ -4056,14 +4056,11 @@
     "text": "[Epic twilight] Imagine being the last of your kind. Not the last in a herd. Not the last in a valle",
     "scene_type": "story",
     "elements": [
-      "ding",
-      "circle",
-      "circle",
-      "circle"
+      "ding"
     ],
     "bg_type": "ocean",
     "mood": "dramatic",
-    "hits": 13
+    "hits": 19
   },
   "6ac89ce5f554e5b63ba110a5f094be75": {
     "text": "[Dramatic night] Why is the years important?",
@@ -4286,14 +4283,15 @@
     "elements": [
       "think_owl",
       "circle",
-      "wave",
-      "wave",
-      "wave",
-      "wave"
+      "flower",
+      "human",
+      "flower",
+      "flower",
+      "flower"
     ],
-    "bg_type": "ocean",
-    "mood": "somber",
-    "hits": 3
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 11
   },
   "6c386f21be41876cb71d70f8090dba19": {
     "text": "[Epic twilight] For more than a thousand years, Constantinople stood where East met West. It was the",
@@ -4579,11 +4577,12 @@
       "circle",
       "glacier",
       "circle",
+      "circle",
       "circle"
     ],
     "bg_type": "ocean",
-    "mood": "epic",
-    "hits": 5
+    "mood": "somber",
+    "hits": 11
   },
   "777fccc6da581ea5392ccad5abf66e46": {
     "text": "[Grand sunset] Slowly, the climate changed. The ice retreated. Forests spread. Grasslands disappeare",
@@ -4606,6 +4605,7 @@
     "scene_type": "story",
     "elements": [
       "ding",
+      "circle",
       "wave",
       "wave",
       "wave",
@@ -4613,7 +4613,7 @@
     ],
     "bg_type": "ocean",
     "mood": "hopeful",
-    "hits": 5
+    "hits": 9
   },
   "f4b30f76a6a9776e792facd8efbb80b8": {
     "text": "[Intense overcast] That's almost worse than a sudden disaster. Perhaps. Because there was no single ",
@@ -4635,11 +4635,13 @@
     "scene_type": "story",
     "elements": [
       "ding",
+      "circle",
+      "circle",
       "circle"
     ],
     "bg_type": "ocean",
-    "mood": "peaceful",
-    "hits": 5
+    "mood": "hopeful",
+    "hits": 9
   },
   "6941a9bb9fc895863099fedd503ad35c": {
     "text": "[Epic twilight] one final group. Imagine standing on an Arctic island. Cold wind. Endless sea. And s",
@@ -4664,14 +4666,11 @@
       "wave",
       "wave",
       "wave",
-      "wave",
-      "circle",
-      "circle",
-      "circle"
+      "wave"
     ],
     "bg_type": "ocean",
     "mood": "dramatic",
-    "hits": 5
+    "hits": 7
   },
   "7d0b03c3c2c4118a5b75a321fd44f3d5": {
     "text": "[Somber dawn] No animal knows it's the last. No ceremony marks the moment. No witness records it. On",
@@ -4734,18 +4733,14 @@
     "scene_type": "story",
     "elements": [
       "dong",
-      "circle",
       "wave",
       "wave",
       "wave",
-      "wave",
-      "circle",
-      "circle",
-      "circle"
+      "wave"
     ],
     "bg_type": "ocean",
     "mood": "mysterious",
-    "hits": 5
+    "hits": 7
   },
   "e215cd5dbb071d6471ade9ee2ed34b01": {
     "text": "[Dramatic night] Did anyone see the world?",
@@ -4771,6 +4766,490 @@
     ],
     "bg_type": "ocean",
     "mood": "somber",
+    "hits": 1
+  },
+  "e8801c010af960c22ff87500ca4b8923": {
+    "text": "A woolly mammoth roaming the tundra.",
+    "scene_type": "story",
+    "elements": [],
+    "bg_type": "gradient",
+    "mood": "epic",
+    "hits": 1
+  },
+  "34fca6d72df75aae77d92751e85b1009": {
+    "text": "Woolly mammoths roamed the frozen tundra.",
+    "scene_type": "story",
+    "elements": [
+      "glacier",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "c09d60daede7564b3c1c255c76fb3b12": {
+    "text": "[Epic twilight] A mammoth stood on the frozen tundra. Its long tusks curved toward the sky.",
+    "scene_type": "story",
+    "elements": [
+      "ding",
+      "mammoth",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "7eb74da9661cae75a0b07c1388cce42f": {
+    "text": "[Dramatic night] What does the long look like?",
+    "scene_type": "story",
+    "elements": [
+      "think_owl",
+      "circle",
+      "mammoth",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "c490e695fbf1a74dfcfb764bda346dbd": {
+    "text": "[Grand sunset] Do you think the mammoth is still out there somewhere?",
+    "scene_type": "story",
+    "elements": [
+      "think_owl",
+      "circle",
+      "mammoth",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "29ea6ee25fbdb8ebd86648b1f0ba2ef4": {
+    "text": "[Epic twilight] The ship sailed through the storm. Waves crashed against its wooden hull. Lightning ",
+    "scene_type": "story",
+    "elements": [
+      "ding",
+      "wave",
+      "rain",
+      "wall",
+      "lightning",
+      "flower",
+      "water",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "ocean",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "a2375db4e6f7f9f5da93b68eb5595d02": {
+    "text": "[Dramatic night] Was the lightning real?",
+    "scene_type": "story",
+    "elements": [
+      "think_owl",
+      "lightning",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "ocean",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "3d32e4682d16a8666d1ab6ce9e03cacd": {
+    "text": "[Grand sunset] I hope the ship was okay in the end.",
+    "scene_type": "story",
+    "elements": [
+      "think_owl",
+      "circle",
+      "wave",
+      "rain",
+      "wave",
+      "wave",
+      "wave"
+    ],
+    "bg_type": "ocean",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "3f5fb1e0ebeb5e2e08bada0e6d1bce10": {
+    "text": "[Epic twilight] The caravan crossed the vast desert. Camels carried heavy loads. The sun blazed over",
+    "scene_type": "story",
+    "elements": [
+      "ding",
+      "desert",
+      "tree",
+      "water",
+      "sun",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "forest",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "69e1fc8af7ee0774d47f3b3aa4b391ff": {
+    "text": "[Epic twilight] The robot worked in the factory. Metal arms moved with precision. Sparks flew from w",
+    "scene_type": "story",
+    "elements": [
+      "ding",
+      "flower",
+      "factory",
+      "building",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "763ba234c40fb2807bd68fa5f2b1d264": {
+    "text": "[Dramatic night] Did anyone see the robot?",
+    "scene_type": "story",
+    "elements": [
+      "think_owl",
+      "circle",
+      "human",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "b94b1bdf90fbf83443144ab1e16c70f7": {
+    "text": "[Dramatic night] What does the camels look like?",
+    "scene_type": "story",
+    "elements": [
+      "think_owl",
+      "desert",
+      "sun",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "forest",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "e898aba10a672b720e7405a8d890c57c": {
+    "text": "[Grand sunset] Do you think the robot is still out there somewhere?",
+    "scene_type": "story",
+    "elements": [
+      "think_owl",
+      "circle",
+      "human",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "26b2d843f7000a8a00582ffa1c87c718": {
+    "text": "[Grand sunset] I wonder what happened to the caravan afterward.",
+    "scene_type": "story",
+    "elements": [
+      "think_owl",
+      "circle",
+      "desert",
+      "sun",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "forest",
+    "mood": "epic",
+    "hits": 1
+  },
+  "341c1b51dda1f33ed949200f4ab759aa": {
+    "text": "The ship sailed through the storm. Waves crashed against its wooden hull. Lightning split the sky.",
+    "scene_type": "story",
+    "elements": [
+      "wave",
+      "ship",
+      "lightning"
+    ],
+    "bg_type": "ocean",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "1395e1620b724729f048b4405f630b68": {
+    "text": "The caravan crossed the vast desert. Camels carried heavy loads. The sun blazed overhead.",
+    "scene_type": "story",
+    "elements": [
+      "sun",
+      "star",
+      "star",
+      "star",
+      "star",
+      "star"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "e4ca0d12df41baaee574bcd7d4f48346": {
+    "text": "The robot worked in the factory. Metal arms moved with precision. Sparks flew from welding machines.",
+    "scene_type": "story",
+    "elements": [
+      "human",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "dramatic",
+    "hits": 1
+  },
+  "ddcc2566c8137954efbb75a448543ba8": {
+    "text": "A woolly mammoth stood alone on the frozen tundra. Its long curved tusks gleamed in the pale light.",
+    "scene_type": "story",
+    "elements": [
+      "mammoth",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "639619c5f60bdf43c35b5784ce8ae5a0": {
+    "text": "A dog ran across the field chasing a ball.",
+    "scene_type": "story",
+    "elements": [
+      "grass",
+      "dog",
+      "flower",
+      "flower",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 17
+  },
+  "c00180c0d24fe142ec95322856f34631": {
+    "text": "Three friends sat beside a campfire",
+    "scene_type": "story",
+    "elements": [
+      "fire",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "2bffd462bb2c0b75585164673afb325b": {
+    "text": "when they noticed something strange.",
+    "scene_type": "story",
+    "elements": [
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 3
+  },
+  "cfdfcabd1eb8f1451249f47a94d5a35a": {
+    "text": "when they noticed",
+    "scene_type": "story",
+    "elements": [
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "438f773170417f10685d9850c9552c52": {
+    "text": "something strange.",
+    "scene_type": "story",
+    "elements": [
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "mysterious",
+    "hits": 1
+  },
+  "925e77581d97fd48da7c978cfe070d1d": {
+    "text": "A curious boy found an old clock buried in his grandfather's attic. Its hands moved strangely. Not f",
+    "scene_type": "story",
+    "elements": [
+      "hand",
+      "clock",
+      "lightbulb",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "indoor",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "802761a1180e24ed3c4ccb7a46486194": {
+    "text": "Cat sitting on a throne",
+    "scene_type": "story",
+    "elements": [
+      "throne",
+      "cat",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 61
+  },
+  "e753cdeb9d1b4d874c6f2f48d767ddcb": {
+    "text": "A dog running in the park",
+    "scene_type": "story",
+    "elements": [
+      "dog",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "ffefdbc006f0aaa5572f8e9be04bb0fe": {
+    "text": "A girl lying on a bed",
+    "scene_type": "story",
+    "elements": [
+      "bed",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "f303dc1d8c5be253c8affc17567caf8f": {
+    "text": "A bird flying",
+    "scene_type": "story",
+    "elements": [
+      "bird",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "somber",
+    "hits": 1
+  },
+  "313051c02d67917742759361a48d5799": {
+    "text": "Two cats sitting together",
+    "scene_type": "story",
+    "elements": [
+      "cat",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "1f16cda35b1241c750ecb62828a3225f": {
+    "text": "Today there are hundreds of millions of pet cats.",
+    "scene_type": "story",
+    "elements": [
+      "cat",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "hopeful",
+    "hits": 1
+  },
+  "197a93863ba92cc3acfc5a6a15afb714": {
+    "text": "They dominate social media.",
+    "scene_type": "story",
+    "elements": [
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "2cd55d70f08489b5068247e99fefba1f": {
+    "text": "They appear in memes, videos, games, and advertisements.",
+    "scene_type": "story",
+    "elements": [
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "0865688c5be130f503c9ec7290eea049": {
+    "text": "Build them furniture.",
+    "scene_type": "story",
+    "elements": [
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
+    "hits": 1
+  },
+  "5f84446f487e5d544e53c78922bd562a": {
+    "text": "And spend countless hours photographing them.",
+    "scene_type": "story",
+    "elements": [
+      "circle",
+      "circle",
+      "circle"
+    ],
+    "bg_type": "gradient",
+    "mood": "peaceful",
     "hits": 1
   }
 }

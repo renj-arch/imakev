@@ -268,9 +268,6 @@ class SketchGenerator:
     # ── Drawing primitives (clean, no wobble) ───────────────────
 
     def draw_circle(self, draw, cx, cy, r, fill=None, stroke=None, stroke_width=2, opacity=255):
-        if self.hand_drawn and self.technique:
-            self._sketch_circle(draw, cx, cy, r, fill=fill, stroke=stroke or self.technique["stroke"], stroke_width=stroke_width)
-            return
         if fill:
             c = fill if len(fill) == 4 else fill + (opacity,)
             draw.ellipse([cx-r, cy-r, cx+r, cy+r], fill=c)
@@ -279,9 +276,6 @@ class SketchGenerator:
             draw.ellipse([cx-r, cy-r, cx+r, cy+r], outline=c, width=stroke_width)
 
     def draw_rect(self, draw, x, y, w, h, fill=None, stroke=None, stroke_width=2, rx=0, opacity=255):
-        if self.hand_drawn and self.technique:
-            self._sketch_rect(draw, x, y, w, h, fill=fill, stroke=stroke or self.technique["stroke"], stroke_width=stroke_width, rx=rx)
-            return
         if fill:
             c = fill if len(fill) == 4 else fill + (opacity,)
             if rx > 0:
@@ -296,9 +290,6 @@ class SketchGenerator:
                 draw.rectangle([x, y, x+w, y+h], outline=c, width=stroke_width)
 
     def draw_polygon(self, draw, points, fill=None, stroke=None, stroke_width=2, opacity=255):
-        if self.hand_drawn and self.technique:
-            self._sketch_polygon(draw, points, fill=fill, stroke=stroke or self.technique["stroke"], stroke_width=stroke_width)
-            return
         if fill:
             c = fill if len(fill) == 4 else fill + (opacity,)
             draw.polygon(points, fill=c)
@@ -307,16 +298,10 @@ class SketchGenerator:
             draw.polygon(points, outline=c, width=stroke_width)
 
     def draw_line(self, draw, x1, y1, x2, y2, color=(0, 0, 0), width=2, opacity=255):
-        if self.hand_drawn and self.technique:
-            self._sketch_line(draw, x1, y1, x2, y2, color or self.technique["stroke"], width, passes=2)
-            return
         c = color if len(color) == 4 else color + (opacity,)
         draw.line([(x1, y1), (x2, y2)], fill=c, width=width)
 
     def draw_arc(self, draw, cx, cy, r, start_angle, end_angle, color=(0, 0, 0), width=2, opacity=255):
-        if self.hand_drawn and self.technique:
-            self._sketch_arc(draw, cx, cy, r, start_angle, end_angle, color=color or self.technique["stroke"], width=width)
-            return
         c = color if len(color) == 4 else color + (opacity,)
         draw.arc([cx-r, cy-r, cx+r, cy+r], start_angle, end_angle, fill=c, width=width)
 
@@ -2840,10 +2825,16 @@ class SketchGenerator:
         self.draw_line(draw, hx + 6*s, hy + 3*s, hx + 8*s, hy + 3.5*s, color=mouth_line, width=1)
         self.draw_line(draw, hx + 6*s, hy + 3*s, hx + 4*s, hy + 4*s, color=mouth_line, width=1)
 
-    def draw_cat(self, draw, x, y, size=1.0, color=(200, 160, 120), pose="standing", mood=None):
-        """Draw a cat — standing or sitting pose, with optional mood expression."""
+    def draw_cat(self, draw, x, y, size=1.0, color=(200, 160, 120), pose="standing", mood=None,
+                 blink=False, mouth_open=0.0, walk_cycle=0.0):
+        """Draw a cat — standing or sitting pose, with optional mood expression.
+        
+        blink: True = closed eyes
+        mouth_open: 0.0-1.0 mouth openness
+        walk_cycle: 0.0-1.0 walking phase for leg movement
+        """
 
-        def _draw_face(hx, hy, mood, s):
+        def _draw_face(hx, hy, mood, s, blink=blink, mouth_open=mouth_open):
             """Draw cat face with mood expression."""
             if mood == "sad":
                 # Droopy half-closed eye (sad slant)
@@ -2980,6 +2971,15 @@ class SketchGenerator:
                 self.draw_circle(draw, hx + 3*s, hy - s, 0.5*s, fill=(255, 255, 255, 180))
                 # Snout
                 self.draw_circle(draw, hx + 5*s, hy + 1*s, 2.5*s, fill=(240, 200, 190, 200))
+            # ── Animation overlays ──
+            if blink:
+                self.draw_line(draw, hx + 1.5*s, hy - s, hx + 4.5*s, hy - s,
+                              color=(30, 25, 20, 200), width=int(1.5*s))
+            if mouth_open > 0.3:
+                mw = int(2.5 * s * mouth_open)
+                mh = int(2.0 * s * mouth_open)
+                self.draw_ellipse(draw, hx + 4*s, hy + 2*s, mw, mh,
+                                 fill=(180, 100, 100, 200))
 
         s = size
         c = tuple(color[:3])
@@ -3088,9 +3088,17 @@ class SketchGenerator:
                               color=(180, 170, 160, 120), width=1)
             self.draw_line(draw, hx + 2*s, hy + 2*s, hx + 5*s, hy + 1*s, color=(140, 100, 80, 150), width=1)
 
-        for side in [-1, 1]:
-            self.draw_line(draw, x + side * 6*s, y - 3*s, x + side * 8*s, y + 8*s,
-                          color=self._darken(c, 15), width=int(2*s))
+        if walk_cycle > 0:
+            import math as _m
+            phase = walk_cycle * _m.pi * 2
+            for side in [-1, 1]:
+                lo = _m.sin(phase + side * _m.pi) * 3 * s
+                self.draw_line(draw, x + side * 6*s, y - 3*s, x + side * 8*s + lo, y + 8*s,
+                              color=self._darken(c, 15), width=int(2*s))
+        else:
+            for side in [-1, 1]:
+                self.draw_line(draw, x + side * 6*s, y - 3*s, x + side * 8*s, y + 8*s,
+                              color=self._darken(c, 15), width=int(2*s))
 
     def draw_bear(self, draw, x, y, size=1.0, color=(120, 80, 60)):
         s = size
@@ -5318,9 +5326,6 @@ class SketchGenerator:
 
     def draw_ellipse(self, draw, x, y, w, h, fill=None, stroke=None, stroke_width=1, opacity=255):
         """Draw an ellipse."""
-        if self.hand_drawn and self.technique:
-            self._sketch_ellipse(draw, x, y, w//2, h//2, fill=fill, stroke=stroke or self.technique["stroke"], stroke_width=stroke_width)
-            return
         if fill:
             fc = tuple(fill[:3]) + (opacity,)
             draw.ellipse([x-w//2, y-h//2, x+w//2, y+h//2], fill=fc)
@@ -5676,7 +5681,11 @@ class SketchGenerator:
         stroke = self._tc(stroke)
 
         # ── Drop shadow ──
-        if elem.get("shadow") and etype not in ("text", "circle", "none"):
+        if not self.hand_drawn and etype not in ("text", "circle", "line", "none", "sun", "moon", "star", "cloud", "bird"):
+            sy = int(y + 6 * s)
+            sr = int(18 * s)
+            draw.ellipse([x - sr, sy - sr//3, x + sr, sy + sr//3], fill=(0, 0, 0, 60))
+        elif elem.get("shadow") and etype not in ("text", "circle", "none"):
             r = max(10, int(20 * s))
             draw.ellipse([x - r, y - r + 4, x + r, y + r + 4], fill=(0, 0, 0, 50))
 
@@ -6084,7 +6093,11 @@ class SketchGenerator:
             c = fill or (200, 160, 120)
             pose = elem.get("pose", "standing")
             mood = elem.get("mood", self.desc.get("mood", None))
-            self.draw_cat(draw, x, y, s, c, pose=pose, mood=mood)
+            blink = elem.get("_blink", False)
+            mouth_open = elem.get("_mouth_open", 0.0)
+            walk_cycle = elem.get("_walk_cycle", 0.0)
+            self.draw_cat(draw, x, y, s, c, pose=pose, mood=mood,
+                         blink=blink, mouth_open=mouth_open, walk_cycle=walk_cycle)
 
         elif etype == "bear":
             c = fill or (120, 80, 60)

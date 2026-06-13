@@ -137,10 +137,15 @@ class RulesEngine:
         return elem
 
     def validate_scene(self, elements):
-        """Apply constraints to every element in a scene."""
+        """Apply constraints to every element in a scene. Filters forbidden types."""
+        forbidden = set(self.rules.get("forbidden_types", []))
+        filtered = []
         for elem in elements:
+            if elem.get("type") in forbidden:
+                continue
             self.constrain_element(elem)
-        return elements
+            filtered.append(elem)
+        return filtered
 
     def process_feedback(self, text, element_type=None):
         """Parse natural language feedback and update rules."""

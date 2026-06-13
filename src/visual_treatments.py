@@ -306,7 +306,13 @@ def apply_treatment(scene: dict, treatment: dict, rng) -> dict:
                      "skeleton", "animal", "house", "building", "globe",
                      "astronaut", "rocket", "spaceship", "mountain", "glacier",
                      "iceberg", "sun", "moon", "tree", "flower", "bird",
-                     "fish", "heart", "dna", "atom", "gear"}
+                     "fish", "heart", "dna", "atom", "gear",
+                     "cat", "dog", "horse", "elephant", "bear", "deer",
+                     "rabbit", "fox", "wolf", "frog", "turtle", "monkey",
+                     "squirrel", "dragon", "snake", "crocodile", "butterfly",
+                     "throne", "crown", "chair", "table", "door", "window",
+                     "book", "coin", "map", "flag", "clock", "key",
+                     "lightbulb", "target", "gear", "planet", "star"}
     protected = [e for e in elements if e.get("type") in PRIMARY_TYPES]
     non_protected = [e for e in elements if e.get("type") not in PRIMARY_TYPES]
     if count_mode == "single" and len(elements) > 1:
