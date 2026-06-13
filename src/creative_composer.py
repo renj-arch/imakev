@@ -61,7 +61,7 @@ SPATIAL_RELATIONS = {
     "in_front_of": ["in front of", "before", "ahead of", "facing"],
     "on":         ["on", "on top of", "above", "perched on", "sitting on", "upon"],
     "under":      ["under", "underneath", "beneath", "below"],
-    "inside":     ["inside", "within", "in", "within"],
+    "inside":     ["inside", "within", "into"],
     "around":     ["around", "surrounding", "encircling"],
     "between":    ["between", "among", "amid", "amidst"],
     "across":     ["across", "opposite", "facing"],
@@ -134,22 +134,60 @@ def _find_pose(text: str, concepts: dict) -> str:
 
 
 def _find_spatial_relation(text: str) -> list[tuple[str, str, str]]:
-    """Find spatial relationships. Returns [(subject_word, relation, object_word), ...]."""
+    """Find spatial relationships. Returns [(subject_word, relation, object_word), ...].
+    
+    Walks back from the relation keyword to find the nearest concept word (skipping
+    articles, clothing, accessories, body parts, and other non-concept words).
+    """
     tl = text.lower()
     words = tl.split()
+
+    # Words to skip when looking for the real subject/object
+    SKIP_WORDS = {"a", "an", "the", "in", "on", "at", "with", "of", "for", "to", "by",
+                  "and", "or", "but", "is", "was", "are", "were", "be", "been", "being",
+                  "have", "has", "had", "do", "does", "did", "will", "would", "could",
+                  "should", "may", "might", "shall", "can", "its", "their", "his", "her",
+                  "my", "your", "our", "that", "this", "these", "those", "it", "they",
+                  "he", "she", "we", "you", "them", "him", "me", "us"}
+
+    # Build set of all known clothing, accessory, body part words to skip
+    clothing_words = {kw for kws in CLOTHING.values() for kw in kws}
+    accessory_words = {kw for kws in ACCESSORIES.values() for kw in kws}
+    bodypart_words = {kw for kws in BODY_PARTS.values() for kw in kws}
+    SKIP_WORDS.update(clothing_words)
+    SKIP_WORDS.update(accessory_words)
+    SKIP_WORDS.update(bodypart_words)
+
     results = []
 
     for rel_name, rel_kw in SPATIAL_RELATIONS.items():
         for kw in rel_kw:
-            pattern = r'(\w+)\s+' + re.escape(kw) + r'\s+(\w+)'
-            for m in re.finditer(pattern, tl):
-                subj, obj = m.group(1), m.group(2)
-                results.append((subj, rel_name, obj))
-            # Also check "beside a/the" pattern
-            pattern2 = r'(\w+)\s+' + re.escape(kw) + r'\s+(?:a|an|the)\s+(\w+)'
-            for m in re.finditer(pattern2, tl):
-                subj, obj = m.group(1), m.group(2)
-                results.append((subj, rel_name, obj))
+            if kw not in tl:
+                continue
+            idx = tl.find(kw)
+            # Walk backward from kw to find subject
+            before = tl[:idx].strip().split()
+            subj = None
+            for w in reversed(before):
+                wc = w.strip(",.;:!?")
+                if wc and wc not in SKIP_WORDS and _map_word_to_concept(wc):
+                    subj = wc
+                    break
+            if not subj:
+                continue
+            # Walk forward from kw to find object
+            after = tl[idx + len(kw):].strip()
+            # Split after text into words
+            after_words = after.split()
+            obj = None
+            for w in after_words:
+                wc = w.strip(",.;:!?")
+                if wc and wc not in SKIP_WORDS and _map_word_to_concept(wc):
+                    obj = wc
+                    break
+            if not obj:
+                continue
+            results.append((subj, rel_name, obj))
     return results
 
 
@@ -218,23 +256,26 @@ def _apply_spatial_positions(elements: list, relations: list, text: str):
             if edef2.get("type") == e.get("type"):
                 obj_elem = e
 
-        if subj_elem and obj_elem:
-            if rel == "beside":
-                # Place subject to the left of object
-                subj_elem["x"] = obj_elem["x"] - 0.2
-                subj_elem["y"] = obj_elem["y"]
-            elif rel == "behind":
-                subj_elem["x"] = obj_elem["x"] - 0.1
-                subj_elem["y"] = obj_elem["y"] - 0.08
-            elif rel == "in_front_of":
-                subj_elem["x"] = obj_elem["x"]
-                subj_elem["y"] = obj_elem["y"] - 0.05
-                subj_elem["_layer"] = 1  # draw on top
-            elif rel == "on" or rel == "on top of":
-                subj_elem["x"] = obj_elem["x"]
-                subj_elem["y"] = obj_elem["y"] - 0.08
-                subj_elem["pose"] = "sitting"
-                subj_elem["_layer"] = 1
+    if subj_elem and obj_elem:
+        if rel == "beside":
+            subj_elem["x"] = 0.32
+            subj_elem["y"] = 0.55
+            obj_elem["x"] = 0.72
+            obj_elem["y"] = 0.55
+        elif rel == "behind":
+            subj_elem["x"] = 0.50
+            subj_elem["y"] = 0.50
+            obj_elem["x"] = 0.55
+            obj_elem["y"] = 0.60
+        elif rel == "in_front_of":
+            subj_elem["x"] = obj_elem["x"]
+            subj_elem["y"] = obj_elem["y"] - 0.05
+            subj_elem["_layer"] = 1  # draw on top
+        elif rel == "on" or rel == "on top of":
+            subj_elem["x"] = obj_elem["x"]
+            subj_elem["y"] = obj_elem["y"] - 0.08
+            subj_elem["pose"] = "sitting"
+            subj_elem["_layer"] = 1
 
 
 def _add_clothing(elements: list, clothing: list[str], rng: random.Random):
@@ -253,40 +294,121 @@ def _add_clothing(elements: list, clothing: list[str], rng: random.Random):
         tx = target["x"]
         ty = target["y"]
         ts = target.get("scale", 2.0)
+        # Clothing size relative to subject's body
+        # Drawing coordinates: cat body_w=20*s, body_h=10*s (standing)
+        # Normalized: body_w/1280= s*0.0156, body_h/1280= s*0.0078
+        body_w_norm = 0.016 * ts
+        body_h_norm = 0.008 * ts
 
         if c == "suit":
+            # Workman's overalls/dungarees — covers cat body
+            suit_color = [65, 70, 90]
+            stitch_color = [90, 95, 115]
+            # Main overalls body (chest/belly coverage)
             elements.append({
-                "type": "rect", "x": tx, "y": ty - 0.02,
-                "width": 0.08 * ts, "height": 0.10 * ts,
-                "fill": [60, 60, 80, 220], "stroke": [40, 40, 60], "stroke_width": 2, "rx": 3,
+                "type": "rect",
+                "x": tx - body_w_norm * 0.3,
+                "y": ty - body_h_norm * 0.4,
+                "width": body_w_norm * 0.9,
+                "height": body_h_norm * 1.0,
+                "fill": suit_color + [220], "stroke": [40, 42, 55], "stroke_width": 2, "rx": 3,
                 "_layer": 2
+            })
+            # Bib front (upper rectangle extending up)
+            elements.append({
+                "type": "rect",
+                "x": tx - body_w_norm * 0.2,
+                "y": ty - body_h_norm * 0.7,
+                "width": body_w_norm * 0.6,
+                "height": body_h_norm * 0.35,
+                "fill": suit_color + [220], "stroke": [40, 42, 55], "stroke_width": 1, "rx": 2,
+                "_layer": 2
+            })
+            # Left strap
+            elements.append({
+                "type": "line",
+                "x1": tx - body_w_norm * 0.15, "y1": ty - body_h_norm * 0.7,
+                "x2": tx - body_w_norm * 0.15, "y2": ty - body_h_norm * 0.95,
+                "color": suit_color + [200], "width": int(max(3, body_w_norm * 200 * 0.08)),
+                "_layer": 3
+            })
+            # Right strap
+            elements.append({
+                "type": "line",
+                "x1": tx + body_w_norm * 0.15, "y1": ty - body_h_norm * 0.7,
+                "x2": tx + body_w_norm * 0.15, "y2": ty - body_h_norm * 0.95,
+                "color": suit_color + [200], "width": int(max(3, body_w_norm * 200 * 0.08)),
+                "_layer": 3
+            })
+            # Buttons on straps
+            btn_r = int(max(2, body_w_norm * 200 * 0.04))
+            elements.append({
+                "type": "circle",
+                "x": tx - body_w_norm * 0.15, "y": ty - body_h_norm * 0.7,
+                "radius": btn_r, "fill": [180, 180, 160], "stroke": [100, 100, 80],
+                "_layer": 3
+            })
+            elements.append({
+                "type": "circle",
+                "x": tx + body_w_norm * 0.15, "y": ty - body_h_norm * 0.7,
+                "radius": btn_r, "fill": [180, 180, 160], "stroke": [100, 100, 80],
+                "_layer": 3
+            })
+            # Chest pocket
+            elements.append({
+                "type": "rect",
+                "x": tx - body_w_norm * 0.05,
+                "y": ty - body_h_norm * 0.5,
+                "width": body_w_norm * 0.3,
+                "height": body_h_norm * 0.15,
+                "fill": None, "stroke": stitch_color + [180], "stroke_width": 1,
+                "_layer": 2
+            })
+            # Pencil in pocket
+            elements.append({
+                "type": "line",
+                "x1": tx + body_w_norm * 0.05, "y1": ty - body_h_norm * 0.5,
+                "x2": tx + body_w_norm * 0.025, "y2": ty - body_h_norm * 0.7,
+                "color": [220, 200, 50, 200], "width": 2,
+                "_layer": 3
             })
         elif c == "hat":
             elements.append({
-                "type": "rect", "x": tx + 0.02, "y": ty - 0.08,
-                "width": 0.06 * ts, "height": 0.025 * ts,
+                "type": "rect",
+                "x": tx + 0.01, "y": ty - body_h_norm,
+                "width": body_w_norm * 0.6,
+                "height": body_h_norm * 0.3,
                 "fill": [80, 60, 50, 220], "stroke": [50, 35, 25], "stroke_width": 2,
                 "_layer": 2
             })
         elif c == "tie":
             elements.append({
                 "type": "polygon",
-                "points": [[tx - 0.005, ty - 0.02], [tx + 0.005, ty - 0.02],
-                           [tx + 0.008, ty + 0.04], [tx, ty + 0.045], [tx - 0.008, ty + 0.04]],
+                "points": [[tx - body_w_norm * 0.05, ty - body_h_norm * 0.2],
+                           [tx + body_w_norm * 0.05, ty - body_h_norm * 0.2],
+                           [tx + body_w_norm * 0.08, ty + body_h_norm * 0.4],
+                           [tx, ty + body_h_norm * 0.5],
+                           [tx - body_w_norm * 0.08, ty + body_h_norm * 0.4]],
                 "fill": [180, 40, 40, 220], "stroke": [120, 20, 20],
                 "_layer": 2
             })
         elif c == "collar":
             elements.append({
-                "type": "rect", "x": tx - 0.015, "y": ty - 0.035,
-                "width": 0.03 * ts, "height": 0.008 * ts,
+                "type": "rect",
+                "x": tx - body_w_norm * 0.15,
+                "y": ty - body_h_norm * 0.4,
+                "width": body_w_norm * 0.3,
+                "height": body_h_norm * 0.1,
                 "fill": [180, 30, 30, 230], "stroke": [80, 10, 10], "stroke_width": 2,
                 "_layer": 2
             })
         elif c == "apron":
             elements.append({
-                "type": "rect", "x": tx - 0.025, "y": ty - 0.01,
-                "width": 0.05 * ts, "height": 0.07 * ts,
+                "type": "rect",
+                "x": tx - body_w_norm * 0.3,
+                "y": ty - body_h_norm * 0.15,
+                "width": body_w_norm * 0.6,
+                "height": body_h_norm * 0.7,
                 "fill": [200, 200, 210, 200], "stroke": [150, 150, 160],
                 "_layer": 2
             })
@@ -386,6 +508,14 @@ def compose_creative_scene(text: str, rng: random.Random = None) -> dict | None:
     elements = _resolve_elements_for_concepts(concepts, pose, rng)
     if not elements:
         return None
+
+    # Scale up primary subject when mood or clothing is present
+    if expression or clothing:
+        for e in elements:
+            if e.get("type") in ("cat", "dog", "human", "bear", "rabbit", "fox", "wolf",
+                                "monkey", "horse", "elephant", "dragon", "lion", "tiger"):
+                e["scale"] = max(e.get("scale", 2.0) * 2.0, 5.0)
+                break
 
     # Apply creative modifiers
     _apply_expression(elements, expression, text)

@@ -2713,16 +2713,37 @@ class SketchGenerator:
         def _draw_face(hx, hy, mood, s):
             """Draw cat face with mood expression."""
             if mood == "sad":
-                # Droopy eyes
-                self.draw_circle(draw, hx + 3*s, hy - s*0.5, 1.5*s, fill=(30, 25, 20, 200))
-                self.draw_line(draw, hx + 3*s, hy + 0.5*s, hx + 3*s, hy + 1.5*s,
-                              color=(30, 25, 20, 150), width=int(s))
-                # Downward mouth
-                self.draw_line(draw, hx + 2*s, hy + 2.5*s, hx + 4*s, hy + 3.5*s,
+                # Droopy half-closed eye (sad slant)
+                self.draw_line(draw, hx + 2*s, hy - 2*s, hx + 4*s, hy - 1*s,
+                              color=(30, 25, 20, 220), width=int(1.5*s))
+                self.draw_arc(draw, hx + 2*s, hy - 2*s, 2*s, 0, 180,
+                             color=(30, 25, 20, 200), width=1)
+                # Tear duct (red)
+                self.draw_circle(draw, hx + 4*s, hy - 0.5*s, 1.5*s, fill=(200, 80, 80, 180))
+                # Big teardrop streaming down
+                self.draw_ellipse(draw, hx + 4*s, hy + 1*s, int(2*s), int(4*s),
+                                 fill=(180, 200, 240, 160))
+                self.draw_ellipse(draw, hx + 4*s, hy + 3.5*s, int(1.5*s), int(3*s),
+                                 fill=(180, 200, 240, 120))
+                # Tear streak line
+                self.draw_line(draw, hx + 4*s, hy + 4*s, hx + 4*s, hy + 8*s,
+                              color=(180, 200, 240, 80), width=int(1.5*s))
+                # Downward frowning mouth
+                self.draw_line(draw, hx + 2*s, hy + 4*s, hx + 4*s, hy + 5*s,
+                              color=(140, 100, 80, 180), width=int(1.5*s))
+                self.draw_line(draw, hx + 4*s, hy + 5*s, hx + 6*s, hy + 4.5*s,
                               color=(140, 100, 80, 150), width=1)
-                # Tear drop
-                self.draw_ellipse(draw, hx + 4*s, hy + s, int(1.5*s), int(2*s),
-                                 fill=(180, 200, 240, 150))
+                # Drooping whiskers (sagging downward)
+                self.draw_line(draw, hx + 5*s, hy + 3*s, hx + 10*s, hy + 5*s,
+                              color=(180, 170, 160, 150), width=1)
+                self.draw_line(draw, hx + 5*s, hy + 4*s, hx + 9*s, hy + 7*s,
+                              color=(180, 170, 160, 120), width=1)
+                self.draw_line(draw, hx + 5*s, hy + 3*s, hx + 0*s, hy + 5*s,
+                              color=(180, 170, 160, 150), width=1)
+                self.draw_line(draw, hx + 5*s, hy + 4*s, hx + 1*s, hy + 7*s,
+                              color=(180, 170, 160, 120), width=1)
+                # Red nose from crying
+                self.draw_circle(draw, hx + 5*s, hy + 1.5*s, 2*s, fill=(220, 120, 120, 200))
             elif mood == "angry":
                 # Angry eyes (slanted)
                 self.draw_line(draw, hx + 2*s, hy - 1.5*s, hx + 4.5*s, hy - s,
@@ -2794,18 +2815,19 @@ class SketchGenerator:
             # Eye
             _draw_face(hx, hy, mood, s)
 
-            # Snout
-            self.draw_circle(draw, hx + 5*s, hy + 2*s, 2.5*s, fill=(240, 200, 190, 200))
+            # Snout / whiskers — skip for moods that draw their own details
+            if mood not in ("sad", "angry", "surprised"):
+                self.draw_circle(draw, hx + 5*s, hy + 2*s, 2.5*s, fill=(240, 200, 190, 200))
 
-            # Whiskers
-            for side in [-1, 1]:
-                self.draw_line(draw, hx + 5*s, hy + 2.5*s, hx + 5*s + side * 6*s, hy + 1.5*s,
-                              color=(180, 170, 160, 120), width=1)
-                self.draw_line(draw, hx + 5*s, hy + 3*s, hx + 5*s + side * 5*s, hy + 3.5*s,
-                              color=(180, 170, 160, 120), width=1)
+                # Whiskers
+                for side in [-1, 1]:
+                    self.draw_line(draw, hx + 5*s, hy + 2.5*s, hx + 5*s + side * 6*s, hy + 1.5*s,
+                                  color=(180, 170, 160, 120), width=1)
+                    self.draw_line(draw, hx + 5*s, hy + 3*s, hx + 5*s + side * 5*s, hy + 3.5*s,
+                                  color=(180, 170, 160, 120), width=1)
 
-            # Mouth line
-            self.draw_line(draw, hx + 2*s, hy + 3*s, hx + 5*s, hy + 2*s, color=(140, 100, 80, 150), width=1)
+                # Mouth line
+                self.draw_line(draw, hx + 2*s, hy + 3*s, hx + 5*s, hy + 2*s, color=(140, 100, 80, 150), width=1)
 
             # Haunch (back leg tucked)
             haunch_r = 5*s
@@ -2854,8 +2876,8 @@ class SketchGenerator:
         # standing pose face
         _draw_face(hx, hy, mood, s)
 
-        # Whiskers (only for non-angry moods that keep default snout)
-        if mood not in ("angry", "surprised"):
+        # Whiskers (only for moods that don't draw their own)
+        if mood not in ("sad", "angry", "surprised"):
             self.draw_circle(draw, hx + 5*s, hy + 1*s, 2.5*s, fill=(240, 200, 190, 200))
             for side in [-1, 1]:
                 self.draw_line(draw, hx + 5*s, hy + 1.5*s, hx + 5*s + side * 6*s, hy + 0.5*s,
