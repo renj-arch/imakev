@@ -1,0 +1,35 @@
+name: 🐱 Pet Cats Multi-Scene Video
+
+on:
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install system deps
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg fonts-dejavu-core
+
+      - name: Install Python deps
+        run: pip install Pillow numpy
+
+      - name: Generate pet cats video
+        run: python generate_pet_cats_video.py
+
+      - name: Upload video
+        uses: actions/upload-artifact@v4
+        with:
+          name: pet-cats-video
+          path: pet_cats_video/pet_cats.mp4
+          retention-days: 30
+          if-no-files-found: error
