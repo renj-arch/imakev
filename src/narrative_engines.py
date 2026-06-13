@@ -31,6 +31,8 @@ ARCHETYPE_DEFS: dict[str, dict] = {
             "gradually", "slowly", "turned into", "no longer", "used to be",
             "began to", "started to", "eventually", "over time", "adapted",
             "shifted", "mutated", "emerged as", "developed into",
+            "rebuilt", "reborn", "restored", "recovered", "renewed",
+            "reopened", "reclaimed",
         ],
         "tension_arc": [2, 4, 6, 2],
         "lighting_arc": ["dusk", "night", "dawn", "day"],
@@ -45,12 +47,17 @@ ARCHETYPE_DEFS: dict[str, dict] = {
         "label": "Mystery Story",
         "phases": ["question", "hint", "contradiction", "reveal"],
         "keywords": [
-            "mystery", "unknown", "secret", "hidden", "discovered", "revealed",
-            "ancient", "lost", "why", "how", "puzzle", "strange", "unexplained",
-            "mysterious", "legend", "myth", "rumor", "whisper", "forgotten",
-            "found", "symbol", "carving", "hint", "temple", "ruin", "artifact",
+            "mystery", "mysterious", "unexplained", "enigma", "perplexing",
+            "ancient", "lost", "forgotten", "puzzle", "riddle",
+            "whisper", "rumor", "legend", "myth", "forbidden",
+            "symbol", "carving", "hint", "temple", "ruin", "artifact",
             "nobody knows", "no one knows", "cannot explain", "buried secret",
-            "cursed", "treasure", "map", "code", "cipher", "hieroglyph",
+            "cursed", "treasure", "code", "cipher", "hieroglyph",
+            "disappearance", "vanished", "without a trace",
+            "strange markings", "impossible to understand", "cannot be read",
+            "secret passage", "hidden chamber", "ancient door",
+            "hidden", "unknown language", "stone door",
+            "cannot decipher", "could not decipher", "unreadable",
         ],
         "tension_arc": [3, 5, 7, 9],
         "lighting_arc": ["shadow", "moonlight", "dark", "dawn"],
@@ -69,9 +76,11 @@ ARCHETYPE_DEFS: dict[str, dict] = {
             "collapsed", "struck", "impact", "devastated", "obliterated", "wiped out",
             "catastrophe", "cataclysmic", "crisis", "fatal", "deadly", "disaster",
             "volcanic", "tsunami", "hurricane", "famine", "pestilence",
-            "exploded", "buried", "ash", "lava", "melted", "burned",
+            "exploded", "ash", "lava", "melted", "burned",
             "sank", "drowned", "crumbled", "fell", "crashed", "shattered",
             "wave", "flooded", "drought", "blizzard", "wildfire",
+            "illness", "sickness", "disease", "infected", "contagious",
+            "epidemic", "pandemic", "symptom",
         ],
         "tension_arc": [2, 4, 9, 10, 5],
         "lighting_arc": ["day", "dusk", "dark", "firelight", "dawn"],
@@ -140,6 +149,8 @@ ARCHETYPE_DEFS: dict[str, dict] = {
             "escaped", "refuge", "safe", "found", "limited resources",
             "injured", "wounded", "bleeding", "alone", "isolated",
             "fending for", "struggling to survive", "fighting to stay alive",
+            "sank", "shipwreck", "no food", "no water", "fresh water",
+            "caught fish", "built a shelter",
         ],
         "tension_arc": [7, 10, 8, 5, 2],
         "lighting_arc": ["dusk", "dark", "night", "moonlight", "dawn"],
@@ -198,14 +209,14 @@ ARCHETYPE_DEFS: dict[str, dict] = {
         "label": "Migration Story",
         "phases": ["home", "departure", "journey", "hardship", "arrival", "settlement"],
         "keywords": [
-            "migrated", "migration", "traveled", "travel", "moved",
-            "move", "followed", "follow", "herd", "flock", "season",
-            "seasonal", "across", "destination", "new home", "homeland",
-            "trek", "exodus", "displaced", "refugee", "nomad",
-            "nomadic", "caravan", "settlers", "pioneers", "crossing",
+            "migrated", "migration", "exodus", "displaced", "refugee",
+            "nomad", "nomadic", "caravan", "moved", "followed",
+            "herd", "flock", "season", "seasonal",
+            "trek", "settlers", "pioneers", "crossing",
+            "destination", "new home", "homeland",
             "great journey", "long road", "search for", "new land",
             "left behind", "said goodbye", "departed", "set off",
-            "stopped wandering", "settled", "built", "planted",
+            "stopped wandering", "settled", "settlement", "wandered",
             "valley", "arrived", "found a place", "made their home",
             "no longer wandered", "put down roots",
         ],
@@ -241,6 +252,97 @@ ARCHETYPE_DEFS: dict[str, dict] = {
     },
 }
 
+# ── Event patterns for narrative event detection ──
+# Strong multi-word signals that heavily bias toward a specific archetype.
+# Event matches get +4 each (vs +2 for single keywords).
+
+ARCHETYPE_EVENTS: dict[str, list[str]] = {
+    "disaster": [
+        "volcano erupted", "earthquake struck", "tsunami hit", "plague spread",
+        "city burned", "mountain exploded", "ash buried", "fire consumed",
+        "wave crashed", "flood destroyed", "lava flowed", "eruption buried",
+        "giant wave", "tidal wave", "wildfire spread", "the ground shook",
+        "the sky fell", "it destroyed", "swept away", "rained down",
+        "the remains of", "survivors searched", "picked through the rubble",
+        "plague spread", "disease spread", "fell ill", "infected with",
+        "sickness spread", "illness appeared", "strange illness",
+    ],
+    "discovery": [
+        "discovered that", "found a way", "figured out", "came to understand",
+        "learned the truth", "experiment showed", "discovered how",
+        "realized that", "understood why", "stumbled upon",
+        "opened their eyes to", "saw the truth",
+    ],
+    "transformation": [
+        "turned into", "became something", "evolved from", "over generations",
+        "gradually changed", "no longer was", "began to change",
+        "started to become", "slowly transformed", "mutated into",
+        "emerged as a", "developed into",
+    ],
+    "journey": [
+        "set out", "crossed the", "made their way", "arrived at",
+        "sailed across", "trekked through", "traveled across",
+        "journeyed to", "headed toward", "made landfall",
+        "reached the", "departed from",
+    ],
+    "mystery": [
+        "no one knew", "could not explain", "cannot explain",
+        "mysterious disappearance", "ancient secret", "cursed treasure",
+        "nobody understood", "remained a mystery", "was never found",
+        "vanished without", "disappeared into",
+        "could not read", "cannot read", "cannot decipher",
+        "could not decipher", "impossible to read", "unknown language",
+    ],
+    "rise_and_fall": [
+        "rose to power", "reached its peak", "began to decline",
+        "fell from grace", "crumbled to dust", "rose from nothing",
+        "reached its height", "slowly declined", "inevitable decline",
+        "golden age", "built an empire", "conquered everything",
+        "lost everything", "stripped of power",
+    ],
+    "survival": [
+        "fighting to survive", "struggled to stay alive", "running out of",
+        "barely survived", "just barely", "fought to survive",
+        "escaped from", "managed to survive", "fought for survival",
+        "limited resources", "running low on",
+    ],
+    "migration": [
+        "left their home", "moved across", "settled in", "built a new",
+        "made their way", "said goodbye to", "departed from their",
+        "crossed the plains", "crossed the desert", "crossed the sea",
+        "search for a new", "in search of", "put down roots",
+        "found a new home", "built a settlement",
+    ],
+    "first_contact": [
+        "first encounter", "face to face", "never seen before",
+        "came across", "emerged from", "appeared before",
+        "first meeting", "encountered a strange", "approached cautiously",
+        "made contact with", "first communication",
+    ],
+    "war": [
+        "declared war", "went to war", "marched to battle",
+        "surrounded by enemies", "army advanced", "invasion began",
+        "battle raged", "fought fiercely", "laid siege",
+        "retreated from", "surrendered to",
+    ],
+}
+
+# ── Concept-to-archetype affinities for concept_score blending ──
+# When concepts_visuals detects these concepts in text, boost the related archetype.
+# Weight 0.0-1.0: how strongly this concept suggests this archetype.
+
+ARCHETYPE_CONCEPT_AFFINITIES: dict[str, dict[str, float]] = {
+    "discovery":     {"discovery": 0.8, "curiosity": 0.5},
+    "mystery":       {"curiosity": 0.3, "isolation": 0.2, "fear": 0.2},
+    "disaster":      {"chaos": 0.7, "fear": 0.5, "danger": 0.5, "despair": 0.3},
+    "survival":      {"fear": 0.6, "danger": 0.5, "despair": 0.4, "isolation": 0.3, "hope": 0.2},
+    "journey":       {"curiosity": 0.5, "discovery": 0.3, "hope": 0.2, "growth": 0.2},
+    "migration":     {"isolation": 0.3, "hope": 0.3, "community": 0.3, "connection": 0.2},
+    "rise_and_fall":  {"power": 0.6, "powerless": 0.4, "growth": 0.4, "decline": 0.5, "control": 0.3, "chaos": 0.3},
+    "transformation": {"growth": 0.4, "discovery": 0.3, "curiosity": 0.3, "hope": 0.2},
+    "first_contact":  {"curiosity": 0.5, "fear": 0.4, "danger": 0.3, "trust": 0.3, "connection": 0.3},
+    "war":           {"chaos": 0.6, "fear": 0.5, "danger": 0.4, "anger": 0.3, "control": 0.2},
+}
 
 @dataclass
 class ArchetypeBeat:
@@ -256,9 +358,10 @@ class ArchetypeBeat:
     suggested_animation: str = "idle"
     goal: str = "advance story"
     description: str = ""
+    archetype_probs: Optional[dict[str, float]] = None  # probability distribution over archetypes
 
 
-# ── Phase definitions per archetype ──
+# ── Phase details ──
 
 PHASE_DETAILS: dict[str, dict[str, dict]] = {
     "transformation": {
@@ -690,92 +793,349 @@ class NarrativeEngine:
     def __init__(self, rng: random.Random = None):
         self.rng = rng or random.Random()
 
-    # ── Archetype detection ──
+    # ── Text matching helpers ──
+
+    def _text_contains(self, text: str, phrase: str) -> bool:
+        """Check if phrase appears in text as a distinct word (or with common
+        inflections like s/es/ed/ing/ies). Multi-word phrases use substring match.
+
+        Prevents false matches like 'war' inside 'forward' or 'warmth',
+        while allowing 'whisper' to match 'whispers' and 'ash' to match 'ashes'.
+        """
+        if " " in phrase:
+            return phrase in text
+        # Exact whole-word match
+        pattern = r"\b" + re.escape(phrase) + r"\b"
+        if re.search(pattern, text):
+            return True
+        # Common inflections for single words
+        if len(phrase) > 2:
+            forms = [
+                phrase + "s",       # regular plural
+                phrase + "ed",      # past tense (for non-e-ending words)
+                phrase + "ing",     # gerund (for non-e-ending words)
+                phrase + "es",      # es plural (churches, ashes)
+            ]
+            # Y→IES: mystery → mysteries
+            if phrase.endswith("y"):
+                forms.append(phrase[:-1] + "ies")
+            # Drop-e rule: explore → explored/exploring
+            if phrase.endswith("e") and len(phrase) > 3:
+                stem = phrase[:-1]
+                forms.extend([stem + "ed", stem + "ing"])
+            for form in forms:
+                if re.search(r"\b" + re.escape(form) + r"\b", text):
+                    return True
+        return False
+
+    # ── Concept detection (shared with concept_visuals) ──
+
+    def _detect_concepts(self, text: str) -> dict[str, float]:
+        """Detect abstract concepts from vocabulary-level signals.
+
+        Returns dict of concept_name -> intensity (0.0-1.0).
+        Mirrors ConceptVisualsTranslator.detect_concepts to avoid circular import.
+        """
+        tl = text.lower()
+        intensities: dict[str, float] = {}
+        concept_keywords = {
+            "power": ["king", "queen", "emperor", "throne", "crown", "ruler", "lord",
+                       "commanded", "ruled", "dominion", "authority", "mighty",
+                       "powerful", "strongest", "reigned"],
+            "powerless": ["lost power", "overthrown", "dethroned", "defeated", "surrendered",
+                          "begged", "pleaded", "weak", "helpless", "powerless", "broken",
+                          "fell from", "lost everything", "humbled", "stripped of",
+                          "empty throne", "walked alone", "nothing remained"],
+            "fear": ["afraid", "scared", "terrified", "fear", "fearful", "dread",
+                     "panicked", "fled", "ran away", "hid", "trembled", "shaking",
+                     "heart pounded", "frozen", "paralyzed", "horrified",
+                     "pounded", "heart raced", "breath caught"],
+            "trust": ["trust", "trusted", "trusting", "faith", "believed", "relied",
+                      "depended", "loyal", "loyalty", "bond", "friendship",
+                      "confidence", "comfortable with", "let its guard down",
+                      "stepped forward", "moved closer", "reached out"],
+            "curiosity": ["curious", "curiosity", "wondered", "fascinated", "intrigued",
+                          "drawn to", "pulled toward", "explored", "investigated",
+                          "leaned closer", "peered", "studied", "examined",
+                          "flickered inside", "pulled harder", "wonder"],
+            "danger": ["danger", "dangerous", "threat", "threatened", "predator",
+                       "hunted", "stalked", "poisonous", "deadly", "lethal",
+                       "warning", "alarm", "fierce", "savage", "lurking",
+                       "dark cave", "shadow moved", "something wrong"],
+            "isolation": ["alone", "lonely", "solitary", "isolated", "abandoned",
+                          "deserted", "empty", "only", "by itself", "separated",
+                          "cut off", "stranded", "left behind",
+                          "empty halls", "no one", "nobody"],
+            "community": ["together", "community", "village", "tribe", "settlement",
+                          "gathered", "crowd", "group", "family", "pack",
+                          "herd", "flock", "neighbors", "allied",
+                          "guards", "children", "people"],
+            "discovery": ["discovered", "found", "stumbled upon", "uncovered", "revealed",
+                          "breakthrough", "eureka", "realized", "understood",
+                          "came across", "noticed", "spotted",
+                          "found light", "flickered", "stepped into"],
+            "growth": ["grew", "expanded", "rose", "climbed", "flourished",
+                       "strengthened", "thrived", "prospered", "increased",
+                       "built", "developed", "advanced", "raised"],
+            "decline": ["declined", "weakened", "faded", "shrank", "deteriorated",
+                        "crumbled", "collapsed", "fell apart", "withered",
+                        "waned", "diminished", "decayed",
+                        "loses power", "loses strength", "fading"],
+            "barrier": ["blocked", "barrier", "wall", "fence", "obstacle",
+                        "separated", "divided", "closed off", "impassable",
+                        "guarded", "locked", "sealed", "forbidden",
+                        "looked away", "turned away"],
+            "connection": ["connected", "linked", "bridged", "joined", "united",
+                           "together", "met", "reunited", "bound", "tied",
+                           "alliance", "merged", "crossed to",
+                           "trade routes opened", "bridge", "highway"],
+            "control": ["controlled", "order", "discipline", "commanded", "organized",
+                        "planned", "deliberate", "calculated", "strategic",
+                        "mastered", "dominated", "regulated"],
+            "chaos": ["chaos", "chaotic", "disorder", "confusion", "pandemonium",
+                      "tumult", "turmoil", "unpredictable", "wild", "frenzy",
+                      "out of control", "spiraled", "descended into"],
+            "hope": ["hope", "hopeful", "optimistic", "dreamed", "longed",
+                     "wished", "prayed", "believed", "looked forward",
+                     "light at the end", "dawn of", "new beginning",
+                     "found light", "stepped forward", "pulled harder"],
+            "despair": ["despair", "hopeless", "gave up", "surrendered", "lost all",
+                        "nothing left", "pointless", "futile", "no way out",
+                        "abandoned hope", "consumed by darkness",
+                        "nothing remained", "empty", "lost everything"],
+        }
+        for concept, keywords in concept_keywords.items():
+            score = 0
+            for kw in keywords:
+                if self._text_contains(tl, kw):
+                    score += 1
+            if score > 0:
+                intensities[concept] = min(1.0, score / 4.0)
+        return intensities
+
+    # ── Three-component archetype detection ──
 
     def detect_archetype(self, full_text: str) -> str:
         """Detect which story archetype this narrative follows.
 
-        Returns one of: transformation, mystery, disaster, journey, unknown
+        Uses three-component scoring:
+          1. keyword_score  — single-word/phrase vocabulary matches
+          2. event_score    — multi-word narrative event patterns
+          3. concept_score  — abstract concept signals blended via affinities
+
+        Returns one of the 10 archetype names.
         """
         tl = full_text.lower()
-
         scores = {}
+
+        # ── 1. Keyword score (word-boundary aware) ──
         for archetype, config in ARCHETYPE_DEFS.items():
             score = 0
             for kw in config["keywords"]:
-                if kw in tl:
+                if self._text_contains(tl, kw):
                     score += 2
-            # Bonus for matching phrase density
-            words = tl.split()
-            keyword_density = sum(1 for kw in config["keywords"] if kw in tl) / max(len(config["keywords"]), 1)
+            matched_count = sum(1 for kw in config["keywords"] if self._text_contains(tl, kw))
+            keyword_density = matched_count / max(len(config["keywords"]), 1)
             score += keyword_density * 10
             scores[archetype] = score
 
-        # Theme-specific heuristics
-        if any(w in tl for w in ["became", "evolved", "transformed", "over generations",
-                                  "turned into", "no longer", "gradually",
-                                  "adapted", "over time", "eventually"]):
-            scores["transformation"] = max(scores.get("transformation", 0), 6)
-        if any(w in tl for w in ["mystery", "unknown", "secret", "why", "how",
-                                  "ancient", "lost", "revealed", "found",
-                                  "symbol", "hint", "temple", "ruin"]):
-            scores["mystery"] = max(scores.get("mystery", 0), 6)
-        if any(w in tl for w in ["eruption", "earthquake", "flood", "extinction",
-                                  "disaster", "destroyed", "catastrophe",
-                                  "exploded", "buried", "collapsed",
-                                  "volcanic", "tsunami", "plague"]):
-            scores["disaster"] = max(scores.get("disaster", 0), 6)
-        if any(w in tl for w in ["journey", "traveled", "migrated", "expedition",
-                                  "voyage", "crossed", "explored", "set out",
-                                  "across the", "ocean crossing", "made landfall",
-                                  "reached", "discovered island", "navigation"]):
-            scores["journey"] = max(scores.get("journey", 0), 6)
-        if any(w in tl for w in ["rose", "rose to", "golden age", "glory", "empire",
-                                  "flourished", "peak", "declined", "crumbled",
-                                  "fell from", "rise and fall", "achieved greatness",
-                                  "reached its height", "slowly declined"]):
-            scores["rise_and_fall"] = max(scores.get("rise_and_fall", 0), 6)
-        if any(w in tl for w in ["stranded", "survive", "survival", "desperate",
-                                  "alone", "endure", "endurance", "starving",
-                                  "persist", "escaped", "rescued", "hunting for",
-                                  "struggling to survive", "fighting to stay alive"]):
-            scores["survival"] = max(scores.get("survival", 0), 6)
-        if any(w in tl for w in ["first contact", "encountered", "approached",
-                                  "face to face", "first meeting", "alien",
-                                  "never seen before", "came across", "stumbled upon",
-                                  "emerged from", "appeared before"]):
-            scores["first_contact"] = max(scores.get("first_contact", 0), 6)
-        if any(w in tl for w in ["curious", "discovery", "breakthrough", "eureka",
-                                  "uncovered", "figured out", "experiment",
-                                  "learned that", "realized that", "understood",
-                                  "opened their eyes", "saw the truth",
-                                  "fascinating", "astonishing"]):
-            scores["discovery"] = max(scores.get("discovery", 0), 6)
-        if any(w in tl for w in ["migrated", "exodus", "displaced", "refugee",
-                                  "nomad", "set off", "new home", "search for",
-                                  "left behind", "said goodbye", "departed",
-                                  "great journey", "long road", "settlers",
-                                  "pioneers", "crossing the"]):
-            scores["migration"] = max(scores.get("migration", 0), 6)
-        if any(w in tl for w in ["war", "battle", "invasion", "army", "enemy",
-                                  "fought", "siege", "warrior", "soldier",
-                                  "declared war", "went to war", "marched to",
-                                  "battlefield", "surrendered", "ceasefire",
-                                  "conflict", "attack", "defend"]):
-            scores["war"] = max(scores.get("war", 0), 6)
+        # ── 2. Event score ──
+        for archetype, events in ARCHETYPE_EVENTS.items():
+            for event in events:
+                if event in tl:
+                    scores[archetype] = scores.get(archetype, 0) + 4
 
-        if not scores or max(scores.values()) < 3:
-            # Second pass: check for phrase patterns
+        # ── 3. Concept score ──
+        detected = self._detect_concepts(tl)
+        for archetype, affinities in ARCHETYPE_CONCEPT_AFFINITIES.items():
+            concept_bonus = 0
+            for concept, weight in affinities.items():
+                intensity = detected.get(concept, 0.0)
+                if intensity > 0:
+                    concept_bonus += intensity * weight
+            if concept_bonus > 0:
+                scores[archetype] = scores.get(archetype, 0) + concept_bonus * 5
+
+        # ── 4. Targeted heuristics (additive, not floor) ──
+        heuristic_map = {
+            "transformation": ["became", "evolved", "transformed",
+                               "over generations",
+                               "turned into", "no longer", "gradually",
+                               "adapted", "over time", "eventually",
+                               "rebuilt", "reborn", "restored", "reopened"],
+            "mystery": ["mystery", "mysterious", "unexplained", "enigma",
+                        "puzzle", "cannot explain", "nobody knows",
+                        "riddle", "cursed", "forbidden", "hidden",
+                        "legend of", "myth of", "without a trace",
+                        "strange markings", "cannot be read",
+                        "impossible to understand"],
+            "disaster": ["eruption", "earthquake", "flood", "extinction",
+                         "disaster", "destroyed", "catastrophe",
+                         "exploded", "collapsed",
+                         "volcanic", "tsunami", "plague", "wildfire",
+                         "volcano", "erupted", "devastated",
+                         "illness", "disease", "epidemic"],
+            "journey": ["journey", "traveled", "voyage", "expedition",
+                        "crossed", "set out", "made landfall",
+                        "trekked", "sailed", "wandered"],
+            "rise_and_fall": ["rose to", "golden age", "glory", "empire",
+                              "flourished", "declined", "crumbled",
+                              "fell from", "rise and fall", "achieved greatness",
+                              "reached its height", "slowly declined",
+                              "built an empire", "lost everything"],
+            "survival": ["stranded", "survive", "survival", "desperate",
+                         "endure", "endurance", "starving",
+                         "persist", "escaped", "rescued",
+                         "struggling to survive", "fighting to stay alive",
+                         "shelter", "sank", "shipwreck", "no food",
+                         "no water", "fresh water", "caught fish"],
+            "first_contact": ["first contact", "encountered", "approached",
+                              "face to face", "first meeting", "alien",
+                              "never seen before", "came across", "stumbled upon",
+                              "emerged from", "appeared before"],
+            "discovery": ["curious", "curiosity", "discovery", "breakthrough",
+                          "eureka", "uncovered", "figured out", "experiment",
+                          "learned that", "realized that", "understood",
+                          "understand", "learning", "knowledge", "truth",
+                          "opened their eyes", "saw the truth",
+                          "fascinating", "astonishing"],
+            "migration": ["migrated", "exodus", "displaced", "refugee",
+                          "nomad", "set off",
+                          "left behind", "said goodbye", "departed",
+                          "great journey", "long road", "settlers",
+                          "pioneers", "crossing the",
+                          "wandered", "followed", "valley", "herd"],
+            "war": ["war", "battle", "invasion", "enemy",
+                    "fought", "siege",
+                    "declared war", "went to war", "marched to",
+                    "battlefield", "surrendered", "ceasefire",
+                    "attack", "defend"],
+        }
+        for archetype, words in heuristic_map.items():
+            for w in words:
+                if self._text_contains(tl, w):
+                    scores[archetype] = scores.get(archetype, 0) + 4
+                    break
+
+        # ── Fallback for very low scores ──
+        if max(scores.values()) < 3:
             for archetype, config in ARCHETYPE_DEFS.items():
                 phrase_score = 0
                 for kw in config["keywords"]:
-                    if kw in tl:
+                    if self._text_contains(tl, kw):
                         phrase_score += 1
                 if phrase_score >= 2:
                     scores[archetype] = max(scores.get(archetype, 0), phrase_score * 2)
 
         best = max(scores, key=scores.get)
         return best
+
+    def detect_archetype_probs(self, full_text: str) -> dict[str, float]:
+        """Return a probability distribution over all archetypes.
+
+        Uses the same three-component scoring as detect_archetype(),
+        then normalizes via softmax (temperature=2 for reasonable spread).
+        """
+        tl = full_text.lower()
+        scores: dict[str, float] = {}
+
+        # ── 1. Keyword score ──
+        for archetype, config in ARCHETYPE_DEFS.items():
+            score = 0
+            for kw in config["keywords"]:
+                if self._text_contains(tl, kw):
+                    score += 2
+            matched_count = sum(1 for kw in config["keywords"] if self._text_contains(tl, kw))
+            keyword_density = matched_count / max(len(config["keywords"]), 1)
+            score += keyword_density * 10
+            scores[archetype] = score
+
+        # ── 2. Event score ──
+        for archetype, events in ARCHETYPE_EVENTS.items():
+            for event in events:
+                if event in tl:
+                    scores[archetype] = scores.get(archetype, 0) + 4
+
+        # ── 3. Concept score ──
+        detected = self._detect_concepts(tl)
+        for archetype, affinities in ARCHETYPE_CONCEPT_AFFINITIES.items():
+            concept_bonus = 0
+            for concept, weight in affinities.items():
+                intensity = detected.get(concept, 0.0)
+                if intensity > 0:
+                    concept_bonus += intensity * weight
+            if concept_bonus > 0:
+                scores[archetype] = scores.get(archetype, 0) + concept_bonus * 5
+
+        # ── 4. Targeted heuristics ──
+        heuristic_map = {
+            "transformation": ["became", "evolved", "transformed",
+                               "over generations", "turned into", "no longer",
+                               "gradually", "adapted", "over time", "eventually",
+                               "rebuilt", "reborn", "restored", "reopened"],
+            "mystery": ["mystery", "mysterious", "unexplained", "enigma",
+                        "puzzle", "cannot explain", "nobody knows",
+                        "riddle", "cursed", "forbidden", "hidden",
+                        "legend of", "myth of", "without a trace",
+                        "strange markings", "cannot be read", "impossible to understand"],
+            "disaster": ["eruption", "earthquake", "flood", "extinction",
+                         "disaster", "destroyed", "catastrophe",
+                         "exploded", "collapsed", "volcanic", "tsunami",
+                         "plague", "wildfire", "volcano", "erupted", "devastated",
+                         "illness", "disease", "epidemic"],
+            "journey": ["journey", "traveled", "voyage", "expedition",
+                        "crossed", "set out", "made landfall",
+                        "trekked", "sailed", "wandered"],
+            "rise_and_fall": ["rose to", "golden age", "glory", "empire",
+                              "flourished", "declined", "crumbled",
+                              "fell from", "rise and fall", "achieved greatness",
+                              "reached its height", "slowly declined",
+                              "built an empire", "lost everything"],
+            "survival": ["stranded", "survive", "survival", "desperate",
+                         "endure", "endurance", "starving",
+                         "persist", "escaped", "rescued",
+                         "struggling to survive", "fighting to stay alive",
+                         "shelter", "sank", "shipwreck", "no food",
+                         "no water", "fresh water", "caught fish"],
+            "first_contact": ["first contact", "encountered", "approached",
+                              "face to face", "first meeting", "alien",
+                              "never seen before", "came across", "stumbled upon",
+                              "emerged from", "appeared before"],
+            "discovery": ["curious", "curiosity", "discovery", "breakthrough",
+                          "eureka", "uncovered", "figured out", "experiment",
+                          "learned that", "realized that", "understood",
+                          "understand", "learning", "knowledge", "truth",
+                          "opened their eyes", "saw the truth",
+                          "fascinating", "astonishing"],
+            "migration": ["migrated", "exodus", "displaced", "refugee",
+                          "nomad", "set off",
+                          "left behind", "said goodbye", "departed",
+                          "great journey", "long road", "settlers",
+                          "pioneers", "crossing the",
+                          "wandered", "followed", "valley", "herd"],
+            "war": ["war", "battle", "invasion", "enemy",
+                    "fought", "siege",
+                    "declared war", "went to war", "marched to",
+                    "battlefield", "surrendered", "ceasefire",
+                    "attack", "defend"],
+        }
+        for archetype, words in heuristic_map.items():
+            for w in words:
+                if self._text_contains(tl, w):
+                    scores[archetype] = scores.get(archetype, 0) + 4
+                    break
+
+        # Normalize via softmax (temperature=2 for moderate spread)
+        import math as _math
+        temp = 2.0
+        max_score = max(scores.values()) if scores else 0
+        if max_score <= 0:
+            return {k: 1.0 / len(ARCHETYPE_DEFS) for k in ARCHETYPE_DEFS}
+        exp_scores = {k: _math.exp((v - max_score) / temp) for k, v in scores.items()}
+        total = sum(exp_scores.values())
+        if total <= 0:
+            return {k: 1.0 / len(ARCHETYPE_DEFS) for k in ARCHETYPE_DEFS}
+        return {k: round(v / total, 3) for k, v in exp_scores.items()}
 
     def get_archetype_config(self, archetype: str) -> dict:
         """Get full config for an archetype."""
@@ -815,41 +1175,88 @@ class NarrativeEngine:
 
     def structure_narrative(self, sentences: list[str],
                             archetype: Optional[str] = None,
-                            full_text: Optional[str] = None) -> list[ArchetypeBeat]:
+                            full_text: Optional[str] = None,
+                            archetype_probs: Optional[dict[str, float]] = None
+                            ) -> list[ArchetypeBeat]:
         """Generate a full archetype beat structure for the narrative.
+
+        If archetype_probs is given, parameters from multiple archetypes
+        are blended proportionally (archetype blending).
 
         Args:
             sentences: list of sentence strings
             archetype: optional pre-detected archetype. If None, auto-detect.
             full_text: used for detection if archetype not provided
+            archetype_probs: probability dict from detect_archetype_probs().
 
         Returns:
             list of ArchetypeBeats, one per sentence-phase assignment
         """
-        if archetype is None:
-            archetype = self.detect_archetype(full_text or " ".join(sentences))
-        if archetype == "unknown":
-            archetype = "transformation"  # best default
+        if archetype_probs is None:
+            if archetype is None:
+                archetype = self.detect_archetype(full_text or " ".join(sentences))
+            if archetype == "unknown":
+                archetype = "transformation"
+            # Build a single-point probability distribution
+            archetype_probs = {archetype: 1.0}
+        else:
+            # Use the highest-prob archetype for phase mapping
+            archetype = max(archetype_probs, key=archetype_probs.get)
 
         config = self.get_archetype_config(archetype)
         phase_details = PHASE_DETAILS.get(archetype, {})
-        tension_arc = config["tension_arc"]
-        lighting_arc = config["lighting_arc"]
-        emotion_arc = config.get("emotion_arc", {})
+
+        # Collect configs for all archetypes with significant probability
+        active_archetypes = [(a, p) for a, p in archetype_probs.items() if p > 0.05]
+        active_configs = [(a, p, self.get_archetype_config(a)) for a, p in active_archetypes]
 
         assigned = self.map_sentences_to_phases(sentences, archetype)
         beats = []
 
+        n_sentences = len(sentences)
+
         for i, (sentence, phase_name, phase_idx) in enumerate(assigned):
             details = phase_details.get(phase_name, {})
-            tension = tension_arc[phase_idx] if phase_idx < len(tension_arc) else 5
-            lighting = lighting_arc[phase_idx] if phase_idx < len(lighting_arc) else "day"
 
-            # Get emotion values for this phase
-            emotions_at_phase = {}
-            for dim, arc in emotion_arc.items():
-                if phase_idx < len(arc):
-                    emotions_at_phase[dim] = arc[phase_idx]
+            # Blend tension: weighted average across active archetypes
+            blended_tension = 0.0
+            tension_weight = 0.0
+            # Blend lighting/mood/camera: weighted vote
+            lighting_votes: dict[str, float] = {}
+            mood_votes: dict[str, float] = {}
+            camera_votes: dict[str, float] = {}
+            animation_votes: dict[str, float] = {}
+
+            for arch, prob, cfg in active_configs:
+                n_phases = len(cfg["phases"])
+                idx = min(phase_idx, n_phases - 1)
+
+                # Tension
+                t_arc = cfg["tension_arc"]
+                t_val = t_arc[idx] if idx < len(t_arc) else 5
+                blended_tension += prob * t_val
+                tension_weight += prob
+
+                # Lighting
+                l_arc = cfg["lighting_arc"]
+                l_val = l_arc[idx] if idx < len(l_arc) else "day"
+                lighting_votes[l_val] = lighting_votes.get(l_val, 0.0) + prob
+
+                # Mood / camera / animation from phase details
+                arch_details = PHASE_DETAILS.get(arch, {})
+                # Find the closest phase name in this archetype
+                arch_phases = cfg["phases"]
+                closest_phase = arch_phases[idx] if idx < len(arch_phases) else arch_phases[-1]
+                phase_info = arch_details.get(closest_phase, {})
+                mood_votes[phase_info.get("mood", "neutral")] = mood_votes.get(phase_info.get("mood", "neutral"), 0.0) + prob
+                camera_votes[phase_info.get("camera", "medium")] = camera_votes.get(phase_info.get("camera", "medium"), 0.0) + prob
+                animation_votes[phase_info.get("animation", "idle")] = animation_votes.get(phase_info.get("animation", "idle"), 0.0) + prob
+
+            tension = round(blended_tension / max(tension_weight, 0.01))
+            lighting = max(lighting_votes, key=lighting_votes.get) if lighting_votes else "day"
+            mood = max(mood_votes, key=mood_votes.get) if mood_votes else "neutral"
+            camera = max(camera_votes, key=camera_votes.get) if camera_votes else "medium"
+            anim = max(animation_votes, key=animation_votes.get) if animation_votes else "idle"
 
             beat = ArchetypeBeat(
                 phase=phase_name,
@@ -858,11 +1265,12 @@ class NarrativeEngine:
                 total_phases=len(config["phases"]),
                 tension=tension,
                 suggested_lighting=lighting,
-                suggested_mood=details.get("mood", "neutral"),
-                suggested_camera=details.get("camera", "medium"),
-                suggested_animation=details.get("animation", "idle"),
+                suggested_mood=mood,
+                suggested_camera=camera,
+                suggested_animation=anim,
                 goal=details.get("goal", "advance story"),
                 description=details.get("description", ""),
+                archetype_probs=archetype_probs,
             )
             beats.append(beat)
 

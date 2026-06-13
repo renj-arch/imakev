@@ -203,10 +203,11 @@ class Director:
         sentences = [s.strip() for s in re.split(r'(?<=[.!?])\s+', narration_text.strip()) if s.strip()]
         full_text = narration_text
 
+        archetype_probs = engine.detect_archetype_probs(full_text)
         archetype_beats = engine.structure_narrative(
-            sentences, full_text=full_text
+            sentences, full_text=full_text, archetype_probs=archetype_probs
         )
-        archetype = engine.detect_archetype(full_text)
+        archetype = max(archetype_probs, key=archetype_probs.get)
         reveal_strategy = engine.get_reveal_strategy(archetype)
 
         # Group archetype beats by sentence for per-sentence sequences
@@ -268,6 +269,34 @@ class Director:
 
             result_sequences.append(beat_seq)
 
+        # ── Emotion Tracker pass ──
+        story_state = None
+        try:
+            from src.emotion_tracker import EmotionTracker
+            et = EmotionTracker(self.rng)
+            story_state = et.initialize_state(narration_text)
+            for i, (sentence, group) in enumerate(zip(sentences, sentence_groups)):
+                concepts_for_char = extract_concepts(sentence)
+                chars = [c for c in concepts_for_char if c in char_types]
+                et.process_sentence(story_state, sentence, i,
+                                    all_chars_in_sentence=chars)
+        except ImportError:
+            pass
+
+        # ── Relationship Tracker pass ──
+        rt = None
+        try:
+            from src.relationship_tracker import RelationshipTracker
+            rt = RelationshipTracker(self.rng)
+            if story_state is not None:
+                for i, (sentence, group) in enumerate(zip(sentences, sentence_groups)):
+                    concepts_for_char = extract_concepts(sentence)
+                    chars = [c for c in concepts_for_char if c in char_types]
+                    rt.process_sentence(story_state, sentence, i,
+                                        chars_in_sentence=chars)
+        except ImportError:
+            pass
+
         # ── Concept-to-Visual translation pass ──
         try:
             from src.concept_visuals import ConceptVisualsTranslator
@@ -282,16 +311,41 @@ class Director:
                 narration_text, archetype, all_phases, len(all_phases)
             )
             phase_to_concepts = dict(zip(all_phases, phase_concept_map)) if len(all_phases) == len(phase_concept_map) else {}
-            for seq in result_sequences:
+            for seq_idx, seq in enumerate(result_sequences):
                 for beat in seq:
-                    # Per-sentence concept detection
+                    # Per-sentence concept detection (with intensities)
                     raw = cvt.detect_concepts(beat.narration_excerpt)
-                    active = set(c for c, v in raw.items() if v > 0.2)
-                    # Blend with phase-level affinities
+                    # Build intensity dict from all sources
+                    concept_intensities: dict[str, float] = {}
+                    for c, v in raw.items():
+                        if v > 0.2:
+                            concept_intensities[c] = v
+                    # Blend with phase-level affinities (moderate weight)
                     if beat.narrative_phase in phase_to_concepts:
                         for pc in phase_to_concepts[beat.narrative_phase]:
-                            active.add(pc)
-                    beat.visual_directives = cvt.concepts_to_directives(list(active))
+                            existing = concept_intensities.get(pc, 0.0)
+                            concept_intensities[pc] = max(existing, 0.35)
+                    # Inject emotion-derived concepts from StoryState
+                    if story_state is not None:
+                        char_emotions = et.get_dominant_emotions(story_state, seq_idx)
+                        for ch_key, emo_dict in char_emotions.items():
+                            for dim, intensity in emo_dict.items():
+                                if intensity > 0.3:
+                                    existing = concept_intensities.get(dim, 0.0)
+                                    concept_intensities[dim] = max(existing, intensity * 0.5)
+                        # Inject relationship-derived concepts (lower weight)
+                        if rt is not None:
+                            rel_concepts = rt.get_relationship_concepts(story_state, beat.characters)
+                            for rc in rel_concepts:
+                                existing = concept_intensities.get(rc, 0.0)
+                                concept_intensities[rc] = max(existing, 0.4)
+                    directives = cvt.concepts_to_directives_weighted(concept_intensities)
+                    # Compute symbolic elements from resolved concepts
+                    active_names = list(concept_intensities.keys())
+                    symbolic = cvt.get_symbolic_elements(active_names)
+                    directives["symbolic_atmosphere"] = symbolic.get("atmosphere")
+                    directives["symbolic_ground"] = symbolic.get("ground_elements", [])
+                    beat.visual_directives = directives
         except ImportError:
             pass
 
@@ -810,8 +864,8 @@ class Director:
             bg_config = {
                 "type": "gradient",
                 "colors": [
-                    [min(255, int(base_colors[0][0] + 40), int(base_colors[0][1] * 0.9), int(base_colors[0][2] * 0.8))],
-                    [min(255, int(base_colors[1][0] + 30), int(base_colors[1][1] * 0.9), int(base_colors[1][2] * 0.8))],
+                    [min(255, int(base_colors[0][0] + 40)), min(255, int(base_colors[0][1] * 0.9)), min(255, int(base_colors[0][2] * 0.8))],
+                    [min(255, int(base_colors[1][0] + 30)), min(255, int(base_colors[1][1] * 0.9)), min(255, int(base_colors[1][2] * 0.8))],
                 ],
                 "horizon": 0.5,
                 "ground_color": [min(255, int(ground_color[0] + 20)), int(ground_color[1] * 0.9), int(ground_color[2] * 0.8)],
@@ -921,8 +975,24 @@ class Director:
                     elem["y"] = round(rng.uniform(0.15, 0.7), 3)
                 elements.append(elem)
 
-        # Camera shake
-        atmos = {"particles": "none", "fog": False, "shake": beat.shake}
+        # Symbolic ground elements from concept translator
+        symbolic_ground = directives.get("symbolic_ground", [])
+        for se in symbolic_ground:
+            # Convert relative (0-1) coords to element format
+            elem = dict(se)
+            elem.setdefault("z_index", 2)
+            elements.append(elem)
+
+        # Symbolic atmosphere overrides
+        symbolic_atmos = directives.get("symbolic_atmosphere")
+        atmos = {
+            "particles": "none",
+            "fog": False,
+            "shake": beat.shake,
+        }
+        if symbolic_atmos:
+            for k, v in symbolic_atmos.items():
+                atmos[k] = v
 
         scene = {
             "bg": bg_config,

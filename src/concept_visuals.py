@@ -337,6 +337,92 @@ NEUTRAL_VISUALS = {
 }
 
 
+# ── Symbolic Elements ──
+# Each concept maps to atmosphere particles (use existing rendering)
+# and ground elements (simple shapes drawn via existing primitives).
+
+CONCEPT_ATMOSPHERE: dict[str, dict] = {
+    "hope":        {"particles": "sunbeams"},
+    "awe":         {"particles": "sparkles", "star_count": 25},
+    "discovery":   {"particles": "sparkles", "star_count": 12},
+    "curiosity":   {"particles": "sparkles", "star_count": 6},
+    "despair":     {"particles": "ash", "fog": "ash"},
+    "danger":      {"particles": "ash"},
+    "chaos":       {"particles": "ash"},
+    "fear":        {"particles": "mist"},
+    "isolation":   {"particles": "mist"},
+}
+
+# Ground element specs use existing primitive types from sketch_generator:
+#   circle, arc, rect, line, x_mark
+# Position: relative frame coord (x, y) in 0.0-1.0, z_index for layering
+CONCEPT_GROUND_ELEMENTS: dict[str, list[dict]] = {
+    "power": [
+        {"type": "rect", "x": 0.5, "y": 0.7, "width": 0.12, "height": 0.06,
+         "fill": [100, 80, 60], "z_index": 1, "rx": 4, "opacity": 200},
+    ],
+    "community": [
+        {"type": "circle", "x": 0.5, "y": 0.68, "radius": 36, "r_scale": 1.0,
+         "stroke": [80, 70, 50], "fill": None, "stroke_width": 2, "z_index": 0, "opacity": 180},
+    ],
+    "connection": [
+        {"type": "line", "x": 0.3, "y": 0.7, "x2": 0.7, "y2": 0.7,
+         "stroke": [80, 70, 50], "stroke_width": 2, "z_index": 0, "opacity": 150},
+        {"type": "line", "x": 0.3, "y": 0.7, "x2": 0.35, "y2": 0.65,
+         "stroke": [80, 70, 50], "stroke_width": 2, "z_index": 0, "opacity": 150},
+        {"type": "line", "x": 0.7, "y": 0.7, "x2": 0.65, "y2": 0.65,
+         "stroke": [80, 70, 50], "stroke_width": 2, "z_index": 0, "opacity": 150},
+    ],
+    "barrier": [
+        {"type": "rect", "x": 0.2, "y": 0.5, "width": 0.03, "height": 0.35,
+         "fill": [60, 55, 50], "z_index": 2, "opacity": 200},
+        {"type": "rect", "x": 0.2, "y": 0.5, "width": 0.25, "height": 0.02,
+         "fill": [60, 55, 50], "z_index": 2, "opacity": 200},
+    ],
+    "growth": [
+        {"type": "line", "x": 0.5, "y": 0.7, "x2": 0.5, "y2": 0.4,
+         "stroke": [50, 130, 50], "stroke_width": 3, "z_index": 0, "opacity": 200},
+        {"type": "circle", "x": 0.5, "y": 0.4, "radius": 8, "r_scale": 1.0,
+         "fill": [50, 150, 50], "stroke": None, "z_index": 1, "opacity": 200},
+        {"type": "circle", "x": 0.48, "y": 0.48, "radius": 6, "r_scale": 1.0,
+         "fill": [60, 160, 60], "stroke": None, "z_index": 1, "opacity": 180},
+        {"type": "circle", "x": 0.52, "y": 0.56, "radius": 5, "r_scale": 1.0,
+         "fill": [70, 170, 70], "stroke": None, "z_index": 1, "opacity": 160},
+    ],
+    "decline": [
+        {"type": "rect", "x": 0.7, "y": 0.75, "width": 0.08, "height": 0.04,
+         "fill": [80, 70, 60], "z_index": 1, "opacity": 180},
+        {"type": "rect", "x": 0.72, "y": 0.74, "width": 0.06, "height": 0.03,
+         "fill": [100, 85, 70], "z_index": 1, "rx": 3, "opacity": 180},
+    ],
+    "control": [
+        {"type": "line", "x": 0.4, "y": 0.65, "x2": 0.4, "y2": 0.8,
+         "stroke": [60, 55, 50], "stroke_width": 2, "z_index": 3, "opacity": 180},
+        {"type": "line", "x": 0.6, "y": 0.65, "x2": 0.6, "y2": 0.8,
+         "stroke": [60, 55, 50], "stroke_width": 2, "z_index": 3, "opacity": 180},
+        {"type": "line", "x": 0.35, "y": 0.72, "x2": 0.65, "y2": 0.72,
+         "stroke": [60, 55, 50], "stroke_width": 1, "z_index": 3, "opacity": 120},
+    ],
+    "freedom": [
+        {"type": "arc", "x": 0.5, "y": 0.7, "radius": 30, "r_scale": 1.0,
+         "start_angle": 180, "end_angle": 360,
+         "stroke": [80, 160, 80], "stroke_width": 2, "z_index": 0, "opacity": 180},
+    ],
+    "powerless": [
+        {"type": "x_mark", "x": 0.5, "y": 0.55,
+         "fill": [120, 40, 40], "z_index": 3, "opacity": 200},
+    ],
+    "danger": [
+        {"type": "x_mark", "x": 0.7, "y": 0.45,
+         "fill": [200, 40, 40], "z_index": 3, "opacity": 180},
+    ],
+}
+
+# Blend symbolic elements when multiple concepts are active
+# atmospheres: first matched wins (most specific)
+# ground elements: merge all, dedup by type+position
+
+
 # ── Concept detection keywords ──
 
 CONCEPT_KEYWORDS: dict[str, list[str]] = {
@@ -615,6 +701,110 @@ class ConceptVisualsTranslator:
                 accumulated[key] = most_common[0][0] if most_common else NEUTRAL_VISUALS[key]
 
         return accumulated
+
+    def resolve_opposing_concepts(self,
+                                  concept_intensities: dict[str, float]
+                                  ) -> dict[str, float]:
+        """Resolve opposing concept pairs by suppressing the weaker side.
+
+        When both sides of an opposing pair are active, the side with
+        higher intensity suppresses the other proportionally. If equal,
+        both are partially suppressed (conceptual tension).
+        """
+        resolved = dict(concept_intensities)
+
+        for a, b in OPPOSING_CONCEPTS:
+            if a in resolved and b in resolved:
+                ia = resolved[a]
+                ib = resolved[b]
+                diff = abs(ia - ib)
+                if ia > ib:
+                    # a wins, suppress b by how much a dominates
+                    suppression = max(0.0, 1.0 - diff)
+                    resolved[b] = resolved[b] * suppression
+                elif ib > ia:
+                    suppression = max(0.0, 1.0 - diff)
+                    resolved[a] = resolved[a] * suppression
+                else:
+                    # Tie — both suppressed, net neutral
+                    resolved[a] = resolved[a] * 0.3
+                    resolved[b] = resolved[b] * 0.3
+
+        # Drop concepts suppressed below threshold
+        return {k: v for k, v in resolved.items() if v > 0.05}
+
+    def concepts_to_directives_weighted(self,
+                                        concept_intensities: dict[str, float]
+                                        ) -> dict:
+        """Blend concepts using weighted intensities, resolving opposing pairs.
+
+        Concepts with higher intensity contribute more to the final blend.
+        Opposing pairs are resolved before blending (see resolve_opposing).
+        """
+        if not concept_intensities:
+            return dict(NEUTRAL_VISUALS)
+
+        resolved = self.resolve_opposing_concepts(concept_intensities)
+
+        matched = {c: v for c, v in resolved.items() if c in CONCEPT_VISUALS}
+        if not matched:
+            return dict(NEUTRAL_VISUALS)
+
+        total_weight = sum(matched.values())
+        if total_weight <= 0:
+            return dict(NEUTRAL_VISUALS)
+
+        accumulated = {}
+        for key in NEUTRAL_VISUALS:
+            values = [(CONCEPT_VISUALS[c][key], matched[c]) for c in matched]
+            if isinstance(values[0][0], (int, float)):
+                # Weighted average
+                weighted_sum = sum(v * w for v, w in values)
+                accumulated[key] = round(weighted_sum / total_weight, 2)
+            else:
+                # Weighted mode: pick the concept with highest weight
+                from collections import Counter
+                weighted_counts: dict[str, float] = {}
+                for c, w in matched.items():
+                    val = CONCEPT_VISUALS[c][key]
+                    weighted_counts[val] = weighted_counts.get(val, 0.0) + w
+                best_val = max(weighted_counts, key=weighted_counts.get)
+                accumulated[key] = best_val
+
+        return accumulated
+
+    def get_symbolic_elements(self, concepts: list[str]) -> dict:
+        """Compute symbolic atmosphere + ground elements from active concepts.
+
+        Returns dict with:
+          - "atmosphere": first matched atmosphere dict (or None)
+          - "ground_elements": merged list of ground element dicts
+        """
+        result: dict = {
+            "atmosphere": None,
+            "ground_elements": [],
+        }
+
+        matched = [c for c in concepts if c in CONCEPT_VISUALS]
+        if not matched:
+            return result
+
+        # Atmosphere: first matching concept with atmosphere wins
+        for c in matched:
+            if c in CONCEPT_ATMOSPHERE:
+                result["atmosphere"] = dict(CONCEPT_ATMOSPHERE[c])
+                break
+
+        # Ground elements: merge from all matched concepts, dedup by (type, x, y)
+        seen = set()
+        for c in matched:
+            for elem in CONCEPT_GROUND_ELEMENTS.get(c, []):
+                key = (elem.get("type"), elem.get("x"), elem.get("y"))
+                if key not in seen:
+                    seen.add(key)
+                    result["ground_elements"].append(dict(elem))
+
+        return result
 
     # ── Main Translation ──
 
