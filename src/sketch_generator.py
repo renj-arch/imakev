@@ -2772,6 +2772,75 @@ class SketchGenerator:
                 self.draw_circle(draw, hx + 3*s, hy - s, s, fill=(30, 25, 20, 200))
                 # Open mouth
                 self.draw_circle(draw, hx + 4.5*s, hy + 2*s, 2*s, fill=(200, 100, 100, 200))
+            elif mood == "proud":
+                # Smug half-closed eyes
+                self.draw_line(draw, hx + 2*s, hy - 1.5*s, hx + 4*s, hy - 2*s,
+                              color=(30, 25, 20, 220), width=int(1.5*s))
+                # Chin lifted (snout slightly higher)
+                self.draw_circle(draw, hx + 5*s, hy + 0.5*s, 2.5*s, fill=(240, 200, 190, 200))
+                # Smug smile
+                self.draw_arc(draw, hx + 3*s, hy + 1.5*s, 2*s, 0, 180,
+                             color=(140, 100, 80, 180), width=int(1.5*s))
+                # Perked ear hint (pupil highlight)
+                self.draw_circle(draw, hx + 3*s, hy - 2.5*s, 0.8*s, fill=(255, 255, 255, 180))
+            elif mood == "sneaky":
+                # Narrowed, cunning eyes
+                self.draw_line(draw, hx + 2*s, hy - 1*s, hx + 4*s, hy - 0.5*s,
+                              color=(30, 25, 20, 220), width=int(1.5*s))
+                self.draw_circle(draw, hx + 3*s, hy - 1*s, 0.8*s, fill=(30, 25, 20, 200))
+                # One ear back (asymmetrical)
+                self.draw_line(draw, hx + 3*s, hy - 4*s, hx + 5*s, hy - 7*s,
+                              color=(180, 140, 100, 120), width=int(2*s))
+                # Sly half-smile
+                self.draw_line(draw, hx + 3.5*s, hy + 2*s, hx + 5.5*s, hy + 2.5*s,
+                              color=(140, 100, 80, 160), width=1)
+            elif mood == "focused":
+                # Intense wide eyes (hunting mode)
+                self.draw_circle(draw, hx + 3*s, hy - s, 2*s, fill=(255, 255, 255, 220))
+                self.draw_circle(draw, hx + 3*s, hy - s, 1.2*s, fill=(30, 25, 20, 220))
+                # Pupil slit
+                self.draw_line(draw, hx + 3*s, hy - 2*s, hx + 3*s, hy + 0.5*s,
+                              color=(30, 25, 20, 220), width=int(s * 0.5))
+                # Flattened ears
+                self.draw_line(draw, hx + 3*s, hy - 4*s, hx + 6*s, hy - 2*s,
+                              color=(180, 140, 100, 150), width=int(2*s))
+                # Tense, straight mouth
+                self.draw_line(draw, hx + 3*s, hy + 2*s, hx + 6*s, hy + 2*s,
+                              color=(140, 100, 80, 160), width=1)
+            elif mood == "mysterious":
+                # Glowing wide eyes in shadow
+                self.draw_circle(draw, hx + 3*s, hy - s, 2*s, fill=(200, 220, 100, 200))
+                self.draw_circle(draw, hx + 3*s, hy - s, 0.8*s, fill=(30, 25, 20, 200))
+                # Slight knowing smile
+                self.draw_arc(draw, hx + 3*s, hy + 1*s, 2*s, 0, 180,
+                             color=(140, 100, 80, 120), width=1)
+            elif mood == "cautious":
+                # Wide eyes, scanning
+                self.draw_circle(draw, hx + 2.5*s, hy - 1.5*s, 1.8*s, fill=(255, 255, 255, 200))
+                self.draw_circle(draw, hx + 2.5*s, hy - 1.5*s, 0.8*s, fill=(30, 25, 20, 200))
+                self.draw_circle(draw, hx + 3.5*s, hy - 1.5*s, 1.8*s, fill=(255, 255, 255, 200))
+                self.draw_circle(draw, hx + 3.5*s, hy - 1.5*s, 0.8*s, fill=(30, 25, 20, 200))
+                # Ears slightly back
+                self.draw_line(draw, hx + 2*s, hy - 4*s, hx + 4*s, hy - 8*s,
+                              color=(180, 140, 100, 180), width=int(2*s))
+                self.draw_line(draw, hx + 5*s, hy - 4*s, hx + 6*s, hy - 7*s,
+                              color=(180, 140, 100, 120), width=int(1.5*s))
+                # Tense mouth
+                self.draw_line(draw, hx + 3*s, hy + 2*s, hx + 5*s, hy + 1.5*s,
+                              color=(140, 100, 80, 150), width=1)
+            elif mood == "triumphant":
+                # Bright, wide eyes
+                self.draw_circle(draw, hx + 3*s, hy - s, 2*s, fill=(255, 255, 255, 220))
+                self.draw_circle(draw, hx + 3*s, hy - s, 1*s, fill=(30, 25, 20, 200))
+                self.draw_circle(draw, hx + 3*s, hy - s, 0.5*s, fill=(255, 255, 255, 220))
+                # Perked ears
+                ear_pts = [(hx + 3*s, hy - 3*s), (hx + 4*s, hy - 9*s), (hx + 6*s, hy - 3*s)]
+                self.draw_polygon(draw, ear_pts, fill=(240, 200, 180, 220))
+                # Big confident smile
+                self.draw_arc(draw, hx + 3*s, hy + 1.5*s, 2.5*s, 0, 180,
+                             color=(140, 100, 80, 200), width=int(1.5*s))
+                # Chin lifted
+                self.draw_circle(draw, hx + 5*s, hy + 0.5*s, 2.5*s, fill=(245, 210, 200, 200))
             else:
                 # Neutral / default eye (single dot + pupil)
                 self.draw_circle(draw, hx + 3*s, hy - s, 1.5*s, fill=(30, 25, 20, 200))
@@ -2816,7 +2885,7 @@ class SketchGenerator:
             _draw_face(hx, hy, mood, s)
 
             # Snout / whiskers — skip for moods that draw their own details
-            if mood not in ("sad", "angry", "surprised"):
+            if mood not in ("sad", "angry", "surprised", "proud", "sneaky", "focused", "mysterious", "cautious", "triumphant"):
                 self.draw_circle(draw, hx + 5*s, hy + 2*s, 2.5*s, fill=(240, 200, 190, 200))
 
                 # Whiskers
@@ -2877,7 +2946,7 @@ class SketchGenerator:
         _draw_face(hx, hy, mood, s)
 
         # Whiskers (only for moods that don't draw their own)
-        if mood not in ("sad", "angry", "surprised"):
+        if mood not in ("sad", "angry", "surprised", "proud"):
             self.draw_circle(draw, hx + 5*s, hy + 1*s, 2.5*s, fill=(240, 200, 190, 200))
             for side in [-1, 1]:
                 self.draw_line(draw, hx + 5*s, hy + 1.5*s, hx + 5*s + side * 6*s, hy + 0.5*s,
@@ -3141,6 +3210,353 @@ class SketchGenerator:
         base_h = int(max_h * 0.08)
         self.draw_rect(draw, x - base_w // 2 - 4, y - base_h, base_w + 8, base_h,
                       fill=self._darken(c, 15) + (235,), stroke=self._darken(c, 25) + (180,), stroke_width=2)
+
+    def draw_egyptian_pyramid(self, draw, x, y, size=1.0, color=(200, 175, 130)):
+        """Draw an Egyptian-style smooth-sided pyramid."""
+        s = max(size, 2.0)
+        c = tuple(color[:3])
+        base_w = int(28 * s)
+        height = int(40 * s)
+        self.draw_shadow_circle(draw, x, y + 2, base_w // 3, offset=(4, 4), blur_radius=8, color=(0, 0, 0, 40))
+
+        # Main pyramid triangle
+        tip = (x, y - height)
+        bl = (x - base_w // 2, y)
+        br = (x + base_w // 2, y)
+        self.draw_polygon(draw, [bl, tip, br], fill=c + (235,),
+                         stroke=self._darken(c, 20) + (180,), stroke_width=2)
+
+        # Shadow side (right half)
+        shadow = self._darken(c, 25)
+        mid = (x + base_w // 6, y)
+        self.draw_polygon(draw, [tip, mid, br], fill=shadow + (80,))
+
+        # Stone block lines (horizontal)
+        n_lines = max(4, int(height / 20))
+        for i in range(1, n_lines):
+            t = i / n_lines
+            ly = y - height * t
+            lw = int(base_w * (1 - t))
+            self.draw_line(draw, x - lw // 2, ly, x + lw // 2, ly,
+                          color=self._darken(c, 15) + (60,), width=1)
+
+        # Gold capstone
+        cap_h = int(height * 0.08)
+        cap_w = int(base_w * 0.12)
+        cap_tip = (x, y - height - cap_h)
+        cap_bl = (x - cap_w // 2, y - height)
+        cap_br = (x + cap_w // 2, y - height)
+        self.draw_polygon(draw, [cap_bl, cap_tip, cap_br], fill=(220, 195, 80, 220),
+                         stroke=(180, 155, 50, 200), stroke_width=1)
+
+        # Base platform
+        base_h = int(4 * s)
+        self.draw_rect(draw, x - base_w // 2 - 6, y - base_h, base_w + 12, base_h,
+                      fill=self._darken(c, 10) + (235,), stroke=self._darken(c, 20) + (180,), stroke_width=2)
+
+    def draw_sphinx(self, draw, x, y, size=1.0, color=(190, 165, 120)):
+        """Draw a sphinx — lion body with human head, side profile."""
+        s = max(size, 2.0)
+        c = tuple(color[:3])
+
+        # Shadow
+        self.draw_shadow_circle(draw, x + 5*s, y + s, 20*s, offset=(3, 3), blur_radius=5, color=(0, 0, 0, 35))
+
+        # Lion body (reclining, side view, facing right)
+        body_w, body_h = 30*s, 10*s
+        bx, by = x - 2*s, y - body_h - 4*s
+        self.draw_ellipse(draw, bx, by, body_w, body_h,
+                         fill=c + (230,), stroke=self._darken(c, 15) + (180,), stroke_width=2)
+
+        # Haunch (back leg)
+        haunch_r = 6*s
+        self.draw_ellipse(draw, x - 8*s, y - 7*s, haunch_r * 2, haunch_r,
+                         fill=self._darken(c, 5) + (220,), stroke=self._darken(c, 15) + (160,), stroke_width=1)
+
+        # Tail curling
+        tail_pts = [(x - 12*s, y - 3*s), (x - 16*s, y - 10*s), (x - 15*s, y - 14*s), (x - 12*s, y - 12*s)]
+        self.draw_polygon(draw, tail_pts, fill=c + (210,), stroke=self._darken(c, 15) + (160,), stroke_width=1)
+
+        # Front leg extended
+        leg_pts = [(x + 14*s, y - 2*s), (x + 18*s, y + 3*s), (x + 19*s, y + 4*s), (x + 17*s, y + 1*s)]
+        self.draw_polygon(draw, leg_pts, fill=self._darken(c, 5) + (220,),
+                         stroke=self._darken(c, 15) + (160,), stroke_width=1)
+
+        # Chest
+        chest_r = 7*s
+        cx = x + 11*s
+        cy = y - 5*s
+        self.draw_circle(draw, cx, cy, chest_r, fill=self._lighten(c, 10) + (230,),
+                        stroke=self._darken(c, 15) + (180,), stroke_width=2)
+
+        # Head (human, side profile facing right)
+        head_r = 6*s
+        hx = x + 17*s
+        hy = y - 12*s
+        self.draw_circle(draw, hx, hy, head_r, fill=self._lighten(c, 8) + (235,),
+                        stroke=self._darken(c, 15) + (180,), stroke_width=2)
+
+        # Face features (profile right)
+        # Nose
+        self.draw_polygon(draw, [(hx + 3*s, hy - s), (hx + 5*s, hy), (hx + 3*s, hy + 2*s)],
+                         fill=self._lighten(c, 5) + (220,), stroke=self._darken(c, 10) + (160,), stroke_width=1)
+
+        # Headdress (nemes) — striped head cloth
+        headdress_pts = [(hx - 4*s, hy - 5*s), (hx + 2*s, hy - 5*s),
+                        (hx + 4*s, hy - 2*s), (hx + 3*s, hy + 4*s),
+                        (hx - 2*s, hy + 5*s), (hx - 5*s, hy + 3*s)]
+        self.draw_polygon(draw, headdress_pts, fill=(180, 140, 80, 220),
+                         stroke=(130, 100, 50, 180), stroke_width=1)
+        # Headdress stripes
+        for si in range(3):
+            sy = hy - 4*s + si * 2*s
+            self.draw_line(draw, hx - 3*s, sy, hx + 1*s, sy, color=(210, 175, 120, 120), width=1)
+
+        # Eye
+        self.draw_arc(draw, hx + s, hy - s, 2*s, 0, 180, color=(30, 25, 20, 200), width=int(1.5*s))
+
+        # Base platform
+        base_h = int(3 * s)
+        self.draw_rect(draw, x - 14*s, y - base_h, 36*s, base_h,
+                      fill=self._darken(c, 10) + (230,), stroke=self._darken(c, 20) + (160,), stroke_width=2)
+
+    def draw_mummy_cat(self, draw, x, y, size=1.0, color=(220, 210, 190)):
+        """Draw a mummified cat — wrapped bundle with linen bandages."""
+        s = max(size, 2.0)
+        c = tuple(color[:3])
+
+        # Shadow
+        self.draw_shadow_circle(draw, x + 2*s, y + 2*s, 10*s, offset=(2, 2), blur_radius=4, color=(0, 0, 0, 35))
+
+        # Mummy body (cat-shaped bundle, reclining)
+        body_w, body_h = 22*s, 10*s
+        bx, by = x - body_w // 2, y - body_h - 2*s
+        self.draw_ellipse(draw, bx, by, body_w, body_h,
+                         fill=c + (235,), stroke=self._darken(c, 15) + (180,), stroke_width=2)
+
+        # Head wrapping (round bundle)
+        head_r = 6*s
+        hx = x + 10*s
+        hy = y - 8*s
+        self.draw_circle(draw, hx, hy, head_r, fill=self._lighten(c, 5) + (235,),
+                        stroke=self._darken(c, 10) + (180,), stroke_width=2)
+
+        # Ears (small pointed through wrappings)
+        ear_pts = [(hx + 3*s, hy - 4*s), (hx + 4*s, hy - 8*s), (hx + 6*s, hy - 4*s)]
+        self.draw_polygon(draw, ear_pts, fill=self._lighten(c, 8) + (220,),
+                         stroke=self._darken(c, 10) + (160,), stroke_width=1)
+
+        # Bandage lines — horizontal and diagonal across body
+        for i in range(6):
+            t = (i + 1) / 7
+            by = y - body_h - 2*s + t * body_h
+            self.draw_line(draw, x - body_w // 2 + 2*s, by, x + body_w // 2 - 2*s, by,
+                          color=(180, 170, 150, 100), width=int(1.5*s))
+
+        # Diagonal bandages
+        for i in range(4):
+            t = (i + 1) / 5
+            bx1 = x - body_w // 2 + t * body_w
+            bx2 = bx1 + 4*s
+            by1 = y - 2*s - t * body_h * 0.5
+            by2 = y - 2*s - (t + 0.2) * body_h * 0.5
+            self.draw_line(draw, bx1, by1, bx2, by2,
+                          color=(180, 170, 150, 80), width=int(s))
+
+        # Painted eyes on head wrapping (Egyptian style)
+        eye_color = (30, 25, 20)
+        self.draw_ellipse(draw, hx + 2*s, hy - s, int(3*s), int(2*s), fill=(255, 255, 255, 200))
+        self.draw_circle(draw, hx + 3*s, hy - s, s, fill=eye_color + (220,))
+        # Kohl eyeliner (thick black line)
+        self.draw_line(draw, hx + s, hy - 2*s, hx + 5*s, hy - 2*s,
+                      color=(20, 15, 10, 200), width=int(s))
+
+        # Ankh symbol on chest
+        ankh_x = x
+        ankh_y = y - 4*s
+        self.draw_circle(draw, ankh_x, ankh_y - 2*s, int(1.5*s), fill=(200, 180, 60, 200))
+        self.draw_line(draw, ankh_x, ankh_y - 3*s, ankh_x, ankh_y + 3*s,
+                      color=(200, 180, 60, 200), width=int(1.5*s))
+        self.draw_line(draw, ankh_x - 2*s, ankh_y + s, ankh_x + 2*s, ankh_y + s,
+                      color=(200, 180, 60, 200), width=int(1.5*s))
+
+    def draw_egyptian_art(self, draw, x, y, size=1.0, color=(200, 170, 100)):
+        """Draw Egyptian-style artwork — cat profile on papyrus with hieroglyph border."""
+        s = max(size, 2.0)
+        c = tuple(color[:3])
+
+        # Papyrus background panel
+        panel_w = int(32 * s)
+        panel_h = int(28 * s)
+        px = x - panel_w // 2
+        py = y - panel_h
+        self.draw_rect(draw, px, py, panel_w, panel_h,
+                      fill=(220, 205, 170, 235), stroke=(160, 140, 100, 180), stroke_width=2)
+
+        # Border — hieroglyphic pattern (top and bottom bands)
+        border_h = int(3 * s)
+        for band_y in [py, py + panel_h - border_h]:
+            self.draw_rect(draw, px + 2, band_y, panel_w - 4, border_h,
+                          fill=(60, 50, 40, 180))
+            # Small symbols in border
+            for sym in range(max(2, int(panel_w / (6 * s)))):
+                sx = px + 4 + sym * int(6 * s)
+                sy = band_y + border_h // 2
+                self.draw_circle(draw, sx, sy, int(s * 0.5), fill=(200, 180, 120, 200))
+                self.draw_line(draw, sx, sy - s, sx, sy + s, color=(200, 180, 120, 200), width=1)
+
+        # Stylized cat profile (facing right)
+        cat_color = (50, 40, 30)
+        cx = x - 4*s
+        cy = y - 14*s
+
+        # Body (long, elegant)
+        body_w, body_h = 14*s, 5*s
+        self.draw_ellipse(draw, cx - body_w // 2, cy, body_w, body_h,
+                         fill=cat_color + (220,))
+
+        # Head
+        head_r = 4*s
+        hx = cx + 6*s
+        hy = cy + s
+        self.draw_circle(draw, hx, hy, head_r, fill=cat_color + (220,))
+
+        # Ear (pointed, Egyptian style)
+        ear_pts = [(hx + 3*s, hy - 2*s), (hx + 4*s, hy - 7*s), (hx + 6*s, hy - 2*s)]
+        self.draw_polygon(draw, ear_pts, fill=cat_color + (220,))
+
+        # Eye (stylized, almond shape)
+        self.draw_line(draw, hx + 2*s, hy - s, hx + 4*s, hy - s,
+                      color=(255, 220, 100, 200), width=int(1.5*s))
+
+        # Tail curved up
+        tail_pts = [(cx - 7*s, cy + s), (cx - 12*s, cy - 3*s), (cx - 14*s, cy + s)]
+        self.draw_polygon(draw, tail_pts, fill=cat_color + (200,))
+
+        # Legs
+        for lx in [cx - 4*s, cx + 2*s]:
+            self.draw_line(draw, lx, cy + body_h // 2, lx + s, cy + body_h + 3*s,
+                          color=cat_color + (200,), width=int(2*s))
+
+    def draw_granary(self, draw, x, y, size=1.0, color=(170, 150, 110)):
+        """Draw an Egyptian grain storage building."""
+        s = max(size, 2.0)
+        c = tuple(color[:3])
+
+        # Shadow
+        self.draw_shadow_circle(draw, x, y + 2, 12*s, offset=(3, 3), blur_radius=4, color=(0, 0, 0, 35))
+
+        # Main building (rectangular with dome top)
+        body_w = int(18 * s)
+        body_h = int(16 * s)
+        bx = x - body_w // 2
+        by = y - body_h
+
+        # Mud-brick walls
+        self.draw_rect(draw, bx, by, body_w, body_h,
+                      fill=c + (230,), stroke=self._darken(c, 15) + (180,), stroke_width=2)
+
+        # Dome roof
+        dome_w = body_w + 4*s
+        dome_h = int(6 * s)
+        dome_y = by - dome_h
+        self.draw_ellipse(draw, x - dome_w // 2, dome_y, dome_w, dome_h * 2,
+                         fill=self._lighten(c, 5) + (230,), stroke=self._darken(c, 10) + (180,), stroke_width=2)
+
+        # Door opening
+        door_w = int(4 * s)
+        door_h = int(6 * s)
+        self.draw_rect(draw, x - door_w // 2, y - door_h, door_w, door_h,
+                      fill=(50, 40, 30, 230))
+
+        # Grain chute (small opening high up)
+        chute_w = int(3 * s)
+        chute_h = int(s)
+        self.draw_rect(draw, x - chute_w // 2, by + 3*s, chute_w, chute_h,
+                      fill=(200, 180, 80, 200))
+
+        # Grain spilling out
+        spill_pts = [(x, by + 3*s + chute_h), (x - 3*s, by + 5*s), (x + 3*s, by + 5*s)]
+        self.draw_polygon(draw, spill_pts, fill=(210, 190, 70, 180))
+
+        # Mud-brick texture lines
+        for row in range(3):
+            ry = by + 5*s + row * 4*s
+            self.draw_line(draw, bx + 2, ry, bx + body_w - 2, ry,
+                          color=self._darken(c, 10) + (80,), width=1)
+
+    def draw_cat_statue(self, draw, x, y, size=1.0, color=(50, 45, 35)):
+        """Draw an Egyptian Bastet-style cat statue (seated, upright)."""
+        s = max(size, 2.0)
+        c = tuple(color[:3])
+
+        # Shadow
+        self.draw_shadow_circle(draw, x + 2*s, y + 2*s, 8*s, offset=(2, 2), blur_radius=4, color=(0, 0, 0, 35))
+
+        # Base pedestal
+        base_w = int(14 * s)
+        base_h = int(3 * s)
+        self.draw_rect(draw, x - base_w // 2, y - base_h, base_w, base_h,
+                      fill=self._darken(c, 5) + (230,), stroke=self._darken(c, 15) + (160,), stroke_width=2)
+
+        # Body (seated upright)
+        body_w, body_h = 12*s, 16*s
+        bx, by = x - body_w // 2, y - body_h - base_h
+        self.draw_ellipse(draw, bx, by, body_w, body_h,
+                         fill=c + (230,), stroke=self._lighten(c, 15) + (180,), stroke_width=2)
+
+        # Chest (lighter/gold accent)
+        chest_w = int(6 * s)
+        chest_h = int(8 * s)
+        self.draw_ellipse(draw, x - chest_w // 2, by + 2*s, chest_w, chest_h,
+                         fill=(200, 170, 80, 200))
+
+        # Head (upright, pointed ears)
+        head_r = 5*s
+        hx = x
+        hy = by - 2*s
+        self.draw_circle(draw, hx, hy, head_r, fill=c + (235,),
+                        stroke=self._lighten(c, 15) + (180,), stroke_width=2)
+
+        # Ears (tall, pointed)
+        ear_size = 3*s
+        for side in [-1, 1]:
+            ear_pts = [(hx + side * 3*s, hy - 3*s),
+                      (hx + side * 4*s, hy - 8*s),
+                      (hx + side * 5*s, hy - 3*s)]
+            self.draw_polygon(draw, ear_pts, fill=c + (220,),
+                             stroke=self._lighten(c, 10) + (160,), stroke_width=1)
+            # Inner ear
+            inner_ear = [(hx + side * 3.5*s, hy - 3.5*s),
+                        (hx + side * 4*s, hy - 7*s),
+                        (hx + side * 4.5*s, hy - 3.5*s)]
+            self.draw_polygon(draw, inner_ear, fill=(230, 200, 150, 150))
+
+        # Eyes (Egyptian style — almond, gold)
+        for side in [-1, 1]:
+            self.draw_ellipse(draw, hx + side * 2*s - 1.5*s, hy - 1*s, int(3*s), int(2*s),
+                            fill=(255, 220, 80, 200))
+            self.draw_circle(draw, hx + side * 2*s, hy, int(s * 0.6), fill=(30, 25, 20, 220))
+            # Kohl eyeliner
+            self.draw_line(draw, hx + side * 3*s, hy - 2*s, hx + side * 3*s, hy + s,
+                          color=(20, 15, 10, 180), width=int(s))
+
+        # Nose
+        self.draw_circle(draw, hx, hy + 2*s, int(s), fill=self._darken(c, 10) + (200,))
+
+        # Whiskers (decorative)
+        for side in [-1, 1]:
+            self.draw_line(draw, hx + side * 3*s, hy + 2*s, hx + side * 7*s, hy + s,
+                          color=self._lighten(c, 20) + (100,), width=1)
+            self.draw_line(draw, hx + side * 3*s, hy + 3*s, hx + side * 6*s, hy + 3*s,
+                          color=self._lighten(c, 20) + (100,), width=1)
+
+        # Gold collar/necklace
+        self.draw_rect(draw, x - 4*s, hy + 4*s, 8*s, int(1.5*s),
+                      fill=(220, 190, 80, 220), stroke=(180, 150, 50), stroke_width=1)
+
+        # Earring (gold ring in ear)
+        self.draw_circle(draw, hx + 5*s, hy - 2*s, int(s), fill=(220, 190, 80, 200))
 
     def draw_temple(self, draw, x, y, size=1.0, color=(160, 130, 100)):
         """Draw a Maya temple — corbel arch, roof comb, stepped platform."""
@@ -5553,6 +5969,30 @@ class SketchGenerator:
         elif etype in ("pyramid", "step_pyramid"):
             c = fill or (180, 150, 120)
             self.draw_pyramid(draw, x, y, s, c, steps=elem.get("steps", 3))
+
+        elif etype == "egyptian_pyramid":
+            c = fill or (200, 175, 130)
+            self.draw_egyptian_pyramid(draw, x, y, s, c)
+
+        elif etype == "sphinx":
+            c = fill or (190, 165, 120)
+            self.draw_sphinx(draw, x, y, s, c)
+
+        elif etype == "mummy_cat":
+            c = fill or (220, 210, 190)
+            self.draw_mummy_cat(draw, x, y, s, c)
+
+        elif etype == "egyptian_art":
+            c = fill or (200, 170, 100)
+            self.draw_egyptian_art(draw, x, y, s, c)
+
+        elif etype == "granary":
+            c = fill or (170, 150, 110)
+            self.draw_granary(draw, x, y, s, c)
+
+        elif etype == "cat_statue":
+            c = fill or (50, 45, 35)
+            self.draw_cat_statue(draw, x, y, s, c)
 
         elif etype in ("temple", "mayan_temple"):
             c = fill or (160, 130, 100)

@@ -20,6 +20,11 @@ EXPRESSIONS = {
     "surprised": ["surprised", "shocked", "amazed", "astonished", "startled", "stunned"],
     "tired":   ["tired", "sleepy", "exhausted", "weary", "fatigued", "drowsy", "yawning"],
     "proud":   ["proud", "confident", "smug", "superior", "triumphant", "victorious"],
+    "sneaky":  ["sneaky", "sneaking", "sneak", "stealthy", "creeping", "sly", "cunning", "mischievous"],
+    "focused": ["focused", "focus", "concentrated", "intense", "hunting", "stalking", "determined", "alert"],
+    "mysterious": ["mysterious", "mystery", "curious", "inquisitive", "wondering", "strange", "unknown"],
+    "cautious": ["cautious", "wary", "careful", "hesitant", "suspicious", "watchful", "vigilant", "guarded"],
+    "triumphant": ["triumphant", "victorious", "glorious", "winning", "conquering", "celebrating"],
 }
 
 # ── Clothing keywords ─────────────────────────────────────────
@@ -256,26 +261,26 @@ def _apply_spatial_positions(elements: list, relations: list, text: str):
             if edef2.get("type") == e.get("type"):
                 obj_elem = e
 
-    if subj_elem and obj_elem:
-        if rel == "beside":
-            subj_elem["x"] = 0.32
-            subj_elem["y"] = 0.55
-            obj_elem["x"] = 0.72
-            obj_elem["y"] = 0.55
-        elif rel == "behind":
-            subj_elem["x"] = 0.50
-            subj_elem["y"] = 0.50
-            obj_elem["x"] = 0.55
-            obj_elem["y"] = 0.60
-        elif rel == "in_front_of":
-            subj_elem["x"] = obj_elem["x"]
-            subj_elem["y"] = obj_elem["y"] - 0.05
-            subj_elem["_layer"] = 1  # draw on top
-        elif rel == "on" or rel == "on top of":
-            subj_elem["x"] = obj_elem["x"]
-            subj_elem["y"] = obj_elem["y"] - 0.08
-            subj_elem["pose"] = "sitting"
-            subj_elem["_layer"] = 1
+        if subj_elem and obj_elem:
+            if rel == "beside":
+                subj_elem["x"] = 0.32
+                subj_elem["y"] = 0.55
+                obj_elem["x"] = 0.72
+                obj_elem["y"] = 0.55
+            elif rel == "behind":
+                subj_elem["x"] = 0.50
+                subj_elem["y"] = 0.50
+                obj_elem["x"] = 0.55
+                obj_elem["y"] = 0.60
+            elif rel == "in_front_of":
+                subj_elem["x"] = obj_elem["x"]
+                subj_elem["y"] = obj_elem["y"] - 0.05
+                subj_elem["_layer"] = 1
+            elif rel == "on" or rel == "on top of":
+                subj_elem["x"] = obj_elem["x"]
+                subj_elem["y"] = obj_elem["y"] - 0.08
+                subj_elem["pose"] = "sitting"
+                subj_elem["_layer"] = 1
 
 
 def _add_clothing(elements: list, clothing: list[str], rng: random.Random):
@@ -491,18 +496,12 @@ def compose_creative_scene(text: str, rng: random.Random = None) -> dict | None:
 
     has_modifiers = bool(clothing or accessories or expression or relations)
 
-    # Only activate for text that needs creative handling
-    if not has_modifiers and not any(w in tl for w in ("wearing", "dressed", "holding", "carrying",
-                                                        "expression", "mood", "feeling")):
+    concepts = extract_concepts(text)
+    if not concepts:
         return None
 
     if rng is None:
         rng = random.Random(hash(tl) & 0xFFFFFFFF)
-
-    # Extract concepts
-    concepts = extract_concepts(text)
-    if not concepts:
-        return None
 
     # Build initial elements
     elements = _resolve_elements_for_concepts(concepts, pose, rng)

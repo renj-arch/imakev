@@ -84,7 +84,7 @@ CONCEPTS = {
     "butterfly":  ["butterfly", "butterflies", "moth", "caterpillar", "chrysalis"],
     "dog":        ["dog", "dogs", "puppy", "canine", "hound", "retriever", "shepherd"],
     "cat":        ["cat", "cats", "kitten", "feline", "lion", "tiger", "leopard",
-                    "cheetah", "panther", "jaguar"],
+                    "cheetah", "panther", "jaguar", "wildcat", "wildcats"],
     "horse":      ["horse", "horses", "pony", "stallion", "mare", "foal",
                     "equestrian", "gallop"],
     "elephant":   ["elephant", "elephants", "tusker", "pachyderm"],
@@ -97,6 +97,8 @@ CONCEPTS = {
     "rabbit":     ["rabbit", "rabbits", "bunny", "hare", "cottontail"],
     "squirrel":   ["squirrel", "squirrels", "chipmunk", "beaver"],
     "fox":        ["fox", "foxes", "fennec", "vulpes"],
+    "rat":        ["rat", "rats", "mouse", "mice", "rodent", "pest", "vermin"],
+    "animal":     ["animal", "animals", "creature", "creatures", "beast", "beasts"],
     "wolf":       ["wolf", "wolves", "dire wolf", "canis lupus"],
     "frog":       ["frog", "frogs", "toad", "amphibian", "tadpole"],
     "turtle":     ["turtle", "turtles", "tortoise", "sea turtle"],
@@ -104,7 +106,7 @@ CONCEPTS = {
                     "reptile"],
 
     # Human / Character
-    "human":      ["person", "people", "human", "man", "woman", "child",
+    "human":      ["person", "people", "human", "humans", "man", "woman", "child",
                     "scientist", "explorer", "adventurer",
                     "doctor", "teacher", "artist", "musician",
                     "king", "queen", "prince", "princess",
@@ -153,7 +155,7 @@ CONCEPTS = {
     "building":   ["building", "buildings", "house", "home", "structure",
                     "skyscraper", "tower", "palace", "temple", "church",
                     "cathedral", "mosque", "monument", "castle",
-                    "fortress", "pyramid", "colosseum"],
+                    "fortress", "pyramid", "colosseum", "feast"],
     "factory":    ["factory", "factories", "mill", "refinery", "warehouse",
                     "industrial", "manufacturing", "smokestacks", "steam engine",
                     "assembly line", "machine"],
@@ -181,6 +183,18 @@ CONCEPTS = {
     "india_map":  ["india map", "india outline", "indian map", "map of india"],
     "ship":       ["ship", "boat", "vessel", "sail", "sailboat", "yacht"],
     "canoe":      ["canoe", "canoeing"],
+
+    # Egypt / Ancient
+    "egyptian_pyramid": ["pyramid", "pyramids", "great pyramid", "giza", "smooth pyramid", "egyptian pyramid"],
+    "sphinx":           ["sphinx", "great sphinx", "sphinx of giza"],
+    "mummy":            ["mummy", "mummified", "mummification", "mummies", "wrapped", "sarcophagus"],
+    "granary":          ["granary", "grain store", "grain storage", "silo", "grain silo"],
+    "pharaoh":          ["pharaoh", "pharaohs", "egyptian king", "egyptian ruler", "cleopatra"],
+    "nile":             ["nile", "river nile", "nile river"],
+    "tomb":             ["tomb", "burial chamber", "sepulcher", "crypt", "necropolis"],
+    "papyrus":          ["papyrus", "scroll", "manuscript", "hieroglyph", "hieroglyphs", "hieroglyphics"],
+    "cat_statue":       ["cat statue", "bastet", "egyptian cat", "cat sculpture", "feline statue"],
+    "ankh":             ["ankh", "ankh symbol", "life symbol", "egyptian cross"],
     "kayak":      ["kayak", "kayaking"],
     "raft":       ["raft", "rafting"],
     "pirate_ship":["pirate ship", "pirate", "pirates", "pirate galleon"],
@@ -262,8 +276,10 @@ def detect_bg_type(concepts: dict) -> str:
                                                "galaxy", "asteroid"])
     aquatic = sum(concepts.get(c, 0) for c in ["ocean", "water", "whale", "dolphin",
                                                "shark", "fish", "ship"])
+    desert = sum(concepts.get(c, 0) for c in ["desert", "egyptian_pyramid", "sphinx",
+                                                "mummy", "granary", "camel"])
     forest = sum(concepts.get(c, 0) for c in ["tree", "mountain", "flower", "grass",
-                                              "desert", "snow", "glacier", "path"])
+                                               "snow", "glacier", "path"])
     tech = sum(concepts.get(c, 0) for c in ["computer", "network", "robot", "ai",
                                             "circuit", "data"])
     city = sum(concepts.get(c, 0) for c in ["building", "flag", "crown", "book",
@@ -272,7 +288,7 @@ def detect_bg_type(concepts: dict) -> str:
                                                 "puzzle", "gear", "target"])
 
     best = max([("gradient", 0), ("space", cosmic), ("ocean", aquatic),
-                ("forest", forest), ("desert", forest), ("mountain", forest),
+                ("forest", forest), ("desert", desert), ("mountain", forest),
                 ("industrial", tech), ("city", city), ("indoor", abstract)],
                key=lambda x: x[1])
 
