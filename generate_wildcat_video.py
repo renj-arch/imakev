@@ -99,7 +99,7 @@ def main():
         cam = s.get('camera', {})
         print("  %d. [%6s] %-40s -> %s" % (i+1, cam.get('shot','?'), s.get('narration','')[:40], ', '.join(types)))
 
-    gen = SketchGenerator(W, H, seed=42)
+    gen = SketchGenerator(W, H, seed=42, hand_drawn=True)
     all_frames = []
     for scene in scenes:
         frames = generate_ken_burns(scene, gen, FRAMES_PER_SCENE)

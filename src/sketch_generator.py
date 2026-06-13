@@ -137,6 +137,124 @@ class SketchGenerator:
     def _darken(c, amount=30):
         return tuple(max(0, v - amount) for v in c[:3])
 
+    # ── Sketch rendering helpers ─────────────────────────────────
+
+    def _hatch_fill(self, draw, polygon, color=(20, 18, 15), density=1.5, angle=45):
+        if not polygon or len(polygon) < 3:
+            return
+        xs = [p[0] for p in polygon]
+        ys = [p[1] for p in polygon]
+        min_x, max_x = int(min(xs)), int(max(xs))
+        min_y, max_y = int(min(ys)), int(max(ys))
+        rad = math.radians(angle)
+        spacing = density * 3
+        diag = max(max_x - min_x, max_y - min_y)
+        for i in range(int(diag / spacing) + 2):
+            off = i * spacing
+            hx1 = min_x + off * math.cos(rad)
+            hy1 = min_y + off * math.sin(rad)
+            hx2 = min_x + off * math.cos(rad) + diag * math.sin(rad)
+            hy2 = min_y + off * math.sin(rad) + diag * math.cos(rad)
+            c = tuple(color[:3]) + (80,)
+            draw.line([(hx1, hy1), (hx2, hy2)], fill=c, width=1)
+
+    def _wobble_points(self, pts, amount=2.0, freq=5):
+        result = []
+        for i, (x, y) in enumerate(pts):
+            t = i / max(len(pts) - 1, 1)
+            wobble_x = amount * math.sin(t * freq * math.pi * 2 + self.rng.random() * 0.5)
+            wobble_y = amount * math.cos(t * freq * math.pi * 2 + self.rng.random() * 0.5)
+            result.append((x + wobble_x, y + wobble_y))
+        return result
+
+    def _sample_ellipse_pts(self, cx, cy, rx, ry, n=20):
+        pts = []
+        for i in range(n + 1):
+            a = 2 * math.pi * i / n
+            pts.append((cx + rx * math.cos(a), cy + ry * math.sin(a)))
+        return pts
+
+    def _sketch_line(self, draw, x1, y1, x2, y2, color, width, passes=2):
+        steps = max(6, int(math.sqrt((x2-x1)**2 + (y2-y1)**2) / 3))
+        base_pts = []
+        for i in range(steps + 1):
+            t = i / steps
+            base_pts.append((x1 + (x2 - x1) * t, y1 + (y2 - y1) * t))
+        for p in range(passes):
+            pts = self._wobble_points(base_pts, amount=1.0 + p * 0.5, freq=4 + p * 2)
+            w = max(1, width + self.rng.randint(-1, 1))
+            alpha = max(40, 200 - p * 50)
+            c = tuple(color[:3]) + (alpha,)
+            for i in range(len(pts) - 1):
+                draw.line([pts[i], pts[i+1]], fill=c, width=w)
+
+    def _sketch_ellipse(self, draw, cx, cy, rx, ry, fill=None, stroke=None, stroke_width=2):
+        pts = self._sample_ellipse_pts(cx, cy, rx, ry, n=24)
+        if fill:
+            hatch_angle = self.rng.choice([30, 45, 60])
+            self._hatch_fill(draw, pts, color=fill, density=1.2, angle=hatch_angle)
+        if stroke or not fill:
+            line_color = stroke or (20, 18, 15)
+            for p in range(2):
+                wobbled = self._wobble_points(pts, amount=1.0 + p, freq=4)
+                w = max(1, stroke_width + self.rng.randint(-1, 1))
+                alpha = 180 - p * 50
+                c = tuple(line_color[:3]) + (alpha,)
+                for i in range(len(wobbled) - 1):
+                    draw.line([wobbled[i], wobbled[i+1]], fill=c, width=w)
+
+    def _sketch_rect(self, draw, x, y, w, h, fill=None, stroke=None, stroke_width=2, rx=0):
+        pts = [(x, y), (x + w, y), (x + w, y + h), (x, y + h)]
+        if fill:
+            hatch_angle = self.rng.choice([30, 45, 60])
+            self._hatch_fill(draw, pts, color=fill, density=1.2, angle=hatch_angle)
+        if stroke or not fill:
+            line_color = stroke or (20, 18, 15)
+            for p in range(2):
+                wobbled = self._wobble_points(pts, amount=1.0 + p, freq=4)
+                w = max(1, stroke_width + self.rng.randint(-1, 1))
+                alpha = 180 - p * 50
+                c = tuple(line_color[:3]) + (alpha,)
+                for i in range(len(wobbled)):
+                    j = (i + 1) % len(wobbled)
+                    draw.line([wobbled[i], wobbled[j]], fill=c, width=w)
+
+    def _sketch_polygon(self, draw, points, fill=None, stroke=None, stroke_width=2):
+        if fill:
+            hatch_angle = self.rng.choice([30, 45, 60])
+            self._hatch_fill(draw, points, color=fill, density=1.2, angle=hatch_angle)
+        if stroke or not fill:
+            line_color = stroke or (20, 18, 15)
+            for p in range(2):
+                wobbled = self._wobble_points(points, amount=1.0 + p, freq=4)
+                w = max(1, stroke_width + self.rng.randint(-1, 1))
+                alpha = 180 - p * 50
+                c = tuple(line_color[:3]) + (alpha,)
+                for i in range(len(wobbled)):
+                    j = (i + 1) % len(wobbled)
+                    draw.line([wobbled[i], wobbled[j]], fill=c, width=w)
+
+    def _sketch_circle(self, draw, cx, cy, r, fill=None, stroke=None, stroke_width=2):
+        self._sketch_ellipse(draw, cx, cy, r, r, fill=fill, stroke=stroke, stroke_width=stroke_width)
+
+    def _sketch_arc(self, draw, cx, cy, r, start_angle, end_angle, color=(0, 0, 0), width=2):
+        n = max(8, int(r * 0.3))
+        pts = []
+        start_r = math.radians(start_angle)
+        end_r = math.radians(end_angle)
+        if end_r <= start_r:
+            end_r += 2 * math.pi
+        for i in range(n + 1):
+            a = start_r + (end_r - start_r) * i / n
+            pts.append((cx + r * math.cos(a), cy + r * math.sin(a)))
+        for p in range(2):
+            wobbled = self._wobble_points(pts, amount=0.8 + p * 0.3, freq=5)
+            w = max(1, width + self.rng.randint(-1, 1))
+            alpha = 180 - p * 50
+            c = tuple(color[:3]) + (alpha,)
+            for i in range(len(wobbled) - 1):
+                draw.line([wobbled[i], wobbled[i+1]], fill=c, width=w)
+
     @staticmethod
     def _lighten(c, amount=30):
         return tuple(min(255, v + amount) for v in c[:3])
@@ -150,6 +268,9 @@ class SketchGenerator:
     # ── Drawing primitives (clean, no wobble) ───────────────────
 
     def draw_circle(self, draw, cx, cy, r, fill=None, stroke=None, stroke_width=2, opacity=255):
+        if self.hand_drawn and self.technique:
+            self._sketch_circle(draw, cx, cy, r, fill=fill, stroke=stroke or self.technique["stroke"], stroke_width=stroke_width)
+            return
         if fill:
             c = fill if len(fill) == 4 else fill + (opacity,)
             draw.ellipse([cx-r, cy-r, cx+r, cy+r], fill=c)
@@ -158,6 +279,9 @@ class SketchGenerator:
             draw.ellipse([cx-r, cy-r, cx+r, cy+r], outline=c, width=stroke_width)
 
     def draw_rect(self, draw, x, y, w, h, fill=None, stroke=None, stroke_width=2, rx=0, opacity=255):
+        if self.hand_drawn and self.technique:
+            self._sketch_rect(draw, x, y, w, h, fill=fill, stroke=stroke or self.technique["stroke"], stroke_width=stroke_width, rx=rx)
+            return
         if fill:
             c = fill if len(fill) == 4 else fill + (opacity,)
             if rx > 0:
@@ -172,6 +296,9 @@ class SketchGenerator:
                 draw.rectangle([x, y, x+w, y+h], outline=c, width=stroke_width)
 
     def draw_polygon(self, draw, points, fill=None, stroke=None, stroke_width=2, opacity=255):
+        if self.hand_drawn and self.technique:
+            self._sketch_polygon(draw, points, fill=fill, stroke=stroke or self.technique["stroke"], stroke_width=stroke_width)
+            return
         if fill:
             c = fill if len(fill) == 4 else fill + (opacity,)
             draw.polygon(points, fill=c)
@@ -180,10 +307,16 @@ class SketchGenerator:
             draw.polygon(points, outline=c, width=stroke_width)
 
     def draw_line(self, draw, x1, y1, x2, y2, color=(0, 0, 0), width=2, opacity=255):
+        if self.hand_drawn and self.technique:
+            self._sketch_line(draw, x1, y1, x2, y2, color or self.technique["stroke"], width, passes=2)
+            return
         c = color if len(color) == 4 else color + (opacity,)
         draw.line([(x1, y1), (x2, y2)], fill=c, width=width)
 
     def draw_arc(self, draw, cx, cy, r, start_angle, end_angle, color=(0, 0, 0), width=2, opacity=255):
+        if self.hand_drawn and self.technique:
+            self._sketch_arc(draw, cx, cy, r, start_angle, end_angle, color=color or self.technique["stroke"], width=width)
+            return
         c = color if len(color) == 4 else color + (opacity,)
         draw.arc([cx-r, cy-r, cx+r, cy+r], start_angle, end_angle, fill=c, width=width)
 
@@ -5185,6 +5318,9 @@ class SketchGenerator:
 
     def draw_ellipse(self, draw, x, y, w, h, fill=None, stroke=None, stroke_width=1, opacity=255):
         """Draw an ellipse."""
+        if self.hand_drawn and self.technique:
+            self._sketch_ellipse(draw, x, y, w//2, h//2, fill=fill, stroke=stroke or self.technique["stroke"], stroke_width=stroke_width)
+            return
         if fill:
             fc = tuple(fill[:3]) + (opacity,)
             draw.ellipse([x-w//2, y-h//2, x+w//2, y+h//2], fill=fc)
