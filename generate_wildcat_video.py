@@ -4,6 +4,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from PIL import Image, ImageDraw, ImageFont
 from src.sketch_generator import SketchGenerator
 from src.narrative_to_scenes import narration_to_scenes
+from src.painterly import painterly_postprocess
 
 NARRATION = """Then another animal noticed the feast.
 Wildcats.
@@ -81,6 +82,7 @@ def generate_ken_burns(scene, gen, num_frames):
             img = add_night_glow(img, True)
             if "feast" in narration.lower():
                 img = add_fire_glow(img)
+        img = painterly_postprocess(img, style="oil")
         add_text_overlay(img, narration, W, H)
         if img.mode == "RGBA":
             bg = Image.new("RGB", img.size, (0, 0, 0))
