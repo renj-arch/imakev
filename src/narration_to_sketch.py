@@ -51,7 +51,8 @@ def _detect_visual_type(text: str) -> str:
         ("timeline",     ["timeline", "over millions of years", "over thousands", "generation after",
                           "over time", "evolved", "gradually", "era", "epoch",
                           "began", "eventually", "slowly", "century after century",
-                          "year after year", "millennium", "over millions"]),
+                          "year after year", "millennium", "over millions",
+                          "changed", "transformed", "became", "over generations"]),
         ("flowchart",    ["leads to", "results in", "because of this", "chain reaction",
                           "step", "stage", "phase", "process", "sequence", "progression",
                           "first", "second", "third", "then", "next", "finally"]),
@@ -97,14 +98,23 @@ def _describe_scene(narration: str, story_context: dict = None,
     visual_type = _detect_visual_type(narration)
     
     # Non-story types: route to auto_story's specialized generators (no treatment applied)
+    # Only use auto_story if it returns enough meaningful elements; otherwise
+    # fall through to the story composer which uses the trained brain for richer scenes.
     if visual_type != "story":
         try:
             from auto_story import _infer_visuals_local
             result = _infer_visuals_local(narration, 1, 1)
             if result and "visual" in result:
                 scene = result["visual"]
-                scene["mood"] = result.get("mood", "peaceful")
-                return scene
+                elems = scene.get("elements", [])
+                # Count non-trivial elements (skip label/icon types that aren't real visuals)
+                LABEL_TYPES = {"circle", "eye", "generation", "dna", "text", "line", "arrow", "x_mark"}
+                meaningful = [e for e in elems
+                              if e.get("scale", 1) >= 1.5
+                              and e.get("type") not in LABEL_TYPES]
+                if len(meaningful) >= 3:
+                    scene["mood"] = result.get("mood", "peaceful")
+                    return scene
         except Exception:
             pass
     
@@ -138,6 +148,12 @@ def _compose_scene(narration: str, story_context: dict = None,
     
     Treatment and background enrichment are applied by _describe_scene() after compose.
     """
+    
+    # CREATIVE: Creative scene composer — understands modifiers, clothing, expressions, spatial relations
+    from src.creative_composer import compose_creative_scene
+    result = compose_creative_scene(narration)
+    if result:
+        return result
     
     # PRIMARY: Creative scene — poetic/reflective/philosophical text
     from src.creative_scenes import match_creative_scene
@@ -525,8 +541,8 @@ def _keyword_describe(narration: str) -> dict | None:
                              "brain has", "brain uses", "brain weighs",
                              "human anatomy", "organs", "skeleton",
                              "muscle", "lungs", "kidney", "liver",
-                             "dna", "gene", "chromosome", "cell",
-                             "genetic", "blueprint of life",
+                              "dna", "chromosome", "cell",
+                              "genetic", "blueprint of life",
                              "immune system", "digestive",
                              "neural", "synapse", "cortex")):
         scene = {
@@ -561,8 +577,8 @@ def _keyword_describe(narration: str) -> dict | None:
                 {"type": "circle", "x": 0.8, "y": 0.6, "radius": 3, "fill": [60, 100, 200]},
                 {"type": "text", "x": 0.5, "y": 0.08, "text": "THE HUMAN HEART", "font_size": 28, "fill": [60, 60, 80]},
             ]
-        if any(w in n for w in ("dna", "gene", "genetic", "chromosome",
-                                 "blueprint of life", "cell")):
+        if any(w in n for w in ("dna", "genetic", "chromosome",
+                                  "blueprint of life", "cell")) or re.search(r'\bgene\b', n):
             scene["elements"] = [
                 {"type": "dna", "x": 0.3, "y": 0.5, "width": 100, "height": 160, "fill": [60, 140, 220]},
                 {"type": "dna", "x": 0.7, "y": 0.5, "width": 100, "height": 160, "fill": [60, 180, 120]},
@@ -624,17 +640,18 @@ def _keyword_describe(narration: str) -> dict | None:
     # ═══════════════════════════════════════════════════════════════
     #  HISTORY / ANCIENT CIVILIZATIONS
     # ═══════════════════════════════════════════════════════════════
-    if any(w in n for w in ("ancient", "civilization", "empire", "pharaoh",
-                             "pyramid", "roman", "roman empire", "greek",
-                             "greece", "egypt", "egyptian",
-                             "medieval", "kingdom", "caesar",
-                             "colosseum", "temple", "monument",
-                             "archaeology", "archaeologist",
-                             "industrial revolution", "steam engine",
-                             "factory", "industrial", "manufacturing",
-                             "renaissance", "colony", "colonial",
-                             "mongol", "viking", "celtic",
-                             "byzantine", "ottoman", "persian")):
+    if any(w in n for w in ("civilization", "empire", "pharaoh",
+                              "pyramid", "roman", "roman empire", "greek",
+                              "greece", "egypt", "egyptian",
+                              "ancient egypt", "ancient greece", "ancient rome",
+                              "medieval", "kingdom", "caesar",
+                              "colosseum", "temple", "monument",
+                              "archaeology", "archaeologist",
+                              "industrial revolution", "steam engine",
+                              "factory", "industrial", "manufacturing",
+                              "renaissance", "colony", "colonial",
+                              "mongol", "viking", "celtic",
+                              "byzantine", "ottoman", "persian")):
         scene = {
             "bg": {"type": "gradient", "colors": [[200, 180, 150], [160, 140, 110]], "horizon": 0.5, "ground_color": [140, 120, 90]},
             "elements": [
@@ -913,6 +930,19 @@ def _keyword_describe(narration: str) -> dict | None:
         }
         if any(w in n for w in ("tail", "tails", "flipper", "flippers", "fin", "fins")):
             scene["elements"].append({"type": "whale", "x": 0.65, "y": 0.5, "scale": 3.0, "fill": [60, 70, 100]})
+        # Wolf / dog domestication: show transformation from wolf to dog
+        if any(w in n for w in ("wolf", "wolves", "dog", "dogs", "canine", "canines")):
+            scene["elements"] = [
+                {"type": "dog", "x": 0.25, "y": 0.6, "scale": 3.5, "fill": [90, 75, 60], "pose": "standing"},
+                {"type": "dog", "x": 0.5, "y": 0.62, "scale": 3.0, "fill": [120, 95, 70], "pose": "sitting"},
+                {"type": "dog", "x": 0.75, "y": 0.64, "scale": 2.5, "fill": [160, 130, 90], "pose": "playful"},
+                {"type": "text", "x": 0.5, "y": 0.08, "text": "WOLF TO DOG", "font_size": 26, "fill": [60, 60, 80]},
+            ]
+            if any(w in n for w in ("ear", "ears", "floppy", "floppier")):
+                # Add ear shape hints via extra elements
+                scene["elements"].append({"type": "circle", "x": 0.2, "y": 0.35, "scale": 0.5})
+            mood = "hopeful" if any(w in n for w in ("playful", "friend", "gentle")) else "epic"
+            scene["mood"] = mood
         scenes.append(scene)
 
     # Mountain / Hill / Valley
@@ -1063,14 +1093,19 @@ def _keyword_describe(narration: str) -> dict | None:
             scene["elements"].insert(0, {"type": "mammoth", "x": 0.5, "y": 0.6, "scale": 3.5, "fill": [150, 130, 100]})
         scenes.append(scene)
 
-    # Choose best match (first match by priority order)
+    # Choose best match: prefer scene with most substantial elements
     if scenes:
-        scene = scenes[0]
+        SUBSTANTIAL_TYPES = {"star", "text", "circle", "line", "arrow", "snow"}
+        def scene_score(s):
+            elems = s.get("elements", [])
+            return sum(2 for e in elems if e.get("scale", 1) >= 2.0 and e.get("type") not in SUBSTANTIAL_TYPES) + \
+                   sum(1 for e in elems if e.get("type") not in SUBSTANTIAL_TYPES)
+        best = max(scenes, key=scene_score)
         # Add text label from narration
         words = n.split()
         label = " ".join(words[:5]).upper()
-        scene["elements"].append({"type": "text", "x": 0.5, "y": 0.08, "text": label, "font_size": 26, "fill": [40, 35, 30]})
-        return scene
+        best["elements"].append({"type": "text", "x": 0.5, "y": 0.08, "text": label, "font_size": 26, "fill": [40, 35, 30]})
+        return best
 
     return None
 

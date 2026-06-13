@@ -2707,8 +2707,57 @@ class SketchGenerator:
         self.draw_line(draw, hx + 6*s, hy + 3*s, hx + 8*s, hy + 3.5*s, color=mouth_line, width=1)
         self.draw_line(draw, hx + 6*s, hy + 3*s, hx + 4*s, hy + 4*s, color=mouth_line, width=1)
 
-    def draw_cat(self, draw, x, y, size=1.0, color=(200, 160, 120), pose="standing"):
-        """Draw a cat — standing or sitting pose."""
+    def draw_cat(self, draw, x, y, size=1.0, color=(200, 160, 120), pose="standing", mood=None):
+        """Draw a cat — standing or sitting pose, with optional mood expression."""
+
+        def _draw_face(hx, hy, mood, s):
+            """Draw cat face with mood expression."""
+            if mood == "sad":
+                # Droopy eyes
+                self.draw_circle(draw, hx + 3*s, hy - s*0.5, 1.5*s, fill=(30, 25, 20, 200))
+                self.draw_line(draw, hx + 3*s, hy + 0.5*s, hx + 3*s, hy + 1.5*s,
+                              color=(30, 25, 20, 150), width=int(s))
+                # Downward mouth
+                self.draw_line(draw, hx + 2*s, hy + 2.5*s, hx + 4*s, hy + 3.5*s,
+                              color=(140, 100, 80, 150), width=1)
+                # Tear drop
+                self.draw_ellipse(draw, hx + 4*s, hy + s, int(1.5*s), int(2*s),
+                                 fill=(180, 200, 240, 150))
+            elif mood == "angry":
+                # Angry eyes (slanted)
+                self.draw_line(draw, hx + 2*s, hy - 1.5*s, hx + 4.5*s, hy - s,
+                              color=(30, 25, 20, 200), width=int(1.5*s))
+                self.draw_line(draw, hx + 1.5*s, hy - 2*s, hx + 3*s, hy - 0.5*s,
+                              color=(30, 25, 20, 150), width=int(s))
+                # Snout
+                self.draw_circle(draw, hx + 5*s, hy + 1*s, 2.5*s, fill=(240, 200, 190, 200))
+                # Angry mouth (zigzag)
+                self.draw_line(draw, hx + 3*s, hy + 2*s, hx + 5*s, hy + 1*s,
+                              color=(140, 100, 80, 150), width=1)
+                self.draw_line(draw, hx + 5*s, hy + 1*s, hx + 6*s, hy + 2*s,
+                              color=(140, 100, 80, 150), width=1)
+            elif mood == "happy":
+                # Happy eyes (closed arcs)
+                self.draw_arc(draw, hx + 3*s, hy - s, 1.5*s, 180, 0,
+                             color=(30, 25, 20, 200), width=int(1.5*s))
+                # Snout
+                self.draw_circle(draw, hx + 5*s, hy + 1*s, 2.5*s, fill=(240, 200, 190, 200))
+                # Happy mouth (smile)
+                self.draw_arc(draw, hx + 3.5*s, hy + s, 2*s, 0, 180,
+                             color=(140, 100, 80, 150), width=1)
+            elif mood == "surprised":
+                # Wide eyes
+                self.draw_circle(draw, hx + 3*s, hy - s, 2*s, fill=(255, 255, 255, 220))
+                self.draw_circle(draw, hx + 3*s, hy - s, s, fill=(30, 25, 20, 200))
+                # Open mouth
+                self.draw_circle(draw, hx + 4.5*s, hy + 2*s, 2*s, fill=(200, 100, 100, 200))
+            else:
+                # Neutral / default eye (single dot + pupil)
+                self.draw_circle(draw, hx + 3*s, hy - s, 1.5*s, fill=(30, 25, 20, 200))
+                self.draw_circle(draw, hx + 3*s, hy - s, 0.5*s, fill=(255, 255, 255, 180))
+                # Snout
+                self.draw_circle(draw, hx + 5*s, hy + 1*s, 2.5*s, fill=(240, 200, 190, 200))
+
         s = size
         c = tuple(color[:3])
 
@@ -2743,8 +2792,7 @@ class SketchGenerator:
             self.draw_polygon(draw, inner_ear, fill=(240, 200, 180, 180))
 
             # Eye
-            self.draw_circle(draw, hx + 3*s, hy, 1.5*s, fill=(30, 25, 20, 200))
-            self.draw_circle(draw, hx + 3*s, hy, 0.5*s, fill=(255, 255, 255, 180))
+            _draw_face(hx, hy, mood, s)
 
             # Snout
             self.draw_circle(draw, hx + 5*s, hy + 2*s, 2.5*s, fill=(240, 200, 190, 200))
@@ -2803,19 +2851,18 @@ class SketchGenerator:
         inner_ear = [(hx + 3.5*s, hy - 3.5*s), (hx + 4*s, hy - 7*s), (hx + 5*s, hy - 3.5*s)]
         self.draw_polygon(draw, inner_ear, fill=(240, 200, 180, 180))
 
-        self.draw_circle(draw, hx + 3*s, hy - s, 1.5*s, fill=(30, 25, 20, 200))
-        self.draw_circle(draw, hx + 3*s, hy - s, 0.5*s, fill=(255, 255, 255, 180))
+        # standing pose face
+        _draw_face(hx, hy, mood, s)
 
-        snout_r = 2.5*s
-        self.draw_circle(draw, hx + 5*s, hy + 1*s, snout_r, fill=(240, 200, 190, 200))
-
-        for side in [-1, 1]:
-            self.draw_line(draw, hx + 5*s, hy + 1.5*s, hx + 5*s + side * 6*s, hy + 0.5*s,
-                          color=(180, 170, 160, 120), width=1)
-            self.draw_line(draw, hx + 5*s, hy + 2*s, hx + 5*s + side * 5*s, hy + 2.5*s,
-                          color=(180, 170, 160, 120), width=1)
-
-        self.draw_line(draw, hx + 2*s, hy + 2*s, hx + 5*s, hy + 1*s, color=(140, 100, 80, 150), width=1)
+        # Whiskers (only for non-angry moods that keep default snout)
+        if mood not in ("angry", "surprised"):
+            self.draw_circle(draw, hx + 5*s, hy + 1*s, 2.5*s, fill=(240, 200, 190, 200))
+            for side in [-1, 1]:
+                self.draw_line(draw, hx + 5*s, hy + 1.5*s, hx + 5*s + side * 6*s, hy + 0.5*s,
+                              color=(180, 170, 160, 120), width=1)
+                self.draw_line(draw, hx + 5*s, hy + 2*s, hx + 5*s + side * 5*s, hy + 2.5*s,
+                              color=(180, 170, 160, 120), width=1)
+            self.draw_line(draw, hx + 2*s, hy + 2*s, hx + 5*s, hy + 1*s, color=(140, 100, 80, 150), width=1)
 
         for side in [-1, 1]:
             self.draw_line(draw, x + side * 6*s, y - 3*s, x + side * 8*s, y + 8*s,
@@ -5462,7 +5509,8 @@ class SketchGenerator:
         elif etype == "cat":
             c = fill or (200, 160, 120)
             pose = elem.get("pose", "standing")
-            self.draw_cat(draw, x, y, s, c, pose=pose)
+            mood = elem.get("mood", self.desc.get("mood", None))
+            self.draw_cat(draw, x, y, s, c, pose=pose, mood=mood)
 
         elif etype == "bear":
             c = fill or (120, 80, 60)
