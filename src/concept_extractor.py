@@ -165,7 +165,7 @@ CONCEPTS = {
     "wall":       ["wall", "walls", "rampart", "ramparts", "fortification", "barricade"],
     "tent":       ["tent", "tents", "camp", "campsite", "encampment"],
     "chain":      ["chain", "chains", "barrier chain"],
-    "crown":      ["crown", "king", "queen", "royal", "throne", "monarch",
+    "crown":      ["crown", "king", "queen", "royal", "monarch",
                     "kingdom", "empire", "emperor"],
     "book":       ["book", "books", "library", "reading", "literature",
                     "manuscript", "scroll", "text", "knowledge", "classroom",
@@ -220,10 +220,19 @@ CONCEPTS = {
 
     # Household items
     "chair":      ["chair", "chairs", "seat", "stool", "bench"],
+    "throne":     ["throne", "royal seat", "king chair", "queen chair"],
     "table":      ["table", "tables", "desk", "counter"],
     "sofa":       ["sofa", "couch", "settee", "loveseat"],
     "bed":        ["bed", "bunk", "cot", "bedding", "mattress"],
     "cupboard":   ["cupboard", "cabinet", "wardrobe", "closet"],
+
+    # Modern / Media
+    "smartphone": ["smartphone", "mobile", "phone", "iphone", "android", "cell phone"],
+    "camera":     ["camera", "photograph", "photographing", "photographer", "selfie", "dslr"],
+    "tv_monitor": ["tv", "television", "monitor", "screen", "display", "video", "meme", "memes",
+                    "advertisement", "commercial", "game", "games", "gaming"],
+    "heart":      ["heart", "like", "love", "favorite", "popular"],
+    "cat_toy":    ["toy", "toys", "cat toy", "plaything", "mouse toy"],
     "fridge":     ["fridge", "refrigerator", "freezer", "icebox"],
     "oven":       ["oven", "stove", "range", "cooker"],
     "sink":       ["sink", "basin", "washbasin"],
@@ -410,7 +419,8 @@ SCENE_TYPE_MAP = {
     "animals":      ["bird", "dog", "cat", "horse", "elephant", "bear", "monkey",
                      "deer", "rabbit", "squirrel", "fox", "wolf", "snake",
                      "dinosaur", "mammoth"],
-    "history":      ["building", "flag", "crown", "book", "coin", "map", "train"],
+    "history":      ["building", "flag", "crown", "book", "coin", "map", "train",
+                     "throne"],
     "abstract":     ["clock", "lightbulb", "key", "question", "target",
                      "infinity", "puzzle", "scales", "gear", "hourglass"],
 }

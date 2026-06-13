@@ -16,7 +16,7 @@ W, H = config.VIDEO_WIDTH, config.VIDEO_HEIGHT
 
 SKETCH_TECHNIQUES = {
     "pencil": {
-        "stroke": (40, 35, 30),        # HB pencil gray
+        "stroke": (20, 18, 15),        # dark pencil — bolder outlines
         "stroke_width": 2,
         "fill_t": 0.35,                # how much to lighten fills
         "paper_tint": (250, 245, 235),
@@ -2293,7 +2293,7 @@ class SketchGenerator:
                            color=self._darken(c, 20) + (80,), width=2)
 
     def draw_animal(self, draw, x, y, size=1.0, color=(100, 80, 60)):
-        """Draw a simple four-legged animal (fallback for beast/monster/creature)."""
+        """Draw a simple four-legged animal."""
         s = size
         c = tuple(color[:3])
         self.draw_shadow_circle(draw, x, y + 3, 14*s, offset=(2, 2), blur_radius=4, color=(0, 0, 0, 35))
@@ -2707,10 +2707,78 @@ class SketchGenerator:
         self.draw_line(draw, hx + 6*s, hy + 3*s, hx + 8*s, hy + 3.5*s, color=mouth_line, width=1)
         self.draw_line(draw, hx + 6*s, hy + 3*s, hx + 4*s, hy + 4*s, color=mouth_line, width=1)
 
-    def draw_cat(self, draw, x, y, size=1.0, color=(200, 160, 120)):
-        """Draw a cat — arched back, pointed ears, whiskers, tail."""
+    def draw_cat(self, draw, x, y, size=1.0, color=(200, 160, 120), pose="standing"):
+        """Draw a cat — standing or sitting pose."""
         s = size
         c = tuple(color[:3])
+
+        if pose == "sitting":
+            # Sitting side-profile cat (facing right)
+            self.draw_shadow_circle(draw, x, y + 3, 16*s, offset=(2, 2), blur_radius=3, color=(0, 0, 0, 30))
+
+            body_w, body_h = 16*s, 12*s
+            bx = x - 2*s
+            by = y - body_h - 4*s
+            self.draw_ellipse(draw, bx, by, body_w, body_h,
+                              fill=c + (220,), stroke=self._darken(c, 15) + (180,), stroke_width=2)
+
+            # Tail curving up
+            tail_pts = [(x - 7*s, y - 6*s), (x - 14*s, y - 14*s), (x - 16*s, y - 6*s),
+                        (x - 12*s, y - 2*s)]
+            self.draw_polygon(draw, tail_pts, fill=c + (210,),
+                              stroke=self._darken(c, 15) + (160,), stroke_width=1)
+
+            # Head (right side of body)
+            head_r = 6*s
+            hx = x + body_w//2 - 2*s + 3*s
+            hy = y - body_h - 4*s - s
+            self.draw_circle(draw, hx, hy, head_r, fill=self._lighten(c, 10) + (220,),
+                            stroke=self._darken(c, 15) + (180,), stroke_width=2)
+
+            # Single ear (side profile)
+            ear_pts = [(hx + 3*s, hy - 3*s), (hx + 4*s, hy - 9*s), (hx + 6*s, hy - 3*s)]
+            self.draw_polygon(draw, ear_pts, fill=self._lighten(c, 15) + (220,),
+                              stroke=self._darken(c, 15) + (180,), stroke_width=1)
+            inner_ear = [(hx + 3.5*s, hy - 3.5*s), (hx + 4*s, hy - 8*s), (hx + 5*s, hy - 3.5*s)]
+            self.draw_polygon(draw, inner_ear, fill=(240, 200, 180, 180))
+
+            # Eye
+            self.draw_circle(draw, hx + 3*s, hy, 1.5*s, fill=(30, 25, 20, 200))
+            self.draw_circle(draw, hx + 3*s, hy, 0.5*s, fill=(255, 255, 255, 180))
+
+            # Snout
+            self.draw_circle(draw, hx + 5*s, hy + 2*s, 2.5*s, fill=(240, 200, 190, 200))
+
+            # Whiskers
+            for side in [-1, 1]:
+                self.draw_line(draw, hx + 5*s, hy + 2.5*s, hx + 5*s + side * 6*s, hy + 1.5*s,
+                              color=(180, 170, 160, 120), width=1)
+                self.draw_line(draw, hx + 5*s, hy + 3*s, hx + 5*s + side * 5*s, hy + 3.5*s,
+                              color=(180, 170, 160, 120), width=1)
+
+            # Mouth line
+            self.draw_line(draw, hx + 2*s, hy + 3*s, hx + 5*s, hy + 2*s, color=(140, 100, 80, 150), width=1)
+
+            # Haunch (back leg tucked)
+            haunch_r = 5*s
+            self.draw_ellipse(draw, x - 7*s, y - 6*s, 8*s, 6*s,
+                             fill=self._darken(c, 5) + (200,),
+                             stroke=self._darken(c, 15) + (160,), stroke_width=1)
+
+            # Front leg hanging down
+            self.draw_line(draw, x - s, y - 2*s, x + s, y + 4*s,
+                          color=self._darken(c, 15), width=int(3*s))
+            self.draw_line(draw, x + 2*s, y - 2*s, x + 4*s, y + 4*s,
+                          color=self._darken(c, 15), width=int(3*s))
+
+            # Back foot tucked
+            self.draw_ellipse(draw, x - 7*s, y - 2*s, 5*s, 3*s,
+                             fill=self._darken(c, 5) + (200,),
+                             stroke=self._darken(c, 15) + (160,), stroke_width=1)
+
+            return
+
+        # ── Standing pose (original) ──
         self.draw_shadow_circle(draw, x, y + 3, 12*s, offset=(2, 2), blur_radius=3, color=(0, 0, 0, 30))
 
         body_w, body_h = 20*s, 10*s
@@ -3137,6 +3205,103 @@ class SketchGenerator:
             wy = y - bh//2 + i * int(bh/4)
             self.draw_line(draw, x - bw//2, wy, x + bw//2, wy,
                           color=self._darken(c, 15) + (80,), width=1)
+
+    def draw_smartphone(self, draw, x, y, size=1.0, color=(30, 30, 35)):
+        """Draw a smartphone with screen."""
+        s = size
+        c = tuple(color[:3])
+        pw, ph = 10*s, 18*s
+        self.draw_rect(draw, x - pw//2, y - ph//2, pw, ph,
+                      fill=c + (230,), stroke=self._lighten(c, 10) + (200,), stroke_width=2, rx=int(2*s))
+        # Screen
+        sx, sy = x - pw//2 + int(1.5*s), y - ph//2 + int(2*s)
+        sw, sh = pw - int(3*s), ph - int(4*s)
+        self.draw_rect(draw, sx, sy, sw, sh, fill=(50, 120, 220, 220), rx=int(s))
+        # Screen content: cat face
+        self.draw_circle(draw, x, y - s, 3*s, fill=(200, 160, 120, 220))
+        # Ears
+        for side in [-1, 1]:
+            ear = [(x + side*2*s, y - 3*s), (x + side*3*s, y - 6*s), (x + side*4*s, y - 3*s)]
+            self.draw_polygon(draw, ear, fill=(200, 160, 120, 220))
+        # Eyes on screen
+        for side in [-1, 1]:
+            self.draw_circle(draw, x + side*s, y - 2*s, s*0.6, fill=(255, 255, 255, 200))
+        # Home button
+        bx = int(1.5*s)
+        self.draw_circle(draw, x, y + ph//2 - bx - 1, s*0.8, fill=(60, 60, 65, 200))
+
+    def draw_camera(self, draw, x, y, size=1.0, color=(60, 55, 50)):
+        """Draw a camera."""
+        s = size
+        c = tuple(color[:3])
+        bw, bh = 14*s, 10*s
+        # Body
+        self.draw_rect(draw, x - bw//2, y - bh//2, bw, bh,
+                      fill=c + (230,), stroke=self._darken(c, 15) + (200,), stroke_width=2, rx=int(s))
+        # Top hump
+        self.draw_rect(draw, x - int(4*s), y - bh//2 - int(3*s), int(8*s), int(3*s),
+                      fill=self._darken(c, 5) + (220,), stroke=self._darken(c, 15) + (200,), stroke_width=2, rx=int(s))
+        # Lens (outer)
+        self.draw_circle(draw, x, y, 5*s, fill=(20, 20, 25, 230))
+        # Lens (inner)
+        self.draw_circle(draw, x, y, 3*s, fill=(40, 40, 50, 220))
+        self.draw_circle(draw, x, y, 2*s, fill=(60, 60, 80, 200))
+        self.draw_circle(draw, x, y, s, fill=(100, 120, 180, 180))
+        # Flash
+        self.draw_rect(draw, x + int(3*s), y - bh//2 + int(s), int(2*s), int(2*s),
+                      fill=(255, 240, 200, 200))
+
+    def draw_tv_monitor(self, draw, x, y, size=1.0, color=(40, 40, 45)):
+        """Draw a TV/monitor."""
+        s = size
+        c = tuple(color[:3])
+        mw, mh = 20*s, 14*s
+        # Bezel
+        self.draw_rect(draw, x - mw//2, y - mh//2, mw, mh,
+                      fill=c + (230,), stroke=self._lighten(c, 10) + (200,), stroke_width=2, rx=int(s))
+        # Screen
+        sx, sy = x - mw//2 + int(1.5*s), y - mh//2 + int(1.5*s)
+        sw, sh = mw - int(3*s), mh - int(3*s)
+        self.draw_rect(draw, sx, sy, sw, sh, fill=(60, 70, 100, 230))
+        # Screen content: cat silhouette
+        self.draw_circle(draw, x, y, 3*s, fill=(180, 200, 220, 180))
+        for side in [-1, 1]:
+            ear = [(x + side*2*s, y - 3*s), (x + side*3*s, y - 5*s), (x + side*4*s, y - 3*s)]
+            self.draw_polygon(draw, ear, fill=(180, 200, 220, 180))
+        # Stand
+        self.draw_rect(draw, x - int(3*s), y + mh//2, int(6*s), int(2*s),
+                      fill=self._darken(c, 10) + (200,))
+        self.draw_rect(draw, x - int(5*s), y + mh//2 + int(2*s), int(10*s), int(2*s),
+                      fill=self._darken(c, 10) + (200,), rx=int(s))
+
+    def draw_heart(self, draw, x, y, size=1.0, color=(220, 50, 50)):
+        """Draw a heart shape."""
+        s = size
+        c = tuple(color[:3])
+        # Two circles for top lobes
+        self.draw_circle(draw, x - 3*s, y - 2*s, 3*s, fill=c + (230,))
+        self.draw_circle(draw, x + 3*s, y - 2*s, 3*s, fill=c + (230,))
+        # Triangle for bottom point
+        pts = [(x - 6*s, y - s), (x + 6*s, y - s), (x, y + 5*s)]
+        self.draw_polygon(draw, pts, fill=c + (230,))
+
+    def draw_cat_toy(self, draw, x, y, size=1.0, color=(200, 80, 50)):
+        """Draw a cat toy (ball with string)."""
+        s = size
+        c = tuple(color[:3])
+        # Ball
+        self.draw_circle(draw, x, y, 3*s, fill=c + (230,),
+                        stroke=self._darken(c, 15) + (200,), stroke_width=2)
+        # Stripe
+        self.draw_line(draw, x - 3*s, y, x + 3*s, y,
+                      color=self._lighten(c, 20) + (180,), width=int(s))
+        # String
+        self.draw_line(draw, x, y - 3*s, x - 8*s, y - 10*s,
+                      color=(180, 160, 120, 200), width=int(s*0.5))
+        # Feather at end of string
+        fe = [(x - 8*s, y - 10*s), (x - 12*s, y - 14*s), (x - 10*s, y - 12*s),
+              (x - 14*s, y - 12*s), (x - 10*s, y - 10*s), (x - 14*s, y - 8*s)]
+        self.draw_polygon(draw, fe, fill=(180, 200, 220, 200))
 
     def draw_dragon(self, draw, x, y, size=1.0, color=(60, 120, 60)):
         s = size
@@ -5165,12 +5330,8 @@ class SketchGenerator:
                 self.draw_text(draw, lx, ly, label, font_size=elem.get("font_size", 18), color=c, align="center")
 
         elif etype == "ellipse":
-            w = int(elem.get("width", 80) * (elem.get("w_scale", 1)))
-            h = int(elem.get("height", 60) * (elem.get("h_scale", 1)))
-            fill_color = fill
-            stroke_color = stroke or (40, 35, 30)
-            draw.ellipse([x - w // 2, y - h // 2, x + w // 2, y + h // 2],
-                        fill=fill_color, outline=stroke_color, width=elem.get("stroke_width", 2))
+            # ellipse is forbidden — skip; no generic oval shapes
+            pass
 
         elif etype == "x_mark":
             c = fill or (180, 40, 40)
@@ -5311,7 +5472,8 @@ class SketchGenerator:
 
         elif etype == "cat":
             c = fill or (200, 160, 120)
-            self.draw_cat(draw, x, y, s, c)
+            pose = elem.get("pose", "standing")
+            self.draw_cat(draw, x, y, s, c, pose=pose)
 
         elif etype == "bear":
             c = fill or (120, 80, 60)
@@ -5927,8 +6089,15 @@ class SketchGenerator:
             h = elem.get("height", 180)
             self.draw_dna(draw, x, y, w=w, h=h, color=fill)
         elif etype == "heart":
-            s = elem.get("scale", 1.0)
-            self.draw_heart(draw, x, y, s=int(40 * s), color=fill)
+            self.draw_heart(draw, x, y, size=s, color=fill)
+        elif etype == "smartphone":
+            self.draw_smartphone(draw, x, y, size=s, color=fill or (30, 30, 35))
+        elif etype == "camera":
+            self.draw_camera(draw, x, y, size=s, color=fill or (60, 55, 50))
+        elif etype == "tv_monitor":
+            self.draw_tv_monitor(draw, x, y, size=s, color=fill or (40, 40, 45))
+        elif etype == "cat_toy":
+            self.draw_cat_toy(draw, x, y, size=s, color=fill or (200, 80, 50))
         elif etype == "infinity":
             s = elem.get("scale", 1.0)
             self.draw_infinity(draw, x, y, s=int(50 * s), color=fill)
@@ -6008,34 +6177,29 @@ class SketchGenerator:
             ch = elem.get("chart_h", 300)
             self.draw_scatter_plot(draw, x, y, points, w=cw, h=ch, color=fill)
 
+        elif etype == "bell":
+            self.draw_bell(draw, x, y, s, fill or (200, 180, 100))
+        elif etype == "cactus":
+            self.draw_cactus(draw, x, y, s, fill or (50, 140, 50))
+        elif etype == "castle":
+            self.draw_castle(draw, x, y, s, fill or (130, 110, 90))
+        elif etype == "chest":
+            self.draw_chest(draw, x, y, s, fill or (140, 90, 50))
+        elif etype == "food":
+            self.draw_food(draw, x, y, s, fill or (220, 180, 100))
+        elif etype == "furniture":
+            self.draw_furniture(draw, x, y, s, fill or (140, 110, 80))
+        elif etype == "pottery":
+            self.draw_pottery(draw, x, y, s, fill or (180, 140, 100))
+        elif etype == "question":
+            self.draw_question(draw, x, y, s, fill or (180, 60, 60))
+        elif etype == "tool":
+            self.draw_tool(draw, x, y, s, fill or (150, 130, 110))
+        elif etype == "vehicle":
+            self.draw_vehicle(draw, x, y, s, fill or (140, 100, 100))
         else:
-            # Try procedural generator from elements_pro
-            try:
-                from src.elements_pro import PROCEDURAL_LIBRARY as _pro_lib
-                if etype in _pro_lib:
-                    rng = getattr(self, 'rng', __import__('random').Random())
-                    parts = _pro_lib[etype](rng, fill or None, s)
-                    # elements_pro generators produce normalized (~0.001-0.30) values
-                    self.draw_composite(draw, parts, x, y, scale=1000)
-                    return
-            except Exception:
-                pass
-            # Try infinite procedural engine (generate() auto-scales to pixels)
-            try:
-                from src.procedural_engine import ProceduralEngine as _PE
-                _pe = _PE(seed=getattr(self, 'rng', __import__('random').Random()).randint(0, 999999))
-                _kwargs = {"size": 1.0}
-                if fill is not None:
-                    _kwargs["color"] = fill
-                parts = _pe.generate(etype, **_kwargs)
-                if parts:
-                    self.draw_composite(draw, parts, x, y, scale=s)
-                    return
-            except Exception:
-                pass
-            # Unknown type — draw with concept card
-            label = elem.get("label", elem.get("text", etype))
-            self.draw_concept(draw, x, y, label, fill, s)
+            # Unknown type — skip silently, no generic oval/shape fallback
+            pass
 
     # ── Chart renderers ────────────────────────────────────────
 
@@ -7842,6 +8006,109 @@ class SketchGenerator:
                 cx + int(cx2 * s) + int(2 * s), cy + int(cy2 * s) + int(1 * s)
             ], fill=(min(color[0]+60, 255), min(color[1]+60, 255), min(color[2]+60, 255)))
 
+    def draw_bell(self, draw, x, y, size=1.0, color=(200, 180, 100)):
+        s = size; c = tuple(color[:3])
+        w, h = int(14*s), int(16*s)
+        self.draw_shadow(draw, [(x-w//2, y), (x+w//2, y), (x+w//2, y-h), (x-w//2, y-h)], offset=(2,2), blur_radius=3, color=(0,0,0,30))
+        pts = [(x-w//2, y), (x+w//2, y), (x+int(w*0.35), y-h), (x-int(w*0.35), y-h)]
+        self.draw_polygon(draw, pts, fill=c+(200,), stroke=self._darken(c,20)+(150,), stroke_width=2)
+        self.draw_circle(draw, x, y-int(2*s), int(2.5*s), fill=(180,120,80,200))
+        self.draw_circle(draw, x, y-h+int(2*s), int(2.5*s), fill=self._lighten(c,10)+(200,), stroke=self._darken(c,20)+(150,), stroke_width=1)
+
+    def draw_cactus(self, draw, x, y, size=1.0, color=(50, 140, 50)):
+        s = size; c = tuple(color[:3])
+        bw, bh = int(8*s), int(20*s)
+        self.draw_rect(draw, x-bw//2, y-bh, bw, bh, fill=c+(220,), stroke=self._darken(c,20)+(160,), stroke_width=2, rx=4)
+        la_x, la_y = x-bw//2-int(4*s), y-bh+int(6*s)
+        self.draw_rect(draw, la_x, la_y, int(8*s), int(5*s), fill=c+(220,), stroke=self._darken(c,20)+(160,), stroke_width=2, rx=3)
+        self.draw_rect(draw, la_x, la_y-int(5*s), int(5*s), int(7*s), fill=c+(220,), stroke=self._darken(c,20)+(160,), stroke_width=2, rx=3)
+        ra_x, ra_y = x+bw//2-int(4*s), y-bh+int(10*s)
+        self.draw_rect(draw, ra_x, ra_y, int(8*s), int(5*s), fill=c+(220,), stroke=self._darken(c,20)+(160,), stroke_width=2, rx=3)
+        self.draw_rect(draw, ra_x+int(3*s), ra_y-int(4*s), int(5*s), int(6*s), fill=c+(220,), stroke=self._darken(c,20)+(160,), stroke_width=2, rx=3)
+        for sx, sy in [(x, y-bh+int(4*s)), (x, y-bh+int(10*s)), (x, y-bh+int(16*s))]:
+            self.draw_line(draw, sx, sy, sx+int(2*s), sy-int(2*s), color=(30,100,30), width=1)
+            self.draw_line(draw, sx, sy, sx-int(2*s), sy-int(2*s), color=(30,100,30), width=1)
+
+    def draw_castle(self, draw, x, y, size=1.0, color=(130, 110, 90)):
+        s = size; c = tuple(color[:3])
+        kw, kh = int(20*s), int(28*s)
+        self.draw_shadow(draw, [(x-kw//2, y), (x+kw//2, y), (x+kw//2, y-kh), (x-kw//2, y-kh)], offset=(2,3), blur_radius=4, color=(0,0,0,40))
+        self.draw_rect(draw, x-kw//2, y-kh, kw, kh, fill=c+(210,), stroke=self._darken(c,20)+(150,), stroke_width=2)
+        for i in range(5):
+            bx = x-kw//2 + i*(kw//5)
+            self.draw_rect(draw, bx, y-kh-int(5*s), kw//5, int(5*s), fill=c+(220,), stroke=self._darken(c,20)+(150,), stroke_width=1, rx=1)
+        self.draw_rect(draw, x-int(6*s), y-int(10*s), int(12*s), int(10*s), fill=self._darken(c,30)+(180,), stroke=(60,50,40,150), stroke_width=2)
+        for wy in [y-kh+int(8*s), y-kh+int(16*s)]:
+            self.draw_rect(draw, x-int(3*s), wy-int(3*s), int(6*s), int(6*s), fill=(180,190,200,150), stroke=(50,40,30,100), stroke_width=1)
+        self.draw_line(draw, x, y-kh-int(5*s), x, y-kh-int(10*s), color=(80,60,40), width=2)
+        self.draw_polygon(draw, [(x, y-kh-int(10*s)), (x+int(6*s), y-kh-int(7*s)), (x, y-kh-int(5*s))], fill=(180,40,40,200))
+
+    def draw_chest(self, draw, x, y, size=1.0, color=(140, 90, 50)):
+        s = size; c = tuple(color[:3])
+        hw, hh = int(18*s), int(12*s)
+        self.draw_shadow(draw, [(x-hw, y+hh), (x+hw, y+hh), (x+hw, y), (x-hw, y)], offset=(2,2), blur_radius=3, color=(0,0,0,30))
+        self.draw_rect(draw, x-hw, y, int(2*hw), hh, fill=c+(200,), stroke=self._darken(c,30)+(180,), stroke_width=2, rx=3)
+        self.draw_rect(draw, x-hw+int(2*s), y-hh//2, int(2*hw)-int(4*s), hh//2, fill=(200,180,80,220), stroke=(180,150,50,180), stroke_width=2, rx=2)
+        self.draw_rect(draw, x-int(3*s), y+int(3*s), int(6*s), int(4*s), fill=(200,180,80,200), stroke=(180,150,50,180), stroke_width=1)
+        bw = int(2*hw)
+        for bx in [x-hw, x-bw//4, x+bw//4-int(4*s), x+hw-int(4*s)]:
+            self.draw_line(draw, bx, y, bx, y+hh, color=self._darken(c,20)+(100,), width=2)
+
+    def draw_food(self, draw, x, y, size=1.0, color=(220, 180, 100)):
+        s = size; c = tuple(color[:3])
+        pr = int(12*s)
+        self.draw_ellipse(draw, x-pr, y-int(pr*0.4), int(2*pr), int(pr*0.8), fill=(240,235,225,220), stroke=(200,190,180,180), stroke_width=2)
+        colors = [(220,100,80), (180,200,60), (240,180,60)]
+        for i, fc in enumerate(colors):
+            angle = math.radians(i*120 - 90)
+            fx = x + int(math.cos(angle)*pr*0.4)
+            fy = y + int(math.sin(angle)*pr*0.15)
+            self.draw_circle(draw, fx, fy, int(3*s), fill=fc+(200,))
+
+    def draw_furniture(self, draw, x, y, size=1.0, color=(140, 110, 80)):
+        s = max(size, 0.5); c = tuple(color[:3])
+        tw, th = int(20*s), int(5*s)
+        self.draw_rect(draw, x-tw//2, y-th, tw, th, fill=self._lighten(c,10)+(220,), stroke=self._darken(c,20)+(160,), stroke_width=2, rx=2)
+        for ox in [-int(8*s), int(8*s)]:
+            self.draw_line(draw, x+ox, y, x+ox, y+int(8*s), color=self._darken(c,20)+(180,), width=max(int(3*s),2))
+        self.draw_rect(draw, x-int(6*s), y-int(3*s), int(12*s), int(3*s), fill=self._darken(c,5)+(180,), stroke=self._darken(c,20)+(120,), stroke_width=1)
+        self.draw_circle(draw, x, y-int(1.5*s), int(1.5*s), fill=(180,160,120,200))
+
+    def draw_pottery(self, draw, x, y, size=1.0, color=(180, 140, 100)):
+        s = size; c = tuple(color[:3])
+        vw, vh = int(14*s), int(18*s)
+        self.draw_shadow(draw, [(x-vw//2, y), (x+vw//2, y), (x+vw//2, y-vh), (x-vw//2, y-vh)], offset=(2,3), blur_radius=3, color=(0,0,0,30))
+        pts = [(x, y-vh), (x+vw//2, y-vh+int(4*s)), (x+vw//2, y-int(2*s)), (x, y), (x-vw//2, y-int(2*s)), (x-vw//2, y-vh+int(4*s))]
+        self.draw_polygon(draw, pts, fill=c+(200,), stroke=self._darken(c,20)+(150,), stroke_width=2)
+        self.draw_ellipse(draw, x-int(6*s), y-vh-int(2*s), int(12*s), int(4*s), fill=self._lighten(c,10)+(220,), stroke=self._darken(c,20)+(160,), stroke_width=1)
+        self.draw_ellipse(draw, x-int(5*s), y-vh+int(8*s), int(10*s), int(3*s), fill=self._darken(c,15)+(80,), stroke=None, stroke_width=0)
+
+    def draw_question(self, draw, x, y, size=1.0, color=(180, 60, 60)):
+        s = size; c = tuple(color[:3])
+        r = 6 * s
+        self.draw_arc(draw, x, y - 4 * s, r, 180, 360, color=c + (200,), width=max(int(2.5 * s), 2))
+        self.draw_line(draw, x + int(r), y + 2 * s, x - int(2 * s), y + int(10 * s), color=c + (200,), width=max(int(2.5 * s), 2))
+        self.draw_circle(draw, x - int(3 * s), y + int(12 * s), int(2 * s), fill=c + (220,))
+
+    def draw_tool(self, draw, x, y, size=1.0, color=(150, 130, 110)):
+        s = max(size, 0.5); c = tuple(color[:3])
+        self.draw_line(draw, x, y+int(8*s), x, y-int(8*s), color=(160,130,80)+(200,), width=max(int(3*s),2))
+        hw, hh = int(10*s), int(5*s)
+        self.draw_rect(draw, x-hw//2, y-int(8*s)-hh, hw, hh, fill=c+(200,), stroke=self._darken(c,20)+(150,), stroke_width=2, rx=1)
+        claw_pts = [(x+hw//2, y-int(8*s)-hh), (x+hw//2+int(4*s), y-int(8*s)-int(3*s)), (x+hw//2, y-int(8*s))]
+        self.draw_polygon(draw, claw_pts, fill=c+(200,), stroke=self._darken(c,20)+(150,), stroke_width=1)
+
+    def draw_vehicle(self, draw, x, y, size=1.0, color=(140, 100, 100)):
+        s = max(size, 0.5); c = tuple(color[:3])
+        bw, bh = int(24*s), int(8*s)
+        self.draw_rect(draw, x-bw//2, y-bh//2, bw, bh, fill=c+(220,), stroke=self._darken(c,20)+(150,), stroke_width=2, rx=3)
+        cw, ch = int(12*s), int(7*s)
+        self.draw_rect(draw, x-cw//2, y-bh//2-ch, cw, ch, fill=(180,200,230,200), stroke=self._darken(c,20)+(150,), stroke_width=1, rx=2)
+        wr = int(2*s)
+        for wx in [x-bw//3, x+bw//3]:
+            draw.ellipse([wx-wr, y+bh//2-wr, wx+wr, y+bh//2+wr], fill=(30,30,30), outline=(60,60,60), width=1)
+        self.draw_circle(draw, x-bw//2+int(2*s), y-int(s), int(1.5*s), fill=(255,240,180,200))
+
 
 # ── Convenience function ──────────────────────────────────────
 
@@ -7871,13 +8138,13 @@ def generate_sketch(prompt: str) -> dict:
 
 
 def _fallback_scene() -> dict:
-    """Generic fallback scene when composition fails."""
+    """Simple scene when composition fails — no generic ovals."""
     return {
         "bg": {"type": "gradient", "colors": [[200, 210, 230], [140, 160, 200]], "horizon": 0.6, "ground_color": [60, 90, 50]},
         "elements": [
-            {"type": "circle", "x": 0.5, "y": 0.4, "radius": 30, "fill": [100, 140, 200, 40]},
-            {"type": "circle", "x": 0.5, "y": 0.4, "radius": 15, "fill": [140, 180, 230, 60]},
-            {"type": "lightbulb", "x": 0.5, "y": 0.4, "scale": 3.5, "fill": [255, 240, 150]},
+            {"type": "hill", "x": 0.5, "y": 0.75, "width": 0.5, "height": 0.12, "fill": [60, 120, 60]},
+            {"type": "cloud", "x": 0.3, "y": 0.2, "scale": 2.5},
+            {"type": "cloud", "x": 0.7, "y": 0.25, "scale": 2.0},
         ],
         "atmosphere": {"particles": "none", "fog": False},
         "mood": "peaceful",

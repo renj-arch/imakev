@@ -142,6 +142,11 @@ ELEMENT_DEFS = {
     "chain":      {"type": "chain", "scale": 2.0, "fill": [100, 90, 80]},
     "soldier":    {"type": "soldier", "scale": 3.0, "fill": [140, 60, 60]},
     "crown":      {"type": "crown", "scale": 2.5, "fill": [230, 200, 50]},
+    "throne":     {"type": "throne", "scale": 3.0, "fill": [140, 100, 70]},
+    "smartphone": {"type": "smartphone", "scale": 3.0, "fill": [30, 30, 35]},
+    "camera":     {"type": "camera", "scale": 3.0, "fill": [60, 55, 50]},
+    "tv_monitor": {"type": "tv_monitor", "scale": 3.0, "fill": [40, 40, 45]},
+    "cat_toy":    {"type": "cat_toy", "scale": 3.0, "fill": [200, 80, 50]},
     "book":       {"type": "book", "scale": 3.5, "fill": [180, 120, 80]},
     "coin":       {"type": "coin", "scale": 2.5, "fill": [230, 200, 80]},
     "map":        {"type": "map", "scale": 3.0, "fill": [180, 170, 140]},
@@ -273,7 +278,8 @@ def compute_positions(concepts: dict, scene_type: str, camera: str = "medium") -
     rng = _scene_rng(str(concepts), scene_type)
     elements = []
     sorted_concepts = sorted(concepts.items(), key=lambda x: -x[1])
-    visual_concepts = [c for c, _ in sorted_concepts if c in ELEMENT_DEFS]
+    visual_concepts = [c for c, _ in sorted_concepts if c in ELEMENT_DEFS
+                        and ELEMENT_DEFS[c].get("type") != "none"]
 
     # Camera angle adjustments
     camera_zoom = {"wide": 0.8, "medium": 1.0, "closeup": 1.5, "overhead": 1.0, "low_angle": 1.0}.get(camera, 1.0)
@@ -284,7 +290,7 @@ def compute_positions(concepts: dict, scene_type: str, camera: str = "medium") -
 
     # Randomly select a subset (85-100%) of concepts to include
     keep_ratio = rng.uniform(0.85, 1.0)
-    n_keep = max(1, int(len(visual_concepts) * keep_ratio))
+    n_keep = max(min(2, len(visual_concepts)), int(len(visual_concepts) * keep_ratio))
     if n_keep < len(visual_concepts):
         # Keep top concept always, randomly drop from rest
         keep = [visual_concepts[0]]
@@ -666,7 +672,7 @@ def compose_context_scene(text: str, story_context: dict = None,
         atmos_config["star_count"] = 40
 
     # Spatial relationship: astronaut/alien on planet surface
-    elements = _apply_spatial_relations(elements)
+    elements = _apply_spatial_relations(elements, text)
 
     # Add narrator character if story context is provided
     if has_context and voice:
@@ -870,7 +876,7 @@ def _apply_pose_modifiers(elements: list, text: str) -> list:
     return elements
 
 
-def _apply_spatial_relations(elements: list) -> list:
+def _apply_spatial_relations(elements: list, text: str = "") -> list:
     """Apply spatial relationships between elements (e.g., astronaut on planet)."""
     has_astronaut = any(e.get("type") in ("astronaut", "alien") for e in elements)
     has_planet = any(e.get("type") == "planet" for e in elements)
@@ -881,4 +887,60 @@ def _apply_spatial_relations(elements: list) -> list:
                 e["scale"] = 1.5
             if e.get("type") in ("astronaut", "alien"):
                 e["y"] = 0.45
+
+    # Sitting-on relationships: detect "X sitting on Y" patterns
+    tl = text.lower()
+    subject_type = None
+    object_types = set()
+    ARTICLES = {"a", "an", "the"}
+    for marker in (" sitting on ", " sits on ", " seated on "):
+        if marker in tl:
+            words = tl.split()
+            marker_words = marker.strip().split()
+            idx = None
+            for i, w in enumerate(words):
+                if w == marker_words[0]:
+                    idx = i
+                    break
+            if idx and idx > 0:
+                subj_word = words[idx - 1]
+                obj_start = idx + len(marker_words)
+                # Skip articles before the object
+                while obj_start < len(words) and words[obj_start] in ARTICLES:
+                    obj_start += 1
+                if obj_start < len(words):
+                    obj_word = words[obj_start]
+                    from src.concept_extractor import CONCEPTS as CE_CONCEPTS
+                    for cname, keywords in CE_CONCEPTS.items():
+                        if subj_word in keywords:
+                            subject_type = cname
+                        if obj_word in keywords:
+                            object_types.add(cname)
+            break
+    if subject_type and object_types:
+        subject_elem = None
+        object_elem = None
+        for e in elements:
+            et = e.get("type")
+            for cname in object_types:
+                defn = ELEMENT_DEFS.get(cname, {})
+                if defn.get("type") == et:
+                    object_elem = e
+                    break
+            if subject_type in ELEMENT_DEFS and ELEMENT_DEFS[subject_type].get("type") == et:
+                subject_elem = e
+        if subject_elem and object_elem:
+            object_elem["x"] = 0.5
+            object_elem["y"] = 0.72
+            object_elem["scale"] = object_elem.get("scale", 1) * 0.8
+            subject_elem["x"] = object_elem["x"]
+            subject_elem["y"] = object_elem["y"] - 0.01
+            subject_elem["scale"] = subject_elem.get("scale", 1) * 1.5
+            subject_elem["pose"] = "sitting"
+            # Reorder: subject on top (drawn after object)
+            if subject_elem in elements and object_elem in elements:
+                elements.remove(subject_elem)
+                obj_idx = elements.index(object_elem)
+                elements.insert(obj_idx + 1, subject_elem)
+
     return elements

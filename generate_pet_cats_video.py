@@ -1,8 +1,7 @@
-"""Pet Cats — multi-scene cinematic video from narration."""
+"""Pet Cats — multi-scene cinematic video with custom-designed scenes."""
 import sys, os, subprocess, math, shutil
 sys.path.insert(0, os.path.dirname(__file__))
 from PIL import Image, ImageDraw, ImageFont
-from src.narration_to_sketch import _describe_scene
 from src.sketch_generator import SketchGenerator
 from src.rules_engine import apply_rules
 import warnings
@@ -37,10 +36,23 @@ CU    = Cam(0.32,0.05,0.36,0.95)
 ECU   = Cam(0.4,0.1,0.2,0.85)
 ZOOM_IN = lambda t: lerp(LONG, Cam(0.15,0.05,0.7,0.9), t)
 
-def render_scene(desc, seed=None):
-    """Render a scene description through SketchGenerator."""
+def E(typ, x=0.5, y=0.5, scale=1.0, **kw):
+    d = {"type": typ, "x": x, "y": y, "scale": scale}; d.update(kw); return d
+
+def render_scene(elements, colors=None, ground=None, mood="playful", seed=None):
+    elements = apply_rules([dict(e) for e in elements])
+    scene = {
+        "bg": {"type": "gradient",
+               "colors": colors or [[200, 180, 220], [160, 140, 200]],
+               "horizon": 0.6,
+               "ground_color": ground or [100, 160, 100]},
+        "elements": elements,
+        "atmosphere": {"particles": "none", "fog": False},
+        "mood": mood,
+        "style": {"vignette": 0.15, "grain": 0.02},
+    }
     gen = SketchGenerator(W, H, seed=seed or rng.randint(0, 99999))
-    return gen.render_scene(desc)
+    return gen.render_scene(scene)
 
 def add_text(img, text, y_bottom=60):
     draw = ImageDraw.Draw(img)
@@ -54,66 +66,133 @@ def add_text(img, text, y_bottom=60):
             except: pass
     lines = []
     for word in text.split():
-        if lines and len(lines[-1] + " " + word) <= 60:
+        if lines and len(lines[-1] + " " + word) <= 55:
             lines[-1] += " " + word
         else:
             lines.append(word)
     for i, ln in enumerate(lines):
         b = draw.textbbox((0,0), ln, font=font)
-        draw.text(((W-b[2])//2, H-y_bottom+i*28), ln, fill=(40,35,30), font=font)
+        draw.text(((W-b[2])//2, H-y_bottom+i*28), ln, fill=(255,255,255), font=font, stroke_width=2, stroke_fill=(30,30,30))
     return img
 
-# ── Scene definitions ──────────────────────────────────────────
+# ── Scene 1: Hundreds of millions of pet cats ─────────────────────
+# Visual: globe/world + many cat silhouettes spread around
+SCENE_1 = {
+    "narration": "Today there are hundreds of millions of pet cats.",
+    "shots": [
+        {"cam": LONG, "dur": 3.0, "elems": [
+            E("cat", 0.15, 0.7, 2.5), E("cat", 0.3, 0.68, 2.0, pose="sitting"),
+            E("cat", 0.5, 0.65, 3.0), E("cat", 0.7, 0.72, 2.2),
+            E("cat", 0.85, 0.68, 2.8, pose="sitting"),
+            E("star", 0.1, 0.1, 2.0), E("star", 0.9, 0.15, 2.5),
+            E("star", 0.5, 0.08, 3.0),
+        ]},
+        {"cam": CU, "dur": 2.5, "elems": [
+            E("cat", 0.5, 0.58, 5.0, pose="sitting"),
+        ]},
+    ]
+}
 
-SENTENCES = [
-    "Today there are hundreds of millions of pet cats.",
-    "They dominate social media.",
-    "They appear in memes, videos, games, and advertisements.",
-    "Humans buy them toys.",
-    "Build them furniture.",
-    "And spend countless hours photographing them.",
+# ── Scene 2: Dominate social media ────────────────────────────────
+# Visual: smartphone with cat on screen, floating hearts/likes
+SCENE_2 = {
+    "narration": "They dominate social media.",
+    "shots": [
+        {"cam": LONG, "dur": 3.0, "elems": [
+            E("smartphone", 0.5, 0.55, 6.0),
+            E("heart", 0.2, 0.15, 2.0, color=(220, 50, 50)),
+            E("heart", 0.75, 0.12, 1.5, color=(220, 50, 50)),
+            E("heart", 0.85, 0.25, 1.2, color=(220, 50, 50)),
+            E("star", 0.1, 0.2, 1.5),
+            E("star", 0.9, 0.1, 1.8),
+        ]},
+        {"cam": CU, "dur": 2.5, "elems": [
+            E("smartphone", 0.5, 0.5, 8.0),
+            E("heart", 0.2, 0.2, 2.0, color=(220, 50, 50)),
+        ]},
+    ]
+}
+
+# ── Scene 3: Memes, videos, games, ads ────────────────────────────
+# Visual: TV screen showing cat + cat toy/controller
+SCENE_3 = {
+    "narration": "They appear in memes, videos, games, and advertisements.",
+    "shots": [
+        {"cam": MED, "dur": 3.5, "elems": [
+            E("tv_monitor", 0.5, 0.55, 5.0),
+            E("cat", 0.2, 0.7, 2.5),
+            E("star", 0.1, 0.1, 1.5), E("star", 0.9, 0.12, 2.0),
+        ]},
+        {"cam": CU, "dur": 2.5, "elems": [
+            E("tv_monitor", 0.5, 0.5, 7.0),
+        ]},
+    ]
+}
+
+# ── Scene 4: Humans buy them toys ─────────────────────────────────
+# Visual: human holding a cat toy, cat nearby
+SCENE_4 = {
+    "narration": "Humans buy them toys.",
+    "shots": [
+        {"cam": MED, "dur": 3.0, "elems": [
+            E("human", 0.3, 0.7, 3.5, pose="standing", gender="woman", mood="happy",
+              skin_color=(235, 200, 175)),
+            E("cat", 0.65, 0.7, 2.8),
+            E("cat_toy", 0.4, 0.55, 3.0),
+            E("star", 0.15, 0.15, 1.5), E("star", 0.85, 0.12, 2.0),
+        ]},
+        {"cam": CU, "dur": 2.5, "elems": [
+            E("cat_toy", 0.3, 0.5, 5.0),
+            E("cat", 0.7, 0.58, 4.0),
+        ]},
+    ]
+}
+
+# ── Scene 5: Build them furniture ─────────────────────────────────
+# Visual: cat on cat tree / throne-like furniture
+SCENE_5 = {
+    "narration": "Build them furniture.",
+    "shots": [
+        {"cam": MED, "dur": 3.0, "elems": [
+            E("cat", 0.5, 0.52, 3.0, pose="sitting"),
+            E("bed", 0.5, 0.72, 4.0),
+            E("star", 0.15, 0.12, 1.5), E("star", 0.85, 0.1, 2.0),
+        ]},
+        {"cam": CU, "dur": 2.5, "elems": [
+            E("cat", 0.5, 0.5, 6.0, pose="sitting"),
+        ]},
+    ]
+}
+
+# ── Scene 6: Photographing them ──────────────────────────────────
+# Visual: human with camera pointing at cat
+SCENE_6 = {
+    "narration": "And spend countless hours photographing them.",
+    "shots": [
+        {"cam": MED, "dur": 3.5, "elems": [
+            E("human", 0.25, 0.7, 3.5, pose="standing", gender="man", mood="happy",
+              skin_color=(235, 200, 175)),
+            E("camera", 0.35, 0.55, 4.0),
+            E("cat", 0.7, 0.7, 3.0, pose="sitting"),
+            E("star", 0.1, 0.1, 1.5), E("star", 0.9, 0.12, 2.0),
+        ]},
+        {"cam": CU, "dur": 2.5, "elems": [
+            E("camera", 0.5, 0.5, 6.0),
+        ]},
+    ]
+}
+
+SCENES = [SCENE_1, SCENE_2, SCENE_3, SCENE_4, SCENE_5, SCENE_6]
+
+# Color themes per scene for variety
+BG_THEMES = [
+    {"colors": [[200, 180, 220], [160, 140, 200]], "ground": [100, 160, 100], "mood": "playful"},
+    {"colors": [[180, 200, 230], [130, 160, 210]], "ground": [90, 150, 90], "mood": "hopeful"},
+    {"colors": [[220, 190, 180], [190, 150, 140]], "ground": [110, 140, 100], "mood": "peaceful"},
+    {"colors": [[200, 220, 190], [160, 190, 150]], "ground": [100, 160, 80], "mood": "happy"},
+    {"colors": [[180, 170, 200], [140, 130, 170]], "ground": [90, 130, 90], "mood": "peaceful"},
+    {"colors": [[210, 200, 170], [180, 160, 130]], "ground": [120, 140, 90], "mood": "hopeful"},
 ]
-
-SCENES = []
-for i, sentence in enumerate(SENTENCES):
-    desc = _describe_scene(sentence)
-    mood = desc.get("mood", "peaceful")
-    # Define shots per scene
-    if i == 0:  # Millions of cats — wide shot, zoom to CU
-        shots = [
-            {"cam": LONG, "dur": 3.0, "seed": i*100+0},
-            {"cam": MED,  "dur": 2.5, "seed": i*100+1},
-        ]
-    elif i == 1:  # Social media — cat closeup
-        shots = [
-            {"cam": MED,  "dur": 2.5, "seed": i*100+0},
-            {"cam": CU,   "dur": 2.0, "seed": i*100+1},
-        ]
-    elif i == 2:  # Memes, videos, games — wider frame
-        shots = [
-            {"cam": LONG, "dur": 3.0, "seed": i*100+0},
-            {"cam": MED,  "dur": 2.0, "seed": i*100+1},
-        ]
-    elif i == 3:  # Humans buy toys — human+cat
-        shots = [
-            {"cam": MED,  "dur": 2.5, "seed": i*100+0},
-            {"cam": CU,   "dur": 2.0, "seed": i*100+1},
-        ]
-    elif i == 4:  # Furniture
-        shots = [
-            {"cam": MED,  "dur": 2.5, "seed": i*100+0},
-        ]
-    else:  # Photographing
-        shots = [
-            {"cam": MED,  "dur": 2.5, "seed": i*100+0},
-            {"cam": ECU,  "dur": 2.0, "seed": i*100+1},
-        ]
-
-    SCENES.append({
-        "narration": sentence,
-        "shots": shots,
-        "desc": desc,
-    })
 
 # ─── RENDER ────────────────────────────────────────────────────
 
@@ -122,12 +201,18 @@ total_frames = 0
 
 for si, scene in enumerate(SCENES):
     frame_idx = 0
+    theme = BG_THEMES[si]
 
     for sh_idx, shot in enumerate(scene["shots"]):
         cam_spec = shot["cam"]
         shot_frames = int(shot["dur"] * FPS)
+        seed = si * 100 + sh_idx
 
-        base_img = render_scene(scene["desc"], seed=shot["seed"])
+        base_img = render_scene(shot["elems"],
+                                colors=theme["colors"],
+                                ground=theme["ground"],
+                                mood=theme["mood"],
+                                seed=seed)
 
         for f in range(shot_frames):
             t = f / max(shot_frames - 1, 1)
@@ -144,13 +229,12 @@ for si, scene in enumerate(SCENES):
             frame_idx += 1
 
     total_frames += frame_idx
-    print(f"  Scene {si+1}/{len(SCENES)} ({scene['narration'][:40]}...) — {frame_idx} frames")
+    print(f"  Scene {si+1}/6 — {frame_idx} frames")
 
 # ─── ASSEMBLE ──────────────────────────────────────────────────
 
 print(f"\n{total_frames} frames. Assembling video...")
 
-# Build a video per scene
 scene_videos = []
 for si in range(len(SCENES)):
     sv = os.path.join(out_dir, f"scene_{si:03d}.mp4")
@@ -165,7 +249,6 @@ for si in range(len(SCENES)):
     scene_videos.append(sv)
     print(f"  Scene {si+1} video done")
 
-# Concatenate
 concat_v = os.path.join(out_dir, "concat_videos.txt")
 with open(concat_v, "w") as f:
     for sv in scene_videos:
